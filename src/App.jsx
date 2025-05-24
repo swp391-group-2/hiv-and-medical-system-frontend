@@ -1,7 +1,8 @@
 import React from "react";
-import LandingPage from "./pages/LandingPage";
+import LandingPage from "./pages/DefaultLayout/landingPage";
+import RoutesApp from "./routes";
 const App = () => {
-  return <LandingPage />;
+  return <RoutesApp/>;
 };
 
 export default App;
