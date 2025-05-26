@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button";
-function App() {
-  return (
-    <>
-      <Button>Click me!</Button>
-    </>
-  );
-}
+
+import React from "react";
+import LandingPage from "./pages/DefaultLayout/landingPage";
+import RoutesApp from "./routes";
+const App = () => {
+  return <RoutesApp/>;
+};
 
 export default App;
-//cc
+
