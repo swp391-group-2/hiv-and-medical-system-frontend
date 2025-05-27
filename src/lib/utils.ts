@@ -6,5 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const formatISO = (raw: string) =>
-  format(parseISO(raw), "MMM d, yyyy, h:mm a");
+export const formatISO = (raw: string) => {
+  const date = parseISO(raw);
+  if (isNaN(date.getTime())) {
+    return "Invalid date";
+  }
+  return format(parseISO(raw), "MMM d, yyyy, h:mm a");
+};
