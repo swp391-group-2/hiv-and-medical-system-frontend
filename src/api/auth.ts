@@ -1,7 +1,7 @@
 type RegisterRequest = {
   phone: string;
   password: string;
-  confirmPw: string;
+  confirm: string;
 };
 
 export const register = async (value: RegisterRequest) => {
