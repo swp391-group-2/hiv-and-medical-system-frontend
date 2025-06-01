@@ -1,3 +1,5 @@
+import axios from "axios";
+
 type RegisterRequest = {
   phone: string;
   password: string;
@@ -5,20 +7,15 @@ type RegisterRequest = {
 };
 
 export const register = async (value: RegisterRequest) => {
-  const response = await fetch("/auth/register", {
-    method: "POST",
+  const response = await axios.post("/auth/register", value, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(value),
+    responseType: "text",
   });
 
-  if (!response.ok) {
-    throw new Error("Số điện thoại đã từng đăng ký trước đó.");
-  }
-
-  return await response.text();
+  return response.data;
 };
 
 type LoginRequest = {
@@ -27,14 +24,10 @@ type LoginRequest = {
 };
 
 export const login = async (value: LoginRequest) => {
-  const response = await fetch("/auth/login", {
-    method: "POST",
+  const response = await axios.post("/auth/login", value, {
     headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(value),
+    responseType: "text",
   });
-  if (!response.ok) {
-    throw new Error("Số điện thoại hoặc mật khẩu không đúng.");
-  }
 
-  return await response.text();
+  return response.data;
 };
