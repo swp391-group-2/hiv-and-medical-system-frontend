@@ -1,9 +1,17 @@
-import { Button } from "@/components/ui/button";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
+
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <>
-      <Button>Click me!</Button>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <div className="flex justify-center">
+          <div className="flex justify-center w-4/5 mt-5"></div>
+        </div>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
