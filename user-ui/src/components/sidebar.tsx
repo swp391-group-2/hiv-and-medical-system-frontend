@@ -3,8 +3,12 @@ import type { LucideIcon } from "lucide-react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-export const Sidebar = (...props: React.ReactNode[]) => {
-  return <aside>{...props}</aside>;
+export const Sidebar = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <aside className="w-64 h-screen bg-white border-r shadow-sm flex flex-col">
+      {children}
+    </aside>
+  );
 };
 
 export const SidebarHeader = (header: string) => {
@@ -15,10 +19,10 @@ export const SidebarHeader = (header: string) => {
   );
 };
 
-export const SidebarNav = (...props: React.ReactNode[]) => {
+export const SidebarNav = ({ children }: { children?: React.ReactNode }) => {
   return (
-    <nav>
-      <ul>{...props}</ul>
+    <nav className="flex-1 overflow-y-auto py-4">
+      <ul className="flex flex-col space-y-1">{children}</ul>
     </nav>
   );
 };
@@ -44,7 +48,7 @@ export const SidebarNavItem = ({
         to={path}
         className={({ isActive }) =>
           cn(
-            "w-full flex items-center gap-2 px-4 py-2 text-base justify-start",
+            "w-full flex items-center gap-2 px-4 py-2 text-base justify-start cursor-pointer",
             isActive
               ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
               : "text-gray-700 hover:bg-gray-100"
