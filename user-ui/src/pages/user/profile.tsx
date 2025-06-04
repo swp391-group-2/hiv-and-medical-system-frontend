@@ -5,33 +5,31 @@ import UserSummary from "@/components/user/user-summary";
 import ProfileTabsContainer from "@/components/user/profile-tabs";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import type { ProfileFormValues } from "@/components/user/profile-info-form";
 
-export interface User {
+export type UserProfileValues = {
   id: string;
-  name: string;
-  phone: string;
+  fullName: string;
   email: string;
-  imageUrl?: string;
-}
-
-export interface UserMedicalRecord extends User {
+  imageUrl: string;
   gender: string;
-  dob: Date;
-  citizen_id: string;
-  medical_assurance_number: string;
-  profession: string;
-  city: string;
+  dob: string; // expecting "YYYY-MM-DD"
+  idNumber: string;
+  insuranceNumber: string;
+  occupation: string;
+  phone: string;
+  province: string;
   district: string;
-  town: string;
-  address: string;
-}
+  ward: string;
+  street: string;
+};
 
 const UserProfile = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserProfileValues | null>(null);
 
   useEffect(() => {
     axios
-      .get<User>("/api/current-user")
+      .get<UserProfileValues>("/api/current-user")
       .then((res) => setUser(res.data))
       .catch((err) => {
         console.error("Failed to fetch user:", err);
@@ -56,6 +54,22 @@ const UserProfile = () => {
           },
         }
       );
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("Axios error:", error.response?.data || error.message);
+      } else {
+        console.error("Unknown error:", error);
+      }
+    }
+  };
+
+  const handleProfileSubmit = async (values: ProfileFormValues) => {
+    try {
+      await axios.post("/api/user/update-profile", values, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         console.error("Axios error:", error.response?.data || error.message);
@@ -105,10 +119,13 @@ const UserProfile = () => {
         <h2 className="text-3xl font-bold mb-5">Hồ sơ</h2>
         <div className="w-full flex gap-5">
           <UserSummary user={user} />
-          <ProfileTabsContainer
-            user={user}
-            handlePasswordSubmit={handlePasswordSubmit}
-          />
+          {user && (
+            <ProfileTabsContainer
+              user={user}
+              handlePasswordSubmit={handlePasswordSubmit}
+              handleProfileSubmit={handleProfileSubmit}
+            />
+          )}
         </div>
       </div>
     </div>

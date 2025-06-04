@@ -42,21 +42,29 @@ const UserSummary = ({ user }: UserSummaryProps) => {
   return (
     <Card className="flex-1/4 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
       <AvatarUpload
-        imageUrl={user.imageUrl ?? ""}
+        imageUrl={user && user.imageUrl ? user.imageUrl : ""}
         onUpload={handleUploadAvatar}
       />
       <CardHeader className="flex flex-col items-center px-6 pt-6 pb-4 border-b border-gray-100">
         <CardTitle className="text-xl font-semibold text-gray-900">
-          {user.name}
+          {user ? user.name : ""}
         </CardTitle>
         <CardDescription className="mt-1 text-sm text-gray-500">
-          {user.phone}
+          {user ? user.phone : ""}
         </CardDescription>
       </CardHeader>
       <CardContent className="px-6 py-4 space-y-4">
-        <InfoRow icon={Phone} name="Số điện thoại" desc={user.phone} />
-        <InfoRow icon={Mail} name="email" desc={user.email} />
-        <InfoRow icon={CircleUserRound} name="Mã bệnh nhân" desc={user.id} />
+        <InfoRow
+          icon={Phone}
+          name="Số điện thoại"
+          desc={user ? user.phone : ""}
+        />
+        <InfoRow icon={Mail} name="Email" desc={user ? user.email : ""} />
+        <InfoRow
+          icon={CircleUserRound}
+          name="Mã bệnh nhân"
+          desc={user ? user.id : ""}
+        />
       </CardContent>
     </Card>
   );
