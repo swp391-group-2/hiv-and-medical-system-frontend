@@ -1,0 +1,29 @@
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+
+const ProfileTabsContainer = () => {
+  return (
+    <section className="flex-3/4 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+      <Tabs defaultValue="account" className="">
+        <TabsList className="">
+          <TabsTrigger value="account" className="">
+            Tài khoản
+          </TabsTrigger>
+          <TabsTrigger value="med-record" className="">
+            Hồ sơ khám bệnh
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="account" className=""></TabsContent>
+        <TabsContent value="med-record" className=""></TabsContent>
+      </Tabs>
+    </section>
+  );
+};
+
+export default ProfileTabsContainer;

@@ -2,7 +2,6 @@ import { Sidebar, SidebarNav, SidebarNavItem } from "@/components/sidebar";
 import { User, Calendar, Pill, FileText, FlaskConical } from "lucide-react";
 
 import UserSummary from "@/components/user-summary";
-import ProfileUpdate from "@/components/profile-update-form";
 
 const sample_user = {
   name: "John",
@@ -52,7 +51,6 @@ const UserProfile = () => {
         <h2 className="text-3xl font-bold mb-5">Hồ sơ</h2>
         <div className="w-full flex gap-5">
           <UserSummary user={sample_user} />
-          <ProfileUpdate />
         </div>
       </div>
     </div>
