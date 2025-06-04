@@ -6,10 +6,10 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "../ui/card";
 
 import AvatarUpload from "./avatar-upload";
-
+import { type User } from "@/pages/user/profile";
 const InfoRow = ({
   icon: Icon,
   name,
@@ -31,13 +31,7 @@ const InfoRow = ({
 };
 
 interface UserSummaryProps {
-  user: {
-    name: string;
-    phone: string;
-    email: string;
-    id: string;
-    imageUrl?: string;
-  };
+  user: User | null;
 }
 
 const UserSummary = ({ user }: UserSummaryProps) => {

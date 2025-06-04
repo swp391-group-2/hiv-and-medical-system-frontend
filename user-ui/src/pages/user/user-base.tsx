@@ -1,4 +1,4 @@
-import { Sidebar, SidebarNav, SidebarNavItem } from "@/components/sidebar";
+import { Sidebar, SidebarNav, SidebarNavItem } from "@/components/user/sidebar";
 import { User, Calendar, Pill, FileText, FlaskConical } from "lucide-react";
 import { Outlet } from "react-router-dom";
 
