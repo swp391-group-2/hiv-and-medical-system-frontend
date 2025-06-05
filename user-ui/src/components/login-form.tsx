@@ -49,7 +49,9 @@ export const LoginForm: FC = () => {
 
       navigate("/");
     },
-    onError: (error) => toast.error(error.message),
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
   const handleProviderLogin = (provider: AuthProviders) => {
     console.log(`Login with ${provider}`);

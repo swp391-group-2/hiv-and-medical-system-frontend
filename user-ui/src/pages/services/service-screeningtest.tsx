@@ -1,5 +1,5 @@
-function ServiceScreeningtest() {
+function ServiceScreeningTest() {
   return <div>service-screeningtest</div>;
 }
 
-export default ServiceScreeningtest;
+export default ServiceScreeningTest;
