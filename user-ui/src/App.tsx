@@ -1,10 +1,15 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+<<<<<<< HEAD
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainLayout from "./layout";
 import Home from "./pages/home";
 import ServiceScreeningtest from "./pages/services/service-screeningtest";
 import LoginPage from "./pages/auth/login";
 import RegisterPage from "./pages/auth/register";
+=======
+import { BrowserRouter } from "react-router-dom";
+import UserProfile from "./pages/user/profile";
+>>>>>>> origin/feature
 
 const queryClient = new QueryClient();
 

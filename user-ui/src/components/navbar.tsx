@@ -132,7 +132,7 @@ function Navbar() {
           <Button variant="outline">
             <Link to="/login">Đăng Nhập</Link>
           </Button>
-          <Button variant="primary">
+          <Button variant="outline">
             <Link to="/register">Đăng Ký</Link>
           </Button>
         </div>
