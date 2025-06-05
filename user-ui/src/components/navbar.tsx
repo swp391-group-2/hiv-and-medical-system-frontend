@@ -129,8 +129,12 @@ function Navbar() {
           </NavigationMenu>
         </div>
         <div className="flex gap-1.5">
-          <Button variant="outline">Đăng Nhập</Button>
-          <Button variant="primary">Đăng Ký</Button>
+          <Button variant="outline">
+            <Link to="/login">Đăng Nhập</Link>
+          </Button>
+          <Button variant="primary">
+            <Link to="/register">Đăng Ký</Link>
+          </Button>
         </div>
       </div>
     </nav>
