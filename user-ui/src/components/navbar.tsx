@@ -30,7 +30,7 @@ const routes: { href: string; label: string }[] = [
     label: "Hỏi đáp",
   },
   {
-    href: "/user-profile",
+    href: "/profile",
     label: "Hồ sơ",
   },
   {
