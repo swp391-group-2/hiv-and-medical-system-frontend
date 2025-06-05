@@ -30,7 +30,7 @@ const routes: { href: string; label: string }[] = [
     label: "Hỏi đáp",
   },
   {
-    href: "/profile",
+    href: "/user-profile",
     label: "Hồ sơ",
   },
   {
@@ -60,7 +60,7 @@ const services: { href: string; title: string; desc: string }[] = [
 function Navbar() {
   const { pathname } = useLocation();
   return (
-    <nav className="sticky top-0 left-0 right-0 py-2.5 shadow-lg shadow-blue-500/15">
+    <nav className="sticky top-0 left-0 right-0 py-3 shadow-xl shadow-blue-500/30 z-50 bg-white">
       <div className="container mx-auto flex justify-between">
         <div>
           <Link to="/">
@@ -132,7 +132,7 @@ function Navbar() {
           <Button variant="outline">
             <Link to="/login">Đăng Nhập</Link>
           </Button>
-          <Button variant="outline">
+          <Button variant="primary">
             <Link to="/register">Đăng Ký</Link>
           </Button>
         </div>
