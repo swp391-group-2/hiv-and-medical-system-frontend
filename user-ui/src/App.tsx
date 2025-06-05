@@ -5,6 +5,12 @@ import Home from "./pages/home";
 
 import LoginPage from "./pages/auth/login";
 import RegisterPage from "./pages/auth/register";
+import UserProfile from "./pages/user/profile";
+import UserBase from "./pages/user/user-base";
+import Appointments from "./pages/user/appointments";
+import Arv from "./pages/user/arv";
+import CheckUpResult from "./pages/user/checkup-result";
+import TestResult from "./pages/user/test-result";
 
 import UserProfile from "./pages/user/profile";
 import ServiceConfirmatoryTest from "./pages/services/service-confirmatorytest";
@@ -25,6 +31,13 @@ function App() {
                 path="confirmatorytest"
                 element={<ServiceConfirmatoryTest />}
               />
+            </Route>
+            <Route element={<UserBase />}>
+              <Route index path="profile" element={<UserProfile />} />
+              <Route path="appointments" element={<Appointments />} />
+              <Route path="arv" element={<Arv />} />
+              <Route path="checkup-result" element={<CheckUpResult />} />
+              <Route path="test-result" element={<TestResult />} />
             </Route>
             <Route path="user-profile" element={<UserProfile />} />
             <Route path="login" element={<LoginPage />} />

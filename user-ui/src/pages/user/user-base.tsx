@@ -7,32 +7,27 @@ const UserBase = () => {
     <div className="w-full flex gap-5">
       <Sidebar>
         <SidebarNav>
+          <SidebarNavItem path="/profile" icon={User} text="Hồ sơ" isActive />
           <SidebarNavItem
-            path="/user-profile"
-            icon={User}
-            text="Hồ sơ"
-            isActive
-          />
-          <SidebarNavItem
-            path="/user-schedule"
+            path="/appointments"
             icon={Calendar}
             text="Lịch khám"
             isActive
           />
           <SidebarNavItem
-            path="/user-arv"
+            path="/arv"
             icon={Pill}
             text="Phác đồ điều trị"
             isActive
           />
           <SidebarNavItem
-            path="/user-checkup-result"
+            path="/checkup-result"
             icon={FileText}
             text="Kết quả khám"
             isActive
           />
           <SidebarNavItem
-            path="/user-test-result"
+            path="/test-result"
             icon={FlaskConical}
             text="Kết quả xét nghiệm"
             isActive
