@@ -6,6 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ArvLabels, ArvItem } from "@/components/user/arv-list";
+import ArvCaution from "@/components/user/arv-caution";
 import type { Medicine, ArvInfoProps } from "@/components/user/arv-list";
 const meds = [
   {
@@ -48,6 +49,13 @@ const arvInfoData = {
   meds: meds,
 } as ArvInfoProps;
 
+const arvCautions = [
+  "Uống thuốc đúng giờ và đúng liều lượng theo chỉ định của bác sĩ.",
+  "Không bỏ liều hoặc tự ý ngưng thuốc khi chưa có chỉ định của bác sĩ.",
+  "Nếu quên uống thuốc, hãy uống ngay khi nhớ ra, trừ khi đã gần đến liều tiếp theo.",
+  "Liên hệ bác sĩ nếu gặp bất kỳ tác dụng phụ nào.",
+];
+
 const Arv = () => {
   const today = new Date();
   const formattedDate = `${today.getDate().toString().padStart(2, "0")}/${(
@@ -57,11 +65,13 @@ const Arv = () => {
     .padStart(2, "0")}`;
 
   return (
-    <section className="w-full mt-7">
+    <section className="w-full mt-7 mr-10">
       <Card>
         <CardHeader>
-          <CardTitle>Phác đồ điều trị: {arvInfoData.name}</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl">
+            Phác đồ điều trị: {arvInfoData.name}
+          </CardTitle>
+          <CardDescription className="text-xl">
             Ngày {formattedDate}: Danh sách thuốc
           </CardDescription>
         </CardHeader>
@@ -70,6 +80,7 @@ const Arv = () => {
           <ArvItem item={arvInfoData} />
         </CardContent>
       </Card>
+      <ArvCaution list={arvCautions} />
     </section>
   );
 };
