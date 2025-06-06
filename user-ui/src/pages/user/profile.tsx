@@ -77,7 +77,7 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="w-full mt-7">
+    <section className="w-full mt-7">
       <h2 className="text-3xl font-bold mb-5">Hồ sơ</h2>
       <div className="w-full flex gap-5">
         <UserSummary user={user} />
@@ -89,7 +89,7 @@ const UserProfile = () => {
           />
         )}
       </div>
-    </div>
+    </section>
   );
 };
 
