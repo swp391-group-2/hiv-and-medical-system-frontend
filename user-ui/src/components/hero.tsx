@@ -1,6 +1,6 @@
 import { Calendar, Search } from "lucide-react";
 import { Button } from "./ui/button";
-import heroImg from "../assets/images/hero.jpg";
+import heroImg from "/images/hero.jpg";
 
 function Hero() {
   return (

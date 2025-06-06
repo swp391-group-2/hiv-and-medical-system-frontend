@@ -1,36 +1,45 @@
-import { FlaskConical } from "lucide-react";
-import { Button } from "./ui/button";
+import { type LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
 
-function ServiceCard() {
+export interface ServiceCardProps {
+  title: string;
+  desc: string;
+  icon: LucideIcon;
+  imgUrl: string;
+  href: string;
+}
+
+function ServiceCard({ title, desc, href, icon, imgUrl }: ServiceCardProps) {
+  const ServiceIcon = icon;
   return (
-    <div className="p-5 shadow-lg shadow-gray-700 rounded-2xl group ">
-      <div className="relative overflow-hidden rounded-t-2xl ">
-        <img
-          src="https://images.unsplash.com/photo-1745894118353-88e64617e064?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="img"
-          className="w-full group-hover:scale-110 group-hover:blur-[2px] transition-all duration-400 transform"
-        />
+    <div className="p-5 group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden border border-gray-100 relative">
+      <div className="relative overflow-hidden rounded-t-2xl  ">
+        <Link to={href}>
+          <img
+            src={imgUrl}
+            alt="img"
+            className="w-full group-hover:scale-110 transition-all duration-400 transform"
+          />
+        </Link>
 
-        <div className="absolute bottom-3 left-0 right-0 px-4 ">
-          <Link to={"/"}>
-            <Button className="border opacity-0 bg-transparent group-hover:backdrop-blur-md group-hover:opacity-100   text-white font-bold w-full py-2 rounded-lg shadow-md transition-all duration-300 transform hover:scale-105">
-              More Info
-            </Button>
-          </Link>
-        </div>
+        <div className="absolute bottom-3 left-0 right-0 px-4 "></div>
       </div>
       <div className="mt-4">
-        <div className="flex items-center gap-2.5 hover:text-primary ">
-          <FlaskConical className="transition-all duration-500" />
+        <div className="flex items-center gap-2.5 group-hover:text-primary ">
           <h3 className="font-bold text-2xl  transition-all duration-300  ">
-            <Link to="/">Xét Nghiệm Sàng Lọc</Link>
+            <Link to={href}>{title}</Link>
           </h3>
+          <ServiceIcon className="duration-300" />
         </div>
-        <p className="mt-1.5 text-gray-500">
-          Xét nghiệm sàng lọc HIV và các bệnh lý khác. Đây là bước đầu tiên
-          trong quy trình chẩn đoán.
-        </p>
+        <p className="mt-1.5 text-gray-500">{desc}</p>
+      </div>
+      <div className="mt-2.5">
+        <Link to={href}>
+          <Button className="font-bold text-lg w-full">
+            Xem Thông Tin Chi Tiết
+          </Button>
+        </Link>
       </div>
     </div>
   );

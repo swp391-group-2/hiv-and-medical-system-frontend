@@ -1,6 +1,6 @@
 import { Hospital } from "lucide-react";
 
-import homeInfoImg from "../assets/images/home-info.jpg";
+import homeInfoImg from "/images/home-info.jpg";
 
 const commitments: { title: string; desc: string }[] = [
   {
@@ -17,7 +17,7 @@ function HomeInfo() {
   return (
     <section>
       <div className="container py-8 mx-auto">
-        <div className="grid grid-cols-12">
+        <div className="grid grid-cols-12 items-center">
           <div className="col-span-8">
             <h2 className="text-4xl text-primary font-bold flex items-center gap-2.5">
               Giới thiệu cơ sở y tế

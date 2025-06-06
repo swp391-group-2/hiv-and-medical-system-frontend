@@ -38,7 +38,6 @@ function App() {
               <Route path="checkup-result" element={<CheckUpResult />} />
               <Route path="test-result" element={<TestResult />} />
             </Route>
-            <Route path="user-profile" element={<UserProfile />} />
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
           </Route>
