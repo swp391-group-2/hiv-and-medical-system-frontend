@@ -1,5 +1,4 @@
 import { Checkbox } from "../ui/checkbox";
-import { Clock } from "lucide-react";
 
 export type Medicine = {
   id: string;
@@ -17,14 +16,12 @@ export type ArvInfoProps = {
 
 export const ArvLabels = () => {
   return (
-    <div className="text-gray-500 w-full grid grid-cols-5 mt-5 mb-5">
+    <div className="text-gray-500 text-center w-full grid grid-cols-5 mt-5 mb-5 p-4">
       <span>Tên thuốc</span>
       <span>Liều uống</span>
-      <span>
-        Thời gian uống <Clock />
-      </span>
+      <span>Thời gian uống</span>
+      <span>Đánh dấu đã uống</span>
       <span>Ghi chú</span>
-      <span>{""}</span>
     </div>
   );
 };
@@ -33,18 +30,27 @@ export const ArvItem = ({ item }: { item: ArvInfoProps }) => {
   return (
     <ul className="w-full border border-gray-300 p-4 rounded">
       {item.meds.map((med: Medicine) => (
-        <li className="w-full grid grid-cols-5 border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0">
+        <li className="w-full grid grid-cols-5 text-center items-center border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0">
           <span>{med.name}</span>
           <span>{med.dosage}</span>
-          <span>
+          <div className="flex flex-col gap-3">
             {med.time.map((takeAt, index) =>
-              index === med.time.length - 1 ? takeAt : takeAt + ", "
+              index === med.time.length - 1 ? (
+                <span>{takeAt}</span>
+              ) : (
+                <span>{takeAt}</span>
+              )
             )}
-          </span>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            {med.time.map(() => (
+              <span>
+                <Checkbox id={med.id} />
+              </span>
+            ))}
+          </div>
           <span>{med.note}</span>
-          <span>
-            <Checkbox id={med.id} /> {med.checked ? "Đã uống" : "Chưa uống"}
-          </span>
         </li>
       ))}
     </ul>
