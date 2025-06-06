@@ -1,4 +1,4 @@
-import logoImg from "../assets/images/logo-hiv.png";
+import logoImg from "/images/logo-hiv.png";
 
 function Logo() {
   return (

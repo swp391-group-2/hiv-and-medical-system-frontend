@@ -11,6 +11,7 @@ import Appointments from "./pages/user/appointments";
 import Arv from "./pages/user/arv";
 import CheckUpResult from "./pages/user/checkup-result";
 import TestResult from "./pages/user/test-result";
+
 import ServiceConfirmatoryTest from "./pages/services/service-confirmatorytest";
 import ServiceScreeningTest from "./pages/services/service-screeningtest";
 
