@@ -7,13 +7,13 @@ interface AppointmentsListProps {
 
 export const AppointmentLabels = () => {
   return (
-    <li className="text-gray-500 w-full grid grid-cols-5 mt-5 mb-5">
+    <div className="text-gray-500 w-full grid grid-cols-5 mt-5 mb-5">
       <span>Mã số</span>
       <span>Bác sĩ phụ trách</span>
       <span>Loại dịch vụ</span>
       <span>Ngày khám</span>
       <span>Giờ khám</span>
-    </li>
+    </div>
   );
 };
 
@@ -31,9 +31,9 @@ const AppointmentItem = ({ item }: { item: AppointmentInfo }) => {
 
 export const AppointmentsList: React.FC<AppointmentsListProps> = ({ list }) => {
   return (
-    <ul className="w-full border border-gray-400 p-4 rounded">
+    <ul className="w-full border border-gray-300 p-4 rounded">
       {list.map((item) => (
-        <AppointmentItem item={item} />
+        <AppointmentItem key={item.id} item={item} />
       ))}
     </ul>
   );
