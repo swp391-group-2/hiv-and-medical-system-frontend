@@ -1,7 +1,12 @@
 import { Eye } from "lucide-react";
 import { Button } from "./ui/button";
 
-function EducationCard() {
+interface EducationCardProps {
+  title: string;
+  desc: string;
+}
+
+function EducationCard({ title, desc }: EducationCardProps) {
   return (
     <div>
       <div className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 overflow-hidden border border-gray-100 relative">
@@ -9,16 +14,11 @@ function EducationCard() {
 
         <div className="p-8">
           <h3 className="text-2xl font-bold text-gray-900 mb-4 line-clamp-2 group-hover:text-primary transition-colors duration-300">
-            Hiểu biết cơ bản về HIV/AIDS
+            {title}
           </h3>
 
           <p className="text-gray-600 mb-6 line-clamp-3 leading-relaxed">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maiores,
-            excepturi, vero nostrum magnam illo deleniti velit quae deserunt hic
-            obcaecati, reiciendis tempore dignissimos harum at minus aspernatur
-            odio nulla maxime mollitia corporis iusto ratione eligendi?
-            Consequatur odit iste cumque harum vitae animi ullam ea, molestias
-            enim explicabo voluptate, accusantium quam!
+            {desc}
           </p>
 
           <div className="flex space-x-3">

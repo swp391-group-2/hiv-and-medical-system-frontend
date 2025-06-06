@@ -30,7 +30,7 @@ function HomeService() {
     <section>
       <div className="container mx-auto">
         <div className="text-center">
-          <h2 className="text-center text-4xl font-bold text-primary mb-4">
+          <h2 className="text-center text-4xl font-bold  mb-4">
             Các Dịch Vụ Của Chúng Tôi
           </h2>
           <p className="inline-block w-[50%] text-lg text-gray-400">

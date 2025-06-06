@@ -1,4 +1,5 @@
 import Hero from "@/components/hero";
+import HomeDoctors from "@/components/home-doctors";
 import HomeEducation from "@/components/home-education";
 import HomeInfo from "@/components/home-info";
 import HomeService from "@/components/home-service";
@@ -15,6 +16,9 @@ function Home() {
       </div>
       <div className="p-10 ">
         <HomeEducation />
+      </div>
+      <div className="p-10 ">
+        <HomeDoctors />
       </div>
     </div>
   );
