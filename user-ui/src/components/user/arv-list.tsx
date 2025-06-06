@@ -30,7 +30,10 @@ export const ArvItem = ({ item }: { item: ArvInfoProps }) => {
   return (
     <ul className="w-full border border-gray-300 p-4 rounded">
       {item.meds.map((med: Medicine) => (
-        <li className="w-full grid grid-cols-5 text-center items-center border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0">
+        <li
+          key={med.id}
+          className="w-full grid grid-cols-5 text-center items-center border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0"
+        >
           <span>{med.name}</span>
           <span>{med.dosage}</span>
           <div className="flex flex-col gap-3">
