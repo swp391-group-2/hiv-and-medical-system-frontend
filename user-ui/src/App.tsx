@@ -12,7 +12,6 @@ import Arv from "./pages/user/arv";
 import CheckUpResult from "./pages/user/checkup-result";
 import TestResult from "./pages/user/test-result";
 
-import UserProfile from "./pages/user/profile";
 import ServiceConfirmatoryTest from "./pages/services/service-confirmatorytest";
 import ServiceScreeningTest from "./pages/services/service-screeningtest";
 
