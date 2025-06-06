@@ -13,6 +13,7 @@ import CheckUpResult from "./pages/user/checkup-result";
 import TestResult from "./pages/user/test-result";
 import ServiceConfirmatoryTest from "./pages/services/service-confirmatorytest";
 import ServiceScreeningTest from "./pages/services/service-screeningtest";
+import ServiceDoctorList from "./pages/services/service-doctor-list";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ function App() {
                 path="confirmatorytest"
                 element={<ServiceConfirmatoryTest />}
               />
+              <Route path="treatment" element={<ServiceDoctorList />} />
             </Route>
             <Route element={<UserBase />}>
               <Route index path="profile" element={<UserProfile />} />
