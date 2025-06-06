@@ -41,17 +41,17 @@ const routes: { href: string; label: string }[] = [
 
 const services: { href: string; title: string; desc: string }[] = [
   {
-    href: "/service/screeningtest",
+    href: "service/screeningtest",
     title: "Xét nghiệm sàng lọc HIV",
     desc: "Xét nghiệm nhằm phát hiện người nghi ngờ nhiễm HIV.",
   },
   {
-    href: "/service/confirmatorytest",
+    href: "service/confirmatorytest",
     title: "Xét nghiệm khẳng định HIV",
     desc: "Xác định chắc chắn một người có nhiễm HIV.",
   },
   {
-    href: "/service/treatment",
+    href: "service/treatment",
     title: "Khám và điều trị HIV",
     desc: "Bao gồm khám lâm sàng, xét nghiệm CD4, tải lượng virus, điều trị bằng thuốc ARV và theo dõi định kỳ.",
   },
@@ -109,6 +109,7 @@ function Navbar() {
                   <NavigationMenuItem key={route.href}>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
+                      asChild
                     >
                       <Link
                         className={cn(
