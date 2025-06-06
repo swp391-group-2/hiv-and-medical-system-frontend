@@ -1,5 +1,5 @@
 import type { AppointmentInfo } from "./appointments-tabs";
-import { formatDate } from "@/lib/utils";
+import { formatDMY } from "@/lib/utils";
 
 interface AppointmentsListProps {
   list: AppointmentInfo[];
@@ -23,7 +23,7 @@ const AppointmentItem = ({ item }: { item: AppointmentInfo }) => {
       <span>{item.id}</span>
       <span>{item.doctor}</span>
       <span>{item.type}</span>
-      <span>{formatDate(item.date.toISOString())}</span>
+      <span>{formatDMY(item.date.toISOString())}</span>
       <span>{item.time.duration}</span>
     </li>
   );
