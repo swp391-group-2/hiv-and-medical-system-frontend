@@ -1,5 +1,6 @@
 import DoctorCards from "@/components/doctorListPage/DoctorCards";
-import FinderBar from "@/components/doctorListPage/finderBar";
+import FinderBar from "@/components/doctorListPage/FinderBar";
+
 import Pagination from "@/components/doctorListPage/Pagination";
 import React, { useEffect, useState } from "react";
 
