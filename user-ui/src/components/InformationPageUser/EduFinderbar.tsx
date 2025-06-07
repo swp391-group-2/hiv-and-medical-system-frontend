@@ -1,17 +1,17 @@
 import React from "react";
 
-interface FinderBarProps {
+interface FinderBarEduProps {
   search: string;
   setSearch: (value: string) => void;
 }
 
-const FinderBar: React.FC<FinderBarProps> = ({ search, setSearch }) => {
+const FinderBarEdu: React.FC<FinderBarEduProps> = ({ search, setSearch }) => {
   return (
     <div className="mb-0 flex justify-center items-center w-full">
       <input
         type="text"
-        placeholder="Tìm bác sĩ"
-        className="border rounded-2xl px-4 py-2 md:w-300 shadow-sm"
+        placeholder="Tìm bài viết giáo dục"
+        className="border rounded-full px-4 py-2 md:w-180 shadow-sm"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -19,4 +19,4 @@ const FinderBar: React.FC<FinderBarProps> = ({ search, setSearch }) => {
   );
 };
 
-export default FinderBar;
+export default FinderBarEdu;
