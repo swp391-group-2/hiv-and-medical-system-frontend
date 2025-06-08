@@ -1,5 +1,9 @@
 import CheckUpResultList from "@/components/user/checkup-rs-list";
-import type { CheckUpRsItemProps } from "@/components/user/checkup-rs-list";
+import type {
+  CD4RsProps,
+  CheckUpRsItemProps,
+  ViralLoadRsProps,
+} from "@/components/user/checkup-rs-item";
 
 const checkUpList: CheckUpRsItemProps[] = [
   {
