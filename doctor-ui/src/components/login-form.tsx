@@ -74,12 +74,12 @@ export const LoginForm: FC = () => {
               field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
               <FormItem className="">
-                <FormLabel className="">Số điện thoại</FormLabel>
+                <FormLabel className="">Email</FormLabel>
                 <FormControl>
                   <Input
                     className=""
                     type="text"
-                    placeholder="Nhập số điện thoại"
+                    placeholder="Nhập email"
                     {...field}
                   />
                 </FormControl>
