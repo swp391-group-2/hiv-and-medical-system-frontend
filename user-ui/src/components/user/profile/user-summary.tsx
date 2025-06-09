@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "@/components/ui/card";
 
 import AvatarUpload from "./avatar-upload";
 import { type User } from "@/pages/user/profile";

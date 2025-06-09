@@ -1,8 +1,8 @@
-import UserSummary from "@/components/user/user-summary";
-import ProfileTabsContainer from "@/components/user/profile-tabs";
+import UserSummary from "@/components/user/profile/user-summary";
+import ProfileTabsContainer from "@/components/user/profile/profile-tabs";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import type { ProfileFormValues } from "@/components/user/profile-info-form";
+import type { ProfileFormValues } from "@/components/user/profile/profile-info-form";
 
 export type UserProfileValues = {
   id: string;

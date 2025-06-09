@@ -8,8 +8,8 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { Clock, Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
-import { type AppointmentsTabsProps } from "@/components/user/appointments-tabs";
-import AppointmentsTabs from "@/components/user/appointments-tabs";
+import { type AppointmentsTabsProps } from "@/components/user/appointments/appointments-tabs";
+import AppointmentsTabs from "@/components/user/appointments/appointments-tabs";
 
 export interface Slot {
   id: number;

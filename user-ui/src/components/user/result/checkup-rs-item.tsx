@@ -13,9 +13,12 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import type { ViralLoadRsProps, CD4RsProps } from "./common";
+import { InfoGroup, InfoTextRow, RsNote } from "./common";
 
 export type CheckUpRsItemProps = {
   id: number;
@@ -23,50 +26,6 @@ export type CheckUpRsItemProps = {
   arv: string;
   time: string;
   note: string;
-};
-
-export type ViralLoadRsProps = {
-  date: string;
-  load: string;
-  result: string;
-  note: string;
-};
-
-export type CD4RsProps = {
-  date: string;
-  quantity: number;
-  percentage: number;
-  normal_threshold: string;
-  note: string;
-};
-
-const CheckUpRsNote = ({ note }: { note: string }) => {
-  return (
-    <div>
-      <div className="mb-2 flex">
-        <span className="w-32 text-zinc-700 font-medium">Ghi chú:</span>
-      </div>
-      <input
-        type="text"
-        value={note}
-        disabled
-        className="w-full bg-zinc-100 rounded px-4 py-3 text-zinc-600 border-none cursor-not-allowed outline-none"
-      />
-    </div>
-  );
-};
-
-const InfoGroup = ({ children }: { children: React.ReactNode }) => {
-  return <div className="space-y-4">{children}</div>;
-};
-
-const InfoTextRow = ({ label, data }: { label: string; data: string }) => {
-  return (
-    <div className="flex justify-between">
-      <span className="text-zinc-700 font-medium">{label}:</span>
-      <span className="text-zinc-900">{data}</span>
-    </div>
-  );
 };
 
 const CheckUpRsItem = ({
@@ -121,7 +80,7 @@ const CheckUpRsItem = ({
                   <InfoTextRow label="Nơi khám" data="Bệnh viện HIV" />
                   <InfoTextRow label="Thời gian" data={formatISO(item.time)} />
                   <InfoTextRow label="Phác đồ được chọn" data={item.arv} />
-                  <CheckUpRsNote note={item.note} />
+                  <RsNote note={item.note} />
                 </InfoGroup>
               </TabsContent>
               <TabsContent value="virus-load" className="p-3">
@@ -132,7 +91,7 @@ const CheckUpRsItem = ({
                   />
                   <InfoTextRow label="Tải lượng virus" data={viral.load} />
                   <InfoTextRow label="Kết quả định tính" data={viral.result} />
-                  <CheckUpRsNote note={viral.note} />
+                  <RsNote note={viral.note} />
                 </InfoGroup>
               </TabsContent>
               <TabsContent value="cd4" className="p-3">
@@ -153,7 +112,7 @@ const CheckUpRsItem = ({
                     label="Ngưỡng bình thường"
                     data={cd4.normal_threshold}
                   />
-                  <CheckUpRsNote note={cd4.note} />
+                  <RsNote note={cd4.note} />
                 </InfoGroup>
               </TabsContent>
             </Tabs>

@@ -15,7 +15,7 @@ import TestResult from "./pages/user/test-result";
 import ServiceConfirmatoryTest from "./pages/services/service-confirmatorytest";
 import ServiceScreeningTest from "./pages/services/service-screeningtest";
 import ServiceDoctorList from "./pages/services/service-doctor-list";
-import EducationPage from "./pages/user/EducationPage";
+import EducationPage from "./pages/static/EducationPage";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +34,7 @@ function App() {
               />
               <Route path="treatment" element={<ServiceDoctorList />} />
             </Route>
-            <Route path="education" element={<EducationPage/>} />
+            <Route path="education" element={<EducationPage />} />
             <Route element={<UserBase />}>
               <Route index path="profile" element={<UserProfile />} />
               <Route path="appointments" element={<Appointments />} />

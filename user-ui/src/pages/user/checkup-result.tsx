@@ -1,10 +1,9 @@
-import CheckUpResultList from "@/components/user/checkup-rs-list";
+import CheckUpResultList from "@/components/user/result/checkup-rs-list";
+import type { CheckUpRsItemProps } from "@/components/user/result/checkup-rs-item";
 import type {
   CD4RsProps,
-  CheckUpRsItemProps,
   ViralLoadRsProps,
-} from "@/components/user/checkup-rs-item";
-
+} from "@/components/user/result/common";
 const checkUpList: CheckUpRsItemProps[] = [
   {
     id: 1,

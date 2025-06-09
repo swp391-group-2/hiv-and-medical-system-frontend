@@ -5,9 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArvLabels, ArvItem } from "@/components/user/arv-list";
-import ArvCaution from "@/components/user/arv-caution";
-import type { Medicine, ArvInfoProps } from "@/components/user/arv-list";
+import { ArvLabels, ArvItem } from "@/components/user/arv/arv-list";
+import ArvCaution from "@/components/user/arv/arv-caution";
+import type { Medicine, ArvInfoProps } from "@/components/user/arv/arv-list";
 const meds = [
   {
     id: "M001",
