@@ -1,26 +1,14 @@
 import axios from "axios";
 
-type RegisterRequest = {
-  phone: string;
-  password: string;
-  confirm: string;
-};
-
-export const register = async (value: RegisterRequest) => {
-  const response = await axios.post("/auth/register", value, {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    responseType: "text",
-  });
-
-  return response.data;
-};
-
 type LoginRequest = {
-  phone: string;
+  email: string;
   password: string;
+};
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
 };
 
 export const login = async (value: LoginRequest) => {
@@ -31,3 +19,8 @@ export const login = async (value: LoginRequest) => {
 
   return response.data;
 };
+
+export async function getCurrentUser(): Promise<User> {
+  const res = await axios.get("/auth/user", { withCredentials: true });
+  return res.data;
+}

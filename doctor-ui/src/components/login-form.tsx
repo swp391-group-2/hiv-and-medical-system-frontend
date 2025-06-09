@@ -2,7 +2,7 @@ import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormField,
@@ -19,7 +19,7 @@ import * as auth from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
-  phone: z.string().regex(/^0\d{10}$/, "Số điện thoại không hợp lệ"),
+  email: z.string().email(),
   password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
 });
 
@@ -32,7 +32,7 @@ export const LoginForm: FC = () => {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phone: "",
+      email: "",
       password: "",
     },
   });
@@ -49,7 +49,9 @@ export const LoginForm: FC = () => {
 
       navigate("/");
     },
-    onError: (error) => toast.error(error.message),
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
   const handleProviderLogin = (provider: AuthProviders) => {
     console.log(`Login with ${provider}`);
@@ -65,11 +67,11 @@ export const LoginForm: FC = () => {
           <h1 className="text-2xl font-bold text-center">Đăng nhập</h1>
           <FormField
             control={form.control}
-            name="phone"
+            name="email"
             render={({
               field,
             }: {
-              field: ControllerRenderProps<LoginFormValues, "phone">;
+              field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
               <FormItem className="">
                 <FormLabel className="">Số điện thoại</FormLabel>
@@ -135,15 +137,6 @@ export const LoginForm: FC = () => {
             <a href="/forgot-password" className="underline text-blue-600">
               Quên mật khẩu?
             </a>
-          </div>
-          <div className="flex justify-between text-sm">
-            Chưa có tài khoản?{" "}
-            <NavLink
-              to="/auth/register"
-              className="underline underline-offset-4"
-            >
-              Đăng ký ngay!
-            </NavLink>
           </div>
         </form>
       </div>

@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "./components/navbar";
+import DoctorSidebar from "@/components/doctor-sidebar";
 
 function MainLayout() {
   return (
     <div>
-      <Navbar />
+      <DoctorSidebar />
       <Outlet />
     </div>
   );

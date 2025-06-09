@@ -1,10 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import MainLayout from "./layout";
-import Home from "./pages/home";
-import ServiceScreeningtest from "./pages/services/service-screeningtest";
-import LoginPage from "./pages/auth/login";
-import RegisterPage from "./pages/auth/register";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import MainLayout from "@/layout/auth-layout";
+import Dashboard from "./pages/home";
+import UnauthLayout from "@/layout/unauth-layout";
+import { RequireAuth, useAuth } from "./auth/auth-checker";
+import UserProfile from "./pages/user/profile";
+import PendingAppointment from "./pages/appointment/pending";
 
 const queryClient = new QueryClient();
 
@@ -13,14 +14,25 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path="service">
-              <Route path="screeningtest" element={<ServiceScreeningtest />} />
-            </Route>
+          <Route element={<UnauthLayout />} />
+          <Route
+            element={
+              <RequireAuth>
+                <MainLayout />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/pending" element={<PendingAppointment />} />
+            <Route path="/completed" element={<PendingAppointment />} />
+            <Route path="" element={<PendingAppointment />} />
+            <Route path="" element={<PendingAppointment />} />
           </Route>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          <Route
+            path="*"
+            element={<Navigate to={useAuth().user ? "/" : "/login"} replace />}
+          />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
