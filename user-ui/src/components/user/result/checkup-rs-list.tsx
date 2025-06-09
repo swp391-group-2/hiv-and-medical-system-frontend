@@ -1,10 +1,5 @@
-import {
-  CheckUpRsItem,
-  type CD4RsProps,
-  type CheckUpRsItemProps,
-  type ViralLoadRsProps,
-} from "./checkup-rs-item";
-
+import { CheckUpRsItem, type CheckUpRsItemProps } from "./checkup-rs-item";
+import { GenericList, type CD4RsProps, type ViralLoadRsProps } from "./common";
 const CheckUpRsLabels = () => {
   return (
     <div className="text-gray-500 text-center w-full grid grid-cols-5 mt-5 mb-5 p-4">
@@ -26,19 +21,14 @@ const CheckUpResultList = ({
   viral: ViralLoadRsProps;
   cd4: CD4RsProps;
 }) => {
-  return list.length ? (
-    <>
-      <CheckUpRsLabels />
-      <ul className="w-full border border-gray-300 p-4 rounded">
-        {list.map((item) => (
-          <CheckUpRsItem item={item} viral={viral} cd4={cd4} />
-        ))}
-      </ul>
-    </>
-  ) : (
-    <span className="block w-full text-center text-4xl text-zinc-500 py-8 italic">
-      Chưa có kết quả
-    </span>
+  return (
+    <GenericList<CheckUpRsItemProps>
+      items={list}
+      header={<CheckUpRsLabels />}
+      renderItem={(item) => (
+        <CheckUpRsItem key={item.id} item={item} viral={viral} cd4={cd4} />
+      )}
+    />
   );
 };
 
