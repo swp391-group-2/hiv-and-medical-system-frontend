@@ -75,7 +75,7 @@ const TestRsItem = ({
               </TabsList>
               <TabsContent value="detail" className="p-3">
                 <InfoGroup>
-                  <InfoTextRow label="STT" data={item.id.toString()} />
+                  <InfoTextRow label="Nơi khám" data="Cơ sở HIV" />
                   <InfoTextRow label="Loại xét nghiệm" data={item.type} />
                   <InfoTextRow label="Kết quả" data={item.result} />
                   <InfoTextRow
