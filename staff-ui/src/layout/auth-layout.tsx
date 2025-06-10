@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import DoctorSidebar from "@/components/doctor-sidebar";
+import StaffSidebar from "@/components/staff-sidebar";
 
 function MainLayout() {
   return (
     <div>
-      <DoctorSidebar />
+      <StaffSidebar />
       <Outlet />
     </div>
   );

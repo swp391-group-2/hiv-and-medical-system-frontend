@@ -5,11 +5,14 @@ import Dashboard from "./pages/home";
 import UnauthLayout from "@/layout/unauth-layout";
 import { AuthProvider, RequireAuth, useAuth } from "./auth/auth-checker";
 import UserProfile from "./pages/user/profile";
-import PendingAppointment from "./pages/appointment/pending";
+import PendingAppointment from "./pages/appointment/checkin-pending";
 import LoginPage from "./pages/auth/login";
-import PatientList from "./pages/appointment/completed";
-import Questions from "./pages/questions/qa";
-import Schedule from "./pages/appointment/schedule";
+import Comeback from "./pages/appointment/comeback";
+import OngoingAppointments from "./pages/appointment/on-going";
+import FinishedAppointments from "./pages/appointment/finished";
+import ArvManagement from "./pages/management/arv";
+import DoctorSchedule from "./pages/management/doctor-schedule";
+import PatientsManagement from "./pages/management/patients";
 
 const queryClient = new QueryClient();
 
@@ -29,12 +32,24 @@ function App() {
                 </RequireAuth>
               }
             >
-              <Route index path="/doctor/dashboard" element={<Dashboard />} />
-              <Route path="/doctor/pending" element={<PendingAppointment />} />
-              <Route path="/doctor/completed" element={<PatientList />} />
-              <Route path="/doctor/schedule" element={<Schedule />} />
-              <Route path="/doctor/qa" element={<Questions />} />
-              <Route path="/doctor/profile" element={<UserProfile />} />
+              <Route index path="/staff/dashboard" element={<Dashboard />} />
+              <Route
+                path="/staff/checkin-pending"
+                element={<PendingAppointment />}
+              />
+              <Route path="/staff/on-going" element={<OngoingAppointments />} />
+              <Route
+                path="/staff/finished"
+                element={<FinishedAppointments />}
+              />
+              <Route path="/staff/comeback" element={<Comeback />} />
+              <Route path="/staff/patients" element={<PatientsManagement />} />
+              <Route path="/staff/arv" element={<ArvManagement />} />
+              <Route
+                path="/staff/doctor-schedule"
+                element={<DoctorSchedule />}
+              />
+              <Route path="/staff/profile" element={<UserProfile />} />
             </Route>
             {/* <Route
               path="*"
