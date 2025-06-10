@@ -1,14 +1,14 @@
-import UserSummary from "@/components/user/user-summary";
-import ProfileTabsContainer from "@/components/user/profile-tabs";
+import UserSummary from "@/components/user/profile/user-summary";
+import ProfileTabsContainer from "@/components/user/profile/profile-tabs";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import type { ProfileFormValues } from "@/components/user/profile-info-form";
+import type { ProfileFormValues } from "@/components/user/profile/profile-info-form";
 
 export type UserProfileValues = {
   id: string;
   fullName: string;
   email: string;
-  imageUrl: string;
+  imageUrl?: string;
   gender: string;
   dob: string; // expecting "YYYY-MM-DD"
   idNumber: string;
@@ -80,7 +80,7 @@ const UserProfile = () => {
     <section className="w-full mt-7">
       <h2 className="text-3xl font-bold mb-5">Hồ sơ</h2>
       <div className="w-full flex gap-5">
-        <UserSummary user={user} />
+        {user && <UserSummary {...user} />}
         {user && (
           <ProfileTabsContainer
             user={user}

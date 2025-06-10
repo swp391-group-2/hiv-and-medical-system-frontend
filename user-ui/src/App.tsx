@@ -15,7 +15,7 @@ import TestResult from "./pages/user/test-result";
 import ServiceConfirmatoryTest from "./pages/services/service-confirmatorytest";
 import ServiceScreeningTest from "./pages/services/service-screeningtest";
 import ServiceDoctorList from "./pages/services/service-doctor-list";
-import EducationPage from "./pages/user/EducationPage";
+import EducationPage from "./pages/static/EducationPage";
 
 import { CookiesProvider } from "react-cookie";
 
