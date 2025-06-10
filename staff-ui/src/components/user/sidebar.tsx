@@ -11,7 +11,7 @@ import {
 
 export const Sidebar = ({ children }: { children: React.ReactNode }) => {
   return (
-    <aside className="w-72 h-screen bg-white border-r shadow-sm flex flex-col">
+    <aside className="w-96 h-screen bg-white border-r shadow-sm flex flex-col">
       {children}
     </aside>
   );
