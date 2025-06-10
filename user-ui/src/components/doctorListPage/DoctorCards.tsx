@@ -1,8 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface Doctor {
   name: string;
-  
+
   rating: number;
   image?: string; // Thêm dòng này
 }
@@ -31,14 +32,16 @@ const DoctorCards: React.FC<DoctorCardsProps> = ({ doctors }) => {
             )}
           </div>
           <h3 className="font-semibold">{doctor.name}</h3>
-       
+
           <div className="flex items-center mb-3">
             <span className="text-yellow-400 mr-2">★★★★★</span>
             <span className="font-medium">{doctor.rating}</span>
           </div>
-          <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
-            Đặt khám
-          </button>
+          <Link to={`./${index}/booking-appointment`}>
+            <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">
+              Đặt khám
+            </button>
+          </Link>
         </div>
       ))}
     </div>

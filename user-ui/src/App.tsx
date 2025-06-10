@@ -18,6 +18,7 @@ import ServiceDoctorList from "./pages/services/service-doctor-list";
 import EducationPage from "./pages/static/EducationPage";
 
 import { CookiesProvider } from "react-cookie";
+import AppointmentBooking from "./pages/appointment/appointment-booking";
 
 const queryClient = new QueryClient();
 
@@ -29,16 +30,29 @@ function App() {
           <Routes>
             <Route element={<MainLayout />}>
               <Route index element={<Home />} />
-              <Route path="service">
-                <Route
-                  path="screeningtest"
-                  element={<ServiceScreeningTest />}
-                />
-                <Route
-                  path="confirmatorytest"
-                  element={<ServiceConfirmatoryTest />}
-                />
-                <Route path="treatment" element={<ServiceDoctorList />} />
+              <Route path="services">
+                <Route path="screeningtest">
+                  <Route index element={<ServiceScreeningTest />} />
+                  <Route
+                    path="booking-appointment"
+                    element={<AppointmentBooking />}
+                  />
+                </Route>
+                <Route path="confirmatorytest">
+                  <Route index element={<ServiceConfirmatoryTest />} />
+                  <Route
+                    path="booking-appointment"
+                    element={<AppointmentBooking />}
+                  />
+                </Route>
+                <Route path="treatment"></Route>
+                <Route path="doctors">
+                  <Route index element={<ServiceDoctorList />} />
+                  <Route
+                    path=":doctorId/booking-appointment"
+                    element={<AppointmentBooking />}
+                  />
+                </Route>
               </Route>
               <Route path="education" element={<EducationPage />} />
               <Route element={<UserBase />}>
