@@ -17,36 +17,43 @@ import ServiceScreeningTest from "./pages/services/service-screeningtest";
 import ServiceDoctorList from "./pages/services/service-doctor-list";
 import EducationPage from "./pages/user/EducationPage";
 
+import { CookiesProvider } from "react-cookie";
+
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path="service">
-              <Route path="screeningtest" element={<ServiceScreeningTest />} />
-              <Route
-                path="confirmatorytest"
-                element={<ServiceConfirmatoryTest />}
-              />
-              <Route path="treatment" element={<ServiceDoctorList />} />
+      <CookiesProvider defaultSetOptions={{ path: "/" }}>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path="service">
+                <Route
+                  path="screeningtest"
+                  element={<ServiceScreeningTest />}
+                />
+                <Route
+                  path="confirmatorytest"
+                  element={<ServiceConfirmatoryTest />}
+                />
+                <Route path="treatment" element={<ServiceDoctorList />} />
+              </Route>
+              <Route path="education" element={<EducationPage />} />
+              <Route element={<UserBase />}>
+                <Route index path="profile" element={<UserProfile />} />
+                <Route path="appointments" element={<Appointments />} />
+                <Route path="arv" element={<Arv />} />
+                <Route path="checkup-result" element={<CheckUpResult />} />
+                <Route path="test-result" element={<TestResult />} />
+              </Route>
+              <Route path="login" element={<LoginPage />} />
+              <Route path="register" element={<RegisterPage />} />
             </Route>
-            <Route path="education" element={<EducationPage/>} />
-            <Route element={<UserBase />}>
-              <Route index path="profile" element={<UserProfile />} />
-              <Route path="appointments" element={<Appointments />} />
-              <Route path="arv" element={<Arv />} />
-              <Route path="checkup-result" element={<CheckUpResult />} />
-              <Route path="test-result" element={<TestResult />} />
-            </Route>
-            <Route path="login" element={<LoginPage />} />
-            <Route path="register" element={<RegisterPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </CookiesProvider>
     </QueryClientProvider>
   );
 }
