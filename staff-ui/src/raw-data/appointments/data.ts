@@ -1,5 +1,5 @@
 import type { Appointment } from "@/types/types";
-
+export const emptyAppointments: Appointment[] = [];
 export const sampleAppointments: Appointment[] = [
   {
     id: 1,

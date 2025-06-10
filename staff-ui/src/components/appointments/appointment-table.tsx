@@ -7,8 +7,12 @@ import {
 } from "@/components/ui/table";
 import type { Appointment } from "@/types/types";
 import { AppointmentRow } from "@/components/appointments/appointment-row";
+import { EmptyListMessage } from "@/components/page-message";
 
 export function AppointmentTable({ data }: { data: Appointment[] }) {
+  if (data.length == 0) {
+    return <EmptyListMessage message="Không có lịch hẹn nào đang chờ" />;
+  }
   return (
     <Table>
       <TableHeader>
