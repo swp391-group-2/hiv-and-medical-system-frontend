@@ -20,7 +20,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route element={<UnauthLayout />}>
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/" element={<LoginPage />} />
             </Route>
             <Route
               element={

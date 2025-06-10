@@ -2,7 +2,7 @@ import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormField,
@@ -114,12 +114,14 @@ export const LoginForm: FC = () => {
               Đăng nhập
             </Button>
           ) : (
-            <Button
-              type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
-            >
-              Đăng nhập
-            </Button>
+            <Link to={"doctor/dashboard"}>
+              <Button
+                type="submit"
+                className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
+              >
+                Đăng nhập
+              </Button>
+            </Link>
           )}
           <Separator className="mb-2" />
           <div className="flex justify-center">
