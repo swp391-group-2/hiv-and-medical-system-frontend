@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
-import React from "react";
+import React, { type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
 export const Sidebar = ({ children }: { children: React.ReactNode }) => {
@@ -27,10 +27,15 @@ export const SidebarNav = ({ children }: { children?: React.ReactNode }) => {
   );
 };
 
+export const SidebarFooter = ({ children }: { children: ReactNode }) => {
+  return <div className="">{children}</div>;
+};
+
 interface SidebarNavItemProps {
   path: string;
   icon?: LucideIcon;
   text: string;
+  desc: string;
   isActive: boolean;
   children?: React.ReactNode;
 }
@@ -39,6 +44,7 @@ export const SidebarNavItem = ({
   path,
   icon: Icon,
   text,
+  desc,
   children,
   ...rest
 }: SidebarNavItemProps) => {
@@ -57,7 +63,14 @@ export const SidebarNavItem = ({
         {...rest}
       >
         {Icon && <Icon className="w-5 h-5" />}
-        <span>{text}</span>
+        {desc ? (
+          <div className="flex flex-col">
+            <span>{text}</span>
+            <span>{desc}</span>
+          </div>
+        ) : (
+          <span>{text}</span>
+        )}
       </NavLink>
       {children && <ul className="pl-8">{children}</ul>}
     </li>
