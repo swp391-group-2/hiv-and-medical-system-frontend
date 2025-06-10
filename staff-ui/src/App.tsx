@@ -5,7 +5,6 @@ import Dashboard from "./pages/home";
 import UnauthLayout from "@/layout/unauth-layout";
 import { AuthProvider, RequireAuth } from "./auth/auth-checker";
 import UserProfile from "./pages/user/profile";
-import PendingAppointment from "./pages/appointment/checkin-pending";
 import LoginPage from "./pages/auth/login";
 import Comeback from "./pages/appointment/comeback";
 import OngoingAppointments from "./pages/appointment/on-going";
@@ -13,6 +12,7 @@ import FinishedAppointments from "./pages/appointment/finished";
 import ArvManagement from "./pages/management/arv";
 import DoctorSchedule from "./pages/management/doctor-schedule";
 import PatientsManagement from "./pages/management/patients";
+import CheckinPending from "./pages/appointment/checkin-pending";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +35,7 @@ function App() {
               <Route index path="/staff/dashboard" element={<Dashboard />} />
               <Route
                 path="/staff/checkin-pending"
-                element={<PendingAppointment />}
+                element={<CheckinPending />}
               />
               <Route path="/staff/on-going" element={<OngoingAppointments />} />
               <Route
