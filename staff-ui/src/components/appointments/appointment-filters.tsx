@@ -43,7 +43,7 @@ export function AppointmentFilters({
             />
           </div>
 
-          <Select value={type} onValueChange={setType}>
+          <Select defaultValue="default" value={type} onValueChange={setType}>
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
               <Funnel className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Tất cả loại khám" />
