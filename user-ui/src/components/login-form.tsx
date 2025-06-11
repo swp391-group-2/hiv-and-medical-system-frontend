@@ -19,7 +19,7 @@ import * as auth from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
-  phone: z.string().regex(/^0\d{10}$/, "Số điện thoại không hợp lệ"),
+  email: z.string().email("Email không hợp lệ"),
   password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
 });
 
@@ -32,7 +32,7 @@ export const LoginForm: FC = () => {
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      phone: "",
+      email: "",
       password: "",
     },
   });
@@ -55,31 +55,31 @@ export const LoginForm: FC = () => {
   });
   const handleProviderLogin = (provider: AuthProviders) => {
     console.log(`Login with ${provider}`);
-    // Handle provider login logic here
+    // login with google
   };
   return (
     <Form {...form}>
       <div className="w-full max-w-md mx-auto">
         <form
           onSubmit={form.handleSubmit((value) => login(value))}
-          className="space-y-6 bg-white p-6 rounded shadow-md"
+          className="space-y-6 bg-white p-6 rounded-xl shadow-md"
         >
           <h1 className="text-2xl font-bold text-center">Đăng nhập</h1>
           <FormField
             control={form.control}
-            name="phone"
+            name="email"
             render={({
               field,
             }: {
-              field: ControllerRenderProps<LoginFormValues, "phone">;
+              field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
               <FormItem className="">
-                <FormLabel className="">Số điện thoại</FormLabel>
+                <FormLabel className="">Email</FormLabel>
                 <FormControl>
                   <Input
                     className=""
                     type="text"
-                    placeholder="Nhập số điện thoại"
+                    placeholder="Nhập email"
                     {...field}
                   />
                 </FormControl>
@@ -140,10 +140,7 @@ export const LoginForm: FC = () => {
           </div>
           <div className="flex justify-between text-sm">
             Chưa có tài khoản?{" "}
-            <NavLink
-              to="/auth/register"
-              className="underline underline-offset-4"
-            >
+            <NavLink to="/signup" className="underline underline-offset-4">
               Đăng ký ngay!
             </NavLink>
           </div>

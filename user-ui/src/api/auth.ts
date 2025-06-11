@@ -1,13 +1,13 @@
 import axios from "axios";
 
 type RegisterRequest = {
-  phone: string;
+  email: string;
   password: string;
-  confirm: string;
+  fullName: string;
 };
 
 export const register = async (value: RegisterRequest) => {
-  const response = await axios.post("/auth/register", value, {
+  const response = await axios.post("/auth/signup", value, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export const register = async (value: RegisterRequest) => {
 };
 
 type LoginRequest = {
-  phone: string;
+  email: string;
   password: string;
 };
 

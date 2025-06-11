@@ -90,7 +90,7 @@ function Navbar() {
             <Link to="/login">Đăng Nhập</Link>
           </Button>
           <Button variant="primary">
-            <Link to="/register">Đăng Ký</Link>
+            <Link to="/signup">Đăng Ký</Link>
           </Button>
         </div>
       </div>

@@ -2,8 +2,7 @@ import { LoginForm } from "@/components/login-form";
 
 const LoginPage = () => {
   return (
-    <div className="flex gap-2 p-2 mt-30  w-3/4 rounded">
-      <div className="w-full h-full rounded bg-blue-400">Phương</div>
+    <div className="bg-blue-300 p-2 pt-30 pb-30 rounded">
       <LoginForm />
     </div>
   );

@@ -20,7 +20,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const regSchema = z
   .object({
-    phone: z.string().regex(/^0\d{9}$/, "Số điện thoại không hợp lệ"),
+    fullName: z
+      .string()
+      .min(1, "Tên phải chứa ít nhất một kí tự")
+      .max(50, "Vượt quá số ký tự cho phép"),
+    email: z.string().email("Email không hợp lệ"),
     password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
     confirm: z.string(),
   })
@@ -38,7 +42,8 @@ export const RegForm: FC = () => {
   const form = useForm<RegFormValues>({
     resolver: zodResolver(regSchema),
     defaultValues: {
-      phone: "",
+      fullName: "",
+      email: "",
       password: "",
       confirm: "",
     },
@@ -69,24 +74,46 @@ export const RegForm: FC = () => {
       <div className="w-full max-w-md mx-auto">
         <form
           onSubmit={form.handleSubmit((value) => register(value))}
-          className="space-y-6 bg-white p-6 rounded shadow-md"
+          className="space-y-6 bg-white p-6 rounded-xl shadow-md"
         >
           <h1 className="text-2xl font-bold text-center">Đăng kí</h1>
           <FormField
             control={form.control}
-            name="phone"
+            name="fullName"
             render={({
               field,
             }: {
-              field: ControllerRenderProps<RegFormValues, "phone">;
+              field: ControllerRenderProps<RegFormValues, "fullName">;
             }) => (
               <FormItem className="">
-                <FormLabel className="">Số điện thoại</FormLabel>
+                <FormLabel className="">Họ và Tên</FormLabel>
                 <FormControl>
                   <Input
                     className=""
                     type="text"
-                    placeholder="Nhập số điện thoại"
+                    placeholder="Nhập họ và tên"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="" />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({
+              field,
+            }: {
+              field: ControllerRenderProps<RegFormValues, "email">;
+            }) => (
+              <FormItem className="">
+                <FormLabel className="">Email</FormLabel>
+                <FormControl>
+                  <Input
+                    className=""
+                    type="text"
+                    placeholder="Nhập email cá nhân của bạn"
                     {...field}
                   />
                 </FormControl>
@@ -164,7 +191,7 @@ export const RegForm: FC = () => {
 
           <div className="flex justify-between text-sm">
             Đã có tài khoản?{" "}
-            <NavLink to="/auth/login" className="underline underline-offset-4">
+            <NavLink to="/login" className="underline underline-offset-4">
               Đăng nhập ngay!
             </NavLink>
           </div>
