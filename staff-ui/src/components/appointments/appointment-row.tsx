@@ -57,7 +57,7 @@ export function AppointmentRow({ appt }: { appt: Appointment }) {
               }}
             >
               {/*TO DO: check-in method */}
-              Check-In Bệnh Nhân
+              Phiên khám bệnh
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
