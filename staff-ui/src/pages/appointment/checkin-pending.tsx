@@ -13,8 +13,6 @@ const CheckinPending = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filters, setFilters] = useState<Filters>({
     search: "",
-    date: undefined,
-    time: "",
     type: "",
   });
 
@@ -23,32 +21,21 @@ const CheckinPending = () => {
   }, []);
 
   const filtered = useMemo(() => {
+    const q = filters.search?.trim().toLowerCase() || "";
+
     return appointments.filter((a) => {
-      // search by name or phone
-      if (filters.search) {
-        const q = filters.search.toLowerCase();
-        if (
-          !a.patientName.toLowerCase().includes(q) &&
-          !a.patientPhone.includes(q)
-        ) {
-          return false;
-        }
-      }
-      // date (ISO YYYY-MM-DD)
-      if (filters.date) {
-        if (a.date !== filters.date.toISOString().slice(0, 10)) {
-          return false;
-        }
-      }
-      // time exact match
-      if (filters.time && a.time !== filters.time) {
-        return false;
-      }
-      // exam type exact match
-      if (filters.type && a.type !== filters.type) {
-        return false;
-      }
-      return true;
+      // type check
+      const typeMatch =
+        filters.type === "default" ? true : a.type === filters.type;
+
+      // search check
+      const searchMatch =
+        !q ||
+        a.patientName.toLowerCase().includes(q) ||
+        a.patientPhone.toLowerCase().includes(q);
+
+      // only include if BOTH match
+      return typeMatch && searchMatch;
     });
   }, [appointments, filters]);
 
