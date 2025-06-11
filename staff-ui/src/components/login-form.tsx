@@ -47,7 +47,7 @@ export const LoginForm: FC = () => {
         queryKey: ["self"],
       });
 
-      navigate("/");
+      navigate("/staff/dashboard");
     },
     onError: (error) => {
       toast.error(error.message);

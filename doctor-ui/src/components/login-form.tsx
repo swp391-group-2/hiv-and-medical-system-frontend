@@ -19,7 +19,7 @@ import * as auth from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email("Email không hợp lệ"),
   password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
 });
 
@@ -47,7 +47,7 @@ export const LoginForm: FC = () => {
         queryKey: ["self"],
       });
 
-      navigate("/");
+      navigate("/doctor/dashboard");
     },
     onError: (error) => {
       toast.error(error.message);
