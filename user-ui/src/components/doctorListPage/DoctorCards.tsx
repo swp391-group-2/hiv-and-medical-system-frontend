@@ -8,7 +8,7 @@ interface Doctor {
   id: string;
   name: string;
   email: string;
-  rating: number;
+  rating?: number;
   image?: string;
 }
 
@@ -58,7 +58,7 @@ const DoctorCards: React.FC<DoctorCardsProps> = ({ doctors }) => {
               <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
                 <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
                 <span className="font-semibold text-gray-800">
-                  {doctor.rating}
+                  {doctor.rating || 5}
                 </span>
                 <span className="text-gray-500 text-sm ml-1">
                   (120+ đánh giá)

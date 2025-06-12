@@ -14,7 +14,8 @@ import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "./ui/separator";
 import { type FC } from "react";
-import authApi from "@/apis/auth.api";
+import { login } from "@/apis/auth";
+import type { User } from "@/types/user.type";
 // import * as auth from "@/apis/auth";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -25,6 +26,12 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 type AuthProviders = "google";
+
+interface LoginResponse {
+  accessToken: string;
+  refreshToken: string;
+  userProfile: User;
+}
 
 export const LoginForm: FC = () => {
   const navigate = useNavigate();
@@ -37,8 +44,19 @@ export const LoginForm: FC = () => {
     },
   });
   const handleLogin = async (value: LoginFormValues) => {
-    await authApi.login(value);
-    navigate("/");
+    login(value)
+      .then((response: LoginResponse) => {
+        localStorage.setItem("accessToken", response.accessToken);
+        localStorage.setItem("refreshToken", response.refreshToken);
+        localStorage.setItem(
+          "userProfile",
+          JSON.stringify(response.userProfile)
+        );
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+      });
   };
   // Handle login logic here, e.g., call an API to authenticate the user
   // const queryClient = useQueryClient();
@@ -78,7 +96,6 @@ export const LoginForm: FC = () => {
               field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
               <FormItem className="">
-                <FormLabel className="">Email</FormLabel>
                 <FormLabel className="">Email</FormLabel>
                 <FormControl>
                   <Input
