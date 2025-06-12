@@ -2,8 +2,8 @@ import axios from "axios";
 
 type RegisterRequest = {
   email: string;
-  password: string;
   fullName: string;
+  password: string;
 };
 
 export const register = async (value: RegisterRequest) => {

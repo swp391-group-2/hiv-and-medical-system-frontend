@@ -1,8 +1,9 @@
 import { Calendar, Clock, Gift, Search, ShieldCheck } from "lucide-react";
 import { Button } from "./ui/button";
 import heroImg from "/images/hero.jpg";
+import { Link } from "react-router-dom";
 
-function Hero() {
+function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
   return (
     <section className="bg-primary/25 py-15 ">
       <div className="container mx-auto">
@@ -24,14 +25,17 @@ function Hero() {
             </p>
             <div className="mt-5 flex gap-4">
               <Button
+                onClick={scrollToHomeService}
                 className="text-primary bg-white hover:bg-white  border-sky-400"
                 size="xl"
               >
                 <Calendar className="!w-[20px] !h-[20px]" /> Đăng Ký Xét Nghiệm
               </Button>
-              <Button className="text-white border-0 " size="xl">
-                <Search className="!w-[20px] !h-[20px]" /> Tìm Bác Sĩ
-              </Button>
+              <Link to={"/services/doctors"}>
+                <Button className="text-white border-0 " size="xl">
+                  <Search className="!w-[20px] !h-[20px]" /> Tìm Bác Sĩ
+                </Button>
+              </Link>
               <Button
                 className="text-white border-0"
                 variant="destructive"

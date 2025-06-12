@@ -20,7 +20,7 @@ export const services: ServiceCardProps[] = [
     title: "Khám và Điều Trị HIV",
     desc: "Dịch vụ khám bệnh, tư vấn, chẩn đoán và điều trị cho bệnh nhân.",
     icon: BriefcaseMedical,
-    href: "/services/treatment",
+    href: "/services/doctors",
     imgUrl: "/images/hivapointment.jpg",
   },
 ];

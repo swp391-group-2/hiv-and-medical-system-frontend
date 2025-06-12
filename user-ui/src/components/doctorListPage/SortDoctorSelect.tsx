@@ -11,7 +11,10 @@ interface SortDoctorSelectProps {
   setSortOrder: (order: "desc" | "asc") => void;
 }
 
-const SortDoctorSelect: React.FC<SortDoctorSelectProps> = ({ sortOrder, setSortOrder }) => (
+const SortDoctorSelect: React.FC<SortDoctorSelectProps> = ({
+  sortOrder,
+  setSortOrder,
+}) => (
   <Select
     value={sortOrder}
     onValueChange={(v) => setSortOrder(v as "desc" | "asc")}

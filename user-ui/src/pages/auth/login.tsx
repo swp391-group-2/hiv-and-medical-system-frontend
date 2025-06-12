@@ -2,8 +2,10 @@ import { LoginForm } from "@/components/login-form";
 
 const LoginPage = () => {
   return (
-    <div className="bg-blue-300 p-2 pt-30 pb-30 rounded">
-      <LoginForm />
+    <div className="flex justify-center items-center mt-10">
+      <div className="w-3/4 max-w-md p-2 rounded">
+        <LoginForm />
+      </div>
     </div>
   );
 };

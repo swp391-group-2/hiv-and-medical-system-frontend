@@ -3,7 +3,7 @@ import Logo from "./logo";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuItem,
+  NavigationMenuItem, // Kiểm tra import này
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
@@ -44,7 +44,7 @@ function Navbar() {
                         <ul className="grid w-[300px] gap-4">
                           <li>
                             {services.map((service) => (
-                              <NavigationMenuLink asChild>
+                              <NavigationMenuLink asChild key={service.href}>
                                 <Link to={service.href}>
                                   <div className="font-medium">
                                     {service.title}
@@ -87,9 +87,10 @@ function Navbar() {
         </div>
         <div className="flex gap-1.5">
           <Button variant="outline">
-            <Link to="/login">Đăng Nhập</Link>
+            <Link to="/auth/login">Đăng Nhập</Link>
           </Button>
           <Button variant="primary">
+            <Link to="/auth/register">Đăng Ký</Link>
             <Link to="/signup">Đăng Ký</Link>
           </Button>
         </div>

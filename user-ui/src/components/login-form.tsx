@@ -1,7 +1,6 @@
 import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   Form,
@@ -15,8 +14,9 @@ import { Button } from "./ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "./ui/separator";
 import { type FC } from "react";
-import * as auth from "@/api/auth";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import authApi from "@/apis/auth.api";
+// import * as auth from "@/apis/auth";
+// import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
@@ -36,23 +36,27 @@ export const LoginForm: FC = () => {
       password: "",
     },
   });
+  const handleLogin = async (value: LoginFormValues) => {
+    await authApi.login(value);
+    navigate("/");
+  };
+  // Handle login logic here, e.g., call an API to authenticate the user
+  // const queryClient = useQueryClient();
+  // const { mutate: login, status } = useMutation({
+  //   mutationFn: async (value: LoginFormValues) => await auth.login(value),
+  //   onSuccess: (token) => {
+  //     localStorage.setItem("token", token);
 
-  const queryClient = useQueryClient();
-  const { mutate: login, status } = useMutation({
-    mutationFn: async (value: LoginFormValues) => await auth.login(value),
-    onSuccess: (token) => {
-      localStorage.setItem("token", token);
+  //     queryClient.invalidateQueries({
+  //       queryKey: ["self"],
+  //     });
 
-      queryClient.invalidateQueries({
-        queryKey: ["self"],
-      });
-
-      navigate("/");
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  //     navigate("/");
+  //   },
+  //   onError: (error) => {
+  //     toast.error(error.message);
+  //   },
+  // });
   const handleProviderLogin = (provider: AuthProviders) => {
     console.log(`Login with ${provider}`);
     // login with google
@@ -61,8 +65,8 @@ export const LoginForm: FC = () => {
     <Form {...form}>
       <div className="w-full max-w-md mx-auto">
         <form
-          onSubmit={form.handleSubmit((value) => login(value))}
-          className="space-y-6 bg-white p-6 rounded-xl shadow-md"
+          onSubmit={form.handleSubmit((value) => handleLogin(value))}
+          className="space-y-6 bg-white p-6 rounded shadow-md"
         >
           <h1 className="text-2xl font-bold text-center">Đăng nhập</h1>
           <FormField
@@ -74,6 +78,7 @@ export const LoginForm: FC = () => {
               field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
               <FormItem className="">
+                <FormLabel className="">Email</FormLabel>
                 <FormLabel className="">Email</FormLabel>
                 <FormControl>
                   <Input

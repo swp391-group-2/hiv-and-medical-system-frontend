@@ -3,23 +3,7 @@ import ProfileTabsContainer from "@/components/user/profile/profile-tabs";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import type { ProfileFormValues } from "@/components/user/profile/profile-info-form";
-
-export type UserProfileValues = {
-  id: string;
-  fullName: string;
-  email: string;
-  imageUrl?: string;
-  gender: string;
-  dob: string; // expecting "YYYY-MM-DD"
-  idNumber: string;
-  insuranceNumber: string;
-  occupation: string;
-  phone: string;
-  province: string;
-  district: string;
-  ward: string;
-  street: string;
-};
+import type { UserProfileValues } from "@/types/userProfile.type";
 
 const UserProfile = () => {
   const [user, setUser] = useState<UserProfileValues | null>(null);

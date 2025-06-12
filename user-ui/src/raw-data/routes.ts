@@ -37,13 +37,8 @@ export const services: { href: string; title: string; desc: string }[] = [
     desc: "Xác định chắc chắn một người có nhiễm HIV.",
   },
   {
-    href: "services/treatment",
-    title: "Khám điều trị HIV",
-    desc: "Bao gồm khám lâm sàng, xét nghiệm CD4, tải lượng virus, điều trị bằng thuốc ARV và theo dõi định kỳ.",
-  },
-  {
     href: "services/doctors",
-    title: " Chọn Bác Sĩ điều trị HIV",
+    title: "Khám điều trị HIV",
     desc: "Bao gồm khám lâm sàng, xét nghiệm CD4, tải lượng virus, điều trị bằng thuốc ARV và theo dõi định kỳ.",
   },
 ];

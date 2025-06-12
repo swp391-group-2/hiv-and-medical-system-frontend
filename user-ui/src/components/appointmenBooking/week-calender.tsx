@@ -111,7 +111,7 @@ const WeekCalendar = ({
                 w-16 h-16 rounded-lg text-sm font-medium transition-colors border-2
                 ${
                   isSelected(date)
-                    ? "bg-cyan-500 text-white border-cyan-500"
+                    ? "bg-primary text-white border-cyan-500"
                     : isToday(date)
                     ? "border-cyan-300 bg-cyan-50 text-cyan-700"
                     : isDateAvailable(date)
