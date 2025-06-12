@@ -34,7 +34,7 @@ export function AppointmentRow({
           <Phone className="w-4 h-4" />
         </Button>
         {/* ellipses */}
-        {status === "SCHEDULED" && <CheckinEllipsis />}
+        {status === "SCHEDULED" && <CheckinEllipsis appt={appt} />}
         {status === "CHECKED_IN" && <OngoingEllipsis />}
       </TableCell>
     </TableRow>

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -13,17 +12,21 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import type { Appointment } from "@/types/types";
+import axios from "axios";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const sampleFormSchema = z.object({
   sampleCode: z.string(),
   sampleType: z.string(),
 });
 
-// 2) Infer the form values type
 type SampleFormValues = z.infer<typeof sampleFormSchema>;
 
-// 3) Create the form component
-export function SampleForm() {
+export function SampleForm({ appt }: { appt: Appointment }) {
+  const queryClient = useQueryClient();
+
   const form = useForm<SampleFormValues>({
     resolver: zodResolver(sampleFormSchema),
     defaultValues: {
@@ -32,15 +35,28 @@ export function SampleForm() {
     },
   });
 
-  const onSubmit = (data: SampleFormValues) => {
-    console.log("Submitted:", data);
-    // …your submit logic here…
-  };
+  const { mutate: checkIn } = useMutation<void, Error, SampleFormValues>({
+    mutationFn: async (data: SampleFormValues) =>
+      await axios.post(`/appointments/${appt.appointmentId}/check-in`, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["appointments"] });
+      toast.success("Check-in thành công!");
+    },
+    onError: (err) => {
+      const msg =
+        axios.isAxiosError(err) && err.response?.data?.message
+          ? err.response.data.message
+          : err.message;
+      toast.error(msg);
+    },
+  });
 
+  const onSubmit = (data: SampleFormValues) => {
+    checkIn(data);
+  };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Sample Code Field */}
         <FormField
           control={form.control}
           name="sampleCode"
@@ -55,7 +71,6 @@ export function SampleForm() {
           )}
         />
 
-        {/* Sample Type Field */}
         <FormField
           control={form.control}
           name="sampleType"
@@ -70,9 +85,12 @@ export function SampleForm() {
           )}
         />
 
-        {/* Submit Button */}
-        <Button type="submit" className="w-full">
-          Submit
+        <Button
+          variant="outline"
+          type="submit"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+        >
+          Xác nhận
         </Button>
       </form>
     </Form>

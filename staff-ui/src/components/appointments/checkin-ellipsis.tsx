@@ -16,11 +16,11 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { ConfirmCheckinDialog } from "./confirm-checkin";
+import type { Appointment } from "@/types/types";
 
-export function CheckinEllipsis() {
+export function CheckinEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState(false);
-  function handleConfirm() {}
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -65,8 +65,8 @@ export function CheckinEllipsis() {
       <ConfirmCheckinDialog
         open={confirm}
         setOpen={setConfirm}
-        patientName=""
-        onConfirm={handleConfirm}
+        patientName={appt.patient.fullName}
+        appt={appt}
       />
     </DropdownMenu>
   );

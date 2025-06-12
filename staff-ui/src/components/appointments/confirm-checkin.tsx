@@ -6,18 +6,20 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { SampleForm } from "./sampling-form";
+import type { Appointment } from "@/types/types";
 
 interface ConfirmCheckinDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   patientName: string;
-  onConfirm: () => void;
+  appt: Appointment;
 }
 
 export function ConfirmCheckinDialog({
   open,
   setOpen,
   patientName,
+  appt,
 }: ConfirmCheckinDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -29,7 +31,7 @@ export function ConfirmCheckinDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <SampleForm />
+        <SampleForm appt={appt} />
 
         <DialogFooter className="flex justify-end gap-2"></DialogFooter>
       </DialogContent>
