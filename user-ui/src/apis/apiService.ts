@@ -17,7 +17,7 @@ class ApiService {
 
   private constructor() {
     this.axiosInstance = axios.create({
-      baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080/hiv/api",
+      baseURL: "http://localhost:8080/hiv/api",
       timeout: 10000, // Timeout sau 10 giây
       headers: {
         "Content-Type": "application/json",

@@ -1,7 +1,8 @@
 import axios from "axios";
 
 type RegisterRequest = {
-  phone: string;
+  email: string;
+  fullName: string;
   password: string;
   confirm: string;
 };
@@ -19,7 +20,7 @@ export const register = async (value: RegisterRequest) => {
 };
 
 type LoginRequest = {
-  phone: string;
+  email: string;
   password: string;
 };
 

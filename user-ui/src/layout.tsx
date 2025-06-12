@@ -7,7 +7,9 @@ function MainLayout() {
     <div>
       <Navbar />
       <Outlet />
-      <Footer />
+      <div className="mt-8">
+        <Footer />
+      </div>
     </div>
   );
 }

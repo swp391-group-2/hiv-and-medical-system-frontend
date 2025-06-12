@@ -33,7 +33,7 @@ const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
         resultTime={props.resultTime}
         notes={props.notes}
       />
-      {/* Info Cards */}
+
       <InfoCardTest Span={props.Span} />
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row gap-8 border rounded-xl bg-gray-50 p-6">
