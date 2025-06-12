@@ -59,7 +59,7 @@ export const LoginForm: FC = () => {
   // });
   const handleProviderLogin = (provider: AuthProviders) => {
     console.log(`Login with ${provider}`);
-    // Handle provider login logic here
+    // login with google
   };
   return (
     <Form {...form}>
@@ -78,6 +78,7 @@ export const LoginForm: FC = () => {
               field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
               <FormItem className="">
+                <FormLabel className="">Email</FormLabel>
                 <FormLabel className="">Email</FormLabel>
                 <FormControl>
                   <Input
@@ -144,10 +145,7 @@ export const LoginForm: FC = () => {
           </div>
           <div className="flex justify-between text-sm">
             Chưa có tài khoản?{" "}
-            <NavLink
-              to="/auth/register"
-              className="underline underline-offset-4"
-            >
+            <NavLink to="/signup" className="underline underline-offset-4">
               Đăng ký ngay!
             </NavLink>
           </div>

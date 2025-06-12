@@ -1,11 +1,7 @@
-import { LoginForm } from "@/components/login-form";
+import LoginPage from "@/pages/auth/login";
 
 const UnauthLayout = () => {
-  return (
-    <div>
-      <LoginForm />
-    </div>
-  );
+  return <LoginPage />;
 };
 
 export default UnauthLayout;

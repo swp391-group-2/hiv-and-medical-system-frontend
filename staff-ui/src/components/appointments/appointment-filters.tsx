@@ -2,12 +2,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import {
   Select,
   SelectTrigger,
   SelectValue,
@@ -15,14 +9,12 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { Calendar as CalendarIcon, Clock, Funnel, Search } from "lucide-react";
+import { Funnel, Search } from "lucide-react";
 import { useState } from "react";
 
 export type Filters = {
   search: string;
-  date: Date | undefined;
-  time: string;
-  type: string;
+  aptStatus: string;
 };
 
 export function AppointmentFilters({
@@ -31,9 +23,7 @@ export function AppointmentFilters({
   onApply: (f: Filters) => void;
 }) {
   const [search, setSearch] = useState("");
-  const [date, setDate] = useState<Date>();
-  const [time, setTime] = useState("");
-  const [type, setType] = useState("");
+  const [aptStatus, setAptStatus] = useState("");
 
   return (
     <Card className="w-full mt-4 mb-4">
@@ -53,56 +43,25 @@ export function AppointmentFilters({
             />
           </div>
 
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="w-[180px] justify-start">
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {date ? date.toLocaleDateString() : "Tất cả ngày"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-md border shadow-sm"
-                captionLayout="dropdown"
-              />
-            </PopoverContent>
-          </Popover>
-
-          <Select value={time} onValueChange={setTime}>
-            <SelectTrigger className="w-[140px] justify-start">
-              <Clock className="mr-2 h-4 w-4" />
-              <SelectValue placeholder="Tất cả giờ" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="default">Tất cả giờ</SelectItem>
-              <SelectItem value="08:00">08:00</SelectItem>
-              <SelectItem value="09:30">09:30</SelectItem>
-              <SelectItem value="10:15">10:15</SelectItem>
-              <SelectItem value="14:00">14:00</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={type} onValueChange={setType}>
-            <SelectTrigger className="w-[200px] justify-start">
+          <Select value={aptStatus} onValueChange={setAptStatus}>
+            <SelectTrigger className="w-[200px] justify-start cursor-pointer">
               <Funnel className="mr-2 h-4 w-4" />
-              <SelectValue placeholder="Tất cả loại khám" />
+              <SelectValue placeholder="Trạng thái lịch hẹn" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="default">Tất cả loại khám</SelectItem>
-              <SelectItem value="Khám thường">Khám thường</SelectItem>
-              <SelectItem value="Xét nghiệm sàng lọc">
-                Xét nghiệm sàng lọc
-              </SelectItem>
-              <SelectItem value="Xét nghiệm khẳng định">
-                Xét nghiệm khẳng định
-              </SelectItem>
+              <SelectItem value="default">Tất cả trạng thái</SelectItem>
+              <SelectItem value="SCHEDULED">Đã lên lịch</SelectItem>
+              <SelectItem value="CHECKED-IN">Đã check-in</SelectItem>
+              <SelectItem value="LAB_COMPLETED">Xét nghiệm xong</SelectItem>
+              <SelectItem value="COMPLETED">Hoàn tất</SelectItem>
             </SelectContent>
           </Select>
 
-          <Button onClick={() => onApply({ search, date, time, type })}>
+          <Button
+            variant="outline"
+            className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white hover:text-white"
+            onClick={() => onApply({ search, aptStatus })}
+          >
             Áp dụng
           </Button>
         </div>

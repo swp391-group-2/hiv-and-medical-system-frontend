@@ -5,6 +5,7 @@ import {
   Users,
   Calendar,
   MessageCircle,
+  Newspaper,
   Stethoscope,
 } from "lucide-react";
 import {
@@ -46,6 +47,11 @@ const items = [
     title: "Tư vấn ẩn danh",
     url: "/doctor/qa",
     icon: MessageCircle,
+  },
+  {
+    title: "Chọn phác đồ ARV",
+    url: "/doctor/arv-seclect",
+    icon: Newspaper,
   },
 ];
 

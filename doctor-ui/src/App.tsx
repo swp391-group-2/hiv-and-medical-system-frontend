@@ -10,6 +10,7 @@ import LoginPage from "./pages/auth/login";
 import PatientList from "./pages/appointment/completed";
 import Questions from "./pages/questions/qa";
 import Schedule from "./pages/appointment/schedule";
+import ARVSeclect from "./pages/ARVSelect/arvSelect";
 
 const queryClient = new QueryClient();
 
@@ -20,7 +21,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route element={<UnauthLayout />}>
-              <Route path="/" element={<LoginPage />} />
+              <Route path="/login" element={<LoginPage />} />
             </Route>
             <Route
               element={
@@ -35,6 +36,7 @@ function App() {
               <Route path="/doctor/schedule" element={<Schedule />} />
               <Route path="/doctor/qa" element={<Questions />} />
               <Route path="/doctor/profile" element={<UserProfile />} />
+                <Route path="/doctor/arv-seclect" element={<ARVSeclect/>} />
             </Route>
             {/* <Route
               path="*"

@@ -4,11 +4,10 @@ type RegisterRequest = {
   email: string;
   fullName: string;
   password: string;
-  confirm: string;
 };
 
 export const register = async (value: RegisterRequest) => {
-  const response = await axios.post("/auth/register", value, {
+  const response = await axios.post("/auth/signup", value, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

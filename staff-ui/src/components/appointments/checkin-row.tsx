@@ -10,17 +10,19 @@ import {
   DialogClose,
   DialogContent,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Phone, MoreHorizontal } from "lucide-react";
 import { PatientCell } from "./patient-cell";
-import { NoteBadge } from "./note-badge";
+import { StatusBadge } from "./status-badge";
 import type { Appointment } from "@/types/types";
 import { InfoGroup, InfoTextRow } from "@/components/info-text";
 import { useState } from "react";
-import { ConfirmCheckinDialog } from "@/components/appointments/confirm-checkin";
+import { ConfirmCheckinDialog } from "./confirm-checkin";
 
-export function AppointmentRow({ appt }: { appt: Appointment }) {
+export function CheckinRow({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
   const [confirm, setConfirm] = useState(false);
   function handleConfirm() {}
@@ -35,7 +37,7 @@ export function AppointmentRow({ appt }: { appt: Appointment }) {
       <TableCell>{appt.time}</TableCell>
       <TableCell>{appt.doctor}</TableCell>
       <TableCell>
-        <NoteBadge hasNote={appt.hasNote} />
+        <StatusBadge status={appt.status} />
       </TableCell>
       <TableCell className="flex items-center gap-2">
         <Button className="cursor-pointer" variant="ghost" size="icon">
@@ -56,8 +58,7 @@ export function AppointmentRow({ appt }: { appt: Appointment }) {
                 setConfirm(true);
               }}
             >
-              {/*TO DO: check-in method */}
-              Check-In Bệnh Nhân
+              Check-In
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
@@ -71,9 +72,10 @@ export function AppointmentRow({ appt }: { appt: Appointment }) {
           </DropdownMenuContent>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="w-[500px] min-h-[550px] flex flex-col justify-between">
-              <InfoGroup>
-                <InfoTextRow label="Nơi khám" data="Cơ sở HIV" />
-              </InfoGroup>
+              <DialogHeader>
+                <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
+              </DialogHeader>
+              {/* <InfoGroup></InfoGroup> */}
               <DialogFooter>
                 <DialogClose asChild>
                   <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
