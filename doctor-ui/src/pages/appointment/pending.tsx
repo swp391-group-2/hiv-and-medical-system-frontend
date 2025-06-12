@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PatientListPending from "@/components/doctorPendingApoinment/patientListPending";
 import { TopHeaderPending } from "@/components/doctorPendingApoinment/topHeaderPending";
+import axios from "axios";
 
 export interface Appointment {
   appointmentId: number;
@@ -93,15 +94,27 @@ const sampleAppointments: Appointment[] = [
 
 const PendingAppointment: React.FC = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(false);
 
+  // Hàm fetch dữ liệu
+  const fetchAppointments = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get<Appointment[]>(
+        "http://localhost:8080/doctor/apoiment"
+      );
+      setAppointments(res.data);
+    } catch (err) {
+      console.error("Lỗi khi lấy danh sách lịch hẹn:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const filtered = sampleAppointments.filter(
-      (app) =>
-        app.serviceType === "CONSULTATION" &&
-        app.labSample?.status === "LAB_COMPLETED"
-    );
-    setAppointments(filtered);
+    fetchAppointments();
+    // Nếu muốn chỉ lấy dữ liệu mẫu khi dev, có thể kiểm tra NODE_ENV
+    // setAppointments(sampleAppointments);
   }, []);
 
   return (
@@ -109,7 +122,11 @@ const PendingAppointment: React.FC = () => {
       <h1 className="text-2xl font-bold mb-2">Xét nghiệm chờ kết quả</h1>
       <p className="text-gray-600 mb-6">Cập nhật kết quả xét nghiệm</p>
       <TopHeaderPending total={appointments.length} />
-      <PatientListPending appointments={appointments} />
+      {loading ? (
+        <div>Đang tải dữ liệu...</div>
+      ) : (
+        <PatientListPending appointments={appointments} />
+      )}
     </main>
   );
 };
