@@ -47,6 +47,11 @@ const items = [
     url: "/doctor/qa",
     icon: MessageCircle,
   },
+   {
+    title: "Chọn phác đồ ARV",
+    url: "/doctor/arv-seclect",
+    icon: MessageCircle,
+  },
 ];
 
 const DoctorSidebar = () => {

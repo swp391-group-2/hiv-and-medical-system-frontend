@@ -10,6 +10,7 @@ import LoginPage from "./pages/auth/login";
 import PatientList from "./pages/appointment/completed";
 import Questions from "./pages/questions/qa";
 import Schedule from "./pages/appointment/schedule";
+import ARVSeclect from "./pages/ARVSeclect/arvSeclect";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ function App() {
               <Route path="/doctor/schedule" element={<Schedule />} />
               <Route path="/doctor/qa" element={<Questions />} />
               <Route path="/doctor/profile" element={<UserProfile />} />
+              <Route path="/doctor/arv-seclect" element={<ARVSeclect/>} />
             </Route>
             {/* <Route
               path="*"
