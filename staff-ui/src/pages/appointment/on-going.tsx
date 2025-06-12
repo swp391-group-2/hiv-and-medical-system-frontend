@@ -13,7 +13,7 @@ const OngoingAppointments = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filters, setFilters] = useState<Filters>({
     search: "",
-    type: "",
+    type: "default",
   });
 
   useEffect(() => {

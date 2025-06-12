@@ -14,7 +14,7 @@ import { useState } from "react";
 
 export type Filters = {
   search: string;
-  type: string;
+  aptStatus: string;
 };
 
 export function AppointmentFilters({
@@ -23,7 +23,7 @@ export function AppointmentFilters({
   onApply: (f: Filters) => void;
 }) {
   const [search, setSearch] = useState("");
-  const [type, setType] = useState("");
+  const [aptStatus, setAptStatus] = useState("");
 
   return (
     <Card className="w-full mt-4 mb-4">
@@ -43,27 +43,24 @@ export function AppointmentFilters({
             />
           </div>
 
-          <Select defaultValue="default" value={type} onValueChange={setType}>
+          <Select value={aptStatus} onValueChange={setAptStatus}>
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
               <Funnel className="mr-2 h-4 w-4" />
-              <SelectValue placeholder="Tất cả loại khám" />
+              <SelectValue placeholder="Trạng thái lịch hẹn" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="default">Tất cả loại khám</SelectItem>
-              <SelectItem value="Khám thường">Khám thường</SelectItem>
-              <SelectItem value="Xét nghiệm sàng lọc">
-                Xét nghiệm sàng lọc
-              </SelectItem>
-              <SelectItem value="Xét nghiệm khẳng định">
-                Xét nghiệm khẳng định
-              </SelectItem>
+              <SelectItem value="default">Tất cả trạng thái</SelectItem>
+              <SelectItem value="SCHEDULED">Đã lên lịch</SelectItem>
+              <SelectItem value="CHECKED-IN">Đã check-in</SelectItem>
+              <SelectItem value="LAB_COMPLETED">Xét nghiệm xong</SelectItem>
+              <SelectItem value="COMPLETED">Hoàn tất</SelectItem>
             </SelectContent>
           </Select>
 
           <Button
             variant="outline"
             className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white hover:text-white"
-            onClick={() => onApply({ search, type })}
+            onClick={() => onApply({ search, aptStatus })}
           >
             Áp dụng
           </Button>

@@ -13,7 +13,7 @@ const CheckinPending = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filters, setFilters] = useState<Filters>({
     search: "",
-    type: "",
+    aptStatus: "default",
   });
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const CheckinPending = () => {
 
     return appointments.filter((a) => {
       // type check
-      const typeMatch =
-        filters.type === "default" ? true : a.type === filters.type;
+      const statusMatch =
+        filters.aptStatus === "default" ? true : a.status === filters.aptStatus;
 
       // search check
       const searchMatch =
@@ -35,7 +35,7 @@ const CheckinPending = () => {
         a.patientPhone.toLowerCase().includes(q);
 
       // only include if BOTH match
-      return typeMatch && searchMatch;
+      return statusMatch && searchMatch;
     });
   }, [appointments, filters]);
 
