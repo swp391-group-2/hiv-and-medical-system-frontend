@@ -56,8 +56,10 @@ function ARVSeclect() {
   const [selectedProtocol, setSelectedProtocol] = useState<Protocol | null>(null);
 
   return (
-    <div className="max-w-5xl mx-auto p-4 space-y-4">
+    <div className="max-w-6xl mx-auto p-4 space-y-4">
+            <h1 className="text-2xl font-bold mb-2">Chọn phác đồ ARV</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        
         <PatientInfoCard patientInfo={patientInfo} />
         <LatestTestResultCard result={result} />
         <div className="space-y-4">
