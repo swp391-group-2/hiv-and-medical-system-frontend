@@ -6,8 +6,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import type { Appointment } from "@/types/types";
-import { CheckinRow } from "@/components/appointments/checkin-row";
 import { EmptyListMessage } from "@/components/page-message";
+import { AppointmentRow } from "./appointment-row";
 
 export function AppointmentTable({ data }: { data: Appointment[] }) {
   if (data.length == 0) {
@@ -29,7 +29,11 @@ export function AppointmentTable({ data }: { data: Appointment[] }) {
       </TableHeader>
       <TableBody>
         {data.map((appt) => (
-          <CheckinRow key={appt.id} appt={appt} />
+          <AppointmentRow
+            key={appt.appointmentId}
+            appt={appt}
+            status={appt.status}
+          />
         ))}
       </TableBody>
     </Table>
