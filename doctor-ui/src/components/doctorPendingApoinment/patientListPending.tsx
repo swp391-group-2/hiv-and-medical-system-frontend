@@ -1,27 +1,50 @@
+import React from "react";
+import PatientItemPending from "./patientItemPending";
 
-import React from 'react';
+interface Appointment {
+  appointmentId: number;
+  patient: {
+    patientId: string;
+    userId: string;
+    email: string;
+    fullName: string;
+    userStatus: string;
+    patientCode: string;
+    dob: Date;
+    gender: string;
+    address: string;
+    phoneNumber: string;
+    identificationCard: string;
+    healthInsurance: string;
+    occupation: string;
+  };
+  date: string;
+  doctorName: string;
+  labResult?: {
+    resultText: string;
+    conclusion: string;
+    viralLoad?: string;
+    cd4?: string;
+  };
+}
 
-import PatientItemPending from './patientItemPending';
+interface Props {
+  appointments: Appointment[];
+}
 
-
-const patients = [
-  { name: 'Trần Thị Bình', id: 'BN002', sampleCode: 'CONFO01', resultLabel: 'Kháng định', resultColor: 'red', date: '15/1/2024', doctor: 'BS. Trần Thị B' },
-  { name: 'Nguyễn Văn An', id: 'BN001', sampleCode: 'SCREEN001', resultLabel: 'Sàng lọc', resultColor: 'blue', date: '15/1/2024', doctor: 'BS. Nguyễn Văn A' },
-  { name: 'Lê Văn Cường', id: 'BN003', sampleCode: 'CD4001', resultLabel: 'CD4', resultColor: 'green', date: '14/1/2024', doctor: 'BS. Lê Văn C' },
-  { name: 'Phạm Thị Dung', id: 'BN004', sampleCode: 'VL001', resultLabel: 'Tải lượng Virus', resultColor: 'yellow', date: '14/1/2024', doctor: 'BS. Phạm Thị D' },
-];
-
-const PatientListPending = () => {
+const PatientListPending: React.FC<Props> = ({ appointments }) => {
   return (
     <div className="bg-white border rounded p-4">
-      <h2 className="font-bold text-lg mb-4">Danh sách chờ kết quả ({patients.length})</h2>
+      <h2 className="font-bold text-lg mb-4">
+        Danh sách chờ khám ({appointments.length})
+      </h2>
       <input
         type="text"
-        placeholder="Tìm kiếm tên, mã BN, mã mẫu..."
+        placeholder="Tìm kiếm tên, mã BN..."
         className="w-full border rounded px-3 py-2 mb-4"
       />
-      {patients.map((patient) => (
-        <PatientItemPending key={patient.id} {...patient} />
+      {appointments.map((app) => (
+        <PatientItemPending key={app.appointmentId} appointment={app} />
       ))}
     </div>
   );
