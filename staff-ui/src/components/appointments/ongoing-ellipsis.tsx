@@ -15,9 +15,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
+import type { Appointment } from "@/types/types";
 
-export function OngoingEllipsis() {
+export function OngoingEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
+  const [openSession, setOpenSession] = useState(false);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,6 +33,7 @@ export function OngoingEllipsis() {
           className="cursor-pointer"
           onSelect={(e) => {
             e.preventDefault();
+            setOpenSession(true);
           }}
         >
           Phiên khám bệnh
@@ -59,7 +63,7 @@ export function OngoingEllipsis() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog>
+      <Dialog open={openSession} onOpenChange={setOpenSession}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Phiên khám bệnh</DialogTitle>

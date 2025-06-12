@@ -15,12 +15,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import { ConfirmCheckinDialog } from "./confirm-checkin";
 import type { Appointment } from "@/types/types";
 
-export function CheckinEllipsis({ appt }: { appt: Appointment }) {
+export function FinishedEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
-  const [confirm, setConfirm] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -33,10 +33,10 @@ export function CheckinEllipsis({ appt }: { appt: Appointment }) {
           className="cursor-pointer"
           onSelect={(e) => {
             e.preventDefault();
-            setConfirm(true);
+            setOpenDetail(true);
           }}
         >
-          Check-In
+          Xem chi tiết buổi khám
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer"
@@ -62,12 +62,20 @@ export function CheckinEllipsis({ appt }: { appt: Appointment }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <ConfirmCheckinDialog
-        open={confirm}
-        setOpen={setConfirm}
-        patientName={appt.patient.fullName}
-        appt={appt}
-      />
+      <Dialog open={openDetail} onOpenChange={setOpenDetail}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Chi tiết buổi khám</DialogTitle>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
+                Đóng
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </DropdownMenu>
   );
 }

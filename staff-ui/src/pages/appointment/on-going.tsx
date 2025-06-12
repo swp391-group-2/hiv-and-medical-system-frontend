@@ -16,7 +16,9 @@ const OngoingAppointments = () => {
   const filtered = useMemo(
     () =>
       Array.isArray(appointments)
-        ? appointments.filter((a) => a.status === "CHECKED_IN")
+        ? appointments.filter(
+            (a) => a.status === "CHECKED_IN" || a.status === "LAB_COMPLETED"
+          )
         : [],
     [appointments]
   );
