@@ -1,11 +1,11 @@
 import React, { useState } from "react";
+import axios from "axios";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 
 const tabs = [
@@ -18,161 +18,159 @@ const regimens = [
     name: "Phác đồ 1 (TDF + 3TC + DTG)",
     drugs: "Tenofovir (TDF) + Lamivudine (3TC) + Dolutegravir (DTG)",
     dosage: "TDF 300mg + 3TC 300mg + DTG 50mg, uống 1 lần/ngày",
-    indication:
-      "Phác đồ ưu tiên cho người lớn và trẻ vị thành niên ≥ 10 tuổi hoặc ≥ 30kg.",
-    note: "Không dùng cho phụ nữ có thai 3 tháng đầu hoặc có chống chỉ định với DTG.",
+    indication: "Phác đồ ưu tiên cho người ≥ 10 tuổi hoặc ≥ 30kg.",
+    note: "Không dùng cho phụ nữ có thai 3 tháng đầu hoặc chống chỉ định DTG.",
   },
   {
     name: "Phác đồ 2 (TDF + 3TC + EFV)",
     drugs: "Tenofovir (TDF) + Lamivudine (3TC) + Efavirenz (EFV)",
     dosage: "TDF 300mg + 3TC 300mg + EFV 600mg, uống 1 lần/ngày",
-    indication: "Dùng khi không có hoặc chống chỉ định với DTG.",
-    note: "Không dùng cho phụ nữ có thai 3 tháng đầu hoặc có chống chỉ định với EFV.",
+    indication: "Dùng khi chống chỉ định DTG.",
+    note: "Không dùng cho phụ nữ có thai 3 tháng đầu hoặc chống chỉ định EFV.",
   },
   {
     name: "Phác đồ 3 (AZT + 3TC + EFV)",
     drugs: "Zidovudine (AZT) + Lamivudine (3TC) + Efavirenz (EFV)",
-    dosage:
-      "AZT 300mg x 2 lần/ngày + 3TC 150mg x 2 lần/ngày + EFV 600mg 1 lần/ngày",
+    dosage: "AZT 300mg x2 + 3TC 150mg x2 + EFV 600mg 1 lần/ngày",
     indication: "Dùng khi không dùng được TDF.",
-    note: "Theo dõi tác dụng phụ thiếu máu do AZT.",
+    note: "Theo dõi thiếu máu do AZT.",
   },
   {
     name: "Phác đồ 4 (TDF + 3TC + LPV/r)",
-    drugs: "Tenofovir (TDF) + Lamivudine (3TC) + Lopinavir/ritonavir (LPV/r)",
-    dosage: "TDF 300mg + 3TC 300mg 1 lần/ngày + LPV/r 400/100mg x 2 lần/ngày",
+    drugs: "TDF + 3TC + Lopinavir/ritonavir (LPV/r)",
+    dosage: "TDF 300mg + 3TC 300mg 1 lần/ngày + LPV/r 400/100mg x2",
     indication: "Dùng cho bệnh nhân thất bại phác đồ bậc 1.",
     note: "Theo dõi chức năng gan, thận.",
   },
 ];
 
-interface PatientDialogProps {
-  name: string;
-  id: string;
-  sampleCode: string;
-  resultLabel: string;
-  resultColor: string;
+export interface Appointment {
+  appointmentId: number;
+  patient: {
+    patientId: string;
+    userId: string;
+    email: string;
+    fullName: string;
+    userStatus: string;
+    patientCode: string;
+    dob: Date;
+    gender: string;
+    address: string;
+    phoneNumber: string;
+    identificationCard: string;
+    healthInsurance: string;
+    occupation: string;
+  };
   date: string;
-  doctor: string;
-  age: number;
-  gender: string;
-  viralLoad: string;
-  cd4: string;
+  doctorName: string;
+  labResult?: {
+    resultText: string;
+    conclusion: string;
+    viralLoad?: string;
+    cd4?: string;
+  };
 }
 
-const PatientDialog: React.FC<PatientDialogProps> = ({
-  name,
-  id,
-  date,
-  doctor,
-  age,
-  gender,
-  viralLoad,
-  cd4,
-}) => {
-  const [tab, setTab] = useState("regimen");
+interface Props {
+  appointment: Appointment;
+  open: boolean;
+  onClose: () => void;
+}
+
+const PatientDialog: React.FC<Props> = ({ appointment, open, onClose }) => {
+  const [tab, setTab] = useState("info");
   const [selectedRegimen, setSelectedRegimen] = useState(0);
+  const { patient, date, doctorName, labResult } = appointment;
+
+  const handleConfirm = async () => {
+    try {
+      const selected = regimens[selectedRegimen];
+      // Dòng này có thể thay thế bằng console.log nếu bạn không gọi API thật
+      await axios.post("/api/regimens/assign", {
+        appointmentId: appointment.appointmentId,
+        regimen: selected,
+      });
+
+      alert("Phác đồ đã được lưu thành công!");
+      onClose();
+    } catch (err) {
+      console.error("Lỗi khi lưu phác đồ:", err);
+      alert("Có lỗi xảy ra khi lưu phác đồ!");
+    }
+  };
 
   return (
-    <Dialog>
-      <DialogTrigger className="bg-blue-600 text-white px-4 py-2 rounded">
-        Khám
-      </DialogTrigger>
-      <DialogContent
-        className="w-[100vw] max-w-full h-[90vh] p-6 overflow-y-auto"
-        style={{ maxWidth: "80vw", width: "100vw" }}
-      >
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="!w-[95vw] !max-w-[1400px] !h-[90vh] p-6 overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Khám bệnh nhân</DialogTitle>
-          <DialogDescription>
-            Thông tin chi tiết và xác nhận điều trị.
-          </DialogDescription>
+          <DialogTitle>Khám {patient.fullName}</DialogTitle>
+          <DialogDescription>Dịch vụ khám ngày {date}</DialogDescription>
         </DialogHeader>
 
-        <div className="mb-4">
-          <div className="flex border-b mb-2">
-            {tabs.map((t) => (
-              <button
-                key={t.value}
-                className={`px-4 py-2 -mb-px border-b-2 ${
-                  tab === t.value
-                    ? "border-blue-600 font-semibold"
-                    : "border-transparent"
-                }`}
-                onClick={() => setTab(t.value)}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
+        <div className="flex border-b mb-4">
+          {tabs.map((t) => (
+            <button
+              key={t.value}
+              onClick={() => setTab(t.value)}
+              className={`px-4 py-2 -mb-px border-b-2 ${
+                tab === t.value
+                  ? "border-blue-600 font-semibold"
+                  : "border-transparent"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
         </div>
 
         {tab === "info" && (
           <>
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Thông tin chung</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  Họ tên: <span className="font-medium">{name}</span>
-                </div>
-                <div>
-                  Mã BN: <span className="font-medium">{id}</span>
-                </div>
-                <div>
-                  Tuổi: <span className="font-medium">{age}</span>
-                </div>
-                <div>
-                  Giới tính: <span className="font-medium">{gender}</span>
-                </div>
-                <div>
-                  Bác sĩ: <span className="font-medium">{doctor}</span>
-                </div>
-                <div>
-                  Ngày: <span className="font-medium">{date}</span>
-                </div>
-              </div>
+            <div className="grid grid-cols-2 gap-4 text-sm mb-6">
+              <Info label="Họ tên" value={patient.fullName} />
+              <Info label="Mã BN" value={patient.patientCode} />
+              <Info
+                label="Ngày sinh"
+                value={new Date(patient.dob).toLocaleDateString("vi-VN")}
+              />
+              <Info label="Giới tính" value={patient.gender} />
+              <Info label="Bác sĩ" value={doctorName} />
+              <Info label="Ngày khám" value={date} />
             </div>
-            {/* Kết quả xét nghiệm */}
-            <div className="mb-4">
-              <h3 className="font-semibold mb-2">Kết quả xét nghiệm</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  Tải lượng HIV:{" "}
-                  <span className="font-medium">{viralLoad}</span>
-                </div>
-                <div>
-                  CD4: <span className="font-medium">{cd4}</span>
-                </div>
-              </div>
+
+            <h3 className="font-semibold mb-2">Kết quả xét nghiệm</h3>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <Info
+                label="Tải lượng HIV"
+                value={labResult?.viralLoad ?? "Chưa có"}
+              />
+              <Info label="CD4" value={labResult?.cd4 ?? "Chưa có"} />
             </div>
           </>
         )}
 
         {tab === "regimen" && (
-          <div className="mb-4 w-full">
-            <h3 className="font-semibold mb-2">Phác đồ điều trị</h3>
-            <div className="flex flex-row gap-8 w-full">
-              {/* Form chọn phác đồ */}
-              <div className="flex-1">
-                <label className="block mb-2">Chọn phác đồ điều trị:</label>
+          <div className="mb-4">
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <label className="block mb-2">Chọn phác đồ:</label>
                 <select
                   className="border rounded px-3 py-2 w-full"
                   value={selectedRegimen}
                   onChange={(e) => setSelectedRegimen(Number(e.target.value))}
                 >
-                  {regimens.map((r, idx) => (
-                    <option value={idx} key={r.name}>
+                  {regimens.map((r, i) => (
+                    <option key={i} value={i}>
                       {r.name}
                     </option>
                   ))}
                 </select>
               </div>
-              {/* Thông tin phác đồ */}
-              <div className="flex-1 bg-gray-50 rounded p-4 border">
+
+              <div className="bg-gray-50 border rounded p-4 text-sm">
                 <h4 className="font-semibold mb-2">
                   {regimens[selectedRegimen].name}
                 </h4>
-                <ul className="text-sm list-disc pl-5">
+                <ul className="list-disc pl-5 space-y-1">
                   <li>
                     <b>Thuốc:</b> {regimens[selectedRegimen].drugs}
                   </li>
@@ -191,9 +189,11 @@ const PatientDialog: React.FC<PatientDialogProps> = ({
           </div>
         )}
 
-        {/* Nút xác nhận */}
-        <div className="flex justify-end">
-          <button className="bg-blue-600 text-white px-6 py-1 rounded hover:bg-blue-700">
+        <div className="flex justify-end mt-6">
+          <button
+            onClick={handleConfirm}
+            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+          >
             Xác nhận
           </button>
         </div>
@@ -201,5 +201,12 @@ const PatientDialog: React.FC<PatientDialogProps> = ({
     </Dialog>
   );
 };
+
+const Info = ({ label, value }: { label: string; value: string }) => (
+  <div>
+    <span className="text-gray-500">{label}:</span>{" "}
+    <span className="font-medium">{value}</span>
+  </div>
+);
 
 export default PatientDialog;

@@ -1,68 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import PatientDialog from "./patientDialogA";
 
-
-// Thêm Tab UI nếu bạn có sẵn, ví dụ dùng @headlessui/react hoặc tự code
-
-
-interface PatientItemProps {
-  name: string;
-  id: string;
-  sampleCode: string;
-  resultLabel: string;
-  resultColor: string;
+interface Appointment {
+  appointmentId: number;
+  patient: {
+    patientId: string;
+    userId: string;
+    email: string;
+    fullName: string;
+    userStatus: string;
+    patientCode: string;
+    dob: Date;
+    gender: string;
+    address: string;
+    phoneNumber: string;
+    identificationCard: string;
+    healthInsurance: string;
+    occupation: string;
+  };
   date: string;
-  doctor: string;
+  doctorName: string;
+  labResult?: {
+    resultText: string;
+    conclusion: string;
+    viralLoad?: string;
+    cd4?: string;
+  };
 }
 
-const PatientItemPending: React.FC<PatientItemProps> = ({
-  name,
-  id,
-  sampleCode,
-  resultLabel,
-  resultColor,
-  date,
-  doctor,
-}) => {
-  
+interface Props {
+  appointment: Appointment;
+}
 
-  // Giả lập dữ liệu
-  const age = 30;
-  const gender = "Nam";
-  const viralLoad = "1200 copies/mL";
-  const cd4 = "350 cells/mm³";
+const PatientItemPending: React.FC<Props> = ({ appointment }) => {
+  const { patient,  doctorName, labResult } = appointment;
+
+  const resultLabel = labResult?.conclusion ?? "Chờ kết quả";
+  const resultColor = labResult ? "text-green-600" : "text-gray-600";
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   return (
-    <div className="flex justify-between items-center border rounded p-4 mb-2 hover:bg-gray-50">
-      <div>
-        <div className="font-semibold">{name}</div>
-        <div className="text-sm text-gray-600">
-          Mã BN: {id} | Mã mẫu: {sampleCode}
+    <>
+      <div
+        className="flex justify-between items-center border rounded p-4 mb-2 hover:bg-gray-50 cursor-pointer"
+        onClick={() => setOpenDialog(true)}
+      >
+        <div>
+          <div className="font-semibold">{patient.fullName}</div>
+          <div className="text-sm text-gray-600">
+            Mã BN: {patient.patientCode}
+          </div>
+          <div className="text-sm text-gray-600">Bác sĩ: {doctorName}</div>
+          <div className={`text-sm ${resultColor}`}>
+            Kết luận: {resultLabel}
+          </div>
         </div>
-        <div className="text-sm text-gray-600 mt-1">
-          <span
-            className={`inline-block px-2 py-0.5 text-xs rounded bg-${resultColor}-100 text-${resultColor}-800 mr-2`}
-          >
-            {resultLabel}
-          </span>
-          {date} | BS: {doctor}
+        <div className="text-blue-600 hover:underline">
+          <button className="px-3 py-1 bg-blue-100 rounded hover:bg-blue-200">
+            Khám
+          </button>
         </div>
       </div>
 
-      <PatientDialog
-        name={name}
-        id={id}
-        sampleCode={sampleCode}
-        resultLabel={resultLabel}
-        resultColor={resultColor}
-        date={date}
-        doctor={doctor}
-        age={age}
-        gender={gender}
-        viralLoad={viralLoad}
-        cd4={cd4}
-      />
-    </div>
+      {openDialog && (
+        <PatientDialog
+          appointment={appointment}
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+        />
+      )}
+    </>
   );
 };
 

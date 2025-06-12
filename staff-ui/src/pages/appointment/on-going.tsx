@@ -1,53 +1,40 @@
 import { formatDMY } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppointmentTable } from "@/components/appointments/appointment-table";
-import { sampleAppointments } from "@/raw-data/appointments/data";
-import {
-  AppointmentFilters,
-  type Filters,
-} from "@/components/appointments/appointment-filters";
-import { useEffect, useMemo, useState } from "react";
-import type { Appointment } from "@/types/types";
+import { AppointmentFilters } from "@/components/appointments/appointment-filters";
+import { useMemo } from "react";
+import { useAppointments } from "@/api/appointments";
 
 const OngoingAppointments = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-  const [filters, setFilters] = useState<Filters>({
-    search: "",
-    type: "default",
-  });
+  const {
+    data: appointments = [],
+    isLoading,
+    isError,
+    error,
+  } = useAppointments();
 
-  useEffect(() => {
-    setAppointments(sampleAppointments);
-  }, []);
-
-  const filtered = useMemo(() => {
-    const q = filters.search?.trim().toLowerCase() || "";
-
-    return appointments.filter((a) => {
-      // type check
-      const typeMatch =
-        filters.type === "default" ? true : a.type === filters.type;
-
-      // search check
-      const searchMatch =
-        !q ||
-        a.patientName.toLowerCase().includes(q) ||
-        a.patientPhone.toLowerCase().includes(q);
-
-      // only include if BOTH match
-      return typeMatch && searchMatch;
-    });
-  }, [appointments, filters]);
+  const filtered = useMemo(
+    () =>
+      Array.isArray(appointments)
+        ? appointments.filter(
+            (a) => a.status === "CHECKED_IN" || a.status === "LAB_COMPLETED"
+          )
+        : [],
+    [appointments]
+  );
+  if (isLoading) return <div>Loading…</div>;
+  if (isError)
+    return <div className="text-red-600">{(error as Error).message}</div>;
 
   return (
     <section className="w-full mt-7">
       <div>
-        <h1 className="text-3xl font-bold mb-5">Danh sách đang khám</h1>
+        <h1 className="text-3xl font-bold mb-5">Danh Sách Đang Khám</h1>
         <p className="text-gray-500">
           Hôm nay là: {formatDMY(new Date().toISOString())}
         </p>
       </div>
-      <AppointmentFilters onApply={(f) => setFilters(f)} />
+      <AppointmentFilters onApply={(f) => f.aptStatus} />
       <Tabs defaultValue="list">
         <TabsList>
           <TabsTrigger value="list">Danh sách</TabsTrigger>
