@@ -6,6 +6,7 @@ import { StatusBadge } from "./status-badge";
 import type { Appointment, AppointmentStatus } from "@/types/types";
 import { CheckinEllipsis } from "./checkin-ellipsis";
 import { OngoingEllipsis } from "./ongoing-ellipsis";
+import { FinishedEllipsis } from "./finished-ellipsis";
 export function AppointmentRow({
   appt,
   status,
@@ -35,7 +36,10 @@ export function AppointmentRow({
         </Button>
         {/* ellipses */}
         {status === "SCHEDULED" && <CheckinEllipsis appt={appt} />}
-        {status === "CHECKED_IN" && <OngoingEllipsis />}
+        {(status === "CHECKED_IN" || status === "LAB_COMPLETED") && (
+          <OngoingEllipsis appt={appt} />
+        )}
+        {status === "COMPLETED" && <FinishedEllipsis appt={appt} />}
       </TableCell>
     </TableRow>
   );

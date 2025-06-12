@@ -17,9 +17,9 @@ import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import type { Appointment } from "@/types/types";
 
-export function OngoingEllipsis({ appt }: { appt: Appointment }) {
+export function FinishedEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
-  const [openSession, setOpenSession] = useState(false);
+  const [openDetail, setOpenDetail] = useState(false);
 
   return (
     <DropdownMenu>
@@ -33,10 +33,10 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
           className="cursor-pointer"
           onSelect={(e) => {
             e.preventDefault();
-            setOpenSession(true);
+            setOpenDetail(true);
           }}
         >
-          Phiên khám bệnh
+          Xem chi tiết buổi khám
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer"
@@ -53,7 +53,6 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
           <DialogHeader>
             <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
           </DialogHeader>
-          {/* <InfoGroup></InfoGroup> */}
           <DialogFooter>
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
@@ -63,10 +62,10 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog open={openSession} onOpenChange={setOpenSession}>
+      <Dialog open={openDetail} onOpenChange={setOpenDetail}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Phiên khám bệnh</DialogTitle>
+            <DialogTitle>Chi tiết buổi khám</DialogTitle>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
