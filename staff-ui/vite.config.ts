@@ -5,6 +5,16 @@ import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target:
+          "https://efficiently-allowing-config-recipe.trycloudflare.com/hiv/api",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
