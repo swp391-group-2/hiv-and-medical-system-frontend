@@ -101,3 +101,9 @@ export interface Appointment {
 
   prescription: Prescription;
 }
+
+export type Response<T> = {
+  code: number;
+  success: boolean;
+  result: Array<T>;
+};

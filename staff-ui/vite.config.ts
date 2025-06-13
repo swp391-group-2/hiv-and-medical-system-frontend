@@ -8,7 +8,8 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:8080/hiv/api",
+        target:
+          "https://efficiently-allowing-config-recipe.trycloudflare.com/hiv/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

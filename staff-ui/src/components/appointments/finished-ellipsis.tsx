@@ -48,6 +48,7 @@ export function FinishedEllipsis({ appt }: { appt: Appointment }) {
           Xem hồ sơ bệnh nhân
         </DropdownMenuItem>
       </DropdownMenuContent>
+      {/* ho so benh nhan */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-[500px] min-h-[550px] flex flex-col justify-between">
           <DialogHeader>
@@ -62,11 +63,13 @@ export function FinishedEllipsis({ appt }: { appt: Appointment }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {/* chi tiet ket qua kham/xn */}
       <Dialog open={openDetail} onOpenChange={setOpenDetail}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Chi tiết buổi khám</DialogTitle>
           </DialogHeader>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">

@@ -1,10 +1,10 @@
 import axios from "axios";
-import type { Appointment } from "@/types/types";
+import type { Response, Appointment } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 
 export const fetchAppointments = async (): Promise<Appointment[]> => {
-  const { data } = await axios.get<Appointment[]>(`/appointments`);
-  return data;
+  const { data } = await axios.get<Response<Appointment>>(`/api/appointments`);
+  return data.result;
 };
 
 export function useAppointments() {
