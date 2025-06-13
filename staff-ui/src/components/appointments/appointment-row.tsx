@@ -7,6 +7,7 @@ import type { Appointment, AppointmentStatus } from "@/types/types";
 import { CheckinEllipsis } from "./checkin-ellipsis";
 import { OngoingEllipsis } from "./ongoing-ellipsis";
 import { FinishedEllipsis } from "./finished-ellipsis";
+import { formatDMY } from "@/lib/utils";
 export function AppointmentRow({
   appt,
   status,
@@ -24,7 +25,7 @@ export function AppointmentRow({
         />
       </TableCell>
       <TableCell>{appt.serviceType}</TableCell>
-      <TableCell>{appt.date}</TableCell>
+      <TableCell>{formatDMY(appt.date)}</TableCell>
       <TableCell>{appt.startTime}</TableCell>
       <TableCell>{appt.doctorName}</TableCell>
       <TableCell>
