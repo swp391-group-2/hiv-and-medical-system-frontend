@@ -2,6 +2,7 @@ import { Calendar, Clock, Gift, Search, ShieldCheck } from "lucide-react";
 import { Button } from "./ui/button";
 import heroImg from "/images/hero.jpg";
 import { Link } from "react-router-dom";
+import { AppRoutes } from "@/constants/appRoutes";
 
 function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
   return (
@@ -31,18 +32,20 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
               >
                 <Calendar className="!w-[20px] !h-[20px]" /> Đăng Ký Xét Nghiệm
               </Button>
-              <Link to={"/services/doctors"}>
+              <Link to={AppRoutes.CONSULTATION_DOCTORS}>
                 <Button className="text-white border-0 " size="xl">
                   <Search className="!w-[20px] !h-[20px]" /> Tìm Bác Sĩ
                 </Button>
               </Link>
-              <Button
-                className="text-white border-0"
-                variant="destructive"
-                size="xl"
-              >
-                <Calendar className="!w-[20px] !h-[20px]" /> Đặt Lịch Khám
-              </Button>
+              <Link to={AppRoutes.CONSULTATION}>
+                <Button
+                  className="text-white border-0"
+                  variant="destructive"
+                  size="xl"
+                >
+                  <Calendar className="!w-[20px] !h-[20px]" /> Đặt Lịch Khám
+                </Button>
+              </Link>
             </div>
             <div className="grid grid-cols-3 gap-6 pt-8">
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-100">
@@ -84,7 +87,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 animate-pulse"></div>
 
-              <div className="absolute -top-4 -left-4 w-8 h-8 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full opacity-60 animate-bounce"></div>
+              <div className="absolute -top-4 -left-4 w-10 h-10 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-full opacity-60 animate-bounce"></div>
               <div className="absolute -top-2 -right-6 w-6 h-6 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-full opacity-40 animate-pulse"></div>
               <div className="absolute -bottom-3 -left-2 w-4 h-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full opacity-50 animate-bounce delay-300"></div>
               <div className="absolute -bottom-6 -right-4 w-10 h-10 bg-gradient-to-r from-cyan-300 to-blue-300 rounded-full opacity-30 animate-pulse delay-500"></div>

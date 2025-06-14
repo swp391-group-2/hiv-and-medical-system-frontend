@@ -2,19 +2,36 @@ import UserSummary from "@/components/user/profile/user-summary";
 import ProfileTabsContainer from "@/components/user/profile/profile-tabs";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import type { ProfileFormValues } from "@/components/user/profile/profile-info-form";
+import { type ProfileFormValues } from "@/components/user/profile/profile-info-form";
+
 import type { UserProfileValues } from "@/types/userProfile.type";
 
 const UserProfile = () => {
   const [user, setUser] = useState<UserProfileValues | null>(null);
 
   useEffect(() => {
-    axios
-      .get<UserProfileValues>("/api/current-user")
-      .then((res) => setUser(res.data))
-      .catch((err) => {
-        console.error("Failed to fetch user:", err);
-      });
+    // axios
+    //   .get<UserProfileValues>("/api/current-user")
+    //   .then((res) => setUser(res.data))
+    //   .catch((err) => {
+    //     console.error("Failed to fetch user:", err);
+    //   });
+    setUser({
+      id: "",
+      fullName: "",
+      email: "",
+      imageUrl: "",
+      gender: "",
+      dob: "",
+      idNumber: "",
+      insuranceNumber: "",
+      occupation: "",
+      phone: "",
+      province: "",
+      district: "",
+      ward: "",
+      street: "",
+    });
   }, []);
 
   const handlePasswordSubmit = async (values: {
