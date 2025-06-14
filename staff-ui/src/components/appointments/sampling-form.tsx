@@ -18,8 +18,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const sampleFormSchema = z.object({
-  sampleCode: z.string(),
-  sampleType: z.string(),
+  sampleCode: z.string().nonempty("Mã mẫu không được bỏ trống"),
+  sampleType: z.string().nonempty("Loại mẫu không được bỏ trống"),
 });
 
 type SampleFormValues = z.infer<typeof sampleFormSchema>;
@@ -37,7 +37,10 @@ export function SampleForm({ appt }: { appt: Appointment }) {
 
   const { mutate: checkIn } = useMutation<void, Error, SampleFormValues>({
     mutationFn: async (data: SampleFormValues) =>
-      await axios.post(`/appointments/${appt.appointmentId}/check-in`, data),
+      await axios.post(
+        `/api/appointments/${appt.appointmentId}/check-in`,
+        data
+      ),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       toast.success("Check-in thành công!");
@@ -88,7 +91,7 @@ export function SampleForm({ appt }: { appt: Appointment }) {
         <Button
           variant="outline"
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white"
+          className="w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer"
         >
           Xác nhận
         </Button>

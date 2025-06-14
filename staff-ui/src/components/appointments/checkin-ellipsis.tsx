@@ -17,6 +17,7 @@ import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import { ConfirmCheckinDialog } from "./confirm-checkin";
 import type { Appointment } from "@/types/types";
+import PatientProfileInfo from "./patient-profile";
 
 export function CheckinEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
@@ -53,6 +54,7 @@ export function CheckinEllipsis({ appt }: { appt: Appointment }) {
           <DialogHeader>
             <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
           </DialogHeader>
+          <PatientProfileInfo appt={appt} />
           <DialogFooter>
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
