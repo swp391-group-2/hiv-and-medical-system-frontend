@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const fetchAppointments = async (): Promise<Appointment[]> => {
   const { data } = await axios.get<Response<Appointment>>(`/api/appointments`);
-  return data.result;
+  return data.data;
 };
 
 export function useAppointments() {
