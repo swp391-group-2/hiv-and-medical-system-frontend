@@ -1,7 +1,8 @@
+import config from "@/constants/config";
 import axios from "axios";
 
 const apiGuest = axios.create({
-  baseURL: "http://localhost:8000/hiv/api",
+  baseURL: config.baseUrl,
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",

@@ -1,37 +1,36 @@
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import type { LucideIcon } from "lucide-react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
 export const Sidebar = ({ children }: { children: React.ReactNode }) => {
   return (
-    <aside className="w-64 h-screen bg-white border-r shadow-sm flex flex-col">
-      {children}
+    <aside className="w-64 h-screen bg-background border-r flex flex-col">
+      <ScrollArea className="flex-1">{children}</ScrollArea>
     </aside>
   );
 };
 
-export const SidebarHeader = (header: string) => {
+export const SidebarHeader = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
-      <span>{header}</span>
+    <div className="p-6">
+      <h2 className="text-lg font-semibold">{children}</h2>
+      <Separator className="mt-4" />
     </div>
   );
 };
 
 export const SidebarNav = ({ children }: { children?: React.ReactNode }) => {
-  return (
-    <nav className="flex-1 overflow-y-auto py-4">
-      <ul className="flex flex-col space-y-1">{children}</ul>
-    </nav>
-  );
+  return <nav className="p-4 space-y-2">{children}</nav>;
 };
 
 interface SidebarNavItemProps {
   path: string;
   icon?: LucideIcon;
   text: string;
-  isActive: boolean;
   children?: React.ReactNode;
 }
 
@@ -40,26 +39,24 @@ export const SidebarNavItem = ({
   icon: Icon,
   text,
   children,
-  ...rest
 }: SidebarNavItemProps) => {
   return (
-    <li>
-      <NavLink
-        to={path}
-        className={({ isActive }) =>
-          cn(
-            "w-full flex items-center gap-2 px-4 py-2 text-base justify-start cursor-pointer",
-            isActive
-              ? "bg-blue-50 text-blue-600 hover:bg-blue-100"
-              : "text-gray-700 hover:bg-gray-100"
-          )
-        }
-        {...rest}
-      >
-        {Icon && <Icon className="w-5 h-5" />}
-        <span>{text}</span>
-      </NavLink>
-      {children && <ul className="pl-8">{children}</ul>}
-    </li>
+    <div>
+      <Button variant="ghost" className="w-full justify-start" asChild>
+        <NavLink
+          to={path}
+          className={({ isActive }) =>
+            cn(
+              "flex items-center gap-2 px-4 py-2",
+              isActive && "bg-accent text-accent-foreground"
+            )
+          }
+        >
+          {Icon && <Icon className="w-4 h-4" />}
+          <span>{text}</span>
+        </NavLink>
+      </Button>
+      {children && <div className="ml-6 mt-2 space-y-1">{children}</div>}
+    </div>
   );
 };

@@ -1,75 +1,39 @@
+import apiGuest from "@/apis/apiGuest";
 import DoctorHero from "@/components/doctorListPage/doctor-hero";
 import DoctorCards from "@/components/doctorListPage/DoctorCards";
 import FinderBar from "@/components/doctorListPage/FinderBar";
-import Pagination from "@/components/doctorListPage/Pagination";
-import SortDoctorSelect from "@/components/doctorListPage/SortDoctorSelect";
-import { allDoctorsData } from "@/raw-data/doctors";
+
+import type { Doctor } from "@/types/doctor.type";
+import { useQuery } from "@tanstack/react-query";
+
 import { useState } from "react";
 
-export type Doctor = {
-  id: string;
-  name: string;
-  rating?: number;
-  email: string;
-  image?: string;
-};
-
-const PAGE_SIZE = 8;
-
 const ServiceDoctorList = () => {
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
-  const [allDoctors] = useState<Doctor[]>(allDoctorsData);
-  // const fetchDoctors = async () => {
-  //   const response = await apiGuest.get<Doctor[]>("/doctors");
-  //   return response.data;
-  // };
 
-  // const {
-  //   data: doctors = [],
-  //   isLoading,
-  //   error,
-  // } = useQuery<Doctor[], Error>({
-  //   queryKey: ["doctors"],
-  //   queryFn: fetchDoctors,
-  // });
+  const fetchDoctors = async (): Promise<Doctor[]> => {
+    const response = await apiGuest.get("doctors");
+    return response.data.data;
+  };
 
-  // Lọc bác sĩ theo từ khóa
-  const filteredDoctors = search
-    ? allDoctors.filter((doctor) =>
-        doctor.name.toLowerCase().includes(search.toLowerCase())
-      )
-    : allDoctors;
-
-  // Sắp xếp theo rating
-  const sortedDoctors = [...filteredDoctors].sort((a, b) => {
-    const ratingA = a.rating || 0;
-    const ratingB = b.rating || 0;
-    return sortOrder === "desc" ? ratingB - ratingA : ratingA - ratingB;
+  const {
+    data: doctors,
+    isLoading,
+    error,
+  } = useQuery<Doctor[], Error>({
+    queryKey: ["doctor"],
+    queryFn: () => fetchDoctors(),
   });
 
-  // Phân trang
-  const totalPages = Math.ceil(sortedDoctors.length / PAGE_SIZE);
-  const paginatedDoctors = sortedDoctors.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
-  );
-
-  // if (isLoading) {
-  //   return <div className="text-center py-8">Đang tải dữ liệu...</div>;
-  // }
-
-  // if (error) {
-  //   return (
-  //     <div className="text-center py-8 text-red-500">Lỗi: {error.message}</div>
-  //   );
-  // }
-
+  if (isLoading) {
+    return <div>Đang tải ....</div>;
+  }
+  if (error) {
+    return <div>{error.message}</div>;
+  }
   return (
     <div>
       <DoctorHero />
-
       <div className="container mx-auto min-h-screen">
         <main className="px-8 py-6">
           <h1 className="text-3xl md:text-4xl font-bold text-primary text-center mb-6 tracking-tight">
@@ -78,19 +42,21 @@ const ServiceDoctorList = () => {
           <div className="w-24 h-1 bg-blue-300 rounded mx-auto mb-8"></div>
           <div className="flex flex-row gap-4 mb-4">
             <FinderBar search={search} setSearch={setSearch} />
-            <SortDoctorSelect
+            {/* <SortDoctorSelect
               sortOrder={sortOrder}
               setSortOrder={setSortOrder}
-            />
+            /> */}
           </div>
-          <DoctorCards doctors={paginatedDoctors} />
-          {totalPages > 1 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={setCurrentPage}
-            />
-          )}
+          <div className="grid grid-cols-4 gap-5">
+            {doctors?.map((doctor) => (
+              <DoctorCards
+                key={doctor.doctorId}
+                doctorId={doctor.doctorId}
+                fullName={doctor.fullName}
+                email={doctor.email}
+              />
+            ))}
+          </div>
         </main>
       </div>
     </div>

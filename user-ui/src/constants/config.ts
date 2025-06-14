@@ -1,5 +1,5 @@
 const config = {
-  baseUrl: "http://localhost:3000/hiv/api/", // bytes
+  baseUrl: "https://api.medcarehiv.pro/hiv/api/", // bytes
 };
 
 export default config;
