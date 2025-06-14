@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Eye } from "lucide-react";
-import type { Patient } from "@/pages/patientManagement/patientType";
+import type { Patient } from "@/types/patientType";
 
 const PatientCard: React.FC<{ patient: Patient }> = ({ patient }) => {
   const tagColor =
@@ -20,7 +20,9 @@ const PatientCard: React.FC<{ patient: Patient }> = ({ patient }) => {
             </span>
           </h2>
           <div className="text-sm text-gray-600">Mã BN: {patient.id}</div>
-          <div className="text-sm text-gray-600">Giới tính: {patient.gender}</div>
+          <div className="text-sm text-gray-600">
+            Giới tính: {patient.gender}
+          </div>
           <div className="text-sm text-gray-600">Sinh: {patient.birthDate}</div>
           {patient.screeningResult && (
             <div className="text-sm">Sàng lọc: {patient.screeningResult}</div>

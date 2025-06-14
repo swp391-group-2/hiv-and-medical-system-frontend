@@ -1,65 +1,115 @@
-import { useState } from 'react';
-import type { Alerts, LatestTestResult, PatientInfo, Protocol, TreatmentHistory } from './type';
-import PatientInfoCard from '@/components/ARVSeckectComponent/patientInfoCard';
-import LatestTestResultCard from '@/components/ARVSeckectComponent/latestTestResultCard';
-import AlertsCard from '@/components/ARVSeckectComponent/aleartsCard';
-import TreatmentHistoryCard from '@/components/ARVSeckectComponent/treatmentHistoryCard';
-import ARVProtocolsSection from '@/components/ARVSeckectComponent/arvProtocolsSection';
-import ARVProtocolDetailCard from '@/components/ARVSeckectComponent/arvProtocolsDetailCard';
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
+import PatientInfoCard from "@/components/ARVSeckectComponent/patientInfoCard";
+import LatestTestResultCard from "@/components/ARVSeckectComponent/latestTestResultCard";
+import AlertsCard from "@/components/ARVSeckectComponent/aleartsCard";
+import TreatmentHistoryCard from "@/components/ARVSeckectComponent/treatmentHistoryCard";
+import ARVProtocolsSection from "@/components/ARVSeckectComponent/arvProtocolsSection";
+import ARVProtocolDetailCard from "@/components/ARVSeckectComponent/arvProtocolsDetailCard";
 
+import { fetchARVProtocols, fetchPatientAlerts, fetchPatientInfo, selectPrescription } from "@/api/doctorChonPhacDo";
+import type { Alerts, LatestTestResult, PatientInfo, Protocol, TreatmentHistory } from "@/types/ARVtype";
 
 function ARVSeclect() {
-  const patientInfo: PatientInfo = {
-    id: 'BN0001',
-    name: 'Nguyễn Văn A',
-    age: 35,
-    weight: '65kg',
-  };
+  const location = useLocation();
+  const patient = location.state?.patient;
+  const appointmentId = location.state?.appointmentId;
 
-  const result: LatestTestResult = {
-    cd4: 450,
-    viralLoad: '<50',
-    date: '20/12/2024',
-  };
-
-  const alerts: Alerts = {
-    allergy: 'Sulfonamide',
-    comorbid: 'Viêm gan B',
-  };
-
-  const history: TreatmentHistory = {
-    protocol: 'AZT/3TC/NVP',
-    status: 'Ngừng điều trị',
-    time: '15/03/2023 - 15/09/2024',
-    duration: '6 tháng',
-    notes: 'Tác dụng phụ nghiêm trọng - thiếu máu',
-  };
-
-  const protocols: Protocol[] = [
-    {
-      id: '1',
-      name: 'TDF/3TC/EFV',
-      ingredients: ['Tenofovir 300mg', 'Lamivudine 300mg', 'Efavirenz 600mg'],
-      level: '1',
-      notes: [],
-    },
-    {
-      id: '2',
-      name: 'ABC/3TC/DTG',
-      ingredients: ['Abacavir 600mg', 'Lamivudine 300mg', 'Dolutegravir 50mg'],
-      level: '1',
-      notes: ['HLA-B*5701 dương tính', 'Suy gan nặng'],
-    },
-  ];
-
+  const [patientInfo, setPatientInfo] = useState<PatientInfo>({
+    id: "Không rõ",
+    name: "Không rõ",
+    age: 0,
+    weight: "Không rõ",
+  });
+  const [alerts, setAlerts] = useState<Alerts>({
+    allergy: "Không rõ",
+    comorbid: "Không rõ",
+  });
+  const [result, setResult] = useState<LatestTestResult>({
+    cd4: 0,
+    viralLoad: "Không rõ",
+    date: "Không rõ",
+  });
+  const [protocols, setProtocols] = useState<Protocol[]>([]);
   const [selectedProtocol, setSelectedProtocol] = useState<Protocol | null>(null);
+  const [history, setHistory] = useState<TreatmentHistory>({
+    protocol: "Không rõ",
+    status: "Chưa có dữ liệu",
+    time: "Không rõ",
+    duration: "Không rõ",
+    notes: "-",
+  });
+
+  useEffect(() => {
+    const init = async () => {
+      if (!patient?.patientId || !appointmentId) return;
+
+      const [info, alert, protocolsRes] = await Promise.all([
+        fetchPatientInfo(patient.patientId),
+        fetchPatientAlerts(patient.patientId),
+        fetchARVProtocols(),
+      ]);
+
+      // Cập nhật dữ liệu bệnh nhân
+      setPatientInfo({
+        id: patient.patientCode || "Không rõ",
+        name: patient.fullName || "Không rõ",
+        age: calculateAge(patient.dob),
+        weight: info.weight || "Không rõ",
+      });
+
+      setAlerts(alert);
+
+      setResult({
+        cd4: info.cd4 || 0,
+        viralLoad: info.viralLoad || "Không rõ",
+        date: info.updatedAt?.split("T")[0] || "Không rõ",
+      });
+
+      setProtocols(protocolsRes);
+
+      if (info?.treatmentHistory) {
+        setHistory({
+          protocol: info.treatmentHistory.protocol || "Không rõ",
+          status: info.treatmentHistory.status || "Không rõ",
+          time: info.treatmentHistory.time || "Không rõ",
+          duration: info.treatmentHistory.duration || "Không rõ",
+          notes: info.treatmentHistory.notes || "-",
+        });
+      }
+    };
+
+    init();
+  }, [patient, appointmentId]);
+
+  const calculateAge = (dob: string) => {
+    const birth = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  const handleSelectProtocol = async (protocol: Protocol) => {
+    setSelectedProtocol(protocol);
+    try {
+      await selectPrescription(appointmentId, protocol.id);
+      alert("Chọn phác đồ thành công!");
+    } catch (err) {
+      console.error(err);
+      alert("Chọn phác đồ thất bại!");
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-4">
-            <h1 className="text-2xl font-bold mb-2">Chọn phác đồ ARV</h1>
+      <h1 className="text-2xl font-bold mb-2">Chọn phác đồ ARV</h1>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        
         <PatientInfoCard patientInfo={patientInfo} />
         <LatestTestResultCard result={result} />
         <div className="space-y-4">
@@ -68,7 +118,7 @@ function ARVSeclect() {
         </div>
       </div>
 
-      <ARVProtocolsSection protocols={protocols} onSelect={setSelectedProtocol} />
+      <ARVProtocolsSection protocols={protocols} onSelect={handleSelectProtocol} />
 
       <ARVProtocolDetailCard protocol={selectedProtocol} />
     </div>

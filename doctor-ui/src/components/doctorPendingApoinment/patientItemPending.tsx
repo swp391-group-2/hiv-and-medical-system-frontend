@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import PatientDialog from "./patientDialogA";
+import React from "react";
+// import PatientDialog from "./patientDialogA";
+import { useNavigate } from "react-router-dom";
 
 interface Appointment {
   appointmentId: number;
@@ -33,18 +34,19 @@ interface Props {
 }
 
 const PatientItemPending: React.FC<Props> = ({ appointment }) => {
-  const { patient,  doctorName, labResult } = appointment;
+  const { patient, doctorName, labResult } = appointment;
 
   const resultLabel = labResult?.conclusion ?? "Chờ kết quả";
   const resultColor = labResult ? "text-green-600" : "text-gray-600";
 
-  const [openDialog, setOpenDialog] = useState(false);
+  // const [openDialog, setOpenDialog] = useState(false);
 
+  const navigate = useNavigate();
   return (
     <>
       <div
         className="flex justify-between items-center border rounded p-4 mb-2 hover:bg-gray-50 cursor-pointer"
-        onClick={() => setOpenDialog(true)}
+        // onClick={() => setOpenDialog(true)}
       >
         <div>
           <div className="font-semibold">{patient.fullName}</div>
@@ -57,19 +59,25 @@ const PatientItemPending: React.FC<Props> = ({ appointment }) => {
           </div>
         </div>
         <div className="text-blue-600 hover:underline">
-          <button className="px-3 py-1 bg-blue-100 rounded hover:bg-blue-200">
+          <button
+            className="px-3 py-1 bg-blue-100 rounded hover:bg-blue-200"
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate("/doctor/arv-seclect", { state: { patient } });
+            }}
+          >
             Khám
           </button>
         </div>
       </div>
 
-      {openDialog && (
+      {/* {openDialog && (
         <PatientDialog
           appointment={appointment}
           open={openDialog}
           onClose={() => setOpenDialog(false)}
         />
-      )}
+      )} */}
     </>
   );
 };

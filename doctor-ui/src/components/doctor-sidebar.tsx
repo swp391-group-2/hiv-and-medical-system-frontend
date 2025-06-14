@@ -29,7 +29,7 @@ const items = [
     icon: ChartColumnIncreasing,
   },
   {
-    title: "Chờ kết quả",
+    title: "Chờ khám",
     url: "/doctor/pending",
     icon: Clock,
   },
@@ -51,6 +51,11 @@ const items = [
   {
     title: "Chọn phác đồ ARV",
     url: "/doctor/arv-seclect",
+    icon: Newspaper,
+  },
+  {
+    title: "Cài đặt tài khoản",
+    url: "/doctor/setting",
     icon: Newspaper,
   },
 ];

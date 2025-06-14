@@ -11,16 +11,24 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "./ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { type FC } from "react";
 import * as auth from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
-  email: z.string().email("Email không hợp lệ"),
-  password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
+  email: z
+    .string()
+    .trim()
+    .nonempty("Vui lòng nhập email")
+    .email("Email không hợp lệ"),
+  password: z
+    .string()
+    .trim()
+    .nonempty("Vui lòng nhập mật khẩu")
+    .min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -28,6 +36,7 @@ type AuthProviders = "google";
 
 export const LoginForm: FC = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -37,34 +46,38 @@ export const LoginForm: FC = () => {
     },
   });
 
-  const queryClient = useQueryClient();
   const { mutate: login, status } = useMutation({
     mutationFn: async (value: LoginFormValues) => await auth.login(value),
     onSuccess: (token) => {
       localStorage.setItem("token", token);
-
-      queryClient.invalidateQueries({
-        queryKey: ["self"],
-      });
-
+      queryClient.invalidateQueries({ queryKey: ["self"] });
       navigate("/doctor/dashboard");
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (error: unknown) => {
+      const message =
+        error && typeof error === "object" && "message" in error
+          ? (error as { message?: string }).message
+          : undefined;
+      toast.error(message || "Đăng nhập thất bại");
     },
   });
+
   const handleProviderLogin = (provider: AuthProviders) => {
     console.log(`Login with ${provider}`);
-    // Handle provider login logic here
+    // Gọi API login social ở đây nếu có
   };
+
   return (
     <Form {...form}>
       <div className="w-full max-w-md mx-auto">
         <form
           onSubmit={form.handleSubmit((value) => login(value))}
-          className="space-y-6 bg-white p-6 rounded shadow-md"
+          className="space-y-6 bg-white p-8 rounded-xl shadow-lg border"
         >
-          <h1 className="text-2xl font-bold text-center">Đăng nhập</h1>
+          <h1 className="text-3xl font-bold text-center text-gray-800">
+            Đăng nhập
+          </h1>
+
           <FormField
             control={form.control}
             name="email"
@@ -73,20 +86,16 @@ export const LoginForm: FC = () => {
             }: {
               field: ControllerRenderProps<LoginFormValues, "email">;
             }) => (
-              <FormItem className="">
-                <FormLabel className="">Email</FormLabel>
+              <FormItem>
+                <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    className=""
-                    type="text"
-                    placeholder="Nhập email"
-                    {...field}
-                  />
+                  <Input type="email" placeholder="Nhập email" {...field} />
                 </FormControl>
-                <FormMessage className="" />
+                <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="password"
@@ -95,51 +104,48 @@ export const LoginForm: FC = () => {
             }: {
               field: ControllerRenderProps<LoginFormValues, "password">;
             }) => (
-              <FormItem className="">
-                <FormLabel className="">Mật khẩu</FormLabel>
+              <FormItem>
+                <FormLabel>Mật khẩu</FormLabel>
                 <FormControl>
                   <Input
-                    className=""
                     type="password"
                     placeholder="Nhập mật khẩu"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="" />
+                <FormMessage />
               </FormItem>
             )}
           />
-          {status === "pending" ? (
-            <Button type="submit" disabled className="w-full bg-gray-500">
-              Đăng nhập
-            </Button>
-          ) : (
-            <Link to={"doctor/dashboard"}>
-              <Button
-                type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
-              >
-                Đăng nhập
-              </Button>
+
+          <Button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+            disabled={status === "pending"}
+          >
+            {status === "pending" ? "Đang xử lý..." : "Đăng nhập"}
+          </Button>
+
+          <div className="text-right text-sm">
+            <Link to="/forgot-password" className="text-blue-600 underline">
+              Quên mật khẩu?
             </Link>
-          )}
-          <Separator className="mb-2" />
-          <div className="flex justify-center">
-            <span className="font-medium">Hoặc</span>
           </div>
+
+          <Separator className="my-4" />
+
+          <div className="text-center text-sm text-gray-500">
+            Hoặc đăng nhập bằng
+          </div>
+
           <Button
             variant="outline"
-            className="w-full cursor-pointer"
+            className="w-full"
             onClick={() => handleProviderLogin("google")}
+            type="button"
           >
             Đăng nhập với Google
           </Button>
-
-          <div className="flex justify-between text-sm">
-            <a href="/forgot-password" className="underline text-blue-600">
-              Quên mật khẩu?
-            </a>
-          </div>
         </form>
       </div>
     </Form>

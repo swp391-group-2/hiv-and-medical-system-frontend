@@ -1,7 +1,6 @@
 
-import type { Protocol } from "@/pages/ARVSelect/type";
+import type { Protocol } from "@/types/ARVtype";
 import ARVProtocolCard from "./arvProtocolCard";
-
 
 const ARVProtocolsSection = ({
   protocols,

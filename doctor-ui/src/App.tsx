@@ -11,6 +11,7 @@ import PatientList from "./pages/appointment/completed";
 import Questions from "./pages/questions/qa";
 import Schedule from "./pages/appointment/schedule";
 import ARVSeclect from "./pages/ARVSelect/arvSelect";
+import DoctorProfile from "./pages/doctorProfile/doctorProfile";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/doctor/qa" element={<Questions />} />
               <Route path="/doctor/profile" element={<UserProfile />} />
                 <Route path="/doctor/arv-seclect" element={<ARVSeclect/>} />
+                <Route path="/doctor/setting" element={<DoctorProfile/>} />
             </Route>
             {/* <Route
               path="*"

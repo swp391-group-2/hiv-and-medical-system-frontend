@@ -1,6 +1,5 @@
-import type { Patient } from "@/pages/Dashboard/patientType";
+import type { Patient } from "@/types/patientType";
 import { FC } from "react";
-
 
 interface Props {
   patient: Patient;
@@ -26,7 +25,11 @@ const PatientCard: FC<Props> = ({ patient }) => {
           </div>
         </div>
       </div>
-      <div className={`px-3 py-1 text-sm rounded-full ${statusColors[patient.status]}`}>
+      <div
+        className={`px-3 py-1 text-sm rounded-full ${
+          statusColors[patient.status]
+        }`}
+      >
         {patient.status}
       </div>
     </div>

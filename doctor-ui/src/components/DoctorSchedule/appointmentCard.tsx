@@ -1,4 +1,5 @@
-import type { Appointment } from "@/pages/appointment/Appointment";
+
+import type { Appointment } from "@/types/appointment";
 import React from "react";
 
 type Props = {

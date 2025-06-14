@@ -1,8 +1,12 @@
-import type { Protocol } from "@/pages/ARVSelect/type";
+import type { Protocol } from "@/types/ARVtype";
 
-
-
-const ARVProtocolCard = ({ protocol, onClick }: { protocol: Protocol; onClick: () => void }) => {
+const ARVProtocolCard = ({
+  protocol,
+  onClick,
+}: {
+  protocol: Protocol;
+  onClick: () => void;
+}) => {
   return (
     <div
       className="bg-white p-4 rounded shadow hover:bg-gray-100 cursor-pointer"

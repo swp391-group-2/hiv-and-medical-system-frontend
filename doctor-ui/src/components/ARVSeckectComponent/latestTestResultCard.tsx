@@ -1,4 +1,4 @@
-import type { LatestTestResult } from "@/pages/ARVSelect/type";
+import type { LatestTestResult } from "@/types/type";
 
 const LatestTestResultCard = ({ result }: { result: LatestTestResult }) => {
   return (
@@ -12,15 +12,14 @@ const LatestTestResultCard = ({ result }: { result: LatestTestResult }) => {
         </p>
       </div>
       <div className="bg-white text-green-800 p-3 rounded border-2 border-green-200 mb-2">
-        
-         <p>
+        <p>
           {" "}
           <p className="font-bold">{result.viralLoad}</p>
           <p className="text-sm">Viral Load</p>
         </p>
       </div>
       <div className="flex justify-center">
-         <p className="text-sm text-green-700 mt-2">Ngày XN: {result.date}</p>
+        <p className="text-sm text-green-700 mt-2">Ngày XN: {result.date}</p>
       </div>
     </div>
   );

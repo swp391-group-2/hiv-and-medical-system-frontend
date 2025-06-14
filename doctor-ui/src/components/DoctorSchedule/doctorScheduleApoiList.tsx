@@ -1,6 +1,7 @@
-import type { Appointment } from "@/pages/appointment/Appointment";
+;
 import React from "react";
 import AppointmentCard from "./appointmentCard";
+import type { Appointment } from "@/types/appointment";
 
 type Props = {
   appointments: Appointment[];

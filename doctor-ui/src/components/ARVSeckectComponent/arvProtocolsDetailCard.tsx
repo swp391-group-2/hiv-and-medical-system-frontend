@@ -1,5 +1,4 @@
-import type { Protocol } from "@/pages/ARVSelect/type";
-
+import type { Protocol } from "@/types/ARVtype";
 
 
 const ARVProtocolDetailCard = ({ protocol }: { protocol: Protocol | null }) => {
@@ -18,13 +17,17 @@ const ARVProtocolDetailCard = ({ protocol }: { protocol: Protocol | null }) => {
       <div className="mb-2">
         <p className="font-medium">Thành phần thuốc:</p>
         {protocol.ingredients.map((ing, index) => (
-          <p key={index} className="text-sm">{ing}</p>
+          <p key={index} className="text-sm">
+            {ing}
+          </p>
         ))}
       </div>
       <div>
         <p className="font-medium">Ghi chú:</p>
         {protocol.notes.map((note, index) => (
-          <p key={index} className="text-sm text-red-600">{note}</p>
+          <p key={index} className="text-sm text-red-600">
+            {note}
+          </p>
         ))}
       </div>
     </div>

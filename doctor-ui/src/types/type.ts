@@ -26,10 +26,3 @@ export type Protocol = {
   level: string;
   notes: string[];
 };
-
-export type PatientInfo = {
-  id: string;
-  name: string;
-  age: number;
-  weight: string;
-};

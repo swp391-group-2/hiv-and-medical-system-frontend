@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await new Promise((r) => setTimeout(r, 500));
 
     // 👉 replace this block with your real API call
-    if (email === "test@gmail.com" && password === "admin") {
+    if (email === "test@gmail.com" && password === "test@gmail.com") {
       const fakeUser: User = {
         id: "demo-1",
         name: "Demo User",
