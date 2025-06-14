@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from "@/layout/auth-layout";
 import Dashboard from "./pages/home";
 import UnauthLayout from "@/layout/unauth-layout";
@@ -23,6 +23,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route element={<UnauthLayout />}>
+              <Route index element={<Navigate to="login" />} />
               <Route path="/login" element={<LoginPage />} />
             </Route>
             <Route
