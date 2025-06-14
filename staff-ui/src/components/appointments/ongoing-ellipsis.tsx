@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import type { Appointment } from "@/types/types";
+import PatientProfileInfo from "./patient-profile";
+import AppointmentSession from "./appointment-session";
 
 export function OngoingEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
@@ -49,12 +51,12 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
         </DropdownMenuItem>
       </DropdownMenuContent>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="w-[500px] min-h-[550px] flex flex-col justify-between">
+        <DialogContent className="w-[500px] min-h-[550px] flex flex-col">
           <DialogHeader>
             <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
           </DialogHeader>
-          {/* <InfoGroup></InfoGroup> */}
-          <DialogFooter>
+          <PatientProfileInfo appt={appt} />
+          <DialogFooter className="mt-auto">
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng
@@ -64,11 +66,12 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
         </DialogContent>
       </Dialog>
       <Dialog open={openSession} onOpenChange={setOpenSession}>
-        <DialogContent>
+        <DialogContent className="w-[500px] min-h-[550px] flex flex-col">
           <DialogHeader>
             <DialogTitle>Phiên khám bệnh</DialogTitle>
           </DialogHeader>
-          <DialogFooter>
+          <AppointmentSession appt={appt} />
+          <DialogFooter className="mt-auto">
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng

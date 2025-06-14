@@ -12,7 +12,7 @@ export type User = {
 };
 
 export const login = async (value: LoginRequest) => {
-  const response = await axios.post("/auth/login", value, {
+  const response = await axios.post("/api/auth/login", value, {
     headers: { Accept: "application/json", "Content-Type": "application/json" },
     responseType: "text",
   });

@@ -17,10 +17,12 @@ const CheckinPending = () => {
   const filtered = useMemo(
     () =>
       Array.isArray(appointments)
-        ? appointments.filter((a) => a.status === "CHECKED_IN")
+        ? appointments.filter((a) => a.status === "SCHEDULED")
         : [],
     [appointments]
   );
+  console.log(filtered);
+  console.log(appointments);
 
   if (isLoading) return <div>Loading…</div>;
   if (isError)
