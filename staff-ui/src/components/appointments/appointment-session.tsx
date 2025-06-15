@@ -5,6 +5,7 @@ import type { Appointment } from "@/types/types";
 import { Badge } from "../ui/badge";
 import { formatStd } from "@/lib/utils";
 import ConfirmResult from "./confirm-result";
+import Prescription from "./prescription";
 
 const LabTestRs = ({ appt }: { appt: Appointment }) => {
   const hasResult =
@@ -113,7 +114,7 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
       <TabsList>
         <TabsTrigger value="service">Dịch vụ</TabsTrigger>
         <TabsTrigger value="lab_rs">Kết quả</TabsTrigger>
-        <TabsTrigger value="pres">Phác đồ</TabsTrigger>
+        <TabsTrigger value="prescription">Phác đồ</TabsTrigger>
       </TabsList>
       <TabsContent value="service">
         <Card className="w-full max-w-md mx-auto shadow-lg">
@@ -127,7 +128,7 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Bác sĩ phụ trách</span>
               <span className="text-sm font-medium text-gray-800">
-                {appt.doctorName}
+                {appt.doctorName.length === 0 ? "Không có" : appt.doctorName}
               </span>
             </div>
             <div className="flex justify-between">
@@ -142,7 +143,9 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
       <TabsContent value="lab_rs">
         <LabTestRs appt={appt} />
       </TabsContent>
-      <TabsContent value="pres"></TabsContent>
+      <TabsContent value="prescription">
+        <Prescription appt={appt} />
+      </TabsContent>
     </Tabs>
   );
 };

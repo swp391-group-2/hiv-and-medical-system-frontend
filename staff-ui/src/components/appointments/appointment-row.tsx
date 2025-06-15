@@ -27,7 +27,9 @@ export function AppointmentRow({
       <TableCell>{appt.serviceType}</TableCell>
       <TableCell>{formatDMY(appt.date)}</TableCell>
       <TableCell>{appt.startTime}</TableCell>
-      <TableCell>{appt.doctorName}</TableCell>
+      <TableCell>
+        {appt.doctorName === null ? "Không có" : appt.doctorName}
+      </TableCell>
       <TableCell>
         <StatusBadge status={appt.status} />
       </TableCell>
