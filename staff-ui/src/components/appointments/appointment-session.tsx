@@ -13,7 +13,7 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
       appt.labResult.resultNumericViralLoad !== null) ||
     appt.labResult.resultText !== null;
   return (
-    <Card className="w-full max-w-xl mx-auto shadow-md">
+    <Card className="h-full shadow-md">
       <CardHeader className="flex items-center justify-between">
         <CardTitle className="text-lg">Kết quả xét nghiệm</CardTitle>
         {hasResult ? (
@@ -91,12 +91,16 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">Kết luận</span>
-                <span className="font-medium">{appt.labResult.conclusion}</span>
+                <span className="font-medium flex-1 whitespace-normal break-words">
+                  {appt.labResult.conclusion === ""
+                    ? "Không có"
+                    : appt.labResult.conclusion}
+                </span>
               </div>
             </div>
             <div className="grid grid-cols-1">
               <span className="text-sm text-gray-500">Ghi chú:</span>
-              <span className="font-medium">
+              <span className="font-medium flex-1 whitespace-normal break-words">
                 {appt.labResult.note === "" ? "Không có" : appt.labResult.note}
               </span>
             </div>
@@ -117,7 +121,7 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
         <TabsTrigger value="prescription">Phác đồ</TabsTrigger>
       </TabsList>
       <TabsContent value="service">
-        <Card className="w-full max-w-md mx-auto shadow-lg">
+        <Card className="w-full shadow-lg">
           <CardHeader className="flex items-center justify-between">
             <CardTitle className="text-xl font-semibold">
               {appt.serviceName}
@@ -128,7 +132,7 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Bác sĩ phụ trách</span>
               <span className="text-sm font-medium text-gray-800">
-                {appt.doctorName.length === 0 ? "Không có" : appt.doctorName}
+                {appt.doctorName === null ? "Không có" : appt.doctorName}
               </span>
             </div>
             <div className="flex justify-between">

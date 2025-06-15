@@ -6,7 +6,8 @@ import { toast } from "sonner";
 
 const ConfirmResult = ({ appt }: { appt: Appointment }) => {
   const queryClient = useQueryClient();
-  const isResultOk = appt.status === "LAB_COMPLETED";
+  const isResultOk =
+    appt.status === "LAB_COMPLETED" || appt.status === "COMPLETED";
 
   const { mutate: confirmReturn, isPending } = useMutation<
     void,

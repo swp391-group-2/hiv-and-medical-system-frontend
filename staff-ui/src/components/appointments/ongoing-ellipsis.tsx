@@ -51,7 +51,7 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
         </DropdownMenuItem>
       </DropdownMenuContent>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="w-[500px] min-h-[550px] flex flex-col">
+        <DialogContent className="min-w-[500px] min-h-[550px] flex flex-col">
           <DialogHeader>
             <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
           </DialogHeader>
@@ -73,7 +73,7 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
           <AppointmentSession appt={appt} />
           <DialogFooter className="mt-auto">
             <DialogClose asChild>
-              <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
+              <Button className=" bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng
               </Button>
             </DialogClose>

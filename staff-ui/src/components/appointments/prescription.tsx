@@ -54,10 +54,12 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
               <AccordionTrigger className="text-sm font-medium text-red-600 hover:underline">
                 Xem chi tiết toa thuốc
               </AccordionTrigger>
-              <AccordionContent className="mt-2 space-y-2">
-                {appt.prescription.prescriptionItems.map((item) => (
-                  <PresItem key={item.prescriptionItemId} item={item} />
-                ))}
+              <AccordionContent className="mt-2">
+                <Accordion type="single" collapsible>
+                  {appt.prescription.prescriptionItems.map((item) => (
+                    <PresItem key={item.prescriptionItemId} item={item} />
+                  ))}
+                </Accordion>
               </AccordionContent>
             </AccordionItem>
           </Accordion>
