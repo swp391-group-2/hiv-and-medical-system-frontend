@@ -51,24 +51,30 @@ const ConfirmResult = ({ appt }: { appt: Appointment }) => {
   return (
     <div>
       {!isResultOk ? (
-        <div className="flex gap-4">
-          <Button
-            variant="outline"
-            disabled={isPending}
-            className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
-            onClick={handleReject}
-          >
-            Từ chối kết quả
+        appt.labResult.resultStatus === "REJECTED" ? (
+          <Button variant="outline" disabled className="bg-red-500 text-white">
+            Đã từ chối kết quả
           </Button>
-          <Button
-            variant="outline"
-            disabled={isPending}
-            className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
-            onClick={handleAccept}
-          >
-            Xác nhận kết quả
-          </Button>
-        </div>
+        ) : (
+          <div className="flex gap-4">
+            <Button
+              variant="outline"
+              disabled={isPending}
+              className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
+              onClick={handleReject}
+            >
+              Từ chối kết quả
+            </Button>
+            <Button
+              variant="outline"
+              disabled={isPending}
+              className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
+              onClick={handleAccept}
+            >
+              Xác nhận kết quả
+            </Button>
+          </div>
+        )
       ) : (
         <Button
           variant="outline"

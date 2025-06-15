@@ -5,6 +5,7 @@ import { AppointmentTable } from "@/components/appointments/appointment-table";
 import { useMemo } from "react";
 import { useAppointments } from "@/api/appointments";
 import { AppointmentFilters } from "@/components/appointments/appointment-filters";
+import { LoadingOverlay } from "@/components/loading-overlay";
 
 const CheckinPending = () => {
   const {
@@ -24,7 +25,7 @@ const CheckinPending = () => {
   console.log(filtered);
   console.log(appointments);
 
-  if (isLoading) return <div>Loading…</div>;
+  if (isLoading) return <LoadingOverlay message="Đang tải..." />;
   if (isError)
     return <div className="text-red-600">{(error as Error).message}</div>;
 

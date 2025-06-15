@@ -1,6 +1,7 @@
 import { useAppointments } from "@/api/appointments";
 import { AppointmentFilters } from "@/components/appointments/appointment-filters";
 import { LabTable } from "@/components/lab/lab-table";
+import { LoadingOverlay } from "@/components/loading-overlay";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { formatDMY } from "@/lib/utils";
 import { useMemo } from "react";
@@ -24,7 +25,7 @@ const Lab = () => {
         : [],
     [appointments]
   );
-  if (isLoading) return <div>Loading…</div>;
+  if (isLoading) return <LoadingOverlay message="Đang tải..." />;
   if (isError)
     return <div className="text-red-600">{(error as Error).message}</div>;
   return (
