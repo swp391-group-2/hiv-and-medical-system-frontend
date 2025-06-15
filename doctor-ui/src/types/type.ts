@@ -4,12 +4,11 @@ export type Alerts = {
   allergy: string;
   comorbid: string;
 };
-
-export type LatestTestResult = {
-  cd4: number;
-  viralLoad: string;
+export interface LatestTestResult {
+  cd4: number | string;
+  viralLoad: string | number;
   date: string;
-};
+}
 
 export type TreatmentHistory = {
   protocol: string;
@@ -25,11 +24,4 @@ export type Protocol = {
   ingredients: string[];
   level: string;
   notes: string[];
-};
-
-export type PatientInfo = {
-  id: string;
-  name: string;
-  age: number;
-  weight: string;
 };

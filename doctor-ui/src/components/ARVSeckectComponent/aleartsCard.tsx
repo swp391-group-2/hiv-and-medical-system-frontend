@@ -1,6 +1,4 @@
-import type { Alerts } from "@/pages/ARVSelect/type";
-
-
+import type { Alerts } from "@/types/type";
 
 const AlertsCard = ({ alerts }: { alerts: Alerts }) => {
   return (

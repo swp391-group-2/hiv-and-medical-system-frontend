@@ -1,0 +1,232 @@
+{
+  "doctorAppointments": [
+    {
+      "appointmentId": 1,
+      "serviceType": "CONSULTATION",
+      "labSample": {
+        "status": "LAB_COMPLETED"
+      },
+      "patient": {
+        "patientId": "P001",
+        "userId": "U001",
+        "email": "patient01@example.com",
+        "fullName": "Nguyễn Văn A",
+        "userStatus": "ACTIVE",
+        "patientCode": "BN001",
+        "dob": "1990-01-01",
+        "gender": "Nam",
+        "address": "123 Đường ABC, Hà Nội",
+        "phoneNumber": "0909123456",
+        "identificationCard": "012345678",
+        "healthInsurance": "BH123456",
+        "occupation": "Kỹ sư"
+      },
+      "date": "2025-06-13",
+      "doctorName": "Bác sĩ Trần Thị B",
+      "labResult": {
+        "resultText": "Không phát hiện virus",
+        "conclusion": "Âm tính",
+        "viralLoad": "0 copies/mL",
+        "cd4": "750"
+      }
+    },
+    {
+      "appointmentId": 5,
+      "serviceType": "CONSULTATION",
+      "labSample": {
+        "status": "LAB_COMPLETED"
+      },
+      "patient": {
+        "patientId": "P001",
+        "userId": "U001",
+        "email": "patient01@example.com",
+        "fullName": "Nguyễn Văn Ninh",
+        "userStatus": "ACTIVE",
+        "patientCode": "BN001",
+        "dob": "1993-01-01",
+        "gender": "Nam",
+        "address": "123 Đường ABC, Hà Nội",
+        "phoneNumber": "0909123456",
+        "identificationCard": "012345678",
+        "healthInsurance": "BH123456",
+        "occupation": "Kỹ sư"
+      },
+      "date": "2025-06-13",
+      "doctorName": "Bác sĩ Trần Thị B",
+      "labResult": {
+        "resultText": "Không phát hiện virus",
+        "conclusion": "Âm tính",
+        "viralLoad": "0 copies/mL",
+        "cd4": "750"
+      }
+    },
+    {
+      "appointmentId": 2,
+      "serviceType": "CONSULTATION",
+      "labSample": {
+        "status": "LAB_COMPLETED"
+      },
+      "patient": {
+        "patientId": "P002",
+        "userId": "U002",
+        "email": "patient02@example.com",
+        "fullName": "Trần Thị B",
+        "userStatus": "ACTIVE",
+        "patientCode": "BN002",
+        "dob": "1985-05-12",
+        "gender": "Nữ",
+        "address": "456 Đường XYZ, TP.HCM",
+        "phoneNumber": "0909988776",
+        "identificationCard": "123456789",
+        "healthInsurance": "BH654321",
+        "occupation": "Giáo viên"
+      },
+      "date": "2025-06-12",
+      "doctorName": "Bác sĩ Nguyễn Văn C",
+      "labResult": {
+        "resultText": "Phát hiện virus",
+        "conclusion": "Dương tính",
+        "viralLoad": "150000 copies/mL",
+        "cd4": "450"
+      }
+    },
+    {
+      "appointmentId": 3,
+      "serviceType": "VACCINATION",
+      "labSample": {
+        "status": "DONE"
+      },
+      "patient": {
+        "patientId": "P003",
+        "userId": "U003",
+        "email": "patient03@example.com",
+        "fullName": "Lê Văn D",
+        "userStatus": "ACTIVE",
+        "patientCode": "BN003",
+        "dob": "1992-03-15",
+        "gender": "Nam",
+        "address": "789 Lê Lợi, Huế",
+        "phoneNumber": "0912345678",
+        "identificationCard": "987654321",
+        "healthInsurance": "BH111222",
+        "occupation": "Sinh viên"
+      },
+      "date": "2025-06-10",
+      "doctorName": "Bác sĩ Trần Hữu E"
+    },
+    {
+      "appointmentId": 4,
+      "serviceType": "VACCINATION",
+      "labSample": {
+        "status": "DONE"
+      },
+      "patient": {
+        "patientId": "P003",
+        "userId": "U003",
+        "email": "patient03@example.com",
+        "fullName": "Lê Văn D",
+        "userStatus": "ACTIVE",
+        "patientCode": "BN003",
+        "dob": "1992-03-15",
+        "gender": "Nam",
+        "address": "789 Lê Lợi, Huế",
+        "phoneNumber": "0912345678",
+        "identificationCard": "987654321",
+        "healthInsurance": "BH111222",
+        "occupation": "Sinh viên"
+      },
+      "date": "2025-06-10",
+      "doctorName": "Bác sĩ Trần Hữu E"
+    }
+  ],
+  "doctorSchedules": [
+    {
+      "id": 1,
+      "doctorId": "doctor123",
+      "workDate": "2025-06-13",
+      "scheduleSlots": [
+        {
+          "id": 1,
+          "slot": {
+            "startTime": "08:00",
+            "endTime": "08:30",
+            "description": "Khám định kỳ bệnh nhân Nguyễn Văn A"
+          },
+          "status": "AVAILABLE"
+        },
+        {
+          "id": 2,
+          "slot": {
+            "startTime": "09:00",
+            "endTime": "09:30",
+            "description": "Khám khẩn bệnh nhân Trần Thị B"
+          },
+          "status": "IN_PROGRESS"
+        },
+        {
+          "id": 3,
+          "slot": {
+            "startTime": "10:00",
+            "endTime": "10:30",
+            "description": "Bệnh nhân Lê Văn C theo dõi sau điều trị"
+          },
+          "status": "DONE"
+        }
+      ]
+    }
+  ],
+  "doctors": [
+    {
+      "id": 1,
+      "doctorId": 1,
+      "userId": "U001",
+      "email": "doctor01@example.com",
+      "password": "123456",
+      "fullName": "Bác sĩ Nguyễn Văn Av",
+      "userStatus": "Đang hoạt động",
+      "doctorCode": "DOC12345",
+      "specialization": "Nội tổng quát",
+      "licenseNumber": "VN-MED-2024-12345"
+    }
+  ],
+  "result": {
+    "scheduleSlots": [
+      {
+        "id": 101,
+        "scheduleId": 1,
+        "slot": {
+          "id": 11,
+          "slotNumber": 1,
+          "startTime": "08:30",
+          "endTime": "09:00",
+          "description": "Tái khám định kỳ"
+        },
+        "status": "DONE"
+      },
+      {
+        "id": 102,
+        "scheduleId": 1,
+        "slot": {
+          "id": 12,
+          "slotNumber": 2,
+          "startTime": "09:15",
+          "endTime": "09:45",
+          "description": "Bệnh nhân có triệu chứng sốt"
+        },
+        "status": "IN_PROGRESS"
+      },
+      {
+        "id": 103,
+        "scheduleId": 1,
+        "slot": {
+          "id": 13,
+          "slotNumber": 3,
+          "startTime": "10:00",
+          "endTime": "10:30",
+          "description": "Theo dõi sau thay đổi phác đồ"
+        },
+        "status": "AVAILABLE"
+      }
+    ]
+  }
+}
