@@ -16,6 +16,9 @@ import CheckinPending from "./pages/appointment/checkin-pending";
 import Lab from "./pages/lab/lab";
 import LabSidebar from "./components/lab/lab-sidebar";
 import { Toaster } from "sonner";
+import ManagerSidebar from "./components/manager/manager-sidebar";
+import ManagerDashboard from "./pages/manager/dashboard";
+import ManagerARV from "./pages/manager/arv";
 
 const queryClient = new QueryClient();
 
@@ -33,31 +36,29 @@ function App() {
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<Lab />} />
             </Route>
+            <Route path="manager" element={<ManagerSidebar />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<ManagerDashboard />} />
+              <Route path="arv" element={<ManagerARV />} />
+            </Route>
             <Route
+              path="staff"
               element={
                 <RequireAuth>
                   <MainLayout />
                 </RequireAuth>
               }
             >
-              <Route index path="/staff/dashboard" element={<Dashboard />} />
-              <Route
-                path="/staff/checkin-pending"
-                element={<CheckinPending />}
-              />
-              <Route path="/staff/on-going" element={<OngoingAppointments />} />
-              <Route
-                path="/staff/finished"
-                element={<FinishedAppointments />}
-              />
-              <Route path="/staff/comeback" element={<Comeback />} />
-              <Route path="/staff/patients" element={<PatientsManagement />} />
-              <Route path="/staff/arv" element={<ArvManagement />} />
-              <Route
-                path="/staff/doctor-schedule"
-                element={<DoctorSchedule />}
-              />
-              <Route path="/staff/profile" element={<UserProfile />} />
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="checkin-pending" element={<CheckinPending />} />
+              <Route path="on-going" element={<OngoingAppointments />} />
+              <Route path="finished" element={<FinishedAppointments />} />
+              <Route path="comeback" element={<Comeback />} />
+              <Route path="patients" element={<PatientsManagement />} />
+              <Route path="arv" element={<ArvManagement />} />
+              <Route path="doctor-schedule" element={<DoctorSchedule />} />
+              <Route path="profile" element={<UserProfile />} />
             </Route>
             {/* <Route
               path="*"
