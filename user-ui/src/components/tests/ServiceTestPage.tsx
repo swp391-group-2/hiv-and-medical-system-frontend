@@ -33,10 +33,10 @@ const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
         resultTime={props.resultTime}
         notes={props.notes}
       />
-      {/* Info Cards */}
+
       <InfoCardTest Span={props.Span} />
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row gap-8 border rounded-xl bg-gray-50 p-6">
+      <div className="flex flex-col lg:flex-row gap-8 border  rounded-xl bg-gray-50 p-6">
         <MainContentLeft
           testPurposes={props.testPurposes}
           targetAudiences={props.targetAudiences}
@@ -48,7 +48,6 @@ const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
         />
         <MainContentRight price={props.price} image={props.image} />
       </div>
-      {/* Bạn có thể tiếp tục viết phần testPurposes, targetAudiences, sampleType,... tại đây */}
     </div>
   );
 };

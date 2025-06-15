@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import type { UserProfileValues } from "@/pages/user/profile";
+import type { UserProfileValues } from "@/types/userProfile.type";
 import AvatarUpload from "./avatar-upload";
 
 const InfoRow = ({

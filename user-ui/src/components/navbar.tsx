@@ -3,17 +3,21 @@ import Logo from "./logo";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuItem,
+  NavigationMenuItem, // Kiểm tra import này
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { routes, services } from "@/raw-data/routes";
+import { useAuthStore } from "@/stores/auth.store";
+import ActionAuth from "./action-auth";
+import ActionUnAuth from "./action-unauth";
 
 function Navbar() {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   const { pathname } = useLocation();
   return (
     <nav className="sticky top-0 left-0 right-0 py-3 shadow-xl shadow-blue-500/30 z-50 bg-white">
@@ -44,7 +48,7 @@ function Navbar() {
                         <ul className="grid w-[300px] gap-4">
                           <li>
                             {services.map((service) => (
-                              <NavigationMenuLink asChild>
+                              <NavigationMenuLink asChild key={service.href}>
                                 <Link to={service.href}>
                                   <div className="font-medium">
                                     {service.title}
@@ -85,14 +89,7 @@ function Navbar() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-        <div className="flex gap-1.5">
-          <Button variant="outline">
-            <Link to="/login">Đăng Nhập</Link>
-          </Button>
-          <Button variant="primary">
-            <Link to="/register">Đăng Ký</Link>
-          </Button>
-        </div>
+        {isAuthenticated ? <ActionAuth /> : <ActionUnAuth />}
       </div>
     </nav>
   );

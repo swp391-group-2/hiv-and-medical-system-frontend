@@ -1,9 +1,13 @@
 import { services } from "@/raw-data/home-service-data";
 import ServiceCard from "./service-card";
 
-function HomeService() {
+function HomeService({
+  homeServiceRef,
+}: {
+  homeServiceRef: React.RefObject<HTMLDivElement | null>;
+}) {
   return (
-    <section>
+    <section ref={homeServiceRef}>
       <div className="container mx-auto">
         <div className="text-center">
           <h2 className="text-center text-4xl font-bold  mb-4">

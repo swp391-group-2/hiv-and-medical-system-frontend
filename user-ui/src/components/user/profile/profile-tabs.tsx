@@ -2,9 +2,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AccountUpdateForm } from "./account-update-form";
 import { ProfileInfoForm } from "./profile-info-form";
-import { type UserProfileValues } from "@/pages/user/profile";
 import { type AccountUpdateFormValues } from "./account-update-form";
 import { type ProfileFormValues } from "./profile-info-form";
+import type { UserProfileValues } from "@/types/userProfile.type";
 
 type ProfileTabsProps = {
   user: UserProfileValues;

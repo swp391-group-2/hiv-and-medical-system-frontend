@@ -3,9 +3,11 @@ import StaffSidebar from "@/components/staff-sidebar";
 
 function MainLayout() {
   return (
-    <div>
+    <div className="flex gap-5">
       <StaffSidebar />
-      <Outlet />
+      <main className="pb-5 w-full">
+        <Outlet />
+      </main>
     </div>
   );
 }

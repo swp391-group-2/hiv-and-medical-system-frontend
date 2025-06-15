@@ -2,7 +2,7 @@ import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Form,
   FormField,
@@ -19,7 +19,7 @@ import * as auth from "@/api/auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().email("Email không hợp lệ"),
   password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
 });
 
@@ -47,7 +47,7 @@ export const LoginForm: FC = () => {
         queryKey: ["self"],
       });
 
-      navigate("/");
+      navigate("/doctor/dashboard");
     },
     onError: (error) => {
       toast.error(error.message);
@@ -114,12 +114,14 @@ export const LoginForm: FC = () => {
               Đăng nhập
             </Button>
           ) : (
-            <Button
-              type="submit"
-              className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
-            >
-              Đăng nhập
-            </Button>
+            <Link to={"doctor/dashboard"}>
+              <Button
+                type="submit"
+                className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
+              >
+                Đăng nhập
+              </Button>
+            </Link>
           )}
           <Separator className="mb-2" />
           <div className="flex justify-center">
