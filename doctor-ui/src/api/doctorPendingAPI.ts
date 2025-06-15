@@ -1,20 +1,18 @@
-// src/api/doctorPendingAPI.ts
 import axios from "axios";
+import { BASE_URL } from "./BaseURL";
 
-const BASE_URL = "http://localhost:8080/hiv";
-const getToken = () => localStorage.getItem("accessToken");
-
-// Gọi API để lấy tất cả các lịch hẹn
 export const fetchPendingAppointments = async () => {
-  const res = await axios.get(`${BASE_URL}/api/appointments`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
-  });
+  const res = await axios.get(`${BASE_URL}/hiv/api/appointments/status/lab_completed`);
 
-  // Chỉ giữ lại những lịch hẹn có serviceType = CONSULTATION và status = LAB_COMPLETED
-  return res.data.result.filter(
+  const data = res.data?.data; // ⚠️ Đổi từ result -> data
+  if (!Array.isArray(data)) {
+    console.error("Lỗi dữ liệu: data không phải mảng", res.data);
+    return [];
+  }
+
+  return data.filter(
     (item: any) =>
-      item.serviceType === "CONSULTATION" && item.status === "LAB_COMPLETED"
+      item.serviceType === "CONSULTATION" &&
+      item.status === "LAB_COMPLETED"
   );
 };

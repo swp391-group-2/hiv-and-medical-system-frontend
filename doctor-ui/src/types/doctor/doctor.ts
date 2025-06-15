@@ -7,4 +7,5 @@ export interface Doctor {
   specialization: string;
   licenseNumber: string;
   userStatus: "ACTIVE" | "INACTIVE" | "BANNED" | string;
+  avatar?: string; 
 }

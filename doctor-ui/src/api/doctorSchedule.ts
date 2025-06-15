@@ -1,9 +1,8 @@
 // src/api/doctorSchedule.ts
 
-import type { Appointment } from "@/types/appointment";
+import type { Appointment } from "@/types/appointment/appointment";
 
 // import type { Appointment } from "@/types/appointment";
-
 
 // export async function fetchDoctorSchedule(
 //   doctorId: string,
@@ -46,60 +45,60 @@ import type { Appointment } from "@/types/appointment";
 //   return status === "AVAILABLE" ? "Chờ khám" : "Hoàn thành";
 // }
 
-
-
 //file endpoint dung
 // src/api/doctorSchedule.ts
 
+import axios from "axios";
+import { BASE_URL } from "./BaseURL";
+import type { DoctorScheduleAppointment } from "@/types/schedule/doctorScheduleAppointment";
 
-export async function fetchDoctorSchedule(doctorId: string, date: string): Promise<Appointment[]> {
-  const response = await fetch(
-    `http://localhost:8080/hiv/api/doctors/${doctorId}/schedules/date?date=${date}`,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${yourToken}` nếu cần
-      },
-    }
-  );
+export async function fetchDoctorSchedule(
+  doctorId: string,
+  date: string
+): Promise<DoctorScheduleAppointment[]> {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/hiv/api/doctors/${doctorId}/schedules/date`,
+      { params: { date } }
+    );
 
-  if (!response.ok) {
-    throw new Error("Không thể lấy lịch khám");
+    const schedules = response.data.data; // danh sách lịch trong ngày
+
+    if (!Array.isArray(schedules)) return [];
+
+    const result: DoctorScheduleAppointment[] = [];
+
+    schedules.forEach((schedule: any) => {
+      const { workDate, scheduleSlots } = schedule;
+
+      scheduleSlots.forEach((slot: any) => {
+        result.push({
+          name: slot.slot.description || "Chưa có mô tả",
+          code: `BN${slot.id}`,
+          time: slot.slot.startTime,
+          slot: `Slot ${slot.slot.slotNumber}`,
+          date: workDate,
+          phone: "Không có",
+          address: "Không có",
+          note: "Tự động từ slot",
+          type: "Định kỳ",
+          status: slot.status === "AVAILABLE" ? "Chờ khám" : "Hoàn thành",
+        });
+      });
+    });
+
+    return result;
+  } catch (error) {
+    console.error("Lỗi khi fetch lịch khám:", error);
+    return [];
   }
-
-  const data = await response.json();
-
-  // Định nghĩa kiểu cho slot
-  interface ScheduleSlot {
-    id: string;
-    slot: {
-      description?: string;
-      startTime: string;
-    };
-    status: string;
-  }
-
-  // Mapping nếu response không khớp trực tiếp với Appointment
-  return data.result.scheduleSlots.map((slot: ScheduleSlot) => ({
-    name: slot.slot.description || "Bệnh nhân ẩn danh",
-    code: `BN${slot.id}`,
-    time: slot.slot.startTime,
-    phone: "Không có",
-    address: "Không có",
-    note: "Tự động từ slot",
-    type: "Định kỳ", // hoặc bạn có thể map từ slot.status nếu phù hợp
-    status: slot.status === "AVAILABLE" ? "Chờ khám" : "Hoàn thành",
-  }));
 }
-// src/api/doctorAPI.ts
 export const getMyDoctorInfo = async () => {
-  const token = localStorage.getItem("accessToken");
-  const response = await fetch("http://localhost:8080/hiv/api/doctors/myInfo", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) throw new Error("Lỗi lấy thông tin bác sĩ");
-  return response.json();
+  try {
+    const response = await axios.get(`${BASE_URL}/hiv/api/doctors/myInfo`);
+    return response.data?.data || null;
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin bác sĩ:", error);
+    throw new Error("Không thể lấy thông tin bác sĩ");
+  }
 };

@@ -1,50 +1,40 @@
-// src/pages/appointment/Schedule.tsx
 import React, { useEffect, useState } from "react";
 import TabSwitcher from "@/components/DoctorSchedule/tabSwitcher";
 import AppointmentList from "@/components/DoctorSchedule/doctorScheduleApoiList";
-import { fetchDoctorSchedule, getMyDoctorInfo } from "@/api/doctorSchedule";
-
-import type { Appointment } from "@/types/appointment";
+import { fetchDoctorSchedule } from "@/api/doctorSchedule";
+import type { DoctorScheduleAppointment } from "@/types/schedule/doctorScheduleAppointment";
 
 const Schedule: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<"today" | "upcoming">("today");
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<DoctorScheduleAppointment[]>([]);
   const [loading, setLoading] = useState(false);
-  const [doctorId, setDoctorId] = useState<string>("");
 
-  useEffect(() => {
-    const fetchDoctor = async () => {
-      try {
-        const data = await getMyDoctorInfo();
-        setDoctorId(data.result.doctorId);
-      } catch (err) {
-        console.error("Không thể lấy thông tin bác sĩ từ token", err);
-      }
-    };
-
-    fetchDoctor();
-  }, []);
+  // ✅ Gán cứng doctorId (tạm thời, vì endpoint /myInfo không tồn tại)
+  const doctorId = "8976eb8d-c827-4652-85d7-754fcb144a23";
 
   useEffect(() => {
     const fetchData = async () => {
       if (!doctorId) return;
+
+      const date = new Date();
+      if (currentTab === "upcoming") {
+        date.setDate(date.getDate() + 1); // ngày mai
+      }
+
+      const formattedDate = date.toISOString().split("T")[0];
+
       try {
         setLoading(true);
-        const today = new Date().toISOString().split("T")[0]; // yyyy-MM-dd
-        const data = await fetchDoctorSchedule(doctorId, today);
+        const data = await fetchDoctorSchedule(doctorId, formattedDate);
         setAppointments(data);
-      } catch (error) {
-        console.error("Lỗi lấy lịch khám:", error);
+      } catch (err) {
+        console.error("Không thể load lịch", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (currentTab === "today") {
-      fetchData();
-    } else {
-      setAppointments([]);
-    }
+    fetchData();
   }, [currentTab, doctorId]);
 
   return (

@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from "@/layout/auth-layout";
 import Dashboard from "./pages/home";
 import UnauthLayout from "@/layout/unauth-layout";
-import { AuthProvider, RequireAuth } from "./auth/auth-checker";
+import { AuthProvider, RequireAuth, useAuth } from "./auth/auth-checker";
 import UserProfile from "./pages/user/profile";
 import PendingAppointment from "./pages/appointment/pending";
 import LoginPage from "./pages/auth/login";
@@ -40,12 +40,12 @@ function App() {
                 <Route path="/doctor/arv-seclect" element={<ARVSeclect/>} />
                 <Route path="/doctor/setting" element={<DoctorProfile/>} />
             </Route>
-            {/* <Route
+            <Route
               path="*"
               element={
                 <Navigate to={useAuth().user ? "/" : "/login"} replace />
               }
-            /> */}
+            />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

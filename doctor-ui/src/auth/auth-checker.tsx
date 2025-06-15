@@ -7,7 +7,6 @@ import {
 } from "react";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import type { User } from "../api/auth";
-import { Navigate } from "react-router-dom";
 
 type AuthContext = {
   user: User | null;
@@ -44,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await new Promise((r) => setTimeout(r, 500));
 
     // 👉 replace this block with your real API call
-    if (email === "test@gmail.com" && password === "test@gmail.com") {
+    if (email === "test@gmail.com" && password === "demo@example.com") {
       const fakeUser: User = {
         id: "demo-1",
         name: "Demo User",

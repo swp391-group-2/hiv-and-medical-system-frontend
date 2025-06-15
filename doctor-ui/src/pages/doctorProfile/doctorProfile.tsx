@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { fetchDoctorById, updateDoctorProfile } from "@/api/doctorProfileAPI";
+import React, { useEffect, useRef, useState } from "react";
+import { fetchDoctorById, updateDoctorProfile, uploadDoctorAvatar } from "@/api/doctorProfileAPI";
 import ProfileField from "@/components/DoctorProfile/doctorProfileFiled";
-
 
 interface DoctorProfile {
   doctorId: string;
@@ -12,20 +11,30 @@ interface DoctorProfile {
   doctorCode: string;
   specialization: string;
   licenseNumber: string;
+  avatar?: string;
 }
 
 const DoctorProfile: React.FC = () => {
   const [profile, setProfile] = useState<DoctorProfile | null>(null);
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState<string | undefined>(
+    undefined
+  );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const doctorId = "abc123"; // hoặc lấy từ context/token/localStorage
+  const doctorId = "8976eb8d-c827-4652-85d7-754fcb144a23"; // hoặc lấy từ context/token/localStorage
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchDoctorById(doctorId);
-        setProfile(data.result); // tùy theo response của API
+        if (Array.isArray(data)) {
+          setProfile(data.find((d) => d.doctorId === doctorId) || null);
+        } else {
+          setProfile(data);
+        }
+        setAvatarPreview(data.avatar);
       } catch {
         console.error("Không thể tải thông tin bác sĩ");
       }
@@ -38,13 +47,37 @@ const DoctorProfile: React.FC = () => {
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
+  // Xử lý upload ảnh
+const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (!profile || !e.target.files || e.target.files.length === 0) return;
+  const file = e.target.files[0];
+
+  // Xem trước ảnh
+  const reader = new FileReader();
+  reader.onloadend = () => {
+    setAvatarPreview(reader.result as string);
+  };
+  reader.readAsDataURL(file);
+
+  try {
+    const uploaded = await uploadDoctorAvatar(profile.doctorId, file);
+    if (uploaded?.url) {
+      setProfile({ ...profile, avatar: uploaded.url });
+      alert("Upload ảnh thành công!");
+    }
+  } catch (error) {
+    console.error("Upload thất bại:", error);
+    alert("Upload ảnh thất bại!");
+  }
+};
+
   const handleSave = async () => {
     if (!profile) return;
     setSaving(true);
     try {
       const updated = await updateDoctorProfile(profile.doctorId, profile);
       alert("Cập nhật thành công!");
-      setProfile(updated.result); // Nếu API trả về profile mới
+      setProfile(updated.result || updated); // Nếu API trả về profile mới
       setEditing(false);
     } catch {
       alert("Cập nhật thất bại!");
@@ -59,27 +92,105 @@ const DoctorProfile: React.FC = () => {
 
   return (
     <div className="max-w-6xl mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg border border-gray-200">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Thông tin bác sĩ</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <ProfileField label="Họ và tên" name="fullName" value={profile.fullName} onChange={handleChange} disabled={!editing} />
-        <ProfileField label="Email" name="email" value={profile.email} onChange={handleChange} disabled={!editing} />
-        <ProfileField label="Mã bác sĩ" name="doctorCode" value={profile.doctorCode} onChange={handleChange} disabled={!editing} />
-        <ProfileField label="Chuyên khoa" name="specialization" value={profile.specialization} onChange={handleChange} disabled={!editing} />
-        <ProfileField label="Mã giấy phép hành nghề" name="licenseNumber" value={profile.licenseNumber} onChange={handleChange} disabled={!editing} />
-        <ProfileField label="Trạng thái tài khoản" name="userStatus" value={profile.userStatus} onChange={handleChange} disabled={!editing} />
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        Thông tin bác sĩ
+      </h2>
+      <div className="flex items-center mb-8">
+        <div className="relative w-28 h-28 mr-6">
+          <img
+            src={avatarPreview || "/default-avatar.png"}
+            alt="avatar"
+            className="w-28 h-28 rounded-full object-cover border-2 border-blue-300"
+          />
+          {editing && (
+            <button
+              className="absolute bottom-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-xs"
+              onClick={() => fileInputRef.current?.click()}
+              type="button"
+            >
+              Đổi ảnh
+            </button>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleAvatarChange}
+            disabled={!editing}
+          />
+        </div>
+        <div className="text-gray-600">
+          <div className="font-semibold">{profile.fullName}</div>
+          <div>{profile.email}</div>
+        </div>
       </div>
-
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ProfileField
+          label="Họ và tên"
+          name="fullName"
+          value={profile.fullName}
+          onChange={handleChange}
+          disabled={!editing}
+        />
+        <ProfileField
+          label="Email"
+          name="email"
+          value={profile.email}
+          onChange={handleChange}
+          disabled={!editing}
+        />
+        <ProfileField
+          label="Mã bác sĩ"
+          name="doctorCode"
+          value={profile.doctorCode}
+          onChange={handleChange}
+          disabled={!editing}
+        />
+        <ProfileField
+          label="Chuyên khoa"
+          name="specialization"
+          value={profile.specialization}
+          onChange={handleChange}
+          disabled={!editing}
+        />
+        <ProfileField
+          label="Mã giấy phép hành nghề"
+          name="licenseNumber"
+          value={profile.licenseNumber}
+          onChange={handleChange}
+          disabled={!editing}
+        />
+        <ProfileField
+          label="Trạng thái tài khoản"
+          name="userStatus"
+          value={profile.userStatus}
+          onChange={handleChange}
+          disabled={!editing}
+        />
+      </div>
       <div className="flex justify-end mt-8 space-x-2">
         {!editing ? (
-          <button className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600" onClick={() => setEditing(true)}>
+          <button
+            className="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600"
+            onClick={() => setEditing(true)}
+          >
             Chỉnh sửa
           </button>
         ) : (
           <>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700" onClick={handleSave} disabled={saving}>
+            <button
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              onClick={handleSave}
+              disabled={saving}
+            >
               {saving ? "Đang lưu..." : "Lưu thay đổi"}
             </button>
-            <button className="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500" onClick={() => setEditing(false)} disabled={saving}>
+            <button
+              className="bg-gray-400 text-white px-6 py-2 rounded-lg hover:bg-gray-500"
+              onClick={() => setEditing(false)}
+              disabled={saving}
+            >
               Hủy
             </button>
           </>

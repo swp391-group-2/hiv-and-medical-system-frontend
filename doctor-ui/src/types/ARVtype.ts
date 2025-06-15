@@ -1,5 +1,5 @@
 export interface Protocol {
-  id: number; 
+  id: number;
   name: string;
   level: string;
   ingredients: string[];
@@ -12,8 +12,8 @@ export interface Alerts {
 }
 
 export interface LatestTestResult {
-  cd4: number;
-  viralLoad: string;
+  cd4: number | string;
+  viralLoad: number | string;
   date: string;
 }
 

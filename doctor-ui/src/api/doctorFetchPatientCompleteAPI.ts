@@ -1,19 +1,43 @@
-// src/api/doctorFetchPatientCompleteAPI.ts
 import axios from "axios";
+import { BASE_URL } from "./BaseURL";
+import type { Appointment } from "@/types/appointment";
 
-const BASE_URL = "http://localhost:8080/hiv";
-const getToken = () => localStorage.getItem("accessToken");
-
-// Gọi API để lấy toàn bộ danh sách bệnh nhân
+// Gọi API không cần token
 export const fetchCompletedPatients = async () => {
-  const res = await axios.get(`${BASE_URL}/api/patients`, {
-    headers: {
-      Authorization: `Bearer ${getToken()}`,
-    },
-  });
+  try {
+    const res = await axios.get(`${BASE_URL}/hiv/api/patients`);
 
-  // Filter nếu cần, ví dụ chỉ bệnh nhân có VL, CD4 hoặc đã sàng lọc
-  return res.data.result.filter((p: any) => 
-    p.cd4 || p.vl || p.screeningResult || p.confirmResult
-  );
+    const data = res.data?.data;
+    if (!Array.isArray(data)) {
+      console.error("Dữ liệu không hợp lệ:", res.data);
+      return [];
+    }
+
+    // In ra danh sách bệnh nhân
+    console.log("Danh sách bệnh nhân:", data);
+
+    // Nếu cần lọc thêm thì làm ở đây, VD:
+    return data;
+  } catch (err) {
+    console.error("Lỗi khi gọi API:", err);
+    return [];
+  }
+};
+export const fetchAppointments = async (): Promise<Appointment[]> => {
+  try {
+    const res = await axios.get(`${BASE_URL}/hiv/api/appointments`);
+
+    const data = res.data?.data;
+    if (!Array.isArray(data)) {
+      console.error("Dữ liệu appointments không hợp lệ:", res.data);
+      return [];
+    }
+
+    console.log("Danh sách appointments:", data);
+
+    return data;
+  } catch (err) {
+    console.error("Lỗi khi gọi API appointments:", err);
+    return [];
+  }
 };

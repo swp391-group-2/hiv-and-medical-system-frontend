@@ -1,27 +1,35 @@
 import PatientListManage from "@/components/PatientManagement/patientListManage";
 import React, { useEffect, useState } from "react";
 import type { Patient } from "../../types/patientType";
-import { fetchCompletedPatients } from "@/api/doctorFetchPatientCompleteAPI";
+import {
+  fetchAppointments,
+  fetchCompletedPatients,
+} from "@/api/doctorFetchPatientCompleteAPI";
 import HeaderStats from "@/components/PatientManagement/headerStats.t";
+import type { Appointment } from "@/types/appointment";
 
 const PatientList = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(false);
-
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchAll = async () => {
       setLoading(true);
       try {
-        const data = await fetchCompletedPatients();
-        setPatients(data);
+        const [patientsData, appointmentsData] = await Promise.all([
+          fetchCompletedPatients(),
+          fetchAppointments(),
+        ]);
+        setPatients(patientsData);
+        setAppointments(appointmentsData);
       } catch (error) {
-        console.error("Lỗi khi fetch bệnh nhân:", error);
+        console.error("Lỗi khi fetch:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPatients();
+    fetchAll();
   }, []);
 
   return (
@@ -36,7 +44,11 @@ const PatientList = () => {
         totalTests={patients.length} // bạn có thể đổi thành logic thật
         testsLast30Days={
           patients.filter((p) => {
-            const date = new Date(p.updatedAt || p.createdAt || p.dob);
+            const dateStr = p.dob;
+            if (!dateStr) return false;
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return false;
+
             const diff = (Date.now() - date.getTime()) / (1000 * 3600 * 24);
             return diff <= 30;
           }).length
@@ -46,7 +58,7 @@ const PatientList = () => {
       {loading ? (
         <div className="text-center text-gray-500 py-6">Đang tải...</div>
       ) : (
-        <PatientListManage patients={patients} />
+        <PatientListManage patients={patients} appointments={appointments} />
       )}
     </div>
   );

@@ -1,5 +1,7 @@
 // import React, { useState } from "react";
 // import axios from "axios";
+// import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+// import { DialogHeader } from "../ui/dialog";
 // // import {
 // //   Dialog,
 // //   DialogContent,
@@ -109,7 +111,7 @@
 //         </DialogHeader>
 
 //         <div className="flex border-b mb-4">
-//           {tabs.map((t) => (
+//           {Tabs.map((t) => (
 //             <button
 //               key={t.value}
 //               onClick={() => setTab(t.value)}

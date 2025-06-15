@@ -1,30 +1,67 @@
+// import axios from "axios";
+// import { BASE_URL } from "./BaseURL";
+
+
+
+// const getToken = () => localStorage.getItem("accessToken");
+
+// export const getMyDoctorInfo = async () => {
+//   const res = await axios.get(`${BASE_URL}/api/doctors/myInfo`, {
+//     headers: { Authorization: `Bearer ${getToken()}` },
+//   });
+//   return res.data.result;
+// };
+
+// export const getTodaySchedule = async () => {
+//   const today = new Date().toISOString().split("T")[0];
+//   const res = await axios.get(
+//     `${BASE_URL}/api/doctors/me/schedules?startDate=${today}&endDate=${today}`,
+//     {
+//       headers: { Authorization: `Bearer ${getToken()}` },
+//     }
+//   );
+//   return res.data.result; // List<Schedule>
+// };
+
+// export const getAllAppointments = async () => {
+//   const res = await axios.get(`${BASE_URL}/api/appointments`, {
+//     headers: { Authorization: `Bearer ${getToken()}` },
+//   });
+//   return res.data.result; // List<Appointment>
+// };
 import axios from "axios";
+import { BASE_URL } from "./BaseURL";
 
-const BASE_URL = "http://localhost:8080/hiv";
-
-const getToken = () => localStorage.getItem("accessToken");
-
+// ✅ Get thông tin bác sĩ
 export const getMyDoctorInfo = async () => {
-  const res = await axios.get(`${BASE_URL}/api/doctors/myInfo`, {
-    headers: { Authorization: `Bearer ${getToken()}` },
-  });
-  return res.data.result;
+  const res = await axios.get(`${BASE_URL}/api/doctors/myInfo`);
+  return res.data?.data || null; // ⚠️ đổi từ result -> data
 };
 
+// ✅ Get lịch làm hôm nay
 export const getTodaySchedule = async () => {
   const today = new Date().toISOString().split("T")[0];
   const res = await axios.get(
-    `${BASE_URL}/api/doctors/me/schedules?startDate=${today}&endDate=${today}`,
-    {
-      headers: { Authorization: `Bearer ${getToken()}` },
-    }
+    `${BASE_URL}/api/doctors/me/schedules?startDate=${today}&endDate=${today}`
   );
-  return res.data.result; // List<Schedule>
+
+  const data = res.data?.data;
+  if (!Array.isArray(data)) {
+    console.error("Lỗi dữ liệu: schedule không phải mảng", res.data);
+    return [];
+  }
+
+  return data; // ✅ Trả mảng lịch làm hôm nay
 };
 
+// ✅ Get toàn bộ cuộc hẹn
 export const getAllAppointments = async () => {
-  const res = await axios.get(`${BASE_URL}/api/appointments`, {
-    headers: { Authorization: `Bearer ${getToken()}` },
-  });
-  return res.data.result; // List<Appointment>
+  const res = await axios.get(`${BASE_URL}/api/appointments`);
+  const data = res.data?.data;
+  if (!Array.isArray(data)) {
+    console.error("Lỗi dữ liệu: appointments không phải mảng", res.data);
+    return [];
+  }
+
+  return data; // ✅ Trả mảng lịch hẹn
 };

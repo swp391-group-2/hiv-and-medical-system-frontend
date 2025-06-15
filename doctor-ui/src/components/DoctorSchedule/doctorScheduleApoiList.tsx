@@ -1,10 +1,9 @@
-;
 import React from "react";
 import AppointmentCard from "./appointmentCard";
-import type { Appointment } from "@/types/appointment";
+import type { DoctorScheduleAppointment } from "@/types/schedule/doctorScheduleAppointment";
 
 type Props = {
-  appointments: Appointment[];
+  appointments: DoctorScheduleAppointment[];
 };
 
 const AppointmentList: React.FC<Props> = ({ appointments }) => {
