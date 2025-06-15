@@ -23,7 +23,7 @@ export function LabTable({ data }: { data: Appointment[] }) {
           <TableHead>Ngày</TableHead>
           <TableHead>Giờ</TableHead>
           <TableHead>Bác sĩ</TableHead>
-          <TableHead>Trạng thái</TableHead>
+          <TableHead>Trạng thái kết quả</TableHead>
           <TableHead>Thao tác</TableHead>
         </TableRow>
       </TableHeader>

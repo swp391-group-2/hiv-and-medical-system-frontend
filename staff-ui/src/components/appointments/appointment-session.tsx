@@ -3,13 +3,14 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StatusBadge } from "./status-badge";
 import type { Appointment } from "@/types/types";
 import { Badge } from "../ui/badge";
-import { formatISO } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { formatStd } from "@/lib/utils";
+import ConfirmResult from "./confirm-result";
 
 const LabTestRs = ({ appt }: { appt: Appointment }) => {
   const hasResult =
-    appt.labResult.resultNumericCD4 !== null &&
-    appt.labResult.resultNumericViralLoad !== null;
+    (appt.labResult.resultNumericCD4 !== null &&
+      appt.labResult.resultNumericViralLoad !== null) ||
+    appt.labResult.resultText !== null;
   return (
     <Card className="w-full max-w-xl mx-auto shadow-md">
       <CardHeader className="flex items-center justify-between">
@@ -42,7 +43,7 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Thu thập lúc</span>
             <span className="font-medium">
-              {formatISO(appt.labSample.collectedAt)}
+              {formatStd(appt.labSample.collectedAt)}
             </span>
           </div>
         </div>
@@ -98,13 +99,7 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
                 {appt.labResult.note === "" ? "Không có" : appt.labResult.note}
               </span>
             </div>
-            <Button
-              variant="outline"
-              className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
-              //   onClick
-            >
-              Trả kết quả
-            </Button>
+            <ConfirmResult appt={appt} />
           </div>
         )}
       </CardContent>

@@ -5,6 +5,8 @@ export type AppointmentStatus =
   | "LAB_COMPLETED"
   | "COMPLETED";
 
+export type LabResultStatus = "PENDING" | "REJECTED" | "FINISHED";
+
 export type ParameterType = "NUMERIC" | "TEXT";
 
 export type ServiceType = "CONSULTATION" | "LAB_TEST";
@@ -57,6 +59,7 @@ export interface LabResult {
   resultText: string;
   resultNumericCD4: number;
   resultNumericViralLoad: number;
+  resultStatus: LabResultStatus;
   conclusion: string;
   note: string;
   resultDate: string; // ISO yyyy-MM-dd

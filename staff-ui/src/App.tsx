@@ -66,7 +66,7 @@ function App() {
               }
             /> */}
           </Routes>
-          <Toaster />
+          <Toaster position="top-center" />
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>

@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { ChartColumnIncreasing } from "lucide-react";
+import { FlaskConical } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -15,9 +15,9 @@ import Logo from "../logo";
 
 const items = [
   {
-    title: "Dashboard",
+    title: "Laboratory",
     url: "/lab/dashboard",
-    icon: ChartColumnIncreasing,
+    icon: FlaskConical,
   },
 ];
 

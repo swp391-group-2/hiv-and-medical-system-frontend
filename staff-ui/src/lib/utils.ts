@@ -10,3 +10,6 @@ export const formatISO = (raw: string) =>
   format(parseISO(raw), "MMM d, yyyy, h:mm a");
 
 export const formatDMY = (raw: string) => format(parseISO(raw), "dd/MM/yyyy");
+
+export const formatStd = (raw: string) =>
+  format(parseISO(raw), "dd/MM/yyyy, h:mm a");

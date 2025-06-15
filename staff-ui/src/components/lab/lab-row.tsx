@@ -2,7 +2,7 @@ import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 import { PatientCell } from "../appointments/patient-cell";
-import { StatusBadge } from "../appointments/status-badge";
+import { ResultStatusBadge } from "../appointments/status-badge";
 import type { Appointment } from "@/types/types";
 import { formatDMY } from "@/lib/utils";
 import { LabEllipsis } from "./lab-ellipsis";
@@ -21,7 +21,7 @@ export function LabRow({ appt }: { appt: Appointment }) {
       <TableCell>{appt.startTime}</TableCell>
       <TableCell>{appt.doctorName}</TableCell>
       <TableCell>
-        <StatusBadge status={appt.status} />
+        <ResultStatusBadge status={appt.labResult.resultStatus} />
       </TableCell>
       <TableCell className="flex items-center gap-2">
         <Button className="cursor-pointer" variant="ghost" size="icon">

@@ -37,7 +37,13 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
 
   const form = useForm<ResultTextValues>({
     resolver: zodResolver(resultTextSchema),
-    defaultValues: { resultText: undefined },
+    defaultValues: {
+      resultText:
+        appt.labResult.resultText === "Dương tính" ||
+        appt.labResult.resultText === "Âm tính"
+          ? appt.labResult.resultText
+          : undefined,
+    },
   });
 
   const { mutate: updateResult } = useMutation<void, Error, ResultTextValues>({
@@ -78,8 +84,8 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
                     <SelectValue placeholder="Chọn kết quả" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="pos">Dương tính</SelectItem>
-                    <SelectItem value="neg">Âm tính</SelectItem>
+                    <SelectItem value="Dương tính">Dương tính</SelectItem>
+                    <SelectItem value="Âm tính">Âm tính</SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -106,8 +112,8 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
   const form = useForm<NumericValues>({
     resolver: zodResolver(numericSchema),
     defaultValues: {
-      resultNumericCD4: undefined,
-      resultNumericViralLoad: undefined,
+      resultNumericCD4: appt.labResult.resultNumericCD4,
+      resultNumericViralLoad: appt.labResult.resultNumericViralLoad,
     },
   });
 
