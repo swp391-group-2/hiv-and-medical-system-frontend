@@ -9,10 +9,14 @@ import {
   UserCheck,
   Pill,
 } from "lucide-react";
+import Logo from "./logo";
 
 const StaffSidebar = () => {
   return (
     <Sidebar>
+      <div className="p-6 border-b border-gray-200">
+        <Logo />
+      </div>
       <SidebarNav>
         <SidebarNavItem
           path="/staff/dashboard"
