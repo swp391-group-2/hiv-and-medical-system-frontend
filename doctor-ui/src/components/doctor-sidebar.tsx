@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   ChartColumnIncreasing,
   Clock,
@@ -21,6 +21,8 @@ import {
   SidebarTrigger,
 } from "./ui/sidebar";
 import Logo from "./logo";
+import { Button } from "./ui/button";
+import { useAuthStore } from "@/stores/auth.store";
 
 const items = [
   {
@@ -61,6 +63,12 @@ const items = [
 ];
 
 const DoctorSidebar = () => {
+  const logoutStore = useAuthStore((state) => state.logout);
+  const navigate = useNavigate(); // 👈 Thêm dòng này
+  const handleLogout = () => {
+    logoutStore(); // Gọi logout để clear Zustand + localStorage
+    navigate("/login"); // Chuyển về trang login
+  };
   return (
     <div className="min-h-screen flex bg-gray-50">
       <SidebarProvider>
@@ -98,6 +106,7 @@ const DoctorSidebar = () => {
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenu>
+                <Button onClick={handleLogout}>Logout</Button>
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>

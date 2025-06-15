@@ -4,7 +4,7 @@ import { BASE_URL } from "./BaseURL";
 // ✅ Lấy danh sách phác đồ ARV
 export const fetchARVProtocols = async () => {
   try {
-    const res = await axios.get(`${BASE_URL}/hiv/api/prescriptions`);
+    const res = await axios.get(`${BASE_URL}prescriptions`);
     const data = res.data?.data;
 
     if (!Array.isArray(data)) {
@@ -30,7 +30,7 @@ export const selectPrescription = async (
 ) => {
   try {
     const res = await axios.post(
-      `${BASE_URL}/hiv/api/appointments/${appointmentId}/prescription/${prescriptionId}`,
+      `${BASE_URL}appointments/${appointmentId}/prescription/${prescriptionId}`,
       "Chọn phác đồ ARV",
       {
         headers: {
@@ -48,7 +48,7 @@ export const selectPrescription = async (
 // ✅ Lấy thông tin cảnh báo (dị ứng, bệnh kèm)
 export const fetchPatientAlerts = async (patientId: string) => {
   try {
-    const res = await axios.get(`${BASE_URL}/hiv/api/patients/${patientId}`);
+    const res = await axios.get(`${BASE_URL}patients/${patientId}`);
     const result = res.data?.data;
 
     return {
@@ -67,7 +67,7 @@ export const fetchPatientAlerts = async (patientId: string) => {
 // ✅ Lấy CD4, VL, cân nặng, tuổi,...
 export const fetchPatientInfo = async (patientId: string) => {
   try {
-    const res = await axios.get(`${BASE_URL}/hiv/api/patients/${patientId}`);
+    const res = await axios.get(`${BASE_URL}patients/${patientId}`);
     return res.data?.data;
   } catch (error) {
     console.error("❌ Lỗi khi lấy thông tin bệnh nhân:", error);

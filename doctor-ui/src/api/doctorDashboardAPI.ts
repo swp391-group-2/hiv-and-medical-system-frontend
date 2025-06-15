@@ -34,7 +34,7 @@ import { BASE_URL } from "./BaseURL";
 
 // ✅ Get thông tin bác sĩ
 export const getMyDoctorInfo = async () => {
-  const res = await axios.get(`${BASE_URL}/api/doctors/myInfo`);
+  const res = await axios.get(`${BASE_URL}doctors/myInfo`);
   return res.data?.data || null; // ⚠️ đổi từ result -> data
 };
 
@@ -42,7 +42,7 @@ export const getMyDoctorInfo = async () => {
 export const getTodaySchedule = async () => {
   const today = new Date().toISOString().split("T")[0];
   const res = await axios.get(
-    `${BASE_URL}/api/doctors/me/schedules?startDate=${today}&endDate=${today}`
+    `${BASE_URL}doctors/me/schedules?startDate=${today}&endDate=${today}`
   );
 
   const data = res.data?.data;
@@ -56,7 +56,7 @@ export const getTodaySchedule = async () => {
 
 // ✅ Get toàn bộ cuộc hẹn
 export const getAllAppointments = async () => {
-  const res = await axios.get(`${BASE_URL}/api/appointments`);
+  const res = await axios.get(`${BASE_URL}appointments`);
   const data = res.data?.data;
   if (!Array.isArray(data)) {
     console.error("Lỗi dữ liệu: appointments không phải mảng", res.data);

@@ -5,7 +5,7 @@ import type { Appointment } from "@/types/appointment";
 // Gọi API không cần token
 export const fetchCompletedPatients = async () => {
   try {
-    const res = await axios.get(`${BASE_URL}/hiv/api/patients`);
+    const res = await axios.get(`${BASE_URL}patients`);
 
     const data = res.data?.data;
     if (!Array.isArray(data)) {
@@ -25,7 +25,7 @@ export const fetchCompletedPatients = async () => {
 };
 export const fetchAppointments = async (): Promise<Appointment[]> => {
   try {
-    const res = await axios.get(`${BASE_URL}/hiv/api/appointments`);
+    const res = await axios.get(`${BASE_URL}appointments`);
 
     const data = res.data?.data;
     if (!Array.isArray(data)) {

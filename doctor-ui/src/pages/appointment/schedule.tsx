@@ -1,41 +1,44 @@
 import React, { useEffect, useState } from "react";
 import TabSwitcher from "@/components/DoctorSchedule/tabSwitcher";
 import AppointmentList from "@/components/DoctorSchedule/doctorScheduleApoiList";
-import { fetchDoctorSchedule } from "@/api/doctorSchedule";
+import { fetchDoctorAppointments } from "@/api/doctorSchedule";
 import type { DoctorScheduleAppointment } from "@/types/schedule/doctorScheduleAppointment";
 
 const Schedule: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<"today" | "upcoming">("today");
-  const [appointments, setAppointments] = useState<DoctorScheduleAppointment[]>([]);
+  const [appointments, setAppointments] = useState<DoctorScheduleAppointment[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
-
-  // ✅ Gán cứng doctorId (tạm thời, vì endpoint /myInfo không tồn tại)
-  const doctorId = "8976eb8d-c827-4652-85d7-754fcb144a23";
 
   useEffect(() => {
     const fetchData = async () => {
-      if (!doctorId) return;
+      const now = new Date();
 
-      const date = new Date();
       if (currentTab === "upcoming") {
-        date.setDate(date.getDate() + 1); // ngày mai
+        now.setDate(now.getDate() + 1);
       }
 
-      const formattedDate = date.toISOString().split("T")[0];
+      const formattedDate = now.toISOString().split("T")[0]; // "YYYY-MM-DD"
+
+      // 🔥 Dùng đúng status hợp lệ
+      const status = currentTab === "today" ? "LAB_COMPLETED" : "COMPLETED";
+
+      console.log("📆 Fetching for:", formattedDate, "status:", status);
 
       try {
         setLoading(true);
-        const data = await fetchDoctorSchedule(doctorId, formattedDate);
+        const data = await fetchDoctorAppointments(formattedDate, status);
         setAppointments(data);
       } catch (err) {
-        console.error("Không thể load lịch", err);
+        console.error("Không thể load lịch khám:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [currentTab, doctorId]);
+  }, [currentTab]);
 
   return (
     <main className="flex-1 p-8">

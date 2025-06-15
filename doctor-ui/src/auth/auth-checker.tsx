@@ -7,6 +7,7 @@ import {
 } from "react";
 import { useCurrentUser } from "../hooks/useCurrentUser";
 import type { User } from "../api/auth";
+import { Navigate } from "react-router-dom";
 
 type AuthContext = {
   user: User | null;
@@ -78,8 +79,8 @@ export function useAuth() {
 }
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
-  //const { user, isLoading } = useAuth();
-  //if (isLoading) return <div>Checking login…</div>;
-  //if (!user) return <Navigate to="/auth/login" replace />;
+  const { user, isLoading } = useAuth();
+  if (isLoading) return <div>Checking login…</div>;
+  if (!user) return <Navigate to="/auth/login" replace />;
   return <>{children}</>;
 }

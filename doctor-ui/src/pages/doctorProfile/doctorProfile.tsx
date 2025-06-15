@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { fetchDoctorById, updateDoctorProfile, uploadDoctorAvatar } from "@/api/doctorProfileAPI";
+import {
+  getDoctorByEmail,
+  updateDoctorProfile,
+  uploadDoctorAvatar,
+} from "@/api/doctorProfileAPI";
 import ProfileField from "@/components/DoctorProfile/doctorProfileFiled";
 
 interface DoctorProfile {
@@ -11,7 +15,7 @@ interface DoctorProfile {
   doctorCode: string;
   specialization: string;
   licenseNumber: string;
-  avatar?: string;
+  urlImage?: string;
 }
 
 const DoctorProfile: React.FC = () => {
@@ -23,61 +27,78 @@ const DoctorProfile: React.FC = () => {
   );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const doctorId = "8976eb8d-c827-4652-85d7-754fcb144a23"; // hoặc lấy từ context/token/localStorage
+  const doctorEmail = localStorage.getItem("doctorEmail") || "";
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchDoctorById(doctorId);
+        const data = await getDoctorByEmail(doctorEmail);
         if (Array.isArray(data)) {
-          setProfile(data.find((d) => d.doctorId === doctorId) || null);
+          const foundDoctor = data.find((d) => d.email === doctorEmail);
+          if (foundDoctor) {
+            setProfile(foundDoctor);
+            setAvatarPreview(foundDoctor.urlImage); // ✅ sử dụng đúng field
+          } else {
+            console.warn("Không tìm thấy bác sĩ với email:", doctorEmail);
+          }
         } else {
           setProfile(data);
+          setAvatarPreview(data.urlImage); // ✅ sử dụng đúng field
         }
-        setAvatarPreview(data.avatar);
-      } catch {
-        console.error("Không thể tải thông tin bác sĩ");
+      } catch (err) {
+        console.error("Lỗi khi tải thông tin bác sĩ:", err);
       }
     };
-    fetchData();
-  }, [doctorId]);
+
+    if (doctorEmail) {
+      fetchData();
+    }
+  }, [doctorEmail]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!profile) return;
     setProfile({ ...profile, [e.target.name]: e.target.value });
   };
 
-  // Xử lý upload ảnh
-const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  if (!profile || !e.target.files || e.target.files.length === 0) return;
-  const file = e.target.files[0];
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!profile || !e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
 
-  // Xem trước ảnh
-  const reader = new FileReader();
-  reader.onloadend = () => {
-    setAvatarPreview(reader.result as string);
-  };
-  reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setAvatarPreview(reader.result as string);
+    };
+    reader.readAsDataURL(file);
 
-  try {
-    const uploaded = await uploadDoctorAvatar(profile.doctorId, file);
-    if (uploaded?.url) {
-      setProfile({ ...profile, avatar: uploaded.url });
-      alert("Upload ảnh thành công!");
+    try {
+      // Sử dụng doctorId thay vì email
+      const uploaded = await uploadDoctorAvatar(profile.doctorId, file);
+      if (uploaded?.url) {
+        const updatedProfile = {
+          ...profile,
+          urlImage: uploaded.url,
+        };
+
+        const result = await updateDoctorProfile(profile.doctorId, updatedProfile);
+     
+        setProfile(result.result || result);
+        setAvatarPreview(uploaded.url);
+        alert("Upload ảnh và cập nhật thành công!");
+      }
+    } catch (error) {
+      console.log(profile.doctorId)
+      
+      console.error("Upload thất bại:", error);
+      alert("Upload ảnh thất bại!");
     }
-  } catch (error) {
-    console.error("Upload thất bại:", error);
-    alert("Upload ảnh thất bại!");
-  }
-};
-
+  };
   const handleSave = async () => {
     if (!profile) return;
     setSaving(true);
     try {
       const updated = await updateDoctorProfile(profile.doctorId, profile);
       alert("Cập nhật thành công!");
-      setProfile(updated.result || updated); // Nếu API trả về profile mới
+      setProfile(updated.result || updated);
       setEditing(false);
     } catch {
       alert("Cập nhật thất bại!");

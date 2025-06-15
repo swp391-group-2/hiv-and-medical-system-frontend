@@ -12,9 +12,17 @@ import Questions from "./pages/questions/qa";
 import Schedule from "./pages/appointment/schedule";
 import ARVSeclect from "./pages/ARVSelect/arvSelect";
 import DoctorProfile from "./pages/doctorProfile/doctorProfile";
+import type { JSX } from "react";
+
 
 const queryClient = new QueryClient();
-
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  const isAuthenticated = localStorage.getItem("doctorEmail");
+  if (!isAuthenticated) {
+    return <Navigate to="/login"  />;
+  }
+  return children;
+}
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -37,8 +45,8 @@ function App() {
               <Route path="/doctor/schedule" element={<Schedule />} />
               <Route path="/doctor/qa" element={<Questions />} />
               <Route path="/doctor/profile" element={<UserProfile />} />
-                <Route path="/doctor/arv-seclect" element={<ARVSeclect/>} />
-                <Route path="/doctor/setting" element={<DoctorProfile/>} />
+              <Route path="/doctor/arv-seclect" element={<ARVSeclect />} />
+              <Route path="/doctor/setting" element={<DoctorProfile />} />
             </Route>
             <Route
               path="*"
@@ -46,9 +54,13 @@ function App() {
                 <Navigate to={useAuth().user ? "/" : "/login"} replace />
               }
             />
+            {/* <Route path="*" element={<RedirectBasedOnAuth />} /> */}
           </Routes>
         </BrowserRouter>
+        
+       
       </AuthProvider>
+        
     </QueryClientProvider>
   );
 }

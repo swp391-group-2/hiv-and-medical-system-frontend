@@ -9,7 +9,7 @@ export const selectPrescription = async (
 ) => {
   try {
     const res = await axios.post(
-      `${BASE_URL}/hiv/api/appointments/${appointmentId}/prescription/${prescriptionId}`,
+      `${BASE_URL}appointments/${appointmentId}/prescription/${prescriptionId}`,
       {} // không cần token hoặc body phức tạp
     );
     return res.data;

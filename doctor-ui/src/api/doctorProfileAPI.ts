@@ -1,70 +1,71 @@
 import axios from "axios";
 import { BASE_URL } from "./BaseURL";
 
-// // ✅ 1. Lấy toàn bộ bác sĩ (không cần thiết nữa nếu bạn chỉ lấy 1 người)
-// export const fetchDoctors = async () => {
-//   const response = await axios.get(`${BASE_URL}/hiv/api/doctors`);
-//   return response.data;
-// };
-
-// ✅ 2. Lấy theo ID
-// export const fetchDoctorById = async (doctorId: string) => {
-//   const response = await axios.get(`${BASE_URL}/hiv/api/doctors/${doctorId}`);
-//   return response.data;
-// };
-
-// // ✅ 3. Cập nhật
-// export const updateDoctorProfile = async (doctorId: string, profileData: any) => {
-//   const response = await axios.put(`${BASE_URL}/hiv/api/doctors/${doctorId}`, profileData);
-//   return response.data;
-// };
-// export const fetchMyDoctorInfo = async () => {
-//   const token = localStorage.getItem("accessToken"); // hoặc từ nơi bạn lưu token
-//   const res = await axios.get(`${BASE_URL}/hiv/api/doctors/myInfo`, {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     },
-//   });
-//   return res.data;
-// };
-
-// ✅ 1. Lấy thông tin bác sĩ theo ID
-export const fetchDoctorById = async (doctorId: string) => {
-  const response = await axios.get(`${BASE_URL}/hiv/api/doctors/${doctorId}`);
-
-  return response.data?.data || null; // Đảm bảo an toàn nếu không có data
+// 1. Lấy thông tin bác sĩ theo ID
+export const fetchDoctorById = async (email: string) => {
+  const response = await axios.get(`${BASE_URL}doctors/${email}`);
+  return response.data?.data || null;
 };
 
-// ✅ 2. Cập nhật thông tin bác sĩ theo ID
+// 2. Cập nhật thông tin bác sĩ theo email (sử dụng email làm định danh URL)
 export const updateDoctorProfile = async (
   doctorId: string,
   profileData: any
 ) => {
   const response = await axios.put(
-    `${BASE_URL}/hiv/api/doctors/${doctorId}`,
+    `${BASE_URL}doctors/${doctorId}`,
     profileData
   );
   return response.data?.data || null;
 };
 
-// ✅ 3. Lấy thông tin của chính bác sĩ đã đăng nhập (KHÔNG cần token nữa)
+// 3. Lấy thông tin của bác sĩ đã đăng nhập
 export const fetchMyDoctorInfo = async () => {
-  const res = await axios.get(`${BASE_URL}/hiv/api/doctors/myInfo`);
+  const res = await axios.get(`${BASE_URL}doctors/myInfo`);
   return res.data?.data || null;
 };
-export const uploadDoctorAvatar = async (doctorId: string, file: File) => {
+
+// 4. Upload ảnh đại diện của bác sĩ theo email
+export const uploadDoctorAvatar = async (doctorId:string, file: File) => {
   const formData = new FormData();
+  // const encodedEmail = encodeURIComponent(email);
   formData.append("file", file);
 
   const response = await axios.post(
-    `${BASE_URL}/hiv/api/doctors/${doctorId}/upload`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
+    `${BASE_URL}doctors/${doctorId}/upload`,
+    formData
   );
 
-  return response.data?.data; // => { id, url, doctorId, active }
+  return response.data?.data || null;
+};
+// export const uploadDoctorAvatar = async (email: string, file: File) => {
+//   const formData = new FormData();
+//   formData.append("file", file); // đổi thành "avatar" nếu backend yêu cầu
+
+//   const encodedEmail = encodeURIComponent(email);
+//   const token = localStorage.getItem("accessToken"); // nếu dùng token
+
+//   const response = await axios.post(
+//     `${BASE_URL}doctors/${encodedEmail}/upload`,
+//     formData,
+//     {
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//         Authorization: `Bearer ${token}`, // nếu cần
+//       },
+//     }
+//   );
+
+//   return response.data?.data || null;
+// };
+// 5. Lấy thông tin hồ sơ bác sĩ theo email
+export const getDoctorByEmail = async (email: string) => {
+  const response = await axios.get(`${BASE_URL}doctors/doctorProfile/${email}`);
+  return response.data?.data || null;
+};
+
+// 6. Lấy ảnh đại diện bác sĩ theo email (nếu dùng riêng)
+export const getDoctorImgByEmail = async (email: string) => {
+  const response = await axios.get(`${BASE_URL}doctors/doctorImg/${email}`);
+  return response.data?.data || null;
 };
