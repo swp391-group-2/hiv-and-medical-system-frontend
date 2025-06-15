@@ -11,7 +11,7 @@ import {
 
 export const Sidebar = ({ children }: { children: React.ReactNode }) => {
   return (
-    <aside className="w-96 h-screen bg-white border-r shadow-sm flex flex-col">
+    <aside className="w-96 min-h-screen bg-white border-r shadow-sm flex flex-col">
       {children}
     </aside>
   );
@@ -89,7 +89,7 @@ export const SidebarNavItem = ({
         </CollapsibleTrigger>
 
         <CollapsibleContent asChild>
-          <ul id={contentId} className="pl-8">
+          <ul id={contentId} className="">
             {children}
           </ul>
         </CollapsibleContent>
