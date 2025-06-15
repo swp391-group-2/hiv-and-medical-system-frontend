@@ -2,9 +2,13 @@ import { formatDMY } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppointmentTable } from "@/components/appointments/appointment-table";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useAppointments } from "@/api/appointments";
-import { AppointmentFilters } from "@/components/appointments/appointment-filters";
+import {
+  AppointmentFilters,
+  type Filters,
+} from "@/components/appointments/appointment-filters";
+import { LoadingOverlay } from "@/components/loading-overlay";
 
 const FinishedAppointments = () => {
   const {
@@ -14,15 +18,33 @@ const FinishedAppointments = () => {
     error,
   } = useAppointments();
 
-  const filtered = useMemo(
-    () =>
-      Array.isArray(appointments)
-        ? appointments.filter((a) => a.status === "COMPLETED")
-        : [],
-    [appointments]
-  );
+  const [filters, setFilters] = useState<Filters>({
+    search: "",
+    serviceType: "default",
+  });
 
-  if (isLoading) return <div>Loading…</div>;
+  const filtered = useMemo(() => {
+    return appointments
+      .filter((a) => a.status === "COMPLETED")
+      .filter((a) => {
+        if (filters.search) {
+          const q = filters.search.toLowerCase();
+          return (
+            a.patient.fullName.toLowerCase().includes(q) ||
+            a.patient.phoneNumber.includes(q)
+          );
+        }
+        return true;
+      })
+      .filter((a) => {
+        if (filters.serviceType && filters.serviceType !== "default") {
+          return a.serviceType === filters.serviceType;
+        }
+        return true;
+      });
+  }, [appointments, filters]);
+
+  if (isLoading) return <LoadingOverlay message="Đang tải..." />;
   if (isError)
     return <div className="text-red-600">{(error as Error).message}</div>;
 
@@ -34,7 +56,7 @@ const FinishedAppointments = () => {
           Hôm nay là: {formatDMY(new Date().toISOString())}
         </p>
       </div>
-      <AppointmentFilters onApply={(f) => f.search} />
+      <AppointmentFilters onApply={setFilters} />
       <Tabs defaultValue="list">
         <TabsList>
           <TabsTrigger value="list">Danh sách</TabsTrigger>

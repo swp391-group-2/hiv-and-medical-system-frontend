@@ -23,6 +23,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
+import { cn } from "@/lib/utils";
 
 const resultTextSchema = z.object({
   resultText: z.enum(["Dương tính", "Âm tính"], {
@@ -46,7 +47,11 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
     },
   });
 
-  const { mutate: updateResult } = useMutation<void, Error, ResultTextValues>({
+  const { mutate: updateResult, isPending } = useMutation<
+    void,
+    Error,
+    ResultTextValues
+  >({
     mutationFn: async (data: ResultTextValues) =>
       await axios.put(`/api/lab-samples/${appt.labSampleId}/results`, data),
     onSuccess: () => {
@@ -93,7 +98,16 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button
+          variant="outline"
+          className={cn(
+            "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
+            isPending ? " cursor-now-allowed bg-gray-400" : ""
+          )}
+          type="submit"
+        >
+          {isPending ? "Đang gửi..." : "Gửi kết quả"}
+        </Button>
       </form>
     </Form>
   );
@@ -117,7 +131,7 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
     },
   });
 
-  const { mutate: updateNumericResults } = useMutation<
+  const { mutate: updateNumericResults, isPending } = useMutation<
     void,
     Error,
     NumericValues
@@ -180,10 +194,13 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
         />
         <Button
           variant="outline"
-          className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
+          className={cn(
+            "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
+            isPending ? " cursor-now-allowed bg-gray-400" : ""
+          )}
           type="submit"
         >
-          Submit
+          {isPending ? "Đang gửi..." : "Gửi kết quả"}
         </Button>
       </form>
     </Form>

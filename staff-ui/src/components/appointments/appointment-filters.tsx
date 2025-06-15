@@ -14,7 +14,7 @@ import { useState } from "react";
 
 export type Filters = {
   search: string;
-  aptStatus: string;
+  serviceType: string;
 };
 
 export function AppointmentFilters({
@@ -23,7 +23,7 @@ export function AppointmentFilters({
   onApply: (f: Filters) => void;
 }) {
   const [search, setSearch] = useState("");
-  const [aptStatus, setAptStatus] = useState("");
+  const [serviceType, setServiceType] = useState("");
 
   return (
     <Card className="w-full mt-4 mb-4">
@@ -43,24 +43,25 @@ export function AppointmentFilters({
             />
           </div>
 
-          <Select value={aptStatus} onValueChange={setAptStatus}>
+          <Select value={serviceType} onValueChange={setServiceType}>
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
               <Funnel className="mr-2 h-4 w-4" />
-              <SelectValue placeholder="Trạng thái lịch hẹn" />
+              <SelectValue placeholder="Dịch vụ" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="default">Tất cả trạng thái</SelectItem>
-              <SelectItem value="SCHEDULED">Đã lên lịch</SelectItem>
-              <SelectItem value="CHECKED-IN">Đã check-in</SelectItem>
-              <SelectItem value="LAB_COMPLETED">Xét nghiệm xong</SelectItem>
-              <SelectItem value="COMPLETED">Hoàn tất</SelectItem>
+              <SelectItem value="default">Tất cả dịch vụ</SelectItem>
+              <SelectItem value="CONSULTATION">Khám thường</SelectItem>
+              <SelectItem value="SCREENING">Xét nghiệm sàng lọc</SelectItem>
+              <SelectItem value="CONFIRMATORY">
+                Xét nghiệm khẳng định
+              </SelectItem>
             </SelectContent>
           </Select>
 
           <Button
             variant="outline"
             className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white hover:text-white"
-            onClick={() => onApply({ search, aptStatus })}
+            onClick={() => onApply({ search, serviceType })}
           >
             Áp dụng
           </Button>
