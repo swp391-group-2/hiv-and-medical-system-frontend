@@ -13,6 +13,9 @@ import ArvManagement from "./pages/management/arv";
 import DoctorSchedule from "./pages/management/doctor-schedule";
 import PatientsManagement from "./pages/management/patients";
 import CheckinPending from "./pages/appointment/checkin-pending";
+import Lab from "./pages/lab/lab";
+import LabSidebar from "./components/lab/lab-sidebar";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +28,10 @@ function App() {
             <Route element={<UnauthLayout />}>
               <Route index element={<Navigate to="login" />} />
               <Route path="/login" element={<LoginPage />} />
+            </Route>
+            <Route path="lab" element={<LabSidebar />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<Lab />} />
             </Route>
             <Route
               element={
@@ -59,6 +66,7 @@ function App() {
               }
             /> */}
           </Routes>
+          <Toaster position="top-center" />
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>

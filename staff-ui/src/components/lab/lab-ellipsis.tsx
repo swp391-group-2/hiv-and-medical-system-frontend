@@ -16,13 +16,12 @@ import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import type { Appointment } from "@/types/types";
-import PatientProfileInfo from "./patient-profile";
-import AppointmentSession from "./appointment-session";
+import PatientProfileInfo from "../appointments/patient-profile";
+import LabRsCard from "./lab-rs-card";
 
-export function OngoingEllipsis({ appt }: { appt: Appointment }) {
+export function LabEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
-  const [openSession, setOpenSession] = useState(false);
-
+  const [openRs, setOpenRs] = useState(false);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -35,10 +34,10 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
           className="cursor-pointer"
           onSelect={(e) => {
             e.preventDefault();
-            setOpenSession(true);
+            setOpenRs(true);
           }}
         >
-          Phiên khám bệnh
+          Nhập kết quả xét nghiệm
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer"
@@ -51,12 +50,12 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
         </DropdownMenuItem>
       </DropdownMenuContent>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="min-w-[500px] min-h-[550px] flex flex-col">
+        <DialogContent className="w-[500px] min-h-[550px] flex flex-col justify-between">
           <DialogHeader>
             <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
           </DialogHeader>
           <PatientProfileInfo appt={appt} />
-          <DialogFooter className="mt-auto">
+          <DialogFooter>
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng
@@ -65,15 +64,15 @@ export function OngoingEllipsis({ appt }: { appt: Appointment }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Dialog open={openSession} onOpenChange={setOpenSession}>
+      <Dialog open={openRs} onOpenChange={setOpenRs}>
         <DialogContent className="w-[500px] min-h-[550px] flex flex-col">
           <DialogHeader>
-            <DialogTitle>Phiên khám bệnh</DialogTitle>
+            <DialogTitle>Nhập kết quả xét nghiệm</DialogTitle>
           </DialogHeader>
-          <AppointmentSession appt={appt} />
+          <LabRsCard appt={appt} />
           <DialogFooter className="mt-auto">
             <DialogClose asChild>
-              <Button className=" bg-blue-500 hover:bg-blue-600 cursor-pointer">
+              <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng
               </Button>
             </DialogClose>

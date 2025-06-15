@@ -3,15 +3,17 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StatusBadge } from "./status-badge";
 import type { Appointment } from "@/types/types";
 import { Badge } from "../ui/badge";
-import { formatISO } from "@/lib/utils";
-import { Button } from "../ui/button";
+import { formatStd } from "@/lib/utils";
+import ConfirmResult from "./confirm-result";
+import Prescription from "./prescription";
 
 const LabTestRs = ({ appt }: { appt: Appointment }) => {
   const hasResult =
-    appt.labResult.resultNumericCD4 !== null &&
-    appt.labResult.resultNumericViralLoad !== null;
+    (appt.labResult.resultNumericCD4 !== null &&
+      appt.labResult.resultNumericViralLoad !== null) ||
+    appt.labResult.resultText !== null;
   return (
-    <Card className="w-full max-w-xl mx-auto shadow-md">
+    <Card className="h-full shadow-md">
       <CardHeader className="flex items-center justify-between">
         <CardTitle className="text-lg">Kết quả xét nghiệm</CardTitle>
         {hasResult ? (
@@ -42,7 +44,7 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Thu thập lúc</span>
             <span className="font-medium">
-              {formatISO(appt.labSample.collectedAt)}
+              {formatStd(appt.labSample.collectedAt)}
             </span>
           </div>
         </div>
@@ -89,22 +91,20 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
               </div>
               <div className="flex flex-col">
                 <span className="text-sm text-gray-500">Kết luận</span>
-                <span className="font-medium">{appt.labResult.conclusion}</span>
+                <span className="font-medium flex-1 whitespace-normal break-words">
+                  {appt.labResult.conclusion === ""
+                    ? "Không có"
+                    : appt.labResult.conclusion}
+                </span>
               </div>
             </div>
             <div className="grid grid-cols-1">
               <span className="text-sm text-gray-500">Ghi chú:</span>
-              <span className="font-medium">
+              <span className="font-medium flex-1 whitespace-normal break-words">
                 {appt.labResult.note === "" ? "Không có" : appt.labResult.note}
               </span>
             </div>
-            <Button
-              variant="outline"
-              className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
-              //   onClick
-            >
-              Trả kết quả
-            </Button>
+            <ConfirmResult appt={appt} />
           </div>
         )}
       </CardContent>
@@ -118,10 +118,10 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
       <TabsList>
         <TabsTrigger value="service">Dịch vụ</TabsTrigger>
         <TabsTrigger value="lab_rs">Kết quả</TabsTrigger>
-        <TabsTrigger value="pres">Phác đồ</TabsTrigger>
+        <TabsTrigger value="prescription">Phác đồ</TabsTrigger>
       </TabsList>
       <TabsContent value="service">
-        <Card className="w-full max-w-md mx-auto shadow-lg">
+        <Card className="w-full shadow-lg">
           <CardHeader className="flex items-center justify-between">
             <CardTitle className="text-xl font-semibold">
               {appt.serviceName}
@@ -132,7 +132,7 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Bác sĩ phụ trách</span>
               <span className="text-sm font-medium text-gray-800">
-                {appt.doctorName}
+                {appt.doctorName === null ? "Không có" : appt.doctorName}
               </span>
             </div>
             <div className="flex justify-between">
@@ -147,7 +147,9 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
       <TabsContent value="lab_rs">
         <LabTestRs appt={appt} />
       </TabsContent>
-      <TabsContent value="pres"></TabsContent>
+      <TabsContent value="prescription">
+        <Prescription appt={appt} />
+      </TabsContent>
     </Tabs>
   );
 };
