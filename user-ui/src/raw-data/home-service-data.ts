@@ -13,7 +13,7 @@ export const services: ServiceCardProps[] = [
     title: "Xét Nghiệm Khẳng Định.",
     desc: "Xét nghiệm khẳng định HIV, CD4, tải lượng virus và các xét nghiệm chuyên sâu khác.",
     icon: FlaskConical,
-    href: "/confirmation",
+    href: "/confirmatory",
     imgUrl: "/images/confirmtest.jpg",
   },
   {

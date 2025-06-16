@@ -3,5 +3,5 @@ export interface Doctor {
   fullName: string;
   email: string;
   rating?: number;
-  image?: string;
+  urlImage?: string;
 }
