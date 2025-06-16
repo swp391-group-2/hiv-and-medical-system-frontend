@@ -1,9 +1,15 @@
 import { LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 
-const LogoutBtn = ({ className }: { className: string }) => {
+const LogoutBtn = ({
+  className,
+  handleLogout,
+}: {
+  className: string;
+  handleLogout: () => void;
+}) => {
   return (
-    <Button variant="destructive" className={className}>
+    <Button onClick={handleLogout} variant="destructive" className={className}>
       <LogOut />
       Đăng xuất
     </Button>
