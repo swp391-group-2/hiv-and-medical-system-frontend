@@ -30,7 +30,7 @@ export const services: { href: string; title: string; desc: string }[] = [
     desc: "Xét nghiệm nhằm phát hiện người nghi ngờ nhiễm HIV.",
   },
   {
-    href: AppRoutes.CONFIRMATION,
+    href: AppRoutes.CONFIRMATORY,
     title: "Xét nghiệm khẳng định HIV",
     desc: "Xác định chắc chắn một người có nhiễm HIV.",
   },

@@ -14,10 +14,14 @@ import { routes, services } from "@/raw-data/routes";
 import { useAuthStore } from "@/stores/auth.store";
 import ActionAuth from "./action-auth";
 import ActionUnAuth from "./action-unauth";
+import { useEffect } from "react";
 
 function Navbar() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  useEffect(() => {
+    initializeAuth();
+  }, []);
   const { pathname } = useLocation();
   return (
     <nav className="sticky top-0 left-0 right-0 py-3 shadow-xl shadow-blue-500/30 z-50 bg-white">

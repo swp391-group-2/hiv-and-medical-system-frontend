@@ -1,47 +1,48 @@
-import axios from "axios";
+import type { Doctor } from "@/types/doctor.type";
+import type {
+  ScheduleSlot,
+  TestScheduleSlotEntry,
+} from "@/types/schedule.type";
+import type { Service } from "@/types/service.type";
+import type { UserProfileValues } from "@/types/userProfile.type";
 import { create } from "zustand";
 
 interface BookingState {
-  patientId: string;
-  serviceId: number;
-  scheduleSlotId: number;
-  labTestSlotId: number;
+  user: UserProfileValues | null;
+  doctor: Doctor | null;
+  service: Service | null;
+  scheduleSlot: ScheduleSlot | null;
+  labTestSlot: TestScheduleSlotEntry | null;
 }
 
 interface BookingActions {
-  setPatientId: (patientId: string) => void;
-  setServiceId: (serviceId: number) => void;
-  setScheduleSlotId: (scheduleSlotId: number) => void;
-  setLabTestSlotId: (labTestSlotId: number) => void;
+  setUser: (user: UserProfileValues | null) => void;
+  setDoctor: (doctor: Doctor | null) => void;
+  setService: (service: Service | null) => void;
+  setScheduleSlot: (scheduleSlot: ScheduleSlot | null) => void;
+  setLabTestSlot: (labTestSlot: TestScheduleSlotEntry | null) => void;
   reset: () => void;
-  booking: () => Promise<void>;
 }
 
-const useBookingStore = create<BookingState & BookingActions>((set, get) => ({
-  patientId: "",
-  serviceId: 0,
-  scheduleSlotId: 0,
-  labTestSlotId: 0,
-  setPatientId: (patientId) => set({ patientId }),
-  setServiceId: (serviceId) => set({ serviceId }),
-  setScheduleSlotId: (scheduleSlotId) => set({ scheduleSlotId }),
-  setLabTestSlotId: (labTestSlotId) => set({ labTestSlotId }),
+const useBookingStore = create<BookingState & BookingActions>((set) => ({
+  user: null,
+  doctor: null,
+  service: null,
+  scheduleSlot: null,
+  labTestSlot: null,
+  setUser: (user) => set({ user }),
+  setDoctor: (doctor) => set({ doctor }),
+  setService: (service) => set({ service }),
+  setScheduleSlot: (scheduleSlot) => set({ scheduleSlot }),
+  setLabTestSlot: (labTestSlot) => set({ labTestSlot }),
   reset: () =>
     set({
-      patientId: "",
-      serviceId: 0,
-      scheduleSlotId: 0,
-      labTestSlotId: 0,
+      user: null,
+      doctor: null,
+      service: null,
+      scheduleSlot: null,
+      labTestSlot: null,
     }),
-  booking: async () => {
-    const state = get();
-    await axios.post("/api/booking", {
-      patientId: state.patientId,
-      serviceId: state.serviceId,
-      scheduleSlotId: state.scheduleSlotId,
-      labTestSlotId: state.labTestSlotId,
-    });
-  },
 }));
 
 export default useBookingStore;

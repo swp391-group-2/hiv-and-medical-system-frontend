@@ -1,13 +1,6 @@
 import type { LucideIcon } from "lucide-react";
-import { Phone, Mail, CircleUserRound } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import type { UserProfileValues } from "@/types/userProfile.type";
+import { Mail, CircleUserRound } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AvatarUpload from "./avatar-upload";
 
 const InfoRow = ({
@@ -30,29 +23,26 @@ const InfoRow = ({
   );
 };
 
-const UserSummary = (user: UserProfileValues) => {
+const UserSummary = () => {
   const handleUploadAvatar = (file: File) => {
     console.log("File selected: " + file);
   };
 
   return (
     <Card className="flex-1/4 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-      <AvatarUpload
-        imageUrl={user.imageUrl ? user.imageUrl : ""}
-        onUpload={handleUploadAvatar}
-      />
+      <AvatarUpload imageUrl={""} onUpload={handleUploadAvatar} />
       <CardHeader className="flex flex-col items-center px-6 pt-6 pb-4 border-b border-gray-100">
         <CardTitle className="text-xl font-semibold text-gray-900">
-          {user.fullName}
+          {"Nguyễn Hoài Phương"}
         </CardTitle>
-        <CardDescription className="mt-1 text-sm text-gray-500">
-          {user.phone}
-        </CardDescription>
       </CardHeader>
       <CardContent className="px-6 py-4 space-y-4">
-        <InfoRow icon={Phone} name="Số điện thoại" desc={user.phone} />
-        <InfoRow icon={Mail} name="Email" desc={user.email} />
-        <InfoRow icon={CircleUserRound} name="Mã bệnh nhân" desc={user.id} />
+        <InfoRow icon={Mail} name="Email" desc={"nhphuong203204@gmail.com"} />
+        <InfoRow
+          icon={CircleUserRound}
+          name="Mã bệnh nhân"
+          desc={"200233203"}
+        />
       </CardContent>
     </Card>
   );

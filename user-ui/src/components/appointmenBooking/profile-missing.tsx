@@ -1,12 +1,18 @@
 import { Plus, Undo2 } from "lucide-react";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AppRoutes } from "@/constants/appRoutes";
 
 function ProfileMissing() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   const handleCreateProfile = () => {
-    // Logic to navigate to profile creation page
-    navigate("/profile");
+    navigate(AppRoutes.USER_PROFILE, { state: { path: location.pathname } });
   };
 
   return (
@@ -45,7 +51,11 @@ function ProfileMissing() {
         </p>
       </div>
       <div className="flex justify-around w-full max-w-2xl mt-8">
-        <Button variant="ghost" className="mt-2.5 flex items-center text-lg">
+        <Button
+          onClick={handleBack}
+          variant="ghost"
+          className="mt-2.5 flex items-center text-lg"
+        >
           <Undo2 className="mr-2" />
           Quay Lại
         </Button>

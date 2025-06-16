@@ -16,7 +16,7 @@ import { useState } from "react";
 
 const schema = z
   .object({
-    phone: z.string().regex(/^0\d{9}$/, "Số điện thoại không hợp lệ"),
+    email: z.string().email("Email không hợp lệ"),
     password: z.string().min(5, "Mật khẩu phải có ít nhất 5 ký tự"),
     confirm: z.string(),
   })
@@ -27,12 +27,12 @@ const schema = z
 
 export type AccountUpdateFormValues = z.infer<typeof schema>;
 interface AccountUpdateFormProps {
-  phone: string;
+  email: string;
   onSubmit: (values: AccountUpdateFormValues) => void;
 }
 
 export const AccountUpdateForm: React.FC<AccountUpdateFormProps> = ({
-  phone,
+  email,
   onSubmit,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -41,7 +41,7 @@ export const AccountUpdateForm: React.FC<AccountUpdateFormProps> = ({
   const form = useForm<AccountUpdateFormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      phone: phone,
+      email: email,
       password: "",
       confirm: "",
     },
@@ -52,18 +52,18 @@ export const AccountUpdateForm: React.FC<AccountUpdateFormProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="">
         <FormField
           control={form.control}
-          name="phone"
+          name="email"
           render={({
             field,
           }: {
-            field: ControllerRenderProps<AccountUpdateFormValues, "phone">;
+            field: ControllerRenderProps<AccountUpdateFormValues, "email">;
           }) => (
             <FormItem className="">
-              <FormLabel className="">Số điện thoại</FormLabel>
+              <FormLabel className="">Email</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  type="text"
+                  type="email"
                   readOnly
                   className="bg-gray-100 cursor-not-allowed"
                 />

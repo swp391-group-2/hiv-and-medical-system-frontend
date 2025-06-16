@@ -1,16 +1,38 @@
 export type UserProfileValues = {
-  id: string;
-  fullName: string;
+  patientId: string;
+  userId: string;
   email: string;
-  imageUrl?: string;
+  fullName: string;
+  userStatus: string;
+  patientCode: string;
+  dob: string;
   gender: string;
-  dob: string; // expecting "YYYY-MM-DD"
-  idNumber: string;
-  insuranceNumber: string;
+  address: string;
+  phoneNumber: string;
+  identificationCard: string;
+  healthInsurance: string;
   occupation: string;
-  phone: string;
-  province: string;
-  district: string;
-  ward: string;
-  street: string;
+};
+
+export type AccountUpdateFormValues = {
+  email: string;
+  password: string;
+  confirm: string;
+};
+export type UserProfileUpdateValues = {
+  fullName: string;
+  dob: string;
+  gender: string;
+  address: string;
+  phoneNumber: string;
+  identificationCard: string;
+  healthInsurance: string;
+  occupation: string;
+};
+
+export type UserProfileResponse = {
+  code: number;
+  success: boolean;
+  message: string;
+  data: UserProfileValues;
 };
