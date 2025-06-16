@@ -56,8 +56,13 @@ export const LoginForm: FC = () => {
       queryClient.invalidateQueries({
         queryKey: ["self"],
       });
-
-      navigate("/staff/dashboard");
+      if (data.data.data.user.role === "STAFF") {
+        navigate("/staff/dashboard");
+      } else if (data.data.data.user.role === "LAB_TECHNICIAN") {
+        navigate("/lab/dashboard");
+      } else if (data.data.data.user.role === "MANAGER") {
+        navigate("/manager/dashboard");
+      }
     },
     onError: (error) => {
       toast.error(error.message);
