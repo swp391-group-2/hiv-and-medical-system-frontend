@@ -12,17 +12,17 @@ import Questions from "./pages/questions/qa";
 import Schedule from "./pages/appointment/schedule";
 import ARVSeclect from "./pages/ARVSelect/arvSelect";
 import DoctorProfile from "./pages/doctorProfile/doctorProfile";
-import type { JSX } from "react";
+// import type { JSX } from "react";
 
 
 const queryClient = new QueryClient();
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  const isAuthenticated = localStorage.getItem("doctorEmail");
-  if (!isAuthenticated) {
-    return <Navigate to="/login"  />;
-  }
-  return children;
-}
+// const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+//   const isAuthenticated = localStorage.getItem("doctorEmail");
+//   if (!isAuthenticated) {
+//     return <Navigate to="/login"  />;
+//   }
+//   return children;
+// }
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

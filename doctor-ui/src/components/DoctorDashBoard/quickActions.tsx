@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { type FC } from "react";
 import { CalendarDays, Activity } from "lucide-react";
 import { useNavigate } from "react-router-dom"; // Thêm dòng này
 
