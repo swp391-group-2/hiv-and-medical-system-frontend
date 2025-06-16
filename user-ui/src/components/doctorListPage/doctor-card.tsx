@@ -19,7 +19,7 @@ const DoctorCard = ({
   doctorId,
   email,
   fullName,
-  image = "",
+  image,
   rating = 5,
   selectDoctor,
 }: DoctorCardProps) => {

@@ -1,6 +1,8 @@
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ListTopDoctor from "./list-top-doctor";
+import { Link } from "react-router-dom";
+import { AppRoutes } from "@/constants/appRoutes";
 
 function HomeDoctors() {
   return (
@@ -18,10 +20,12 @@ function HomeDoctors() {
       </div>
 
       <div className="actions text-center ">
-        <Button size="lg">
-          <Users className="mr-2 h-4 w-4" />
-          Xem tất cả bác sĩ
-        </Button>
+        <Link to={AppRoutes.CONSULTATION_DOCTORS}>
+          <Button size="lg">
+            <Users className="mr-2 h-4 w-4" />
+            Xem tất cả bác sĩ
+          </Button>
+        </Link>
       </div>
     </div>
   );
