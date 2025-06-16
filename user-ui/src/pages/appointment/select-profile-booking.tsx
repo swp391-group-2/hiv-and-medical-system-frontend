@@ -17,7 +17,7 @@ function SelectProfileBooking() {
     },
     enabled: !!user.email,
   });
-  const hasProfile = patientData?.data.gender !== undefined;
+  const hasProfile = patientData?.data.identificationCard;
   const setUser = useBookingStore((state) => state.setUser);
   if (hasProfile) {
     setUser(patientData.data);
