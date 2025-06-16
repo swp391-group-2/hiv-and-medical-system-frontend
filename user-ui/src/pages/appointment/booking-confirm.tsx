@@ -19,8 +19,53 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import useBookingStore from "@/stores/booking.store";
+import type { AppointmentBooking } from "@/apis/appointment.api";
+import appointmentApi from "@/apis/appointment.api";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { AppRoutes } from "@/constants/appRoutes";
 
 const BookingConfirm = () => {
+  const navigate = useNavigate();
+  const user = useBookingStore((state) => state.user);
+  const doctor = useBookingStore((state) => state.doctor);
+  const service = useBookingStore((state) => state.service);
+  const scheduleSlot = useBookingStore((state) => state.scheduleSlot);
+  const labTestSlot = useBookingStore((state) => state.labTestSlot);
+  const reset = useBookingStore((state) => state.reset);
+
+  const bookingMutation = useMutation({
+    mutationFn: async (appointmentBookingData: AppointmentBooking) => {
+      const response = await appointmentApi.postAppointmentBooking(
+        appointmentBookingData
+      );
+      return response;
+    },
+    onSuccess: () => {
+      toast.success("Đã đăng ký lịch thành công ");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const handleConfirmBooking = () => {
+    if (!user || !service) return;
+
+    const bookingData: AppointmentBooking = {
+      patientId: user.patientId,
+      serviceId: service.id,
+      scheduleSlotId: scheduleSlot?.id || null,
+      labTestSlotId: labTestSlot?.id || null,
+    };
+
+    bookingMutation.mutate(bookingData);
+    reset();
+    navigate(AppRoutes.HOME);
+  };
+
   return (
     <div className="min-h-screen  p-4">
       <div className="max-w-6xl mx-auto">
@@ -60,7 +105,11 @@ const BookingConfirm = () => {
                       <TableRow className="">
                         <TableHead className="text-gray-700">#</TableHead>
                         <TableHead className="text-gray-700">Dịch Vụ</TableHead>
-                        <TableHead className="text-gray-700">Bác Sĩ</TableHead>
+                        {doctor && (
+                          <TableHead className="text-gray-700">
+                            Bác Sĩ
+                          </TableHead>
+                        )}
                         <TableHead className="text-gray-700">
                           Thời gian khám
                         </TableHead>
@@ -74,12 +123,30 @@ const BookingConfirm = () => {
                       <TableRow>
                         <TableCell>1</TableCell>
                         <TableCell>Khám điều trị HIV</TableCell>
-                        <TableCell>Uông Thanh Tú</TableCell>
-                        <TableCell>
-                          <div>09:00 - 10:00</div>
-                          <div className="text-gray-500">26/06/2025</div>
-                        </TableCell>
-                        <TableCell>160.000 đ</TableCell>
+                        {doctor && <TableCell>{doctor.fullName}</TableCell>}
+                        {scheduleSlot && (
+                          <TableCell>
+                            <div>
+                              {scheduleSlot.slot.startTime +
+                                " " +
+                                scheduleSlot.slot.endTime}
+                            </div>
+                            <div className="text-gray-500">2025-06-16</div>
+                          </TableCell>
+                        )}
+                        {labTestSlot && (
+                          <TableCell>
+                            <div>
+                              {labTestSlot.slot.startTime +
+                                " " +
+                                labTestSlot.slot.endTime}
+                            </div>
+                            <div className="text-gray-500">
+                              {labTestSlot.date}
+                            </div>
+                          </TableCell>
+                        )}
+                        <TableCell>{service?.price} đ</TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -99,7 +166,7 @@ const BookingConfirm = () => {
                       <div>
                         <span className="text-gray-600">Họ và tên:</span>
                         <span className="ml-2 font-medium">
-                          NGUYỄN HOÀI PHƯƠNG
+                          {user?.fullName}
                         </span>
                       </div>
                     </div>
@@ -108,7 +175,7 @@ const BookingConfirm = () => {
                       <Calendar className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">Ngày sinh:</span>
-                        <span className="ml-2 font-medium">20/03/2004</span>
+                        <span className="ml-2 font-medium">{user?.dob}</span>
                       </div>
                     </div>
 
@@ -116,9 +183,7 @@ const BookingConfirm = () => {
                       <Mail className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">Email:</span>
-                        <span className="ml-2 font-medium">
-                          nhphuong203204@gmail.com
-                        </span>
+                        <span className="ml-2 font-medium">{user?.email}</span>
                       </div>
                     </div>
 
@@ -126,7 +191,11 @@ const BookingConfirm = () => {
                       <CreditCard className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">Mã số BHYT:</span>
-                        <span className="ml-2 font-medium">Chưa cập nhật</span>
+                        <span className="ml-2 font-medium">
+                          {user?.healthInsurance
+                            ? user.healthInsurance
+                            : "Chưa cập nhật"}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -136,7 +205,9 @@ const BookingConfirm = () => {
                       <User className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">Giới tính:</span>
-                        <span className="ml-2 font-medium">Nam</span>
+                        <span className="ml-2 font-medium">
+                          {user?.gender === "male" ? "Nam" : "Nữ"}
+                        </span>
                       </div>
                     </div>
 
@@ -144,15 +215,19 @@ const BookingConfirm = () => {
                       <CreditCard className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">CMND:</span>
-                        <span className="ml-2 font-medium">0742042223251</span>
+                        <span className="ml-2 font-medium">
+                          {user?.identificationCard}
+                        </span>
                       </div>
                     </div>
 
                     <div className="flex items-center space-x-3">
                       <User className="w-5 h-5 text-gray-500" />
                       <div>
-                        <span className="text-gray-600">Dân tộc:</span>
-                        <span className="ml-2 font-medium">Kinh</span>
+                        <span className="text-gray-600">Nghề Nghiệp:</span>
+                        <span className="ml-2 font-medium">
+                          {user?.occupation}
+                        </span>
                       </div>
                     </div>
 
@@ -161,8 +236,7 @@ const BookingConfirm = () => {
                       <div>
                         <span className="text-gray-600">Địa chỉ:</span>
                         <span className="ml-2 font-medium">
-                          ấp 1 Thị trấn Cù Chi Huyện Cù Chi Thành phố Hồ Chí
-                          Minh
+                          {user?.address}
                         </span>
                       </div>
                     </div>
@@ -184,7 +258,12 @@ const BookingConfirm = () => {
 
                 {/* Confirm Button */}
                 <div className="mt-6 flex justify-end">
-                  <Button className="  px-8 py-3">Xác nhận</Button>
+                  <Button
+                    onClick={handleConfirmBooking}
+                    className="  px-8 py-3"
+                  >
+                    Xác nhận
+                  </Button>
                 </div>
               </CardContent>
             </Card>

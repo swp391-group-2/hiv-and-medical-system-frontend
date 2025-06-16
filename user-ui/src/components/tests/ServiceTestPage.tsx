@@ -1,9 +1,10 @@
 // src/pages/services/ServiceTestPage.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import TestHeader from "./TestHeader";
 import InfoCardTest from "./InfoCardTest";
 import MainContentLeft from "./MainContentLeft";
 import MainContentRight from "./MainContentRight";
+import useBookingStore from "@/stores/booking.store";
 
 interface ServiceTestProps {
   title: string;
@@ -23,6 +24,12 @@ interface ServiceTestProps {
 }
 
 const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
+  const reset = useBookingStore((state) => state.reset);
+
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 font-sans">
       {/* Header Section */}

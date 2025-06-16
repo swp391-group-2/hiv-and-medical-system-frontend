@@ -4,7 +4,7 @@ export const AppRoutes = {
 
   // Các dịch vụ chính
   SCREENING: "/screening",
-  CONFIRMATION: "/confirmation",
+  CONFIRMATORY: "/confirmatory",
   EXAMINATION: "/examination",
   CONSULTATION: "/consultation",
   CONSULTATION_DOCTORS: "/consultation/doctors",

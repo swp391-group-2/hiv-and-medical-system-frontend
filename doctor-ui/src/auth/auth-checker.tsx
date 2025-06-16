@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await new Promise((r) => setTimeout(r, 500));
 
     // 👉 replace this block with your real API call
-    if (email === "test@gmail.com" && password === "admin") {
+    if (email === "test@gmail.com" && password === "demo@example.com") {
       const fakeUser: User = {
         id: "demo-1",
         name: "Demo User",
@@ -79,8 +79,8 @@ export function useAuth() {
 }
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
-  //const { user, isLoading } = useAuth();
-  //if (isLoading) return <div>Checking login…</div>;
-  //if (!user) return <Navigate to="/auth/login" replace />;
+  const { user, isLoading } = useAuth();
+  if (isLoading) return <div>Checking login…</div>;
+  if (!user) return <Navigate to="/auth/login" replace />;
   return <>{children}</>;
 }
