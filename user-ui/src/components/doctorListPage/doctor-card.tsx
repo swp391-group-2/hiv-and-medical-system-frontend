@@ -3,22 +3,38 @@ import { Button } from "@/components/ui/button";
 import { Star, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { buildRoute } from "@/constants/appRoutes";
+import useBookingStore from "@/stores/booking.store";
 import type { Doctor } from "@/types/doctor.type";
 
-const DoctorCards = ({
+export interface DoctorCardProps {
+  doctorId: string;
+  email: string;
+  fullName: string;
+  image?: string;
+  rating?: number;
+  selectDoctor: (doctorId: string) => Doctor | undefined;
+}
+
+const DoctorCard = ({
   doctorId,
   email,
   fullName,
   image = "",
   rating = 5,
-}: Doctor) => {
+  selectDoctor,
+}: DoctorCardProps) => {
   const navigation = useNavigate();
+  const setDoctor = useBookingStore((state) => state.setDoctor);
+
   const handleBooking = (doctorId: string) => {
-    console.log(doctorId);
+    const doctor = selectDoctor(doctorId);
+    if (doctor) {
+      setDoctor(doctor);
+    }
     navigation(buildRoute.bookingConsultationDoctor(doctorId));
   };
   return (
-    <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md bg-gradient-to-br from-white to-gray-50">
+    <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md shadow-primary/40 ">
       <CardContent className="p-4">
         <div className="flex justify-center mb-3 ">
           <div className="relative w-full">
@@ -80,4 +96,4 @@ const DoctorCards = ({
   );
 };
 
-export default DoctorCards;
+export default DoctorCard;

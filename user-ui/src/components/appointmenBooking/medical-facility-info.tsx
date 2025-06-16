@@ -6,9 +6,45 @@ import {
 } from "lucide-react";
 import { Card } from "../ui/card";
 import { useParams } from "react-router-dom";
+import useBookingStore from "@/stores/booking.store";
+import { useQuery } from "@tanstack/react-query";
+import serviceApi from "@/apis/service.api";
 
 function MedicalFacilityInfo() {
   const { serviceType } = useParams<{ serviceType: string }>();
+  const doctor = useBookingStore((state) => state.doctor);
+  const setService = useBookingStore((state) => state.setService);
+
+  const { data: service, isLoading } = useQuery({
+    queryKey: ["service", serviceType],
+    queryFn: async () => {
+      if (!serviceType) {
+        throw new Error("Service type is required");
+      }
+      const response = await serviceApi
+        .getServicesByType(serviceType)
+        .then((res) => res.data);
+      return response;
+    },
+    enabled: !!serviceType,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
+  if (!service) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="error">Failed to load service data</div>
+      </div>
+    );
+  }
+
   const medicalInfoList: {
     id: number;
     title: string;
@@ -21,24 +57,27 @@ function MedicalFacilityInfo() {
       info: "Tổ 1 ấp 1 Xã Lạc An huyện Bắc Tân Uyên, Tình Bình Dương",
       icon: MapPin,
     },
-    {
+  ];
+
+  if (service) {
+    setService(service);
+    medicalInfoList.push({
       id: 2,
       title: "Dịch Vụ ",
-      info:
-        serviceType === "confirmatorytest"
-          ? "Xét nghiệm khẳng định HIV"
-          : serviceType === "screeningtest"
-          ? "Xét nghiệm sàng lọc HIV"
-          : "Dịch vụ khám bệnh",
+      info: service.name || "Dịch vụ chưa được chọn",
       icon: Clipboard,
-    },
-    {
+    });
+  }
+
+  if (doctor) {
+    medicalInfoList.push({
       id: 3,
       title: "Bác sĩ ",
-      info: "Uông Thanh Tú",
+      info: doctor?.fullName || "Bác sĩ chưa được chọn",
       icon: BriefcaseMedical,
-    },
-  ];
+    });
+  }
+
   return (
     <Card className="bg-white shadow-lg overflow-hidden py-0">
       <div className="bg-primary text-white px-4 py-3">

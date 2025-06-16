@@ -1,36 +1,13 @@
-import apiGuest from "@/apis/apiGuest";
 import DoctorHero from "@/components/doctorListPage/doctor-hero";
-import DoctorCards from "@/components/doctorListPage/DoctorCards";
+
 import FinderBar from "@/components/doctorListPage/FinderBar";
 
-import type { Doctor } from "@/types/doctor.type";
-import { useQuery } from "@tanstack/react-query";
-
 import { useState } from "react";
+import DoctorList from "@/components/doctorListPage/doctor-list";
 
 const ServiceDoctorList = () => {
   const [search, setSearch] = useState<string>("");
 
-  const fetchDoctors = async (): Promise<Doctor[]> => {
-    const response = await apiGuest.get("doctors");
-    return response.data.data;
-  };
-
-  const {
-    data: doctors,
-    isLoading,
-    error,
-  } = useQuery<Doctor[], Error>({
-    queryKey: ["doctor"],
-    queryFn: () => fetchDoctors(),
-  });
-
-  if (isLoading) {
-    return <div>Đang tải ....</div>;
-  }
-  if (error) {
-    return <div>{error.message}</div>;
-  }
   return (
     <div>
       <DoctorHero />
@@ -47,16 +24,7 @@ const ServiceDoctorList = () => {
               setSortOrder={setSortOrder}
             /> */}
           </div>
-          <div className="grid grid-cols-4 gap-5">
-            {doctors?.map((doctor) => (
-              <DoctorCards
-                key={doctor.doctorId}
-                doctorId={doctor.doctorId}
-                fullName={doctor.fullName}
-                email={doctor.email}
-              />
-            ))}
-          </div>
+          <DoctorList />
         </main>
       </div>
     </div>

@@ -19,6 +19,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import type { UserProfileUpdateValues } from "@/types/userProfile.type";
 
 const profileSchema = z.object({
   fullName: z.string().min(1, { message: "Họ và tên không được để trống" }),
@@ -33,10 +34,10 @@ const profileSchema = z.object({
     },
     { message: "Ngày sinh không hợp lệ (YYYY-MM-DD)" }
   ),
-  idNumber: z.string().min(1, { message: "Số CCCD/CMND không được để trống" }),
+  idNumber: z.string().min(8, { message: "Số CCCD/CMND không được để trống" }),
   insuranceNumber: z
     .string()
-    .min(1, { message: "Số BHYT không được để trống" }),
+    .min(8, { message: "Số BHYT không được để trống" }),
   occupation: z.string().min(1, { message: "Vui lòng chọn nghề nghiệp" }),
   phone: z.string().regex(/^0\d{9}$/, "Số điện thoại không hợp lệ"),
   province: z.string().min(1, { message: "Vui lòng chọn tỉnh/thành phố" }),
@@ -51,7 +52,7 @@ export type ProfileFormValues = z.infer<typeof profileSchema>;
 
 interface ProfileInfoFormProps {
   defaultValues?: Partial<ProfileFormValues>;
-  onSubmit: (values: ProfileFormValues) => void;
+  onSubmit: (values: UserProfileUpdateValues) => void;
 }
 
 export function ProfileInfoForm({
@@ -77,7 +78,23 @@ export function ProfileInfoForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+      <form
+        onSubmit={form.handleSubmit((values) => {
+          // Transform ProfileFormValues to UserProfileUpdateValues
+          const updateValues: UserProfileUpdateValues = {
+            fullName: values.fullName,
+            dob: values.dob,
+            gender: values.gender,
+            address: `${values.street}, ${values.ward}, ${values.district}, ${values.province}`,
+            phoneNumber: values.phone,
+            identificationCard: values.idNumber,
+            healthInsurance: values.insuranceNumber,
+            occupation: values.occupation,
+          };
+          onSubmit(updateValues);
+        })}
+        className="space-y-8 w-full"
+      >
         {/* —————— SECTION: Thông Tin Chung —————— */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-teal-600">

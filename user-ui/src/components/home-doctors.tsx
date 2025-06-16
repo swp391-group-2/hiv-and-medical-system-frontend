@@ -1,5 +1,6 @@
 import { Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ListTopDoctor from "./list-top-doctor";
 
 function HomeDoctors() {
   return (
@@ -12,9 +13,11 @@ function HomeDoctors() {
           Tìm kiếm và kết nối với các bác sĩ chuyên nghiệp
         </p>
       </div>
-      <div className="grid-cols-4 grid gap-5"></div>
+      <div className="mb-10">
+        <ListTopDoctor />
+      </div>
 
-      <div className="actions text-center">
+      <div className="actions text-center ">
         <Button size="lg">
           <Users className="mr-2 h-4 w-4" />
           Xem tất cả bác sĩ
