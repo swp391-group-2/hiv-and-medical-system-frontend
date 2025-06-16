@@ -1,16 +1,15 @@
-import { formatDMY } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppointmentTable } from "@/components/appointments/appointment-table";
-
-import { useMemo, useState } from "react";
 import { useAppointments } from "@/api/appointments";
 import {
   AppointmentFilters,
   type Filters,
 } from "@/components/appointments/appointment-filters";
+import { LabTable } from "@/components/lab/lab-table";
 import { LoadingOverlay } from "@/components/loading-overlay";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatDMY } from "@/lib/utils";
+import { useMemo, useState } from "react";
 
-const FinishedAppointments = () => {
+const Lab = () => {
   const {
     data: appointments = [],
     isLoading,
@@ -25,7 +24,10 @@ const FinishedAppointments = () => {
 
   const filtered = useMemo(() => {
     return appointments
-      .filter((a) => a.status === "COMPLETED")
+      .filter(
+        (a) =>
+          a.status === "CHECKED_IN" && a.labResult.resultStatus !== "FINISHED"
+      )
       .filter((a) => {
         if (filters.search) {
           const q = filters.search.toLowerCase();
@@ -47,11 +49,10 @@ const FinishedAppointments = () => {
   if (isLoading) return <LoadingOverlay message="Đang tải..." />;
   if (isError)
     return <div className="text-red-600">{(error as Error).message}</div>;
-
   return (
     <section className="w-full mt-7">
       <div>
-        <h1 className="text-3xl font-bold mb-5">Danh Sách Đã Khám</h1>
+        <h1 className="text-3xl font-bold mb-5">Danh Sách Chờ Xét Nghiệm</h1>
         <p className="text-gray-500">
           Hôm nay là: {formatDMY(new Date().toISOString())}
         </p>
@@ -65,11 +66,11 @@ const FinishedAppointments = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="list">
-          <AppointmentTable data={filtered} />
+          <LabTable data={filtered} />
         </TabsContent>
       </Tabs>
     </section>
   );
 };
 
-export default FinishedAppointments;
+export default Lab;

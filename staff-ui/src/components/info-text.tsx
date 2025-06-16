@@ -4,7 +4,7 @@ const InfoGroup = ({ children }: { children: React.ReactNode }) => {
 
 const InfoTextRow = ({ label, data }: { label: string; data: string }) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-auto">
       <span className="text-sm text-gray-500">{label}</span>
       <span className="font-medium text-gray-800">{data}</span>
     </div>

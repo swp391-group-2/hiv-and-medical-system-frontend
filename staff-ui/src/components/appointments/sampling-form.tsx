@@ -16,6 +16,7 @@ import type { Appointment } from "@/types/types";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { LoadingOverlay } from "../loading-overlay";
 
 const sampleTestSchema = z.object({
   sampleCode: z.string().nonempty("Mã mẫu không được bỏ trống"),
@@ -51,7 +52,11 @@ export function SampleTestForm({ appt }: { appt: Appointment }) {
     },
   });
 
-  const { mutate: checkIn } = useMutation<void, Error, SampleTestValues>({
+  const { mutate: checkIn, isPending } = useMutation<
+    void,
+    Error,
+    SampleTestValues
+  >({
     mutationFn: async (data: SampleTestValues) =>
       await axios.post(
         `/api/appointments/${appt.appointmentId}/check-in`,
@@ -75,6 +80,7 @@ export function SampleTestForm({ appt }: { appt: Appointment }) {
   };
   return (
     <Form {...form}>
+      {isPending && <LoadingOverlay message="Đang tải..." />}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}

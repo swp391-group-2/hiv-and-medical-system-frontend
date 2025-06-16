@@ -8,11 +8,18 @@ import {
   FastForward,
   UserCheck,
   Pill,
+  User,
 } from "lucide-react";
+import Logo from "./logo";
+import { SidebarFooter } from "./ui/sidebar";
+import LogoutBtn from "./logout-btn";
 
 const StaffSidebar = () => {
   return (
     <Sidebar>
+      <div className="p-6 border-b border-gray-200">
+        <Logo />
+      </div>
       <SidebarNav>
         <SidebarNavItem
           path="/staff/dashboard"
@@ -78,6 +85,16 @@ const StaffSidebar = () => {
           desc="Theo dõi lịch làm việc bác sĩ"
         />
       </SidebarNav>
+      <SidebarFooter className="sticky bottom-0">
+        <div className="flex flex-col gap-3 items-center border border-gray-300 shadow rounded p-4">
+          <div className="flex gap-4">
+            <User />
+            <span>Họ và tên</span>
+          </div>
+          <span>Role</span>
+        </div>
+        <LogoutBtn className="cursor-pointer" />
+      </SidebarFooter>
     </Sidebar>
   );
 };

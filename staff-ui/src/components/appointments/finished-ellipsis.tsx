@@ -17,6 +17,7 @@ import { MoreHorizontal } from "lucide-react";
 import { useState } from "react";
 import type { Appointment } from "@/types/types";
 import PatientProfileInfo from "./patient-profile";
+import AppointmentSession from "./appointment-session";
 
 export function FinishedEllipsis({ appt }: { appt: Appointment }) {
   const [open, setOpen] = useState(false);
@@ -56,7 +57,7 @@ export function FinishedEllipsis({ appt }: { appt: Appointment }) {
             <DialogTitle>Xem hồ sơ bệnh nhân</DialogTitle>
           </DialogHeader>
           <PatientProfileInfo appt={appt} />
-          <DialogFooter>
+          <DialogFooter className="mt-auto">
             <DialogClose asChild>
               <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng
@@ -65,16 +66,15 @@ export function FinishedEllipsis({ appt }: { appt: Appointment }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      {/* chi tiet ket qua kham/xn */}
       <Dialog open={openDetail} onOpenChange={setOpenDetail}>
-        <DialogContent>
+        <DialogContent className="min-w-[1000px] min-h-[800px] flex flex-col justify-start">
           <DialogHeader>
             <DialogTitle>Chi tiết buổi khám</DialogTitle>
           </DialogHeader>
-
-          <DialogFooter>
+          <AppointmentSession appt={appt} />
+          <DialogFooter className="mt-auto">
             <DialogClose asChild>
-              <Button className="bg-blue-500 hover:bg-blue-600 cursor-pointer">
+              <Button className="mt-auto bg-blue-500 hover:bg-blue-600 cursor-pointer">
                 Đóng
               </Button>
             </DialogClose>
