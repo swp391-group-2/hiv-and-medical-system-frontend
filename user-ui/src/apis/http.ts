@@ -12,12 +12,7 @@ import {
   setRefreshTokenToLS,
 } from "./userauth";
 import config from "@/constants/config";
-import {
-  URL_LOGIN,
-  URL_LOGOUT,
-  URL_REFRESH_TOKEN,
-  URL_REGISTER,
-} from "@/apis/auth.api";
+import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN } from "@/apis/auth.api";
 import {
   isAxiosExpiredTokenError,
   isAxiosUnauthorizedError,
@@ -57,7 +52,7 @@ export class Http {
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === URL_LOGIN || url === URL_REGISTER) {
+        if (url === URL_LOGIN) {
           const data = response.data as AuthResponse;
           this.accessToken = data.data.accessToken;
           this.refreshToken = data.data.refreshToken;
@@ -81,7 +76,7 @@ export class Http {
         ) {
           const message = error.message || "Có lỗi xảy ra";
           // Thông báo lỗi
-          console.error(message);
+          console.error("Lỗi rồi Phương", message);
         }
         if (
           isAxiosUnauthorizedError<
@@ -129,7 +124,7 @@ export class Http {
   private handleRefreshToken() {
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
-        refresh_token: this.refreshToken,
+        refreshToken: this.refreshToken,
       })
       .then((res) => {
         const { accessToken } = res.data.data;

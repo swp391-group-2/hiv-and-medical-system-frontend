@@ -5,6 +5,12 @@ export type AppointmentStatus =
   | "LAB_COMPLETED"
   | "COMPLETED";
 
+export type LabResultStatus = "PENDING" | "REJECTED" | "FINISHED";
+
+export type ParameterType = "NUMERIC" | "TEXT";
+
+export type ServiceType = "CONSULTATION" | "LAB_TEST";
+
 /** Patient info */
 export interface Patient {
   patientId: string;
@@ -13,7 +19,7 @@ export interface Patient {
   fullName: string;
   userStatus: string;
   patientCode: string;
-  dob: string; // YYYY-MM-DD
+  dob: string; // ISO yyyy-MM-dd
   gender: string;
   address: string;
   phoneNumber: string;
@@ -27,22 +33,38 @@ export interface LabSample {
   id: number;
   sampleCode: string;
   sampleType: string;
+  sampleCodeCD4: string;
+  sampleTypeCD4: string;
+  sampleCodeVirus: string;
+  sampleTypeVirus: string;
   results: string;
   collectedAt: string; // ISO timestamp
   status: string;
+}
+
+export interface LabTestParameter {
+  labTestParameterId: number;
+  parameterName: string;
+  parameterType: ParameterType;
+  unitCD4: string;
+  unitViralLoad: string;
+  normalRangeCD4: string;
+  normalRangeStringViralLoad: string;
+  description: string;
 }
 
 /** Lab result, including its own nested sample */
 export interface LabResult {
   labResultId: number;
   resultText: string;
-  resultNumeric: number;
   resultNumericCD4: number;
   resultNumericViralLoad: number;
+  resultStatus: LabResultStatus;
   conclusion: string;
   note: string;
-  resultDate: string; // YYYY-MM-DD
+  resultDate: string; // ISO yyyy-MM-dd
   labSample: LabSample;
+  labTestParameter: LabTestParameter;
 }
 
 /** Medication details */
@@ -82,28 +104,28 @@ export interface Appointment {
 
   serviceId: number;
   serviceName: string;
-  serviceType: string;
+  serviceType: ServiceType;
   price: number;
+  note: string;
 
-  labTestSlotId: number;
+  labTestSlotId: number | null;
   doctorName: string;
 
-  scheduleSlotId: number;
-  date: string; // YYYY-MM-DD
-  startTime: string; // e.g. "09:30"
-  endTime: string; // e.g. "10:00"
+  scheduleSlotId: number | null;
+  date: string; // yyyy-MM-dd
+  startTime: string;
+  endTime: string;
   slotDescription: string;
 
-  labSampleId: number;
-  labSample: LabSample;
-
-  labResult: LabResult;
-
-  prescription: Prescription;
+  labSampleId: number | null;
+  labSample: LabSample; // optional until collected
+  labResult: LabResult; // optional until result exists
+  prescription: Prescription; // optional
 }
 
 export type Response<T> = {
   code: number;
   success: boolean;
-  result: Array<T>;
+  message: string;
+  data: Array<T>;
 };

@@ -10,14 +10,15 @@ function ServiceRouters() {
   return (
     <Routes>
       {/* Service Information Pages */}
-      <Route path="screeningtest" element={<ServiceScreeningTest />} />
-      <Route path="confirmatorytest" element={<ServiceConfirmatoryTest />} />
-
-      <Route path="doctors" element={<ServiceDoctorList />} />
+      <Route path="screening" element={<ServiceScreeningTest />} />
+      <Route path="confirmatory" element={<ServiceConfirmatoryTest />} />
+      <Route path="consultation">
+        <Route path="doctors" element={<ServiceDoctorList />} />
+      </Route>
 
       <Route path="booking/:serviceType" element={<AppointmentBooking />} />
       <Route
-        path="booking/doctors/:doctorId"
+        path="booking/:serviceType/:doctorId"
         element={<AppointmentBooking />}
       />
 
@@ -26,13 +27,13 @@ function ServiceRouters() {
         element={<SelectProfileBooking />}
       />
       <Route
-        path="select-profile-booking/doctors/:doctorId"
+        path="select-profile-booking/:serviceType/:doctorId"
         element={<SelectProfileBooking />}
       />
 
       <Route path="booking-confirm/:serviceType" element={<BookingConfirm />} />
       <Route
-        path="booking-confirm/doctors/:doctorId"
+        path="booking-confirm/:serviceType/:doctorId"
         element={<BookingConfirm />}
       />
     </Routes>

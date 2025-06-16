@@ -108,7 +108,7 @@ const WeekCalendar = ({
             <button
               onClick={() => isDateAvailable(date) && onDateSelect(date)}
               className={`
-                w-16 h-16 rounded-lg text-sm font-medium transition-colors border-2
+                w-16 h-16 cursor-pointer rounded-lg text-sm font-medium transition-colors border-2
                 ${
                   isSelected(date)
                     ? "bg-primary text-white border-cyan-500"

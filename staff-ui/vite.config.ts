@@ -8,8 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target:
-          "https://efficiently-allowing-config-recipe.trycloudflare.com/hiv/api",
+        target: "https://api.medcarehiv.pro/hiv/api",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },

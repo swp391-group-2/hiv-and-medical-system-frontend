@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { SampleForm } from "./sampling-form";
+import { SampleTestForm, SampleConsultForm } from "./sampling-form";
 import type { Appointment } from "@/types/types";
 
 interface ConfirmCheckinDialogProps {
@@ -31,7 +31,11 @@ export function ConfirmCheckinDialog({
           </DialogTitle>
         </DialogHeader>
 
-        <SampleForm appt={appt} />
+        {appt.serviceType === "CONSULTATION" ? (
+          <SampleConsultForm appt={appt} />
+        ) : (
+          <SampleTestForm appt={appt} />
+        )}
 
         <DialogFooter className="flex justify-end gap-2"></DialogFooter>
       </DialogContent>

@@ -1,25 +1,41 @@
 import MedicalFacilityInfo from "@/components/appointmenBooking/medical-facility-info";
-
-import TimeSlotSelector from "@/components/appointmenBooking/time-slot-selector";
+import TimeSlotSelectorConsultation from "@/components/appointmenBooking/time-slot-selector-consultation";
+import TimeSlotSelectorTest from "@/components/appointmenBooking/time-slot-selector-test";
 import WeekCalendar from "@/components/appointmenBooking/week-calender";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { buildRoute } from "@/constants/appRoutes";
+import useBookingStore from "@/stores/booking.store";
+import type {
+  ScheduleSlot,
+  TestScheduleSlotEntry,
+} from "@/types/schedule.type";
 import { Undo2 } from "lucide-react";
 
 import { useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const AppointmentBooking = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [currentWeek, setCurrentWeek] = useState(new Date());
-
+  const setScheduleSlot = useBookingStore((state) => state.setScheduleSlot);
+  const setLabTestSlot = useBookingStore((state) => state.setLabTestSlot);
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
-    setSelectedTime(""); // Reset time when date changes
+    setSelectedTime("");
   };
 
-  const handleTimeSelect = (time: string) => {
+  const handleSelectScheduleSlot = (time: string, slot: ScheduleSlot) => {
+    setScheduleSlot(slot);
+    setSelectedTime(time);
+  };
+
+  const handleSelectLabTestSlot = (
+    time: string,
+    slot: TestScheduleSlotEntry
+  ) => {
+    setLabTestSlot(slot);
     setSelectedTime(time);
   };
 
@@ -27,12 +43,14 @@ const AppointmentBooking = () => {
     const newWeek = new Date(currentWeek);
     newWeek.setDate(currentWeek.getDate() - 7);
     setCurrentWeek(newWeek);
+    setSelectedDate(null);
   };
 
   const goToNextWeek = () => {
     const newWeek = new Date(currentWeek);
     newWeek.setDate(currentWeek.getDate() + 7);
     setCurrentWeek(newWeek);
+    setSelectedDate(null);
   };
 
   const navigate = useNavigate();
@@ -40,20 +58,17 @@ const AppointmentBooking = () => {
     navigate(-1);
   };
 
-  const location = useLocation();
-  const { serviceType } = useParams<{ serviceType: string }>();
+  // const location = useLocation();
+  const { serviceType, doctorId } = useParams<{
+    serviceType: string;
+    doctorId: string;
+  }>();
 
   const handleBooking = () => {
-    if (location.pathname.includes("doctors")) {
-      navigate(
-        `/services/select-profile-booking/doctors/${location.pathname
-          .split("/")
-          .pop()}`
-      );
-    } else if (serviceType?.includes("screeningtest")) {
-      navigate("/services/select-profile-booking/screeningtest");
-    } else if (serviceType?.includes("confirmatorytest")) {
-      navigate("/services/select-profile-booking/confirmatorytest");
+    if (doctorId) {
+      navigate(buildRoute.selectProfileBookingConsultation(doctorId));
+    } else if (serviceType) {
+      navigate(buildRoute.selectProfileBooking(serviceType));
     }
   };
 
@@ -85,10 +100,19 @@ const AppointmentBooking = () => {
                   />
                   {selectedDate && (
                     <div className="mt-6">
-                      <TimeSlotSelector
-                        selectedTime={selectedTime}
-                        onTimeSelect={handleTimeSelect}
-                      />
+                      {doctorId ? (
+                        <TimeSlotSelectorConsultation
+                          selectedDate={selectedDate}
+                          selectedTime={selectedTime}
+                          onTimeSelect={handleSelectScheduleSlot}
+                        />
+                      ) : (
+                        <TimeSlotSelectorTest
+                          selectedDate={selectedDate}
+                          selectedTime={selectedTime}
+                          onTimeSelect={handleSelectLabTestSlot}
+                        />
+                      )}
                     </div>
                   )}
 

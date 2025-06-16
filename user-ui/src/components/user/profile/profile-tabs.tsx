@@ -3,17 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AccountUpdateForm } from "./account-update-form";
 import { ProfileInfoForm } from "./profile-info-form";
 import { type AccountUpdateFormValues } from "./account-update-form";
-import { type ProfileFormValues } from "./profile-info-form";
-import type { UserProfileValues } from "@/types/userProfile.type";
+import type { UserProfileUpdateValues } from "@/types/userProfile.type";
 
 type ProfileTabsProps = {
-  user: UserProfileValues;
   handlePasswordSubmit: (values: AccountUpdateFormValues) => Promise<void>;
-  handleProfileSubmit: (values: ProfileFormValues) => Promise<void>;
+  handleProfileSubmit: (values: UserProfileUpdateValues) => Promise<void>;
 };
 
 const ProfileTabsContainer = ({
-  user,
   handlePasswordSubmit,
   handleProfileSubmit,
 }: ProfileTabsProps) => {
@@ -35,7 +32,7 @@ const ProfileTabsContainer = ({
             </CardHeader>
             <CardContent className="">
               <AccountUpdateForm
-                phone={user.phone}
+                email={"nhphuong203204@gmail.com"}
                 onSubmit={handlePasswordSubmit}
               />
             </CardContent>
