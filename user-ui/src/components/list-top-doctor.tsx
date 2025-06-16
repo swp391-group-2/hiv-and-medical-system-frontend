@@ -35,6 +35,10 @@ function ListTopDoctor() {
     return <div>Không có bác sĩ </div>;
   }
 
+  const selectDoctor = (doctorId: string) => {
+    return doctorsList?.find((doctor) => doctor.doctorId === doctorId);
+  };
+
   return (
     <div className="grid-cols-4 grid gap-5">
       {doctorsList.map((doctor) => (
@@ -43,6 +47,7 @@ function ListTopDoctor() {
           doctorId={doctor.doctorId}
           fullName={doctor.fullName}
           email={doctor.email}
+          selectDoctor={selectDoctor}
         />
       ))}
     </div>

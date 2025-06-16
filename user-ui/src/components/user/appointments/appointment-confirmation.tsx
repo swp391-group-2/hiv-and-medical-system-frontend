@@ -111,7 +111,7 @@ const AppointmentConfirmation = ({
                 <div className="flex items-center space-x-2">
                   <Phone className="w-3 h-3 text-gray-400" />
                   <span className="text-sm text-gray-600">
-                    SĐT: {appointment.profile.phone}
+                    SĐT: {appointment.profile.phoneNumber}
                   </span>
                 </div>
 
@@ -119,20 +119,20 @@ const AppointmentConfirmation = ({
                   Ngày sinh: {appointment.profile.dob}
                 </div>
 
-                {appointment.profile.idNumber && (
+                {appointment.profile.identificationCard && (
                   <div className="flex items-center space-x-2">
                     <IdCard className="w-3 h-3 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      CCCD/CMND: {appointment.profile.idNumber}
+                      CCCD/CMND: {appointment.profile.identificationCard}
                     </span>
                   </div>
                 )}
 
-                {appointment.profile.insuranceNumber && (
+                {appointment.profile.healthInsurance && (
                   <div className="flex items-center space-x-2">
                     <CreditCard className="w-3 h-3 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      Số BHYT: {appointment.profile.insuranceNumber}
+                      Số BHYT: {appointment.profile.healthInsurance}
                     </span>
                   </div>
                 )}
@@ -148,9 +148,7 @@ const AppointmentConfirmation = ({
 
                 <div className="md:col-span-2">
                   <span className="text-sm text-gray-600">
-                    Địa chỉ: {appointment.profile.street},{" "}
-                    {appointment.profile.ward}, {appointment.profile.district},{" "}
-                    {appointment.profile.province}
+                    Địa chỉ: {appointment.profile.address}
                   </span>
                 </div>
               </div>
