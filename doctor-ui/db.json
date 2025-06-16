@@ -1,0 +1,86 @@
+{
+  "code": 1000,
+  "success": true,
+  "data": {
+    "appointmentId": 11,
+    "status": "LAB_COMPLETED",
+    "patient": {
+      "patientId": "84c8b1d7-bea5-4c7a-bff7-4e26c30b88bf",
+      "userId": "09f89c6b-8fdb-496f-aa09-a834081eac50",
+      "email": "uongthanhtu@gmail11.com",
+      "fullName": "Uông Thanh Tú",
+      "userStatus": "ACTIVE",
+      "patientCode": null,
+      "dob": null,
+      "gender": null,
+      "address": null,
+      "phoneNumber": null,
+      "identificationCard": null,
+      "healthInsurance": null,
+      "occupation": null
+    },
+    "serviceId": 3,
+    "serviceName": "Dịch vụ đăng kí khám",
+    "serviceType": "CONSULTATION",
+    "price": 900000,
+    "note": null,
+    "labTestSlotId": null,
+    "doctorName": "Uông Thanh Tù",
+    "scheduleSlotId": 19,
+    "date": "2025-06-14",
+    "startTime": "09:00:00",
+    "endTime": "10:00:00",
+    "slotDescription": "Đi đúng slot, đúng giờ sẽ được check-in và lấy mẫu xét nghiệm",
+    "labSampleId": 16,
+    "labSample": {
+      "id": 16,
+      "sampleCode": null,
+      "sampleType": null,
+      "sampleCodeCD4": "a",
+      "sampleTypeCD4": "b",
+      "sampleCodeVirus": "c",
+      "sampleTypeVirus": "d",
+      "results": null,
+      "collectedAt": "2025-06-15T10:26:21.059224",
+      "status": "COLLECTED"
+    },
+    "labResult": {
+      "labResultId": 15,
+      "resultText": null,
+      "resultNumericCD4": 36,
+      "resultNumericViralLoad": 36,
+      "conclusion": "",
+      "note": "",
+      "resultStatus": "FINISHED",
+      "resultDate": "2025-06-15",
+      "labSample": {
+        "id": 16,
+        "sampleCode": null,
+        "sampleType": null,
+        "sampleCodeCD4": "a",
+        "sampleTypeCD4": "b",
+        "sampleCodeVirus": "c",
+        "sampleTypeVirus": "d",
+        "results": null,
+        "collectedAt": "2025-06-15T10:26:21.059224",
+        "status": "COLLECTED"
+      },
+      "labTestParameter": {
+        "labTestParameterId": 3,
+        "parameterName": "CD4 Cell Count",
+        "parameterType": "NUMERIC",
+        "unitCD4": "cells/mm³",
+        "unitViralLoad": "copies/mL",
+        "normalRangeCD4": "500-1500",
+        "normalRangeStringViralLoad": "\u003C50",
+        "description": "Number of CD4 T cells per cubic millimeter"
+      }
+    },
+   "prescription": {
+  "prescriptionId": 2,
+  "name": "TDF + 3TC + DTG",
+  "description": "Phác đồ đang áp dụng",
+  "contraindication": "Suy thận nặng"
+}
+  }
+}

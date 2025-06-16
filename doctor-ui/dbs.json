@@ -1,0 +1,584 @@
+{
+  "code": 1000,
+  "success": true,
+  "data": [
+    {
+      "prescriptionId": 1,
+      "name": "TDF + 3TC + DTG (Bậc 1 ưu tiên)",
+      "contraindication": "Suy thận nặng (TDF), loãng xương nặng; thận trọng với phụ nữ có thai 3 tháng đầu (DTG).",
+      "sideEffect": "Buồn nôn, đau đầu, mất ngủ (DTG); ảnh hưởng thận và xương (TDF).",
+      "dosageForm": "Viên nén bao phim",
+      "instructions": "Uống 1 lần/ngày vào buổi sáng, có thể cùng hoặc không cùng bữa ăn.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 4,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Tenofovir disoproxil fumarate (TDF)",
+            "description": "Ức chế men sao chép ngược loại nucleotide (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 5,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 6,
+          "dosage": "50 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Dolutegravir (DTG)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "50 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 2,
+      "name": "TDF + 3TC + EFV (Bậc 1 thay thế)",
+      "contraindication": "Rối loạn tâm thần, trầm cảm nặng (EFV); suy thận nặng (TDF).",
+      "sideEffect": "Chóng mặt, mất ngủ, ác mộng (EFV); buồn nôn, đau đầu (TDF, 3TC).",
+      "dosageForm": "Viên nén bao phim",
+      "instructions": "Uống 1 lần/ngày vào buổi tối trước khi ngủ, không dùng cùng thức ăn nhiều chất béo.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 10,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Tenofovir disoproxil fumarate (TDF)",
+            "description": "Ức chế men sao chép ngược loại nucleotide (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 11,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 12,
+          "dosage": "600 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Efavirenz (EFV)",
+            "description": "Ức chế men sao chép ngược không nucleoside (NNRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "600 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 3,
+      "name": "AZT + 3TC + DTG (Bậc 1 thay thế)",
+      "contraindication": "Thiếu máu nặng (AZT); thận trọng với phụ nữ có thai (DTG).",
+      "sideEffect": "Thiếu máu, mệt mỏi (AZT); mất ngủ, nhức đầu (DTG).",
+      "dosageForm": "Viên nén bao phim",
+      "instructions": "AZT & 3TC uống 2 lần/ngày; DTG 1 lần/ngày vào buổi sáng hoặc tối.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 16,
+          "dosage": "300 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Zidovudine (AZT)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 17,
+          "dosage": "300 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 18,
+          "dosage": "50 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Dolutegravir (DTG)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "50 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 4,
+      "name": "ABC + 3TC + DTG + DRV/r",
+      "contraindication": "HLA-B*5701 dương tính (ABC); suy gan nặng (DRV/r).",
+      "sideEffect": "Tiêu chảy, tăng men gan (DRV/r); mất ngủ (DTG); phản ứng quá mẫn (ABC).",
+      "dosageForm": null,
+      "instructions": "ABC & 3TC uống 1 lần/ngày; DTG 2 lần/ngày; DRV/r 2 lần/ngày cùng thức ăn.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 23,
+          "dosage": "600 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Abacavir (ABC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 24,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 25,
+          "dosage": "50 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Dolutegravir (DTG)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "50 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 26,
+          "dosage": "800 mg/100 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Darunavir/ritonavir (DRV/r)",
+            "description": "Ức chế men protease phối hợp ritonavir (PI/r)",
+            "dosageForm": "Viên nén",
+            "strength": "800 mg/100 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 5,
+      "name": "TDF + 3TC + DTG (Dự phòng sau phơi nhiễm PEP)",
+      "contraindication": "Không dùng nếu đã nhiễm HIV; suy thận nặng (TDF).",
+      "sideEffect": "Buồn nôn, đau đầu; có thể tăng creatinin nhẹ.",
+      "dosageForm": "Viên nén bao phim",
+      "instructions": "Bắt đầu trong 72 giờ sau phơi nhiễm, uống 1 lần/ngày mỗi thuốc, duy trì 28 ngày.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 30,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "28 ngày",
+          "medication": {
+            "medicationId": 0,
+            "name": "Tenofovir disoproxil fumarate (TDF)",
+            "description": "Ức chế men sao chép ngược loại nucleotide (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 31,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "28 ngày",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 32,
+          "dosage": "50 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "28 ngày",
+          "medication": {
+            "medicationId": 0,
+            "name": "Dolutegravir (DTG)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "50 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 6,
+      "name": "TDF + 3TC + DTG (Ưu tiên mang thai)",
+      "contraindication": "Suy thận nặng (TDF); thận trọng 3 tháng đầu (DTG).",
+      "sideEffect": "Tương tự phác đồ ưu tiên bậc 1: buồn nôn, mất ngủ, ảnh hưởng thận/xương.",
+      "dosageForm": "Viên nén bao phim",
+      "instructions": "Uống 1 lần/ngày, bắt đầu càng sớm càng tốt khi biết có thai, duy trì suốt đời.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 36,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "suốt thai kỳ & duy trì",
+          "medication": {
+            "medicationId": 0,
+            "name": "Tenofovir disoproxil fumarate (TDF)",
+            "description": "Ức chế men sao chép ngược loại nucleotide (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 37,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "suốt thai kỳ & duy trì",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 38,
+          "dosage": "50 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "suốt thai kỳ & duy trì",
+          "medication": {
+            "medicationId": 0,
+            "name": "Dolutegravir (DTG)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "50 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 7,
+      "name": "AZT + 3TC + LPV/r (Bậc 2)",
+      "contraindication": "Thiếu máu nặng (AZT); rối loạn tiêu hóa (LPV/r).",
+      "sideEffect": "Thiếu máu, mệt mỏi (AZT); tiêu chảy, tăng men gan (LPV/r).",
+      "dosageForm": "Viên nén và viên phối hợp cố định",
+      "instructions": "AZT & 3TC uống 2 lần/ngày; LPV/r uống 2 lần/ngày cùng thức ăn.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 42,
+          "dosage": "300 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Zidovudine (AZT)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 43,
+          "dosage": "300 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 44,
+          "dosage": "200 mg/50 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lopinavir/ritonavir (LPV/r)",
+            "description": "Ức chế men protease phối hợp ritonavir (PI/r)",
+            "dosageForm": "Viên nén",
+            "strength": "200 mg/50 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 8,
+      "name": "AZT + 3TC + DRV/r (Bậc 2 thay thế)",
+      "contraindication": "Suy gan nặng (DRV/r); thiếu máu nặng (AZT).",
+      "sideEffect": "Tăng men gan, tiêu chảy (DRV/r); thiếu máu (AZT).",
+      "dosageForm": "Viên nén và viên phối hợp cố định",
+      "instructions": "AZT & 3TC uống 2 lần/ngày; DRV/r uống 2 lần/ngày cùng thức ăn.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 48,
+          "dosage": "300 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Zidovudine (AZT)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 49,
+          "dosage": "300 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 50,
+          "dosage": "800 mg/100 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Darunavir/ritonavir (DRV/r)",
+            "description": "Ức chế men protease phối hợp ritonavir (PI/r)",
+            "dosageForm": "Viên nén",
+            "strength": "800 mg/100 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 9,
+      "name": "ABC + 3TC + DTG + DRV/r (Bậc 2 và 3)",
+      "contraindication": "HLA-B*5701 dương tính (ABC); suy gan nặng (DRV/r).",
+      "sideEffect": "Phản ứng quá mẫn (ABC); tiêu chảy, tăng men gan (DRV/r); mất ngủ (DTG).",
+      "dosageForm": "Viên nén tách riêng (không có phối hợp cố định)",
+      "instructions": "ABC & 3TC uống 1 lần/ngày; DTG 2 lần/ngày; DRV/r 2 lần/ngày cùng thức ăn.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 55,
+          "dosage": "600 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Abacavir (ABC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 56,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 57,
+          "dosage": "50 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Dolutegravir (DTG)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "50 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 58,
+          "dosage": "800 mg/100 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Darunavir/ritonavir (DRV/r)",
+            "description": "Ức chế men protease phối hợp ritonavir (PI/r)",
+            "dosageForm": "Viên nén",
+            "strength": "800 mg/100 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 10,
+      "name": "TDF + 3TC + RAL (Bậc 2 thay thế)",
+      "contraindication": "Không dung nạp Raltegravir.",
+      "sideEffect": "Đau đầu, buồn nôn, tiêu chảy (RAL).",
+      "dosageForm": "Viên nén và viên bao phim",
+      "instructions": "TDF & 3TC uống 1 lần/ngày; RAL uống 2 lần/ngày.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 62,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Tenofovir disoproxil fumarate (TDF)",
+            "description": "Ức chế men sao chép ngược loại nucleotide (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 63,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 64,
+          "dosage": "400 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Raltegravir (RAL)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "400 mg"
+          }
+        }
+      ]
+    },
+    {
+      "prescriptionId": 11,
+      "name": "DRV/r + RAL + Optimized NRTIs (Bậc 3)",
+      "contraindication": "Suy gan nặng (DRV/r), không dung nạp RAL.",
+      "sideEffect": "Tiêu chảy, tăng men gan (DRV/r); đau đầu, buồn nôn (RAL).",
+      "dosageForm": "Viên nén tách riêng",
+      "instructions": "DRV/r uống 2 lần/ngày cùng thức ăn; RAL uống 2 lần/ngày; NRTIs theo chỉ định.",
+      "prescriptionItems": [
+        {
+          "prescriptionItemId": 69,
+          "dosage": "800 mg/100 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Darunavir/ritonavir (DRV/r)",
+            "description": "Ức chế men protease phối hợp ritonavir (PI/r)",
+            "dosageForm": "Viên nén",
+            "strength": "800 mg/100 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 70,
+          "dosage": "400 mg",
+          "frequency": "2 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Raltegravir (RAL)",
+            "description": "Ức chế men tích hợp (INSTI)",
+            "dosageForm": "Viên bao phim",
+            "strength": "400 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 71,
+          "dosage": "600 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Abacavir (ABC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        },
+        {
+          "prescriptionItemId": 72,
+          "dosage": "300 mg",
+          "frequency": "1 lần/ngày",
+          "duration": "liên tục",
+          "medication": {
+            "medicationId": 0,
+            "name": "Lamivudine (3TC)",
+            "description": "Ức chế men sao chép ngược loại nucleoside (NRTI)",
+            "dosageForm": "Viên nén",
+            "strength": "300 mg"
+          }
+        }
+      ]
+    }
+  ]
+}

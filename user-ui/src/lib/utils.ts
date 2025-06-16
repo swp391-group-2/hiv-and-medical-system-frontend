@@ -8,3 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export const formatISO = (raw: string) =>
   format(parseISO(raw), "MMM d, yyyy, h:mm a");
+<<<<<<< HEAD
+=======
+
+export const formatMDY = (raw: string) => format(parseISO(raw), "MMM d, yyyy");
+
+export const formatDMY = (raw: string) => format(parseISO(raw), "d/MM/yyyy");
+>>>>>>> origin/develop
