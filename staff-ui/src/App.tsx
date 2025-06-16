@@ -28,19 +28,23 @@ function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            <Route element={<UnauthLayout />}>
+            {/* unauth screen */}
+            <Route path="/" element={<UnauthLayout />}>
               <Route index element={<Navigate to="login" />} />
               <Route path="/login" element={<LoginPage />} />
             </Route>
+            {/* laboratory */}
             <Route path="lab" element={<LabSidebar />}>
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<Lab />} />
             </Route>
+            {/* manager */}
             <Route path="manager" element={<ManagerSidebar />}>
               <Route index element={<Navigate to="dashboard" replace />} />
               <Route path="dashboard" element={<ManagerDashboard />} />
               <Route path="arv" element={<ManagerARV />} />
             </Route>
+            {/* staff */}
             <Route
               path="staff"
               element={
