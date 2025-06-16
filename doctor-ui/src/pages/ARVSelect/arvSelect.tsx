@@ -9,10 +9,12 @@ import PrescriptionList from "@/components/ARVSeckectComponent/arvProtocolsSecti
 import PrescriptionDetailCard from "@/components/ARVSeckectComponent/arvProtocolsDetailCard";
 
 import {
+  fetchAppointmentDetail,
   fetchARVProtocols,
   fetchPatientAlerts,
   fetchPatientInfo,
   selectPrescription,
+  updatePrescription,
 } from "@/api/doctorChonPhacDo";
 
 import type { Patient } from "@/types/patientType";
@@ -62,6 +64,7 @@ function ARVSeclect() {
           fetchPatientInfo(patient.patientId),
           fetchPatientAlerts(patient.patientId),
           fetchARVProtocols(),
+          console.log(appointmentId),
         ]);
 
         // Ưu tiên lab result từ location nếu có
@@ -112,17 +115,6 @@ function ARVSeclect() {
     init();
   }, [patient.patientId, appointmentId]);
 
-  // const handleSelectPrescription = async (prescription: Prescription) => {
-  //   setSelectedPrescription(prescription);
-  //   try {
-  //     await selectPrescription(appointmentId, prescription.prescriptionId);
-  //     alert("✅ Chọn phác đồ thành công!");
-  //   } catch (err) {
-  //     console.error("❌ Lỗi khi chọn phác đồ:", err);
-  //     alert("❌ Chọn phác đồ thất bại!");
-  //   }
-  // };
-
   return (
     <div className="max-w-6xl mx-auto p-4 space-y-4">
       <h1 className="text-2xl font-bold mb-2">Chọn phác đồ ARV</h1>
@@ -150,14 +142,34 @@ function ARVSeclect() {
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={async () => {
               try {
-                await selectPrescription(
-                  appointmentId,
-                  selectedPrescription.prescriptionId
+                const appointment = await fetchAppointmentDetail(appointmentId);
+
+                if (appointment.prescription) {
+                  const confirmUpdate = confirm(
+                    "⚠️ Bệnh nhân đã có phác đồ. Cập nhật lại?"
+                  );
+                  if (!confirmUpdate) return;
+
+                  await updatePrescription(
+                    appointmentId,
+                    selectedPrescription.prescriptionId
+                  );
+                  alert("✅ Cập nhật phác đồ thành công!");
+                } else {
+                  await selectPrescription(
+                    appointmentId,
+                    selectedPrescription.prescriptionId
+                  );
+                  alert("✅ Chọn phác đồ thành công!");
+                }
+              } catch (err: any) {
+                console.error(
+                  "❌ Lỗi khi xử lý phác đồ:",
+                  err.response?.data || err
                 );
-                alert("✅ Chọn phác đồ thành công!");
-              } catch (err) {
-                console.error("❌ Lỗi khi chọn phác đồ:", err);
-                alert("❌ Chọn phác đồ thất bại!");
+                alert(
+                  "❌ Thao tác thất bại: " + (err.response?.data?.message || "")
+                );
               }
             }}
           >
