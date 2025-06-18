@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
-import PatientInfoCard from "@/components/ARVSeckectComponent/patientInfoCard";
-import LatestTestResultCard from "@/components/ARVSeckectComponent/latestTestResultCard";
-import AlertsCard from "@/components/ARVSeckectComponent/aleartsCard";
-import TreatmentHistoryCard from "@/components/ARVSeckectComponent/treatmentHistoryCard";
-import PrescriptionList from "@/components/ARVSeckectComponent/arvProtocolsSection";
-import PrescriptionDetailCard from "@/components/ARVSeckectComponent/arvProtocolsDetailCard";
+import PatientInfoCard from "@/components/ARVSeclectComponent/patientInfoCard";
+import LatestTestResultCard from "@/components/ARVSeclectComponent/latestTestResultCard";
+import AlertsCard from "@/components/ARVSeclectComponent/aleartsCard";
+import TreatmentHistoryCard from "@/components/ARVSeclectComponent/treatmentHistoryCard";
+import PrescriptionList from "@/components/ARVSeclectComponent/arvProtocolsSection";
+import PrescriptionDetailCard from "@/components/ARVSeclectComponent/arvProtocolsDetailCard";
 
 import {
   fetchAppointmentDetail,

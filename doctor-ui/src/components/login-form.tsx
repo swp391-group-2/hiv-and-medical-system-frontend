@@ -60,6 +60,7 @@ export const LoginForm = () => {
       localStorage.setItem("accessToken", data.data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.data.refreshToken);
       localStorage.setItem("doctorEmail", data.data.data.user.email);
+      localStorage.setItem("doctorName", data.data.data.user.fullName);
       toast.success("Login successful!", {
         description: `Chào mừng ${
           data.data.data.user.fullName || "bạn"

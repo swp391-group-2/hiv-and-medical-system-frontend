@@ -8,7 +8,7 @@ interface Props {
 }
 
 const PatientItemPending: React.FC<Props> = ({ appointment }) => {
-  const { patient, doctorName, labResult } = appointment;
+  const { patient, doctorName, labResult, appointmentCode} = appointment;
 
   const resultLabel = labResult?.conclusion ?? "Chờ kết quả";
   const resultColor = labResult ? "text-green-600" : "text-gray-600";
@@ -21,6 +21,9 @@ const PatientItemPending: React.FC<Props> = ({ appointment }) => {
           <div className="font-semibold">{patient.fullName}</div>
           <div className="text-sm text-gray-600">
             Mã BN: {patient.patientCode}
+          </div>
+           <div className="text-sm text-gray-600">
+           appointmentCode : {appointmentCode}
           </div>
           <div className="text-sm text-gray-600">Bác sĩ: {doctorName}</div>
           <div className={`text-sm ${resultColor}`}>
