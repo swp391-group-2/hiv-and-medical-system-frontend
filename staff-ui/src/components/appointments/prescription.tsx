@@ -18,7 +18,7 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
               Tên phác đồ
             </span>
             <span className="truncate text-gray-900">
-              {appt.prescription.name}
+              {appt.prescription.originalPrescription.name}
             </span>
           </div>
 
@@ -27,16 +27,23 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
               Chỉ dẫn uống
             </span>
             <span className="truncate text-gray-900">
-              {appt.prescription.instructions}
+              {appt.prescription.note}
             </span>
           </div>
-
+          <div className="flex items-start gap-4">
+            <span className="font-medium text-gray-600 shrink-0">
+              Uống trong:
+            </span>
+            <span className="flex-1 whitespace-normal break-words">
+              {appt.prescription.duration}
+            </span>
+          </div>
           <div className="flex items-start gap-4">
             <span className="font-medium text-gray-600 w-40 shrink-0">
               Chống chỉ định
             </span>
             <span className="truncate text-gray-900">
-              {appt.prescription.contraindication}
+              {appt.prescription.originalPrescription.contraindication}
             </span>
           </div>
 
@@ -45,7 +52,7 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
               Tác dụng phụ
             </span>
             <span className="truncate text-gray-900">
-              {appt.prescription.sideEffect}
+              {appt.prescription.originalPrescription.sideEffect}
             </span>
           </div>
 
@@ -57,7 +64,7 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
               <AccordionContent className="mt-2">
                 <Accordion type="single" collapsible>
                   {appt.prescription.prescriptionItems.map((item) => (
-                    <PresItem key={item.prescriptionItemId} item={item} />
+                    <PresItem key={item.id} item={item} />
                   ))}
                 </Accordion>
               </AccordionContent>
