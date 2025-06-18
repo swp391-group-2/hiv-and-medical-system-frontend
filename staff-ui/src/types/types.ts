@@ -62,7 +62,7 @@ export interface LabResult {
   resultStatus: LabResultStatus;
   conclusion: string;
   note: string;
-  resultDate: string; // ISO yyyy-MM-dd
+  resultDate: string;
   labSample: LabSample;
   labTestParameter: LabTestParameter;
 }
@@ -81,7 +81,6 @@ export interface PrescriptionItem {
   prescriptionItemId: number;
   dosage: string;
   frequency: string;
-  duration: string;
   medication: Medication;
 }
 
@@ -94,11 +93,32 @@ export interface Prescription {
   instructions: string;
   prescriptionDate: string; // YYYY-MM-DD
   prescriptionItems: PrescriptionItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PatientPrescription {
+  id: number;
+  duration: string;
+  note: string;
+  createdAt: string;
+  defPrescriptionId: number;
+  defPrescriptionName: string;
+  prescriptionItems: PatientPresItem[];
+}
+
+export interface PatientPresItem {
+  id: number;
+  dosage: string;
+  frequency: string;
+  quantity: number;
+  medication: Medication;
 }
 
 /** The full appointment DTO */
 export interface Appointment {
   appointmentId: number;
+  appointmentCode: string;
   status: AppointmentStatus;
   patient: Patient;
 
@@ -118,9 +138,9 @@ export interface Appointment {
   slotDescription: string;
 
   labSampleId: number | null;
-  labSample: LabSample; // optional until collected
-  labResult: LabResult; // optional until result exists
-  prescription: Prescription; // optional
+  labSample: LabSample;
+  labResult: LabResult;
+  prescription: Prescription;
 }
 
 export type Response<T> = {
