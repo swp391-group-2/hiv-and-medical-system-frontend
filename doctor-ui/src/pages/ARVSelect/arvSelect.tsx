@@ -7,6 +7,7 @@ import AlertsCard from "@/components/ARVSeclectComponent/aleartsCard";
 import TreatmentHistoryCard from "@/components/ARVSeclectComponent/treatmentHistoryCard";
 import PrescriptionList from "@/components/ARVSeclectComponent/arvProtocolsSection";
 import PrescriptionDetailCard from "@/components/ARVSeclectComponent/arvProtocolsDetailCard";
+import UpdatePrescriptionItemsModal from "@/components/ARVSeclectComponent/updatePrescriptionItems"; // Import modal
 
 import {
   fetchAppointmentDetail,
@@ -54,6 +55,7 @@ function ARVSeclect() {
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [selectedPrescription, setSelectedPrescription] =
     useState<Prescription | null>(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -135,9 +137,27 @@ function ARVSeclect() {
       />
 
       <PrescriptionDetailCard prescription={selectedPrescription} />
-
+      {/* Modal cập nhật thuốc */}
       {selectedPrescription && (
-        <div className="mt-4 flex justify-end">
+        <UpdatePrescriptionItemsModal
+          open={showUpdateModal}
+          onOpenChange={setShowUpdateModal}
+          prescription={selectedPrescription}
+          appointmentId={appointmentId}
+          onUpdated={async () => {
+            setShowUpdateModal(false);
+            // Có thể reload lại prescription nếu muốn
+          }}
+        />
+      )}
+      {selectedPrescription && (
+        <div className="mt-4 flex justify-end gap-2">
+          <button
+            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+            onClick={() => setShowUpdateModal(true)}
+          >
+            Cập nhật thuốc
+          </button>
           <button
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={async () => {

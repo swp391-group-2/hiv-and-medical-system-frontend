@@ -11,6 +11,7 @@ export interface PrescriptionItem {
   dosage: string;
   frequency: string;
   duration: string;
+  quantity: number;
   medication: Medication;
 }
 
