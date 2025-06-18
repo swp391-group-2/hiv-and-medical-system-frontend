@@ -11,7 +11,7 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
   return (
     <div className="space-y-4 p-4 bg-white rounded-xl shadow">
       <h2 className="text-xl font-semibold text-gray-800">Phác đồ điều trị</h2>
-      {appt.prescription !== null ? (
+      {appt.prescription !== null && appt.prescription !== undefined ? (
         <>
           <div className="flex items-start gap-4">
             <span className="font-medium text-gray-600 w-40 shrink-0">
