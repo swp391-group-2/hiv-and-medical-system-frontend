@@ -26,6 +26,7 @@ const PrescriptionDetailCard = ({
         <p className="font-medium mb-1">Chi tiết thuốc:</p>
         {prescription.prescriptionItems.map((item, index) => (
           <div key={index} className="mb-1 text-sm ">
+         
             <p>
               <strong>Thuốc:</strong> {item.medication.name}
             </p>
@@ -38,10 +39,10 @@ const PrescriptionDetailCard = ({
             <p>
               <strong>Thời gian:</strong> {item.duration}
             </p>
-            {/* <p>
-              <strong>Dạng bào chế:</strong> {item.medication.dosageForm}
+            <p>
+              {/* <strong>Dạng bào chế:</strong> {item.medication.dosageForm} */}
                <strong>Dạng viên:</strong> {item.medication.dosageForm}
-            </p> */}
+            </p>
             <p>
               <strong>Hàm lượng:</strong> {item.medication.strength}
             </p>

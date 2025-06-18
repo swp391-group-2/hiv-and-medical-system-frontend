@@ -1,10 +1,7 @@
 import PatientListManage from "@/components/PatientManagement/patientListManage";
 import React, { useEffect, useState } from "react";
 import type { Patient } from "../../types/patientType";
-import {
-  fetchAppointments,
-  fetchCompletedPatients,
-} from "@/api/doctorFetchPatientCompleteAPI";
+import { fetchCompletedAppointmentsByDoctor } from "@/api/doctorFetchPatientCompleteAPI";
 import HeaderStats from "@/components/PatientManagement/headerStats.t";
 import type { Appointment } from "@/types/appointment";
 
@@ -12,16 +9,23 @@ const PatientList = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(false);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const [patientsData, appointmentsData] = await Promise.all([
-          fetchCompletedPatients(),
-          fetchAppointments(),
-        ]);
-        setPatients(patientsData);
+        // Lấy các appointment đã hoàn thành của bác sĩ
+        const appointmentsData = await fetchCompletedAppointmentsByDoctor();
         setAppointments(appointmentsData);
+
+        // Lấy danh sách bệnh nhân từ các appointment này (loại trùng)
+        const uniquePatients: Record<string, Patient> = {};
+        appointmentsData.forEach((a) => {
+          if (a.patient && a.patient.patientId) {
+            uniquePatients[a.patient.patientId] = a.patient;
+          }
+        });
+        setPatients(Object.values(uniquePatients));
       } catch (error) {
         console.error("Lỗi khi fetch:", error);
       } finally {
@@ -41,14 +45,13 @@ const PatientList = () => {
 
       <HeaderStats
         totalPatients={patients.length}
-        totalTests={patients.length} // bạn có thể đổi thành logic thật
+        totalTests={appointments.length}
         testsLast30Days={
-          patients.filter((p) => {
-            const dateStr = p.dob;
+          appointments.filter((a) => {
+            const dateStr = a.date;
             if (!dateStr) return false;
             const date = new Date(dateStr);
             if (isNaN(date.getTime())) return false;
-
             const diff = (Date.now() - date.getTime()) / (1000 * 3600 * 24);
             return diff <= 30;
           }).length

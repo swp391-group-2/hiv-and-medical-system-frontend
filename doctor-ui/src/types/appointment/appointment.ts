@@ -3,6 +3,7 @@ import type { LabSample } from "./labSample";
 
 export interface Appointment {
   appointmentId: number;
+  appointmentCode : string;
   serviceType: "CONSULTATION" | "LAB" | "FOLLOW_UP";
   status:
     | "WAITING"
