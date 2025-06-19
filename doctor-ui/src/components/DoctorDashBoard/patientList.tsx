@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllAppointments } from "@/api/doctorDashboardAPI";
+import { getAllAppointments, getAllAppointmentsByDoctor } from "@/api/doctorDashboardAPI";
 import PatientCard from "./patientCard";
 import type { Appointment } from "@/types/appointment/appointment";
 
@@ -9,7 +9,7 @@ const PatientList = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const data = await getAllAppointments();
+        const data = await getAllAppointmentsByDoctor();
 
         const today = new Date().toISOString().split("T")[0];
 

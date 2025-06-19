@@ -1,6 +1,7 @@
-
+import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import { BASE_URL } from "./BaseURL";
+import type { Appointment } from "@/types/appointment";
 
 // ✅ Get thông tin bác sĩ
 export const getMyDoctorInfo = async () => {
@@ -35,3 +36,25 @@ export const getAllAppointments = async () => {
 
   return data; // ✅ Trả mảng lịch hẹn
 };
+export const getAllAppointmentsByDoctor = async (): Promise<Appointment[]> => {
+  const token = localStorage.getItem("accessToken");
+  if (!token) throw new Error("Không tìm thấy access token");
+
+  const decoded = jwtDecode(token) as { sub: string };
+  const doctorEmail = decoded.sub;
+   // 1. Lấy profile bác sĩ theo email
+  const profileRes = await axios.get(`${BASE_URL}doctors/doctorProfile/${doctorEmail}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const doctorFullName = profileRes.data.data.fullName;
+
+  // 2. Lấy tất cả appointments
+  const appointmentsRes = await axios.get(`${BASE_URL}appointments`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const allAppointments = appointmentsRes.data.data;
+  const filtered = allAppointments.filter(
+    (a: Appointment) =>
+      a.doctorName === doctorFullName )
+    return filtered;
+}

@@ -1,6 +1,6 @@
 import type { Prescription } from "@/types/prescription";
 
-const  PrescriptionDetailCard = ({
+const PrescriptionDetailCard = ({
   prescription,
 }: {
   prescription: Prescription | null;

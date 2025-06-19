@@ -8,8 +8,8 @@ export interface Medication {
 
 export interface PrescriptionItem {
   prescriptionItemId: number;
-  dosage: string;
-  frequency: string;
+  dosage: string;  //lieu dung
+  frequency: string; //tan suat
   duration: string;
   quantity: number;
   medication: Medication;

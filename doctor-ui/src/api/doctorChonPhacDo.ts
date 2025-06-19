@@ -75,16 +75,7 @@ export const fetchAppointmentDetail = async (appointmentId: number) => {
 };
 
 // ✅ Cập nhật phác đồ
-export const updatePrescription = async (
-  appointmentId: number,
-  prescriptionId: number
-) => {
-  const res = await axios.put(
-    `${BASE_URL}appointments/${appointmentId}/prescription`,
-    {prescriptionId}
-  );
-  return res.data;
-};
+
 // export const updatePrescriptionItem = async ( 
 // )=>{
 //   try{

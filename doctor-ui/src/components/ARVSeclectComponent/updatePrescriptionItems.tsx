@@ -3,12 +3,12 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogClose,
+  
 } from "@/components/ui/dialog";
 import React, { useState } from "react";
 import type { Prescription, PrescriptionItem } from "@/types/prescription";
 import {
-  updatePrescription,
+ 
   updatePrescriptionItem,
 } from "@/api/doctorChonPhacDo";
 
@@ -130,7 +130,7 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
             className="bg-blue-600 text-white px-4 py-2 rounded"
             onClick={handleSave}
           >
-            Lưu thay đổi
+            Xác nhận chọn phác đồ
           </button>
         </div>
       </DialogContent>
