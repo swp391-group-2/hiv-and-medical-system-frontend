@@ -6,7 +6,7 @@ const AppointmentStatSection = ({ list }: { list: AppointmentStat[] }) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center">
+        <CardTitle className="flex items-center text-2xl">
           <Activity className="h-5 w-5 mr-2" />
           Thống kê dịch vụ khám
         </CardTitle>
