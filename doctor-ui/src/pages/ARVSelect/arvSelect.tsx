@@ -150,7 +150,7 @@ function ARVSeclect() {
       )}
       {selectedPrescription && (
         <div className="mt-4 flex justify-end gap-2">
-          <button
+          {/* <button
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={async () => {
               try {
@@ -169,7 +169,7 @@ function ARVSeclect() {
             }}
           >
             Xác nhận chọn phác đồ
-          </button>
+          </button> */}
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={() => setShowUpdateModal(true)}

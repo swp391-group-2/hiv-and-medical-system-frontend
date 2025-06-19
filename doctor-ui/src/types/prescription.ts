@@ -10,8 +10,8 @@ export interface PrescriptionItem {
   prescriptionItemId: number;
   dosage: string;  //lieu dung
   frequency: string; //tan suat
-  duration: string;
-  quantity: number;
+  duration: string; //thoi gian
+  quantity: number;  //so luong
   medication: Medication;
 }
 
