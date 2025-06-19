@@ -1,11 +1,9 @@
-import { StatCards } from "@/components/stat-card-section";
+import { StatCardsSection } from "@/components/stat-card-section";
 
 const ManagerDashboard = () => {
   return (
-    <div>
-      <div className="flex flex-col">
-        <StatCards />
-      </div>
+    <div className="flex flex-col gap-4">
+      <StatCardsSection />
     </div>
   );
 };
