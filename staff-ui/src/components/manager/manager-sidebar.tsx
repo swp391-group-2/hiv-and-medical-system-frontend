@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { Grid2x2, Pill, User } from "lucide-react";
+import { Grid2x2, Pill, User, Users } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -24,7 +24,17 @@ const items = [
     icon: Grid2x2,
   },
   {
-    title: "ARV Storage",
+    title: "Quản lý bác sĩ",
+    url: "/manager/doctors",
+    icon: User,
+  },
+  {
+    title: "Quản lý Staff",
+    url: "/manager/staffs",
+    icon: Users,
+  },
+  {
+    title: "Quản lý phác đồ",
     url: "/manager/arv",
     icon: Pill,
   },

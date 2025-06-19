@@ -14,6 +14,8 @@ import { Toaster } from "sonner";
 import ManagerSidebar from "./components/manager/manager-sidebar";
 import ManagerDashboard from "./pages/manager/dashboard";
 import ManagerARV from "./pages/manager/arv";
+import ManagerDoctors from "./pages/manager/doctors";
+import ManagerStaffs from "./pages/manager/staffs";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +38,8 @@ function App() {
           <Route path="manager" element={<ManagerSidebar />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<ManagerDashboard />} />
+            <Route path="doctors" element={<ManagerDoctors />} />
+            <Route path="staffs" element={<ManagerStaffs />} />
             <Route path="arv" element={<ManagerARV />} />
           </Route>
           {/* staff */}
