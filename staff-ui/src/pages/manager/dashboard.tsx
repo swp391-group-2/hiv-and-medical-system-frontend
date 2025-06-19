@@ -1,4 +1,5 @@
 import AppointmentStatSection from "@/components/appointment-stat";
+import RecentActivities from "@/components/dashboard-recent-activities";
 import FavouriteDoctors from "@/components/favourite-doctors";
 import { StatCardsSection } from "@/components/stat-card-section";
 import { appointmentStats } from "@/pending-resource/sample-data";
@@ -11,6 +12,7 @@ const ManagerDashboard = () => {
         <AppointmentStatSection list={appointmentStats} />
         <FavouriteDoctors />
       </div>
+      <RecentActivities />
     </div>
   );
 };
