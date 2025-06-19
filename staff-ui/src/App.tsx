@@ -5,12 +5,8 @@ import Dashboard from "./pages/home";
 import UnauthLayout from "@/layout/unauth-layout";
 import UserProfile from "./pages/user/profile";
 import LoginPage from "./pages/auth/login";
-import Comeback from "./pages/appointment/comeback";
 import OngoingAppointments from "./pages/appointment/on-going";
 import FinishedAppointments from "./pages/appointment/finished";
-import ArvManagement from "./pages/management/arv";
-import DoctorSchedule from "./pages/management/doctor-schedule";
-import PatientsManagement from "./pages/management/patients";
 import CheckinPending from "./pages/appointment/checkin-pending";
 import Lab from "./pages/lab/lab";
 import LabSidebar from "./components/lab/lab-sidebar";
@@ -49,10 +45,6 @@ function App() {
             <Route path="checkin-pending" element={<CheckinPending />} />
             <Route path="on-going" element={<OngoingAppointments />} />
             <Route path="finished" element={<FinishedAppointments />} />
-            <Route path="comeback" element={<Comeback />} />
-            <Route path="patients" element={<PatientsManagement />} />
-            <Route path="arv" element={<ArvManagement />} />
-            <Route path="doctor-schedule" element={<DoctorSchedule />} />
             <Route path="profile" element={<UserProfile />} />
           </Route>
           {/* <Route

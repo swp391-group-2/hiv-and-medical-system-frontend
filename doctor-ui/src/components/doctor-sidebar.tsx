@@ -7,6 +7,7 @@ import {
   MessageCircle,
   Newspaper,
   Stethoscope,
+  LogOut,
 } from "lucide-react";
 import {
   Sidebar,
@@ -84,7 +85,7 @@ const DoctorSidebar = () => {
                 <Stethoscope className="h-5 w-5 text-sky-400" />
                 Các Tính Năng Của Bác Sĩ
               </SidebarGroupLabel>
-              <SidebarGroupContent>
+              <SidebarGroupContent className="flex flex-col flex-1 justify-between h-full">
                 <SidebarMenu className="space-y-2">
                   {items.map((item) => (
                     <SidebarMenuItem key={item.title}>
@@ -106,7 +107,15 @@ const DoctorSidebar = () => {
                     </SidebarMenuItem>
                   ))}
                 </SidebarMenu>
-                <Button onClick={handleLogout}>Logout</Button>
+                <div className="mt-8 flex flex-col">
+                  <Button
+                    onClick={handleLogout}
+                    className="w-full bg-red-600 text-white hover:bg-red-700 flex items-center justify-center gap-2 py-3 font-semibold rounded-lg transition"
+                  >
+                    <LogOut className="w-5 h-5" />
+                    Đăng xuất
+                  </Button>
+                </div>
               </SidebarGroupContent>
             </SidebarGroup>
           </SidebarContent>

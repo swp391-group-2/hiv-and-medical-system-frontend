@@ -37,6 +37,7 @@ function DoctorList() {
             key={doctor.doctorId}
             doctorId={doctor.doctorId}
             fullName={doctor.fullName}
+            image={doctor.urlImage}
             email={doctor.email}
             selectDoctor={selectDoctor}
           />

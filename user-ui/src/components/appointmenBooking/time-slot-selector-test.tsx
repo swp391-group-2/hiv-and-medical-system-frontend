@@ -91,7 +91,7 @@ const TimeSlotSelectorTest = ({
                   }
                 `}
               >
-                {slot.slot.startTime + slot.slot.endTime}
+                {slot.slot.startTime + "-" + slot.slot.endTime}
               </button>
             ))}
           </div>

@@ -46,13 +46,21 @@ export const LoginForm = () => {
   const { mutate: login, status } = useMutation({
     mutationFn: async (value: LoginFormValues) => await authApi.login(value),
     onSuccess: (data) => {
-      loginStore(data.data.data.user);
-      console.log("doctor email", data.data.data.user.email);
-      console.log("Login successful:", data.data.data.user);
+      // Map user object to match expected User type for loginStore
+      const apiUser = data.data.data.user;
+      const mappedUser = {
+        ...apiUser,
+        id: apiUser.userId ?? apiUser.userId ?? "", // fallback if id is named _id or missing
+        name: apiUser.fullName ?? apiUser.fullName ?? apiUser.email ?? "", // fallback to fullName or email
+      };
+      loginStore(mappedUser);
+      console.log("doctor email", mappedUser.email);
+      console.log("Login successful:", mappedUser);
       console.log("Access Token:", data.data.data.accessToken);
       localStorage.setItem("accessToken", data.data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.data.refreshToken);
       localStorage.setItem("doctorEmail", data.data.data.user.email);
+      localStorage.setItem("doctorName", data.data.data.user.fullName);
       toast.success("Login successful!", {
         description: `Chào mừng ${
           data.data.data.user.fullName || "bạn"
@@ -84,7 +92,7 @@ export const LoginForm = () => {
             <div className="flex justify-center mb-2">
               <Logo />
             </div>
-            <h1 className="text-4xl font-bold text-gray-900">Đăng nhập</h1>
+            <h1 className=" text-4xl font-bold text-gray-900">Đăng nhập dành cho bác sĩ</h1>
           </div>
 
           <Form {...form}>

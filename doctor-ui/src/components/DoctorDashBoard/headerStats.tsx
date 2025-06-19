@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, type JSX } from "react";
+import {  useEffect, useState, type JSX, type FC } from "react";
 import { CalendarDays, User, Clock, AlertTriangle } from "lucide-react";
 import { getTodaySchedule } from "@/api/doctorDashboardAPI";
 
@@ -18,19 +18,29 @@ const HeaderStats: FC = () => {
         const schedules = await getTodaySchedule();
 
         const total = schedules.reduce((acc, sch) => acc + sch.scheduleSlots.length, 0);
+        interface ScheduleSlot {
+          status: string;
+          slot?: {
+            description?: string;
+          };
+        }
         const completed = schedules.reduce(
           (acc, sch) =>
-            acc + sch.scheduleSlots.filter((s: any) => s.status === "FINISHED").length,
+            acc + sch.scheduleSlots.filter((s: ScheduleSlot) => s.status === "FINISHED").length,
           0
         );
         const waiting = schedules.reduce(
           (acc, sch) =>
-            acc + sch.scheduleSlots.filter((s: any) => s.status === "AVAILABLE").length,
+            acc + sch.scheduleSlots.filter((s: ScheduleSlot) => s.status === "AVAILABLE").length,
           0
         );
+
         const emergency = schedules.reduce(
           (acc, sch) =>
-            acc + sch.scheduleSlots.filter((s: any) => s.slot?.description?.includes("khẩn")).length,
+            acc +
+            sch.scheduleSlots.filter(
+              (s: ScheduleSlot) => s.slot?.description?.includes("khẩn")
+            ).length,
           0
         );
 

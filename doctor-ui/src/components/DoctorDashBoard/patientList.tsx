@@ -1,40 +1,41 @@
 import { useEffect, useState } from "react";
 import { getAllAppointments } from "@/api/doctorDashboardAPI";
-import type { Patient } from "@/types/patientType";
 import PatientCard from "./patientCard";
+import type { Appointment } from "@/types/appointment/appointment";
 
 const PatientList = () => {
-  const [patients, setPatients] = useState<Patient[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
 
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchAppointments = async () => {
       try {
         const data = await getAllAppointments();
 
         const today = new Date().toISOString().split("T")[0];
-        const todayPatients = data.filter((a: any) => a.date === today).map((a: any) => ({
-          name: a.patient?.fullName || "Ẩn danh",
-          time: a.time || "00:00",
-          type: a.type || "Định kỳ",
-          initials: a.patient?.fullName?.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase() || "BN",
-          status: a.status || "Chờ khám",
-        }));
 
-        setPatients(todayPatients);
+        // Lọc các lịch hẹn hôm nay
+        const todayAppointments = (data as Appointment[]).filter(
+          (a: Appointment) => a.date === today
+        );
+
+        setAppointments(todayAppointments);
       } catch (error) {
-        console.error("Không thể tải danh sách bệnh nhân:", error);
+        console.error("Không thể tải danh sách lịch hẹn:", error);
       }
     };
 
-    fetchPatients();
+    fetchAppointments();
   }, []);
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-sm">
       <h2 className="text-xl font-bold mb-4">👥 Bệnh nhân hôm nay</h2>
       <div className="space-y-4">
-        {patients.map((patient, index) => (
-          <PatientCard key={index} patient={patient} />
+        {appointments.map((appointment, index) => (
+          <PatientCard
+            key={appointment.appointmentId || index}
+            appointment={appointment}
+          />
         ))}
       </div>
       <button className="mt-4 text-center w-full text-sm text-blue-600 hover:underline">
