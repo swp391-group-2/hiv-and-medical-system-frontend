@@ -1,91 +1,129 @@
 import { Card, CardContent } from "@/components/ui/card";
+import type { StatCardStaticProps } from "@/types/stats";
 import {
   Calendar,
   TrendingUp,
   TrendingDown,
   UserCheck,
   Users,
-  type LucideIcon,
 } from "lucide-react";
-
-type StatCardStaticProps = {
-  title: string;
-  icon: LucideIcon;
-  value: string;
-  change: string;
-  isGrowing: boolean;
-  color: string;
-};
 
 const stats = [
   {
     title: "Tổng khách hàng",
-    icon: Users,
-    value: "24",
-    change: "+2",
-    color: "text-blue-600",
+    value: "1.234",
+    change: "+5%",
+    isGrowing: true,
   },
   {
     title: "Bác sĩ hoạt động",
-    icon: UserCheck,
-    value: "24",
-    change: "+2",
-    color: "text-green-600",
+    value: "56",
+    change: "-3%",
+    isGrowing: false,
   },
   {
     title: "Lịch hẹn hôm nay",
-    icon: Calendar,
-    value: "24",
-    change: "+2",
-    color: "text-purple-600",
+    value: "32",
+    change: "+12%",
+    isGrowing: true,
   },
   {
     title: "Doanh thu tháng",
-    icon: TrendingUp || TrendingDown,
-    value: "24",
-    change: "+2",
+    value: "₫120.500.000",
+    change: "+8%",
     isGrowing: true,
-    color: "text-orange-600",
   },
 ] as StatCardStaticProps[];
-
-export const StatCard = ({
-  index,
-  stat,
-}: {
-  index: string;
-  stat: StatCardStaticProps;
-}) => {
-  return (
-    <Card key={index}>
-      <CardContent className="p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-            <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-            <p className="text-sm text-green-600">{stat.change}</p>
-          </div>
-          {stat.title === "Doanh thu tháng" ? (
-            stat.isGrowing ? (
-              <TrendingUp className={`h-8 w-8 ${stat.color}`} />
-            ) : (
-              <TrendingDown className={`h-8 w-8 ${stat.color}`} />
-            )
-          ) : (
-            <stat.icon className={`h-8 w-8 ${stat.color}`} />
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
 
 export function StatCardsSection() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((item) => (
-        <StatCard index={item.title} stat={item} />
-      ))}
+      {stats.map((item) => {
+        switch (item.title) {
+          case "Tổng khách hàng":
+            return (
+              <Card key="Tổng khách hàng">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Tổng khách hàng
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {item.value}
+                      </p>
+                      <p className="text-sm text-green-600">{item.change}</p>
+                    </div>
+                    <Users className="h-8 w-8 text-blue-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          case "Bác sĩ hoạt động":
+            return (
+              <Card key="Bác sĩ hoạt động">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Bác sĩ hoạt động
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {item.value}
+                      </p>
+                      <p className="text-sm text-green-600">{item.change}</p>
+                    </div>
+                    <UserCheck className="h-8 w-8 text-green-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          case "Lịch hẹn hôm nay":
+            return (
+              <Card key="Lịch hẹn hôm nay">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Lịch hẹn hôm nay
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {item.value}
+                      </p>
+                      <p className="text-sm text-green-600">{item.change}</p>
+                    </div>
+                    <Calendar className="h-8 w-8 text-purple-600" />
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          case "Doanh thu tháng":
+            return (
+              <Card key="Doanh thu tháng">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">
+                        Doanh thu tháng
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {item.value}
+                      </p>
+                      <p className="text-sm text-green-600">{item.change}</p>
+                    </div>
+                    {item.isGrowing ? (
+                      <TrendingUp className="h-8 w-8 text-orange-600" />
+                    ) : (
+                      <TrendingDown className="h-8 w-8 text-orange-600" />
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          default:
+            return null;
+        }
+      })}
     </div>
   );
 }
