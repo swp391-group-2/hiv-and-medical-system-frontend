@@ -58,7 +58,7 @@ function App() {
               }
             /> */}
         </Routes>
-        <Toaster position="top-center" />
+        <Toaster richColors position="top-center" />
       </BrowserRouter>
     </QueryClientProvider>
   );
