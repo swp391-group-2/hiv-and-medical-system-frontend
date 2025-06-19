@@ -10,3 +10,10 @@ export type StatCardStaticProps = {
   change: string;
   isGrowing: boolean;
 };
+
+export type FavoriteDoctor = {
+  id: number;
+  name: string;
+  specialization: string;
+  totalAppointment: number;
+};

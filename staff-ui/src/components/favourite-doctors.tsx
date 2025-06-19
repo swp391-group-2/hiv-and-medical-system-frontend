@@ -1,13 +1,29 @@
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Heart } from "lucide-react";
+import type { FavoriteDoctor } from "@/types/stats";
 
 const popularDoctors = [
-  { name: "BS. Nguyễn Văn A", appointments: 89 },
-  { name: "BS. Trần Thị B", appointments: 76 },
-  { name: "BS. Lê Văn C", appointments: 65 },
-  { name: "BS. Phạm Thị D", appointments: 54 },
-];
+  {
+    id: 1,
+    name: "BS. Nguyễn Văn A",
+    specialization: "HIV",
+    totalAppointment: 89,
+  },
+  {
+    id: 2,
+    name: "BS. Trần Thị B",
+    specialization: "HIV",
+    totalAppointment: 76,
+  },
+  { id: 3, name: "BS. Lê Văn C", specialization: "HIV", totalAppointment: 65 },
+  {
+    id: 4,
+    name: "BS. Phạm Thị D",
+    specialization: "HIV",
+    totalAppointment: 54,
+  },
+] as FavoriteDoctor[];
 
 const FavouriteDoctors = () => {
   return (
@@ -26,9 +42,12 @@ const FavouriteDoctors = () => {
               key={index}
               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-200 cursor-pointer"
             >
-              <p className="font-medium">{doctor.name}</p>
+              <div>
+                <p className="font-medium">{doctor.name}</p>
+                <p className="text-sm text-gray-600">{doctor.specialization}</p>
+              </div>
               <Badge variant="secondary" className="bg-green-400">
-                {doctor.appointments} lịch hẹn
+                {doctor.totalAppointment} lịch hẹn
               </Badge>
             </div>
           ))}
