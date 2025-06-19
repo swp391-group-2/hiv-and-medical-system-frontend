@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllAppointments, getAllAppointmentsByDoctor } from "@/api/doctorDashboardAPI";
+import {  getAllAppointmentsByDoctor } from "@/api/doctorDashboardAPI";
 import PatientCard from "./patientCard";
 import type { Appointment } from "@/types/appointment/appointment";
 
