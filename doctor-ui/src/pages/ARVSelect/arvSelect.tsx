@@ -13,12 +13,12 @@ import {
   fetchARVProtocols,
   fetchPatientAlerts,
   fetchPatientInfo,
-  selectPrescription,
+ 
 } from "@/api/doctorChonPhacDo";
 
 import type { Patient } from "@/types/patientType";
 import type { Alerts, LatestTestResult, TreatmentHistory } from "@/types/type";
-import type { Prescription } from "@/types/prescription";
+import type { patientPrescription } from "@/types/prescription";
 
 function ARVSeclect() {
   const location = useLocation();
@@ -50,9 +50,9 @@ function ARVSeclect() {
     duration: "Không rõ",
     notes: "-",
   });
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [prescriptions, setPrescriptions] = useState<patientPrescription[]>([]);
   const [selectedPrescription, setSelectedPrescription] =
-    useState<Prescription | null>(null);
+    useState<patientPrescription | null>(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   useEffect(() => {
@@ -91,7 +91,7 @@ function ARVSeclect() {
         setAlerts(alert);
 
         const validPrescriptions = prescriptionsRes.filter(
-          (pres: any): pres is Prescription =>
+          (pres: any): pres is patientPrescription =>
             !!pres &&
             typeof pres.prescriptionId === "number" &&
             typeof pres.name === "string"

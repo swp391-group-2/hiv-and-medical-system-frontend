@@ -7,6 +7,7 @@ import type { Appointment } from "@/types/appointment";
 interface Props {
   patients: Patient[];
   appointments: Appointment[];
+
 }
 
 const PatientListManage: React.FC<Props> = ({  appointments }) => {
@@ -52,6 +53,7 @@ const PatientListManage: React.FC<Props> = ({  appointments }) => {
     return filteredAppointments.map((a) => ({
       patient: a.patient,
       appointment: a,
+      patientPrescription : a.patientPrescription,
     }));
   }, [appointments, searchTerm, filterType]);
 
@@ -69,11 +71,12 @@ const PatientListManage: React.FC<Props> = ({  appointments }) => {
       {filteredData.length === 0 ? (
         <p className="text-gray-500">Không tìm thấy bệnh nhân.</p>
       ) : (
-        filteredData.map(({ patient, appointment }) => (
+        filteredData.map(({ patient, appointment, }) => (
           <PatientCard
             key={`${patient.patientId}-${appointment.appointmentId}`}
             patient={patient}
             appointment={appointment}
+           
           />
         ))
       )}

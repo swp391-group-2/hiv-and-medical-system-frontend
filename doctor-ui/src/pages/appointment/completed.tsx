@@ -5,6 +5,7 @@ import { fetchCompletedAppointmentsByDoctor } from "@/api/doctorFetchPatientComp
 import HeaderStats from "@/components/PatientManagement/headerStats.t";
 import type { Appointment } from "@/types/appointment";
 
+
 const PatientList = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(false);
