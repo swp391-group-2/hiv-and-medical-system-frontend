@@ -10,6 +10,7 @@ export type LabResultStatus = "PENDING" | "REJECTED" | "FINISHED";
 export type ParameterType = "NUMERIC" | "TEXT";
 
 export type ServiceType = "CONSULTATION" | "LAB_TEST";
+export type ServiceName = "CONSULTATION" | "SCREENING" | "CONFIRMATORY";
 
 /** Patient info */
 export interface Patient {
@@ -122,7 +123,7 @@ export interface Appointment {
   patient: Patient;
 
   serviceId: number;
-  serviceName: string;
+  serviceName: ServiceName;
   serviceType: ServiceType;
   price: number;
   note: string;

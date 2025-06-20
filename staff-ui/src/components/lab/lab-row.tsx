@@ -16,7 +16,9 @@ export function LabRow({ appt }: { appt: Appointment }) {
           phone={appt.patient.phoneNumber}
         />
       </TableCell>
-      <TableCell>{appt.serviceType}</TableCell>
+      <TableCell>
+        {appt.serviceType === "CONSULTATION" ? "Khám combo" : "Xét nghiệm"}
+      </TableCell>
       <TableCell>{formatDMY(appt.date)}</TableCell>
       <TableCell>{appt.startTime}</TableCell>
       <TableCell>{appt.doctorName}</TableCell>
