@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from "react";
-import type { Prescription, PrescriptionItem } from "@/types/prescription";
+import type { patientPrescription, patientPrescriptionItems } from "@/types/prescription";
 import { updatePrescriptionItem } from "@/api/doctorChonPhacDo";
 import BasicModal from "../Modal/basicModal";
-import { Pill, PillBottle } from "lucide-react";
+import { Pill } from "lucide-react";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  prescription: Prescription;
+  prescription: patientPrescription;
   appointmentId: number;
   onUpdated?: () => void;
 }
+
+const frequencyOptions = [
+  "1 lần/ngày",
+  "2 lần/ngày",
+  "3 lần/ngày",
+  "1 lần/tuần",
+];
+
+const parseFrequency = (frequency: string): number => {
+  const lower = frequency.toLowerCase();
+  if (lower.includes("1 lần/ngày")) return 1;
+  if (lower.includes("2 lần/ngày")) return 2;
+  if (lower.includes("3 lần/ngày")) return 3;
+  if (lower.includes("1 lần/tuần")) return 1 / 7;
+  return 1;
+};
 
 const UpdatePrescriptionItemsModal: React.FC<Props> = ({
   open,
@@ -19,23 +35,37 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
   appointmentId,
   onUpdated,
 }) => {
-  const [items, setItems] = useState<PrescriptionItem[]>(
-    prescription.prescriptionItems
-  );
+  const [items, setItems] = useState<patientPrescriptionItems[]>(prescription.patientPrescriptionItems);
 
   useEffect(() => {
     if (open) {
-      setItems(prescription.prescriptionItems);
+      setItems(prescription.patientPrescriptionItems);
     }
-  }, [open, prescription.prescriptionItems]);
+  }, [open, prescription.patientPrescriptionItems]);
 
   const handleChange = (
     idx: number,
-    field: keyof PrescriptionItem,
+    field: keyof patientPrescriptionItems,
     value: string
   ) => {
     setItems((prev) =>
-      prev.map((item, i) => (i === idx ? { ...item, [field]: value } : item))
+      prev.map((item, i) => {
+        if (i !== idx) return item;
+
+        const newItem = { ...item, [field]: value };
+
+        if (field === "frequency" || field === "duration") {
+          const freqPerDay = parseFrequency(
+            field === "frequency" ? value : item.frequency
+          );
+          const days = parseFloat(field === "duration" ? value : item.duration);
+          if (!isNaN(freqPerDay) && !isNaN(days)) {
+            newItem.quantity = Math.ceil(freqPerDay * days);
+          }
+        }
+
+        return newItem;
+      })
     );
   };
 
@@ -51,6 +81,7 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
       onUpdated?.();
     } catch (err) {
       alert("Cập nhật thất bại!");
+      console.error("Cập nhật thuốc thất bại:", err);
     }
   };
 
@@ -86,25 +117,27 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
                 <label className="block text-xs font-medium text-gray-600 mb-1">
                   Tần suất
                 </label>
-                <input
-                  type="text"
+                <select
                   value={item.frequency}
-                  onChange={(e) =>
-                    handleChange(idx, "frequency", e.target.value)
-                  }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                />
+                  onChange={(e) => handleChange(idx, "frequency", e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring focus:ring-blue-200"
+                >
+                  {frequencyOptions.map((freq) => (
+                    <option key={freq} value={freq}>
+                      {freq}
+                    </option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-600 mb-1">
                   Thời gian (ngày)
                 </label>
                 <input
-                  type="text"
+                  type="number"
+                  min={1}
                   value={item.duration}
-                  onChange={(e) =>
-                    handleChange(idx, "duration", e.target.value)
-                  }
+                  onChange={(e) => handleChange(idx, "duration", e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
                 />
               </div>
@@ -116,10 +149,8 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
                   type="number"
                   min={0}
                   value={item.quantity || ""}
-                  onChange={(e) =>
-                    handleChange(idx, "quantity", e.target.value)
-                  }
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+                  readOnly
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
                 />
               </div>
             </div>

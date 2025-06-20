@@ -1,3 +1,5 @@
+
+import type { patientPrescription } from "../prescription";
 import type { LabResult } from "./labResult";
 import type { LabSample } from "./labSample";
 
@@ -32,4 +34,5 @@ export interface Appointment {
 
   labSample?: LabSample;
   labResult?: LabResult;
+  patientPrescription: patientPrescription
 }
