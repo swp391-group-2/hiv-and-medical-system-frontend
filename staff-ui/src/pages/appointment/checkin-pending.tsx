@@ -20,6 +20,7 @@ const CheckinPending = () => {
 
   const [filters, setFilters] = useState<Filters>({
     search: "",
+    date: "default",
     startHour: "default",
     serviceType: "default",
   });
@@ -36,6 +37,12 @@ const CheckinPending = () => {
             a.patient.fullName.toLowerCase().includes(q) ||
             a.patient.phoneNumber.includes(q)
           );
+        }
+        return true;
+      })
+      .filter((a) => {
+        if (filters.date && filters.date !== "default") {
+          return formatDMY(a.date) === filters.date;
         }
         return true;
       })
