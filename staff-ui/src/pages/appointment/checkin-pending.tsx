@@ -20,6 +20,8 @@ const CheckinPending = () => {
 
   const [filters, setFilters] = useState<Filters>({
     search: "",
+    date: "default",
+    startHour: "default",
     serviceType: "default",
   });
 
@@ -39,8 +41,20 @@ const CheckinPending = () => {
         return true;
       })
       .filter((a) => {
+        if (filters.date && filters.date !== "default") {
+          return formatDMY(a.date) === filters.date;
+        }
+        return true;
+      })
+      .filter((a) => {
         if (filters.serviceType && filters.serviceType !== "default") {
           return a.serviceType === filters.serviceType;
+        }
+        return true;
+      })
+      .filter((a) => {
+        if (filters.startHour && filters.startHour !== "default") {
+          return a.startTime === filters.startHour;
         }
         return true;
       });
