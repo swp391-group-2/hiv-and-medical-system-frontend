@@ -9,11 +9,12 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { Funnel, Search } from "lucide-react";
+import { Funnel, Search, Clock } from "lucide-react";
 import { useState } from "react";
 
 export type Filters = {
   search: string;
+  startHour: string;
   serviceType: string;
 };
 
@@ -24,6 +25,7 @@ export function AppointmentFilters({
 }) {
   const [search, setSearch] = useState("");
   const [serviceType, setServiceType] = useState("");
+  const [startHour, setStartHour] = useState("");
 
   return (
     <Card className="w-full mt-4 mb-4">
@@ -42,6 +44,23 @@ export function AppointmentFilters({
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
+          <Select value={startHour} onValueChange={setStartHour}>
+            <SelectTrigger className="w-[200px] justify-start cursor-pointer">
+              <Clock className="mr-2 h-4 w-4" />
+              <SelectValue placeholder="Giờ" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="default">Tất cả ca</SelectItem>
+              <SelectItem value="07:00:00">7:00</SelectItem>
+              <SelectItem value="08:00:00">8:00</SelectItem>
+              <SelectItem value="09:00:00">9:00</SelectItem>
+              <SelectItem value="10:00:00">10:00</SelectItem>
+              <SelectItem value="13:00:00">13:00</SelectItem>
+              <SelectItem value="14:00:00">14:00</SelectItem>
+              <SelectItem value="15:00:00">15:00</SelectItem>
+              <SelectItem value="16:00:00">16:00</SelectItem>
+            </SelectContent>
+          </Select>
 
           <Select value={serviceType} onValueChange={setServiceType}>
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
@@ -61,7 +80,7 @@ export function AppointmentFilters({
           <Button
             variant="outline"
             className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white hover:text-white"
-            onClick={() => onApply({ search, serviceType })}
+            onClick={() => onApply({ search, startHour, serviceType })}
           >
             Áp dụng
           </Button>
