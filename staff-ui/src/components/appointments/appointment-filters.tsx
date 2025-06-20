@@ -8,16 +8,10 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
 
-import { Funnel, Search, Clock, Calendar as CalendarIcon } from "lucide-react";
+import { Funnel, Search, Clock, Calendar } from "lucide-react";
 import { useState } from "react";
 import { formatDMY } from "@/lib/utils";
-import { Calendar } from "../ui/calendar";
 
 export type Filters = {
   search: string;
@@ -55,7 +49,7 @@ export function AppointmentFilters({
           </div>
           <Select value={date} onValueChange={setDate}>
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
-              <Clock className="mr-2 h-4 w-4" />
+              <Calendar className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Ngày" />
             </SelectTrigger>
             <SelectContent>
