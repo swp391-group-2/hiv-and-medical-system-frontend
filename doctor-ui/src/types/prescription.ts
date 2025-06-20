@@ -8,9 +8,10 @@ export interface Medication {
 
 export interface PrescriptionItem {
   prescriptionItemId: number;
-  dosage: string;
-  frequency: string;
-  duration: string;
+  dosage: string;  //lieu dung
+  frequency: string; //tan suat
+  duration: string; //thoi gian
+  quantity: number;  //so luong
   medication: Medication;
 }
 

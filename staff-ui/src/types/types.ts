@@ -148,3 +148,10 @@ export type Response<T> = {
   message: string;
   data: Array<T>;
 };
+
+export type ResponseSingleObject<T> = {
+  code: number;
+  success: boolean;
+  message: string;
+  data: T;
+};

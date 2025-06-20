@@ -7,14 +7,13 @@ import AlertsCard from "@/components/ARVSeclectComponent/aleartsCard";
 import TreatmentHistoryCard from "@/components/ARVSeclectComponent/treatmentHistoryCard";
 import PrescriptionList from "@/components/ARVSeclectComponent/arvProtocolsSection";
 import PrescriptionDetailCard from "@/components/ARVSeclectComponent/arvProtocolsDetailCard";
+import UpdatePrescriptionItemsModal from "@/components/ARVSeclectComponent/updatePrescriptionItems"; // Import modal
 
 import {
-  fetchAppointmentDetail,
   fetchARVProtocols,
   fetchPatientAlerts,
   fetchPatientInfo,
   selectPrescription,
-  updatePrescription,
 } from "@/api/doctorChonPhacDo";
 
 import type { Patient } from "@/types/patientType";
@@ -54,6 +53,7 @@ function ARVSeclect() {
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
   const [selectedPrescription, setSelectedPrescription] =
     useState<Prescription | null>(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
 
   useEffect(() => {
     const init = async () => {
@@ -135,45 +135,46 @@ function ARVSeclect() {
       />
 
       <PrescriptionDetailCard prescription={selectedPrescription} />
-
+      {/* Modal cập nhật thuốc */}
       {selectedPrescription && (
-        <div className="mt-4 flex justify-end">
-          <button
+        <UpdatePrescriptionItemsModal
+          open={showUpdateModal}
+          onOpenChange={setShowUpdateModal}
+          prescription={selectedPrescription}
+          appointmentId={appointmentId}
+          onUpdated={async () => {
+            setShowUpdateModal(false);
+            // Có thể reload lại prescription nếu muốn
+          }}
+        />
+      )}
+      {selectedPrescription && (
+        <div className="mt-4 flex justify-end gap-2">
+          {/* <button
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
             onClick={async () => {
               try {
-                const appointment = await fetchAppointmentDetail(appointmentId);
-
-                if (appointment.prescription) {
-                  const confirmUpdate = confirm(
-                    "⚠️ Bệnh nhân đã có phác đồ. Cập nhật lại?"
-                  );
-                  if (!confirmUpdate) return;
-
-                  await updatePrescription(
-                    appointmentId,
-                    selectedPrescription.prescriptionId
-                  );
-                  alert("✅ Cập nhật phác đồ thành công!");
-                } else {
-                  await selectPrescription(
-                    appointmentId,
-                    selectedPrescription.prescriptionId
-                  );
-                  alert("✅ Chọn phác đồ thành công!");
-                }
+                await selectPrescription(
+                  appointmentId,
+                  selectedPrescription.prescriptionId
+                );
+                alert("✅ Đã chọn phác đồ mới cho bệnh nhân!");
               } catch (err: any) {
                 console.error(
-                  "❌ Lỗi khi xử lý phác đồ:",
+                  "❌ Lỗi khi chọn phác đồ:",
                   err.response?.data || err
                 );
-                alert(
-                  "❌ Thao tác thất bại: " + (err.response?.data?.message || "")
-                );
+                alert("❌ Thất bại: " + (err.response?.data?.message || ""));
               }
             }}
           >
             Xác nhận chọn phác đồ
+          </button> */}
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={() => setShowUpdateModal(true)}
+          >
+            Kê đơn thuốc
           </button>
         </div>
       )}
