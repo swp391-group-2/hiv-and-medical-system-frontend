@@ -9,8 +9,8 @@ export const AppRoutes = {
   CONSULTATION: "/consultation",
   CONSULTATION_DOCTORS: "/consultation/doctors",
   //   đăn ký đăng nhập
-  LOGIN: "auth/login",
-  REGISTER: "auth/register",
+  LOGIN: "/auth/login",
+  REGISTER: "/auth/register",
 
   // Các trang thông tin
   EDUCATION: "/education",
