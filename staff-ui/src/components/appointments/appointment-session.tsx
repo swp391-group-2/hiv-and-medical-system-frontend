@@ -124,7 +124,7 @@ const AppointmentSession = ({ appt }: { appt: Appointment }) => {
         <Card className="w-full shadow-lg">
           <CardHeader className="flex items-center justify-between">
             <CardTitle className="text-xl font-semibold">
-              {appt.serviceName}
+              Mã số: {appt.appointmentCode} - {appt.serviceName}
             </CardTitle>
             <StatusBadge status={appt.status} />
           </CardHeader>
