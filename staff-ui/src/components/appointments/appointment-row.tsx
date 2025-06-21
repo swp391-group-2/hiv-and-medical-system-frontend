@@ -24,7 +24,7 @@ export function AppointmentRow({
           phone={appt.patient.phoneNumber}
         />
       </TableCell>
-      <TableCell>{appt.serviceType}</TableCell>
+      <TableCell>{appt.serviceName}</TableCell>
       <TableCell>{formatDMY(appt.date)}</TableCell>
       <TableCell>{appt.startTime}</TableCell>
       <TableCell>

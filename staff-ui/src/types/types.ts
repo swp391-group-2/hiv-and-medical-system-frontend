@@ -10,6 +10,7 @@ export type LabResultStatus = "PENDING" | "REJECTED" | "FINISHED";
 export type ParameterType = "NUMERIC" | "TEXT";
 
 export type ServiceType = "CONSULTATION" | "LAB_TEST";
+export type ServiceName = "CONSULTATION" | "SCREENING" | "CONFIRMATORY";
 
 /** Patient info */
 export interface Patient {
@@ -62,7 +63,7 @@ export interface LabResult {
   resultStatus: LabResultStatus;
   conclusion: string;
   note: string;
-  resultDate: string; // ISO yyyy-MM-dd
+  resultDate: string;
   labSample: LabSample;
   labTestParameter: LabTestParameter;
 }
@@ -81,7 +82,6 @@ export interface PrescriptionItem {
   prescriptionItemId: number;
   dosage: string;
   frequency: string;
-  duration: string;
   medication: Medication;
 }
 
@@ -94,16 +94,36 @@ export interface Prescription {
   instructions: string;
   prescriptionDate: string; // YYYY-MM-DD
   prescriptionItems: PrescriptionItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PatientPrescription {
+  id: number;
+  duration: string;
+  note: string;
+  createdAt: string;
+  originalPrescription: Prescription;
+  prescriptionItems: PatientPresItem[];
+}
+
+export interface PatientPresItem {
+  id: number;
+  dosage: string;
+  frequency: string;
+  quantity: number;
+  medication: Medication;
 }
 
 /** The full appointment DTO */
 export interface Appointment {
   appointmentId: number;
+  appointmentCode: string;
   status: AppointmentStatus;
   patient: Patient;
 
   serviceId: number;
-  serviceName: string;
+  serviceName: ServiceName;
   serviceType: ServiceType;
   price: number;
   note: string;
@@ -118,9 +138,9 @@ export interface Appointment {
   slotDescription: string;
 
   labSampleId: number | null;
-  labSample: LabSample; // optional until collected
-  labResult: LabResult; // optional until result exists
-  prescription: Prescription; // optional
+  labSample: LabSample;
+  labResult: LabResult;
+  prescription: PatientPrescription;
 }
 
 export type Response<T> = {
@@ -128,4 +148,11 @@ export type Response<T> = {
   success: boolean;
   message: string;
   data: Array<T>;
+};
+
+export type ResponseSingleObject<T> = {
+  code: number;
+  success: boolean;
+  message: string;
+  data: T;
 };
