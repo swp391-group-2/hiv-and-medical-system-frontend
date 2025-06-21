@@ -26,6 +26,8 @@ export function ConfirmCheckinDialog({
       <DialogContent className="max-w-sm">
         <DialogHeader>
           <DialogTitle>
+            Mã số:{" "}
+            <span className="front-semibold">{appt.appointmentCode}</span>
             Xác nhận check-in cho{" "}
             <span className="font-semibold">{patientName}</span>
           </DialogTitle>
