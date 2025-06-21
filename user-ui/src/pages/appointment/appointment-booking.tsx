@@ -1,3 +1,4 @@
+import serviceApi from "@/apis/service.api";
 import MedicalFacilityInfo from "@/components/appointmenBooking/medical-facility-info";
 import TimeSlotSelectorConsultation from "@/components/appointmenBooking/time-slot-selector-consultation";
 import TimeSlotSelectorTest from "@/components/appointmenBooking/time-slot-selector-test";
@@ -10,6 +11,7 @@ import type {
   ScheduleSlot,
   TestScheduleSlotEntry,
 } from "@/types/schedule.type";
+import { useQuery } from "@tanstack/react-query";
 import { Undo2 } from "lucide-react";
 
 import { useState } from "react";
@@ -72,13 +74,47 @@ const AppointmentBooking = () => {
     }
   };
 
+  const { data: service, isLoading } = useQuery({
+    queryKey: ["service", serviceType],
+    queryFn: async () => {
+      if (!serviceType) {
+        throw new Error("Service type is required");
+      }
+      const response = await serviceApi
+        .getServicesByType(serviceType)
+        .then((res) => res.data);
+      return response;
+    },
+    enabled: !!serviceType,
+  });
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="flex flex-row gap-2">
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
+        </div>
+      </div>
+    );
+  }
+
+  if (!service) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="error">Failed to load service data</div>
+      </div>
+    );
+  }
+
   return (
     <section>
       <div className="container mx-auto min-h-screen">
         <div className="mt-7">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-1">
-              <MedicalFacilityInfo />
+              <MedicalFacilityInfo service={service} />
             </div>
             <div className="lg:col-span-3">
               <Card className="bg-white shadow-lg py-0 overflow-hidden">

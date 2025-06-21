@@ -2,7 +2,7 @@ import { Calendar, Clock, Gift, Search, ShieldCheck } from "lucide-react";
 import { Button } from "./ui/button";
 import heroImg from "/images/hero.jpg";
 import { Link } from "react-router-dom";
-import { AppRoutes } from "@/constants/appRoutes";
+import { AppRoutes, buildRoute } from "@/constants/appRoutes";
 
 function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
   return (
@@ -37,7 +37,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
                   <Search className="!w-[20px] !h-[20px]" /> Tìm Bác Sĩ
                 </Button>
               </Link>
-              <Link to={AppRoutes.CONSULTATION}>
+              <Link to={buildRoute.bookingService("consultation")}>
                 <Button
                   className="text-white border-0"
                   variant="destructive"

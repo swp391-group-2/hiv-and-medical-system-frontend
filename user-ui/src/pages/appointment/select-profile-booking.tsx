@@ -2,13 +2,32 @@ import userApi from "@/apis/user.api";
 import { getProfileFromLS } from "@/apis/userauth";
 import ProfileDone from "@/components/appointmenBooking/profile-done";
 import ProfileMissing from "@/components/appointmenBooking/profile-missing";
+import { buildRoute } from "@/constants/appRoutes";
 import useBookingStore from "@/stores/booking.store";
 import type { User } from "@/types/user.type";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 function SelectProfileBooking() {
   const user: User = getProfileFromLS();
+  const service = useBookingStore((state) => state.service);
 
+  const { doctorId, serviceType } = useParams<{
+    doctorId: string;
+    serviceType: string;
+  }>();
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!service) {
+      if (doctorId) {
+        navigate(buildRoute.bookingConsultationDoctor(doctorId));
+      } else if (serviceType) {
+        navigate(buildRoute.bookingService(serviceType));
+      }
+    }
+  }, [service, doctorId, serviceType, navigate]);
   const { data: patientData, isLoading } = useQuery({
     queryKey: ["patient-info", user.email],
     queryFn: async () => {
