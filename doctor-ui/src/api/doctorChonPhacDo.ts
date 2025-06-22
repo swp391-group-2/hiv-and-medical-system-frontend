@@ -94,29 +94,30 @@ export const updatePrescriptionItem = async (
   appointmentId: number,
   prescriptionId: number,
   items: patientPrescriptionItems[],
-  
+  note: string 
 ) => {
-  // Map prescriptionItems sang patientPrescriptionItems
   const patientPrescriptionItems = items.map((item) => ({
     dosage: item.dosage,
     frequency: item.frequency,
-    quantity: Number(item.quantity) || 0, // hoặc truyền đúng quantity nếu có
+    quantity: Number(item.quantity) || 0,
     medicationId: item.medication.medicationId,
   }));
 
-  // Bạn có thể lấy duration, frequency, quantity tổng thể từ prescription hoặc từ item đầu tiên
   const body = {
     duration: items[0]?.duration || "1 tháng",
     frequency: items[0]?.frequency || "1 lần/ngày",
     quantity: items[0]?.quantity ? Number(items[0].quantity) : 0,
     prescriptionId,
     appointmentId,
+    note, 
     patientPrescriptionItems,
   };
 
   const res = await axios.post(`${BASE_URL}prescriptions/patients`, body);
+  console.log("🔍 Body gửi lên server:", body);
   return res.data;
 };
+
 
 export const fetchPatientPrescription = async (
   appointmentId: number

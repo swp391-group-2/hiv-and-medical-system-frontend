@@ -77,21 +77,24 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
     );
   };
 
-  const handleSave = async () => {
-    try {
-      await updatePrescriptionItem(
-        appointmentId,
-        prescription.prescriptionId,
-        items
-      );
-      alert("Cập nhật thuốc thành công!");
-      onOpenChange(false);
-      onUpdated?.();
-    } catch (err) {
-      alert("Cập nhật thất bại!");
-      console.error("Cập nhật thuốc thất bại:", err);
-    }
-  };
+ const handleSave = async () => {
+  try {
+    await updatePrescriptionItem(
+      appointmentId,
+      prescription.prescriptionId,
+      items,
+      note // ✅ truyền note vào
+    );
+    alert("Cập nhật thuốc thành công!");
+    onOpenChange(false);
+    onUpdated?.();
+  } catch (err) {
+    alert("Cập nhật thất bại!");
+    console.error("Cập nhật thuốc thất bại:", err);
+    
+  }
+};
+
 
   return (
     <BasicModal open={open} onClose={() => onOpenChange(false)}>
