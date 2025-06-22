@@ -32,11 +32,10 @@ const LabTestRs = ({ appt }: { appt: Appointment }) => {
           <div className="flex flex-col">
             <span className="text-sm text-gray-500">Mẫu xét nghiệm</span>
             {appt.serviceType === "CONSULTATION" ? (
-              <span className="font-medium">
-                {appt.labSample.sampleCodeCD4 +
-                  ", " +
-                  appt.labSample.sampleCodeVirus}
-              </span>
+              <div className="flex flex-col font-medium">
+                <span>Mẫu CD4: {appt.labSample.sampleCodeCD4}</span>
+                <span>Mẫu virus: {appt.labSample.sampleCodeVirus}</span>
+              </div>
             ) : (
               <span className="font-medium">{appt.labSample.sampleType}</span>
             )}
