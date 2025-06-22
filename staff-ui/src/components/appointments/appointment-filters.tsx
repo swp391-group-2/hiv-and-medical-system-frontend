@@ -15,6 +15,7 @@ import { formatDMY } from "@/lib/utils";
 
 export type Filters = {
   search: string;
+  code: string;
   date: string;
   startHour: string;
   serviceType: string;
@@ -26,6 +27,7 @@ export function AppointmentFilters({
   onApply: (f: Filters) => void;
 }) {
   const [search, setSearch] = useState("");
+  const [searchCode, setSearchCode] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [startHour, setStartHour] = useState("");
   const [date, setDate] = useState("");
@@ -45,6 +47,15 @@ export function AppointmentFilters({
               placeholder="Tìm kiếm bệnh nhân..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Input
+              className="pl-10"
+              placeholder="Nhập mã lịch hẹn..."
+              value={searchCode}
+              onChange={(e) => setSearchCode(e.target.value)}
             />
           </div>
           <Select value={date} onValueChange={setDate}>
@@ -95,7 +106,15 @@ export function AppointmentFilters({
           <Button
             variant="outline"
             className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white hover:text-white"
-            onClick={() => onApply({ search, date, startHour, serviceType })}
+            onClick={() =>
+              onApply({
+                search,
+                code: searchCode,
+                date,
+                startHour,
+                serviceType,
+              })
+            }
           >
             Áp dụng
           </Button>
