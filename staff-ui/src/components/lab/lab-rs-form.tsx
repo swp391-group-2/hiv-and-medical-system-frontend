@@ -25,7 +25,6 @@ import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
-import { LoadingOverlay } from "../loading-overlay";
 
 const resultTextSchema = z.object({
   resultText: z.enum(["Dương tính", "Âm tính"], {
@@ -76,10 +75,6 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
   const onSubmit = (values: ResultTextValues) => {
     updateResult(values);
   };
-
-  if (isPending) {
-    return <LoadingOverlay message="Đang xử lý..." />;
-  }
 
   return (
     <Form {...form}>
@@ -144,7 +139,7 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
           variant="outline"
           className={cn(
             "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400" : ""
+            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
           )}
           type="submit"
         >
@@ -274,7 +269,7 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
           variant="outline"
           className={cn(
             "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400" : ""
+            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
           )}
           type="submit"
         >
