@@ -47,8 +47,13 @@ const PatientListManage: React.FC<Props> = ({  appointments }) => {
       filteredAppointments = appointments.filter(
         (a) => a.startTime === targetStartTime
       );
+      
     }
-
+if (filterType === "byAppointmentCode") {
+  filteredAppointments = appointments.filter((a) =>
+    a.appointmentCode?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+}
     // Trả về mảng các cặp patient và appointment
     return filteredAppointments.map((a) => ({
       patient: a.patient,

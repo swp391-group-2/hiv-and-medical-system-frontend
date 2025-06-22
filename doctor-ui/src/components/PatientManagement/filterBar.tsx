@@ -22,6 +22,8 @@ const FilterBar: React.FC<Props> = ({
     ? "Nhập ngày khám (yyyy-mm-dd)"
     : filterType === "bySlot"
     ? "Nhập slot khám (số)"
+    : filterType === "byAppointmentCode"
+    ? "Nhập mã buổi khám..."
     : "Tìm kiếm tên bệnh nhân..."
 }
 
@@ -37,7 +39,9 @@ const FilterBar: React.FC<Props> = ({
   <option value="all">Tất cả</option>
   <option value="byDate">Lọc theo ngày</option>
   <option value="byName">Lọc theo tên</option>
-  <option value="bySlot">Lọc theo slot khám</option> {/* ✅ thêm dòng này */}
+  <option value="bySlot">Lọc theo slot khám</option> 
+    <option value="byAppointmentCode">Lọc theo mã buổi khám</option>
+
 </select>
 
 
