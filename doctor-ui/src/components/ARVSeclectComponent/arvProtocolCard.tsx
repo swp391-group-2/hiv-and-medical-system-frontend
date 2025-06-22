@@ -1,4 +1,5 @@
-import type { Prescription } from "@/types/prescription";
+import type { patientPrescription } from "@/types/prescription";
+
 
 
 const PrescriptionCard = ({
@@ -6,7 +7,7 @@ const PrescriptionCard = ({
   onClick,
   selected,
 }: {
-  prescription: Prescription;
+  prescription: patientPrescription;
   onClick: () => void;
   selected: boolean;
 }) => {
