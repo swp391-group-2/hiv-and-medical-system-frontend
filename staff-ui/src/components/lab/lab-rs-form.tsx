@@ -25,6 +25,7 @@ import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
+import { LoadingOverlay } from "../loading-overlay";
 
 const resultTextSchema = z.object({
   resultText: z.enum(["Dương tính", "Âm tính"], {
@@ -75,6 +76,10 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
   const onSubmit = (values: ResultTextValues) => {
     updateResult(values);
   };
+
+  if (isPending) {
+    return <LoadingOverlay message="Đang xử lý..." />;
+  }
 
   return (
     <Form {...form}>

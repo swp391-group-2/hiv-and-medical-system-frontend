@@ -24,12 +24,13 @@ export function ConfirmCheckinDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-sm">
-        <DialogHeader>
-          <DialogTitle>
-            Mã số:{" "}
-            <span className="front-semibold">{appt.appointmentCode}</span>
-            Xác nhận check-in cho{" "}
-            <span className="font-semibold">{patientName}</span>
+        <DialogHeader className="mb-5">
+          <DialogTitle className="flex flex-col gap-4">
+            <span className="font-semibold">Mã số: {appt.appointmentCode}</span>
+
+            <span className="font-semibold">
+              Xác nhận check-in cho {patientName}
+            </span>
           </DialogTitle>
         </DialogHeader>
 
