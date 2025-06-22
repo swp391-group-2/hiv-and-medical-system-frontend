@@ -18,6 +18,7 @@ export function LabTable({ data }: { data: Appointment[] }) {
       <TableHeader>
         <TableRow>
           <TableHead>ID</TableHead>
+          <TableHead>Mã lịch hẹn</TableHead>
           <TableHead>Bệnh nhân</TableHead>
           <TableHead>Loại khám</TableHead>
           <TableHead>Ngày</TableHead>
