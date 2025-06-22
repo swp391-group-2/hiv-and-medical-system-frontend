@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./BaseURL";
-import type { PrescriptionItem, Prescription } from "@/types/prescription";
+import type { patientPrescription, patientPrescriptionItems } from "@/types/prescription";
+
 
 // ✅ Lấy danh sách phác đồ ARV
 export const fetchARVProtocols = async () => {
@@ -92,7 +93,8 @@ export const fetchAppointmentDetail = async (appointmentId: number) => {
 export const updatePrescriptionItem = async (
   appointmentId: number,
   prescriptionId: number,
-  items: PrescriptionItem[]
+  items: patientPrescriptionItems[],
+  
 ) => {
   // Map prescriptionItems sang patientPrescriptionItems
   const patientPrescriptionItems = items.map((item) => ({
@@ -118,7 +120,7 @@ export const updatePrescriptionItem = async (
 
 export const fetchPatientPrescription = async (
   appointmentId: number
-): Promise<Prescription | null> => {
+): Promise<patientPrescription | null> => {
   try {
     const token = localStorage.getItem("accessToken");
     const res = await axios.get(`${BASE_URL}appointments/${appointmentId}`, {

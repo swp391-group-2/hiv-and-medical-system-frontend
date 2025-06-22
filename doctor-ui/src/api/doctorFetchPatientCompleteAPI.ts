@@ -3,7 +3,6 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { BASE_URL } from "./BaseURL";
 import type { Appointment } from "@/types/appointment";
-import type { Prescription } from "@/types/prescription";
 
 export const fetchCompletedAppointmentsByDoctor = async (): Promise<Appointment[]> => {
   const token = localStorage.getItem("accessToken");

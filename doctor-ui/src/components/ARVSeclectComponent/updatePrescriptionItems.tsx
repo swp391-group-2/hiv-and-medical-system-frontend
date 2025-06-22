@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import type { patientPrescription, patientPrescriptionItems } from "@/types/prescription";
+import type {
+  patientPrescription,
+  patientPrescriptionItems,
+} from "@/types/prescription";
 import { updatePrescriptionItem } from "@/api/doctorChonPhacDo";
 import BasicModal from "../Modal/basicModal";
 import { Pill } from "lucide-react";
@@ -35,13 +38,18 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
   appointmentId,
   onUpdated,
 }) => {
-  const [items, setItems] = useState<patientPrescriptionItems[]>(prescription.patientPrescriptionItems);
+  const [items, setItems] = useState<patientPrescriptionItems[]>(
+    prescription?.patientPrescriptionItems || []
+  );
+  const [note, setNote] = useState<string>(prescription?.note || "");
 
   useEffect(() => {
-    if (open) {
-      setItems(prescription.patientPrescriptionItems);
+    if (open && prescription) {
+      const itemList = (prescription as any).prescriptionItems ?? [];
+      setItems(itemList);
+      setNote(prescription.note || "");
     }
-  }, [open, prescription.patientPrescriptionItems]);
+  }, [open, prescription?.prescriptionId]);
 
   const handleChange = (
     idx: number,
@@ -92,70 +100,96 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
       </h2>
 
       <div className="space-y-6">
-        {items.map((item, idx) => (
-          <div
-            key={item.prescriptionItemId}
-            className="border border-gray-200 rounded-xl p-4 shadow-sm"
-          >
-            <div className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-              <Pill /> Thuốc: {item.medication.name}
-            </div>
+        {items && items.length > 0 ? (
+          items.map((item, idx) => (
+            <div
+              key={item.prescriptionItemId ?? idx}
+              className="border border-gray-200 rounded-xl p-4 shadow-sm"
+            >
+              <div className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <Pill /> Thuốc: {item.medication.name}
+              </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Liều dùng
-                </label>
-                <input
-                  type="text"
-                  value={item.dosage}
-                  onChange={(e) => handleChange(idx, "dosage", e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Tần suất
-                </label>
-                <select
-                  value={item.frequency}
-                  onChange={(e) => handleChange(idx, "frequency", e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring focus:ring-blue-200"
-                >
-                  {frequencyOptions.map((freq) => (
-                    <option key={freq} value={freq}>
-                      {freq}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Thời gian (ngày)
-                </label>
-                <input
-                  type="number"
-                  min={1}
-                  value={item.duration}
-                  onChange={(e) => handleChange(idx, "duration", e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  Số lượng (viên)
-                </label>
-                <input
-                  type="number"
-                  min={0}
-                  value={item.quantity || ""}
-                  readOnly
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
-                />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Liều dùng
+                  </label>
+                  <input
+                    type="text"
+                    value={item.dosage}
+                    onChange={(e) =>
+                      handleChange(idx, "dosage", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Tần suất
+                  </label>
+                  <select
+                    value={item.frequency}
+                    onChange={(e) =>
+                      handleChange(idx, "frequency", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring focus:ring-blue-200"
+                  >
+                    {frequencyOptions.map((freq) => (
+                      <option key={freq} value={freq}>
+                        {freq}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Thời gian (ngày)
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={item.duration}
+                    onChange={(e) =>
+                      handleChange(idx, "duration", e.target.value)
+                    }
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Số lượng (viên)
+                  </label>
+                  <input
+                    type="number"
+                    min={0}
+                    value={item.quantity || ""}
+                    readOnly
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-700 cursor-not-allowed"
+                  />
+                </div>
               </div>
             </div>
+          ))
+        ) : (
+          <div className="text-gray-500 italic">
+            Không có thuốc trong phác đồ.
           </div>
-        ))}
+        )}
+
+        {/* Thêm ô nhập lưu ý */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Lưu ý của bác sĩ
+          </label>
+          <textarea
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
+            rows={3}
+            placeholder="Nhập lưu ý về bệnh nhân (nếu có)..."
+          />
+        </div>
       </div>
 
       <div className="flex justify-end gap-3 mt-8">
