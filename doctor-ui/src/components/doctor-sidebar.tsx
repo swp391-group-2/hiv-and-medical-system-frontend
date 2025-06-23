@@ -51,11 +51,11 @@ const items = [
     url: "/doctor/qa",
     icon: MessageCircle,
   },
-  {
-    title: "Chọn phác đồ ARV",
-    url: "/doctor/arv-seclect",
-    icon: Newspaper,
-  },
+  // {
+  //   title: "Chọn phác đồ ARV",
+  //   url: "/doctor/arv-seclect",
+  //   icon: Newspaper,
+  // },
   {
     title: "Cài đặt tài khoản",
     url: "/doctor/setting",
