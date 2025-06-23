@@ -196,7 +196,7 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                    Số lượng (viên)
+                   Tổng số lượng (viên thuốc)
                   </label>
                   <input
                     type="number"
