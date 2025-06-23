@@ -25,8 +25,8 @@ const getPatientPrescriptionsUrl = (patientId: string) => {
   return `patients/${patientId}/prescriptions`;
 };
 
-const getPatientPrescriptionsCompleteUrl = (patientId: string) => {
-  return `patients/${patientId}/prescriptions/completed`;
+const getPatientAppointmentsCompleteUrl = (patientId: string) => {
+  return `patients/${patientId}/appointmentsCompleted`;
 };
 
 const userApi = {
@@ -49,9 +49,9 @@ const userApi = {
       getPatientPrescriptionsUrl(patientId)
     );
   },
-  getPatientPrescriptionsComplete: (patientId: string) => {
+  getPatientAppointmentsComplete: (patientId: string) => {
     return http.get<AppointmentCompletedApiResponse>(
-      getPatientPrescriptionsCompleteUrl(patientId)
+      getPatientAppointmentsCompleteUrl(patientId)
     );
   },
 };

@@ -1,32 +1,37 @@
-import { CheckUpRsItem, type CheckUpRsItemProps } from "./checkup-rs-item";
-import { GenericList, type CD4RsProps, type ViralLoadRsProps } from "./common";
+import type { AppointmentCompletedEntry } from "@/types/appointment.type";
+import { CheckUpRsItem } from "./checkup-rs-item";
+import { GenericList } from "./common";
 const CheckUpRsLabels = () => {
   return (
-    <div className="text-gray-500 text-center w-full grid grid-cols-5 mt-5 mb-5 p-4">
-      <span>STT</span>
-      <span>Bác sĩ phụ trách</span>
-      <span>Phác đồ đã chọn</span>
-      <span>Thời gian khám</span>
-      <span>Thao tác</span>
-    </div>
+    <p>
+      <div className="w-full grid grid-cols-9 mt-6 mb-4 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
+        <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
+          Mã số
+        </span>
+        <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
+          Bác sĩ Phụ Trách
+        </span>
+        <span className="font-semibold col-span-3 text-gray-700 text-sm uppercase tracking-wide">
+          Phác Đồ Đã Chọn
+        </span>
+        <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
+          Thời Gian Khám
+        </span>
+        <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
+          Thao Tác
+        </span>
+      </div>
+    </p>
   );
 };
 
-const CheckUpResultList = ({
-  list,
-  viral,
-  cd4,
-}: {
-  list: CheckUpRsItemProps[];
-  viral: ViralLoadRsProps;
-  cd4: CD4RsProps;
-}) => {
+const CheckUpResultList = ({ list }: { list: AppointmentCompletedEntry[] }) => {
   return (
-    <GenericList<CheckUpRsItemProps>
+    <GenericList<AppointmentCompletedEntry>
       items={list}
       header={<CheckUpRsLabels />}
       renderItem={(item) => (
-        <CheckUpRsItem key={item.id} item={item} viral={viral} cd4={cd4} />
+        <CheckUpRsItem key={item.appointmentId} item={item} />
       )}
     />
   );
