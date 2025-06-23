@@ -1,9 +1,10 @@
-import type { Prescription } from "@/types/prescription";
+import type { patientPrescription } from "@/types/prescription";
+
 
 const PrescriptionDetailCard = ({
   prescription,
 }: {
-  prescription: Prescription | null;
+  prescription: patientPrescription | null;
 }) => {
   if (!prescription) {
     return (
