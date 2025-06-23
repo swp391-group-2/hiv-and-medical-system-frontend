@@ -1,5 +1,5 @@
 import { Ellipsis } from "lucide-react";
-import { formatDMY, formatISO } from "@/lib/utils";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,34 +17,22 @@ import { Button } from "../../ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import type { ViralLoadRsProps, CD4RsProps } from "./common";
 import { InfoGroup, InfoTextRow, RsNote } from "./common";
+import type { AppointmentCompletedEntry } from "@/types/appointment.type";
 
-export type CheckUpRsItemProps = {
-  id: number;
-  doctor: string;
-  arv: string;
-  time: string;
-  note: string;
-};
-
-const CheckUpRsItem = ({
-  item,
-  viral,
-  cd4,
-}: {
-  item: CheckUpRsItemProps;
-  viral: ViralLoadRsProps;
-  cd4: CD4RsProps;
-}) => {
+const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <li className="w-full grid grid-cols-5 text-center items-center border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0">
-      <span>{item.id}</span>
-      <span>Bs. {item.doctor}</span>
-      <span>{item.arv}</span>
-      <span>{formatISO(item.time)}</span>
+    <li className="w-full grid grid-cols-9  items-center border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0">
+      <span>{item.appointmentCode}</span>
+      <span className="col-span-2">Bs. {item.doctor.fullName}</span>
+      <span className="col-span-3">
+        {item.patientPrescription.prescriptionDefaultName}
+      </span>
+      <span className="col-span-2">
+        {item.startTime + "-" + new Date(item.date).toLocaleDateString("vi")}
+      </span>
       <span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -71,48 +59,62 @@ const CheckUpRsItem = ({
             <Tabs defaultValue="detail">
               <TabsList>
                 <TabsTrigger value="detail">Thông tin buổi khám</TabsTrigger>
-                <TabsTrigger value="virus-load">Tải lượng virus</TabsTrigger>
-                <TabsTrigger value="cd4">CD4</TabsTrigger>
+                <TabsTrigger value="virus-load">
+                  Tải lượng virus và CD4
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="detail" className="p-3">
                 <InfoGroup>
-                  <InfoTextRow label="Bác sĩ" data={item.doctor} />
-                  <InfoTextRow label="Nơi khám" data="Bệnh viện HIV" />
-                  <InfoTextRow label="Thời gian" data={formatISO(item.time)} />
-                  <InfoTextRow label="Phác đồ được chọn" data={item.arv} />
-                  <RsNote note={item.note} />
+                  <InfoTextRow label="Mã số khám" data={item.appointmentCode} />
+                  <InfoTextRow label="Bác sĩ" data={item.doctor.fullName} />
+                  <InfoTextRow label="Email Bác sĩ" data={item.doctor.email} />
+                  <InfoTextRow
+                    label="Ngày Khám"
+                    data={new Date(
+                      item.labResult.resultDate
+                    ).toLocaleDateString("vi")}
+                  />
+                  <InfoTextRow
+                    label="Thời gian"
+                    data={item.startTime + " - " + item.endTime}
+                  />
+                  <InfoTextRow
+                    label="Phác đồ được chọn"
+                    data={item.patientPrescription.prescriptionDefaultName}
+                  />
+                  <RsNote note={item.patientPrescription.note} />
                 </InfoGroup>
               </TabsContent>
               <TabsContent value="virus-load" className="p-3">
                 <InfoGroup>
                   <InfoTextRow
-                    label="Ngày xét nghiệm"
-                    data={formatDMY(viral.date)}
-                  />
-                  <InfoTextRow label="Tải lượng virus" data={viral.load} />
-                  <InfoTextRow label="Kết quả định tính" data={viral.result} />
-                  <RsNote note={viral.note} />
-                </InfoGroup>
-              </TabsContent>
-              <TabsContent value="cd4" className="p-3">
-                <InfoGroup>
-                  <InfoTextRow
-                    label="Ngày xét nghiệm"
-                    data={formatDMY(cd4.date)}
+                    label="Tải lượng virus"
+                    data={
+                      item.labResult.resultNumericViralLoad +
+                      " " +
+                      item.labResult.labTestParameter.unitViralLoad
+                    }
                   />
                   <InfoTextRow
                     label="Số lượng CD4 (cells/mm³)"
-                    data={cd4.quantity.toString()}
+                    data={
+                      item.labResult.resultNumericCD4 +
+                      " " +
+                      item.labResult.labTestParameter.unitCD4
+                    }
                   />
                   <InfoTextRow
-                    label="Phần trăm CD4 (%)"
-                    data={cd4.percentage.toString()}
+                    label="Ngày xét nghiệm"
+                    data={new Date(
+                      item.labResult.resultDate
+                    ).toLocaleDateString("vi")}
                   />
                   <InfoTextRow
-                    label="Ngưỡng bình thường"
-                    data={cd4.normal_threshold}
+                    label="Thời gian trả kết quả"
+                    data={item.startTime + " - " + item.endTime}
                   />
-                  <RsNote note={cd4.note} />
+
+                  <RsNote note={item.labResult.note} />
                 </InfoGroup>
               </TabsContent>
             </Tabs>

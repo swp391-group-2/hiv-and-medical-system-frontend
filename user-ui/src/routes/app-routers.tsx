@@ -9,7 +9,7 @@ import UserProfile from "@/pages/user/profile";
 import Appointments from "@/pages/user/appointments";
 import Arv from "@/pages/user/arv";
 import CheckUpResult from "@/pages/user/checkup-result";
-import TestResult from "@/pages/user/test-result";
+// import TestResult from "@/pages/user/test-result";
 import AppointmentBooking from "@/pages/appointment/appointment-booking";
 import BookingConfirm from "@/pages/appointment/booking-confirm";
 import SelectProfileBooking from "@/pages/appointment/select-profile-booking";
@@ -41,7 +41,7 @@ const AppRoutes = () => {
             <Route path="appointments" element={<Appointments />} />
             <Route path="arv" element={<Arv />} />
             <Route path="checkup-result" element={<CheckUpResult />} />
-            <Route path="test-result" element={<TestResult />} />
+            {/* <Route path="test-result" element={<TestResult />} /> */}
           </Route>
 
           <Route
