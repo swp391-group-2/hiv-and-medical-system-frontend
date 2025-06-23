@@ -17,6 +17,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Loader2 } from "lucide-react";
 
 const sampleTestSchema = z.object({
   sampleCode: z.string().nonempty("Mã mẫu không được bỏ trống"),
@@ -113,12 +114,15 @@ export function SampleTestForm({ appt }: { appt: Appointment }) {
         <Button
           variant="outline"
           type="submit"
-          className={cn(
-            "w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer",
-            isPending ? " bg-gray-400 cursor-not-allowed" : ""
-          )}
+          className="w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer"
         >
-          {isPending ? "Đang xử lý" : "Xác nhận"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử lý...
+            </>
+          ) : (
+            "Xác nhận"
+          )}
         </Button>
       </form>
     </Form>
@@ -232,12 +236,16 @@ export function SampleConsultForm({ appt }: { appt: Appointment }) {
         <Button
           variant="outline"
           type="submit"
-          className={cn(
-            "w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer",
-            isPending ? " bg-gray-400 cursor-not-allowed" : ""
-          )}
+          disabled={isPending}
+          className="w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer"
         >
-          {isPending ? "Đang xử lý" : "Xác nhận"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử lý...
+            </>
+          ) : (
+            "Xác nhận"
+          )}
         </Button>
       </form>
     </Form>
