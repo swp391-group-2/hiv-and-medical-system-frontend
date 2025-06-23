@@ -25,31 +25,44 @@ const PrescriptionDetailCard = ({
        <p className="text-sm mb-2">Dạng viên: {prescription.dosageForm}</p>
       <div className="mt-3">
         <p className="font-medium mb-1">Chi tiết thuốc:</p>
-        {prescription.prescriptionItems.map((item, index) => (
-          <div key={index} className="mb-1 text-sm ">
-         
-            <p>
-              <strong>Thuốc:</strong> {item.medication.name}
-            </p>
-            <p>
-              <strong>Liều dùng:</strong> {item.dosage}
-            </p>
-            <p>
-              <strong>Tần suất:</strong> {item.frequency}
-            </p>
-            <p>
-              <strong>Thời gian:</strong> {item.duration}
-            </p>
-            <p>
-              {/* <strong>Dạng bào chế:</strong> {item.medication.dosageForm} */}
-               <strong>Dạng viên:</strong> {item.medication.dosageForm}
-            </p>
-            <p>
-              <strong>Hàm lượng:</strong> {item.medication.strength}
-            </p>
-            <hr className="my-1" />
-          </div>
-        ))}
+        {prescription.prescriptionItems.map(
+          (
+            item: {
+              medication: {
+          name: string;
+          dosageForm: string;
+          strength: string;
+              };
+              dosage: string;
+              frequency: string;
+              duration: string;
+            },
+            index: number
+          ) => (
+            <div key={index} className="mb-1 text-sm ">
+              <p>
+          <strong>Thuốc:</strong> {item.medication.name}
+              </p>
+              <p>
+          <strong>Liều dùng:</strong> {item.dosage}
+              </p>
+              <p>
+          <strong>Tần suất:</strong> {item.frequency}
+              </p>
+              <p>
+          <strong>Thời gian:</strong> {item.duration}
+              </p>
+              <p>
+          {/* <strong>Dạng bào chế:</strong> {item.medication.dosageForm} */}
+          <strong>Dạng viên:</strong> {item.medication.dosageForm}
+              </p>
+              <p>
+          <strong>Hàm lượng:</strong> {item.medication.strength}
+              </p>
+              <hr className="my-1" />
+            </div>
+          )
+        )}
       </div>
     </div>
   );

@@ -22,6 +22,8 @@ const frequencyOptions = [
   "1 lần/tuần",
 ];
 
+const pillsPerDoseOptions = [1, 2, 3, 4, 5];
+
 const parseFrequency = (frequency: string): number => {
   const lower = frequency.toLowerCase();
   if (lower.includes("1 lần/ngày")) return 1;
@@ -31,6 +33,8 @@ const parseFrequency = (frequency: string): number => {
   return 1;
 };
 
+type ItemWithPills = patientPrescriptionItems & { pillsPerDose?: number };
+
 const UpdatePrescriptionItemsModal: React.FC<Props> = ({
   open,
   onOpenChange,
@@ -38,63 +42,76 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
   appointmentId,
   onUpdated,
 }) => {
-  const [items, setItems] = useState<patientPrescriptionItems[]>(
-    prescription?.patientPrescriptionItems || []
-  );
+  const [items, setItems] = useState<ItemWithPills[]>([]);
   const [note, setNote] = useState<string>(prescription?.note || "");
 
   useEffect(() => {
     if (open && prescription) {
       const itemList = (prescription as any).prescriptionItems ?? [];
-      setItems(itemList);
+      // Thêm thuộc tính tạm pillsPerDose cho từng item (mặc định 1)
+      const itemListWithPills = itemList.map((item: any) => ({
+        ...item,
+        pillsPerDose: item.pillsPerDose ?? 1,
+      }));
+      setItems(itemListWithPills);
       setNote(prescription.note || "");
     }
   }, [open, prescription?.prescriptionId]);
 
   const handleChange = (
     idx: number,
-    field: keyof patientPrescriptionItems,
-    value: string
+    field: keyof patientPrescriptionItems | "pillsPerDose",
+    value: string | number
   ) => {
     setItems((prev) =>
       prev.map((item, i) => {
         if (i !== idx) return item;
-
         const newItem = { ...item, [field]: value };
 
-        if (field === "frequency" || field === "duration") {
-          const freqPerDay = parseFrequency(
-            field === "frequency" ? value : item.frequency
-          );
-          const days = parseFloat(field === "duration" ? value : item.duration);
-          if (!isNaN(freqPerDay) && !isNaN(days)) {
-            newItem.quantity = Math.ceil(freqPerDay * days);
-          }
+        // Lấy số viên/lần uống
+        const pillsPerDose =
+          field === "pillsPerDose"
+            ? Number(value)
+            : Number(item.pillsPerDose) || 1;
+
+        // Tính tổng số viên
+        const freqPerDay = parseFrequency(
+          field === "frequency" ? String(value) : item.frequency
+        );
+        const days = parseFloat(
+          field === "duration" ? String(value) : item.duration
+        );
+        if (!isNaN(freqPerDay) && !isNaN(days)) {
+          newItem.quantity = Math.ceil(pillsPerDose * freqPerDay * days);
         }
 
+        newItem.pillsPerDose = pillsPerDose;
         return newItem;
       })
     );
   };
 
- const handleSave = async () => {
-  try {
-    await updatePrescriptionItem(
-      appointmentId,
-      prescription.prescriptionId,
-      items,
-      note // ✅ truyền note vào
-    );
-    alert("Cập nhật thuốc thành công!");
-    onOpenChange(false);
-    onUpdated?.();
-  } catch (err) {
-    alert("Cập nhật thất bại!");
-    console.error("Cập nhật thuốc thất bại:", err);
-    
-  }
-};
-
+  const handleSave = async () => {
+    try {
+      // Nối chuỗi số viên và liều dùng vào dosage
+      const itemsToSave = items.map((item) => ({
+        ...item,
+        dosage: `${item.pillsPerDose || 1} viên (${item.dosage})`,
+      }));
+      await updatePrescriptionItem(
+        appointmentId,
+        prescription.prescriptionId,
+        itemsToSave,
+        note
+      );
+      alert("Cập nhật thuốc thành công!");
+      onOpenChange(false);
+      onUpdated?.();
+    } catch (err) {
+      alert("Cập nhật thất bại!");
+      console.error("Cập nhật thuốc thất bại:", err);
+    }
+  };
 
   return (
     <BasicModal open={open} onClose={() => onOpenChange(false)}>
@@ -113,10 +130,10 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
                 <Pill /> Thuốc: {item.medication.name}
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-4 text-sm">
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                    Liều dùng
+                    Liều dùng (1 viên)
                   </label>
                   <input
                     type="text"
@@ -126,6 +143,24 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
                     }
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-blue-200"
                   />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Số viên/lần uống
+                  </label>
+                  <select
+                    value={item.pillsPerDose || 1}
+                    onChange={(e) =>
+                      handleChange(idx, "pillsPerDose", Number(e.target.value))
+                    }
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring focus:ring-blue-200"
+                  >
+                    {pillsPerDoseOptions.map((n) => (
+                      <option key={n} value={n}>
+                        {n} viên
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
