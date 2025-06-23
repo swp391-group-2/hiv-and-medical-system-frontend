@@ -46,15 +46,21 @@ export const SidebarNavItem = ({
         end
         className={({ isActive }) =>
           cn(
-            "flex items-center gap-3 px-6 py-6  border transition-colors",
-            isActive && " text-accent-foreground border-l-4 border-l-primary "
+            "flex items-center gap-3 px-3 py-3 rounded-lg transition-colors hover:bg-accent",
+            isActive
+              ? "bg-accent text-accent-foreground border-l-4 border-l-primary"
+              : "text-muted-foreground"
           )
         }
       >
-        {Icon && <Icon />}
-        <span className="text-md">{text}</span>
+        {Icon && <Icon className="w-5 h-5" />}
+        <span className="font-medium">{text}</span>
       </NavLink>
-      {children && <div className="ml-8 mt-6 space-y-2">{children}</div>}
+      {children && (
+        <div className="ml-6 mt-2 space-y-1 border-l border-border pl-4">
+          {children}
+        </div>
+      )}
     </div>
   );
 };

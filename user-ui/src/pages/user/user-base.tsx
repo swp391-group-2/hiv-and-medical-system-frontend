@@ -16,7 +16,7 @@ const UserBase = () => {
   ];
 
   return (
-    <div className="w-full flex gap-5">
+    <div className="w-[calc(100%-40px)] mx-auto flex gap-5">
       <Sidebar>
         <SidebarNav>
           {sidebarItems.map((item) => (

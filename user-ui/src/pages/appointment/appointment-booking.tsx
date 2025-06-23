@@ -23,6 +23,32 @@ const AppointmentBooking = () => {
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const setScheduleSlot = useBookingStore((state) => state.setScheduleSlot);
   const setLabTestSlot = useBookingStore((state) => state.setLabTestSlot);
+
+  const { serviceType, doctorId } = useParams<{
+    serviceType: string;
+    doctorId: string;
+  }>();
+
+  const handleBooking = () => {
+    if (doctorId) {
+      navigate(buildRoute.selectProfileBookingConsultation(doctorId));
+    } else if (serviceType) {
+      navigate(buildRoute.selectProfileBooking(serviceType));
+    }
+  };
+
+  const { data: service, isLoading } = useQuery({
+    queryKey: ["service", serviceType],
+    queryFn: async () => {
+      if (!serviceType) {
+        throw new Error("Service type is required");
+      }
+      const response = await serviceApi.getServicesByType(serviceType);
+      return response.data;
+    },
+    enabled: !!serviceType,
+  });
+
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
     setSelectedTime("");
@@ -30,6 +56,7 @@ const AppointmentBooking = () => {
 
   const handleSelectScheduleSlot = (time: string, slot: ScheduleSlot) => {
     setScheduleSlot(slot);
+    setLabTestSlot(null);
     setSelectedTime(time);
   };
 
@@ -38,6 +65,7 @@ const AppointmentBooking = () => {
     slot: TestScheduleSlotEntry
   ) => {
     setLabTestSlot(slot);
+    setScheduleSlot(null);
     setSelectedTime(time);
   };
 
@@ -61,32 +89,6 @@ const AppointmentBooking = () => {
   };
 
   // const location = useLocation();
-  const { serviceType, doctorId } = useParams<{
-    serviceType: string;
-    doctorId: string;
-  }>();
-
-  const handleBooking = () => {
-    if (doctorId) {
-      navigate(buildRoute.selectProfileBookingConsultation(doctorId));
-    } else if (serviceType) {
-      navigate(buildRoute.selectProfileBooking(serviceType));
-    }
-  };
-
-  const { data: service, isLoading } = useQuery({
-    queryKey: ["service", serviceType],
-    queryFn: async () => {
-      if (!serviceType) {
-        throw new Error("Service type is required");
-      }
-      const response = await serviceApi
-        .getServicesByType(serviceType)
-        .then((res) => res.data);
-      return response;
-    },
-    enabled: !!serviceType,
-  });
 
   if (isLoading) {
     return (

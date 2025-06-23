@@ -33,7 +33,7 @@ export const LoginForm = () => {
   const location = useLocation();
   const loginStore = useAuthStore((state) => state.login);
   const navigationState: { email: string } = location.state;
-  const fromPath = location?.state?.from.pathname || "/";
+  const fromPath = location?.state?.from?.pathname || "/";
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),

@@ -21,11 +21,25 @@ import {
 } from "@/components/ui/select";
 import type { UserProfileUpdateValues } from "@/types/userProfile.type";
 
+export type UserProfileValues = {
+  patientId: string;
+  userId: string;
+  email: string;
+  fullName: string;
+  userStatus: string;
+  patientCode: string;
+  dob: string;
+  gender: string;
+  address: string;
+  phoneNumber: string;
+  identificationCard: string;
+  healthInsurance: string;
+  occupation: string;
+};
+
 const profileSchema = z.object({
   fullName: z.string().min(1, { message: "Họ và tên không được để trống" }),
-  gender: z.enum(["male", "female", "unspecified"], {
-    errorMap: () => ({ message: "Vui lòng chọn giới tính" }),
-  }),
+  gender: z.string().min(1, { message: "Vui lòng chọn giới tính" }),
   dob: z.string().refine(
     (val) => {
       // Simple check: must match YYYY-MM-DD or DD/MM/YYYY
@@ -34,12 +48,14 @@ const profileSchema = z.object({
     },
     { message: "Ngày sinh không hợp lệ (YYYY-MM-DD)" }
   ),
-  idNumber: z.string().min(8, { message: "Số CCCD/CMND không được để trống" }),
-  insuranceNumber: z
+  identificationCard: z
+    .string()
+    .min(8, { message: "Số CCCD/CMND không được để trống" }),
+  healthInsurance: z
     .string()
     .min(8, { message: "Số BHYT không được để trống" }),
   occupation: z.string().min(1, { message: "Vui lòng chọn nghề nghiệp" }),
-  phone: z.string().regex(/^0\d{9}$/, "Số điện thoại không hợp lệ"),
+  phoneNumber: z.string().regex(/^0\d{9}$/, "Số điện thoại không hợp lệ"),
   province: z.string().min(1, { message: "Vui lòng chọn tỉnh/thành phố" }),
   district: z.string().min(1, { message: "Vui lòng chọn quận/huyện" }),
   ward: z.string().min(1, { message: "Vui lòng chọn phường/xã" }),
@@ -63,16 +79,16 @@ export function ProfileInfoForm({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       fullName: defaultValues?.fullName ?? "",
-      gender: defaultValues?.gender ?? "unspecified",
+      gender: defaultValues?.gender ?? "Không xác định",
       dob: defaultValues?.dob ?? "", // "YYYY-MM-DD"
-      idNumber: defaultValues?.idNumber ?? "",
-      insuranceNumber: defaultValues?.insuranceNumber ?? "",
-      occupation: defaultValues?.occupation ?? "",
-      phone: defaultValues?.phone ?? "",
+      identificationCard: defaultValues?.identificationCard ?? "",
+      healthInsurance: defaultValues?.healthInsurance ?? "",
+      phoneNumber: defaultValues?.phoneNumber ?? "",
       province: defaultValues?.province ?? "",
       district: defaultValues?.district ?? "",
       ward: defaultValues?.ward ?? "",
       street: defaultValues?.street ?? "",
+      occupation: defaultValues?.occupation ?? "",
     },
   });
 
@@ -86,9 +102,9 @@ export function ProfileInfoForm({
             dob: values.dob,
             gender: values.gender,
             address: `${values.street}, ${values.ward}, ${values.district}, ${values.province}`,
-            phoneNumber: values.phone,
-            identificationCard: values.idNumber,
-            healthInsurance: values.insuranceNumber,
+            phoneNumber: values.phoneNumber,
+            identificationCard: values.identificationCard,
+            healthInsurance: values.healthInsurance,
             occupation: values.occupation,
           };
           onSubmit(updateValues);
@@ -97,7 +113,7 @@ export function ProfileInfoForm({
       >
         {/* —————— SECTION: Thông Tin Chung —————— */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-teal-600">
+          <h2 className="text-xl  text-primary font-bold border-b border-gray-200 pb-2 mb-4">
             Thông Tin Chung
           </h2>
 
@@ -131,12 +147,12 @@ export function ProfileInfoForm({
                   <FormControl>
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="w-full cursor-pointer">
-                        <SelectValue placeholder="Chọn giới tính" />
+                        <SelectValue placeholder="Chọn Giới Tính" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="male">Nam</SelectItem>
-                        <SelectItem value="female">Nữ</SelectItem>
-                        <SelectItem value="unspecified">
+                        <SelectItem value="Nam">Nam</SelectItem>
+                        <SelectItem value="Nữ">Nữ</SelectItem>
+                        <SelectItem value="Không xác định">
                           Không xác định
                         </SelectItem>
                       </SelectContent>
@@ -168,10 +184,9 @@ export function ProfileInfoForm({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Số CCCD/CMND */}
             <FormField
               control={form.control}
-              name="idNumber"
+              name="identificationCard"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
@@ -185,10 +200,9 @@ export function ProfileInfoForm({
               )}
             />
 
-            {/* Số BHYT */}
             <FormField
               control={form.control}
-              name="insuranceNumber"
+              name="healthInsurance"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Số BHYT</FormLabel>
@@ -202,7 +216,6 @@ export function ProfileInfoForm({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Ngành nghề */}
             <FormField
               control={form.control}
               name="occupation"
@@ -217,12 +230,12 @@ export function ProfileInfoForm({
                         <SelectValue placeholder="Chọn nghề nghiệp" />
                       </SelectTrigger>
                       <SelectContent>
-                        {/* Replace these with actual occupations */}
-                        <SelectItem value="student">
+                        <SelectItem value="Học sinh/Sinh viên">
                           Học sinh/Sinh viên
                         </SelectItem>
-                        <SelectItem value="teacher">Giáo viên</SelectItem>
-                        <SelectItem value="engineer">Kỹ sư</SelectItem>
+                        <SelectItem value="Giáo viên">Giáo viên</SelectItem>
+                        <SelectItem value="Kỹ sư">Kỹ sư</SelectItem>
+                        <SelectItem value="Họa sĩ">Kỹ sư</SelectItem>
                         <SelectItem value="other">Khác</SelectItem>
                       </SelectContent>
                     </Select>
@@ -235,7 +248,7 @@ export function ProfileInfoForm({
             {/* Sđt */}
             <FormField
               control={form.control}
-              name="phone"
+              name="phoneNumber"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
@@ -251,14 +264,12 @@ export function ProfileInfoForm({
           </div>
         </div>
 
-        {/* —————— SECTION: Địa Chỉ Theo CCCD —————— */}
         <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-teal-600">
+          <h2 className="text-xl  text-primary font-bold border-b border-gray-200 pb-2 mb-4">
             Địa Chỉ Theo CCCD
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Tỉnh/Thành phố */}
             <FormField
               control={form.control}
               name="province"
@@ -274,10 +285,10 @@ export function ProfileInfoForm({
                       </SelectTrigger>
                       <SelectContent>
                         {/* Add real province options */}
-                        <SelectItem value="hanoi">Hà Nội</SelectItem>
-                        <SelectItem value="hochiminh">Hồ Chí Minh</SelectItem>
-                        <SelectItem value="danang">Đà Nẵng</SelectItem>
-                        <SelectItem value="other">Khác</SelectItem>
+                        <SelectItem value="Hà Nội">Hà Nội</SelectItem>
+                        <SelectItem value="Hồ Chí Minh">Hồ Chí Minh</SelectItem>
+                        <SelectItem value="Đà Nẵng">Đà Nẵng</SelectItem>
+                        <SelectItem value="Chưa Rõ">Khác</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -302,10 +313,12 @@ export function ProfileInfoForm({
                       </SelectTrigger>
                       <SelectContent>
                         {/* These should be filtered based on province in a real app */}
-                        <SelectItem value="quan1">Quận 1</SelectItem>
-                        <SelectItem value="quan3">Quận 3</SelectItem>
-                        <SelectItem value="quan5">Quận 5</SelectItem>
-                        <SelectItem value="other">Khác</SelectItem>
+                        <SelectItem value="Quận 1">Quận 1</SelectItem>
+                        <SelectItem value="Quận 2">Quận 3</SelectItem>
+                        <SelectItem value="Quận 3">Quận 5</SelectItem>
+                        <SelectItem value="Quận Thủ Đức">
+                          Quận Thủ Đức
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -332,10 +345,12 @@ export function ProfileInfoForm({
                       </SelectTrigger>
                       <SelectContent>
                         {/* These should be filtered based on district in a real app */}
-                        <SelectItem value="phuong1">Phường 1</SelectItem>
-                        <SelectItem value="phuong3">Phường 3</SelectItem>
-                        <SelectItem value="phuong5">Phường 5</SelectItem>
-                        <SelectItem value="other">Khác</SelectItem>
+                        <SelectItem value="Phường 1">Phường 1</SelectItem>
+                        <SelectItem value="Phường 2">Phường 3</SelectItem>
+                        <SelectItem value="Phường 3">Phường 5</SelectItem>
+                        <SelectItem value="Phường Long Thạnh Mỹ">
+                          Phường Long Thạnh Mỹ
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </FormControl>
@@ -369,12 +384,7 @@ export function ProfileInfoForm({
 
         {/* —————— SUBMIT BUTTON —————— */}
         <div className="flex justify-end">
-          <Button
-            className="bg-blue-500 hover:bg-blue-600 cursor-pointer"
-            type="submit"
-          >
-            Lưu thông tin hồ sơ
-          </Button>
+          <Button type="submit">Lưu thông tin hồ sơ</Button>
         </div>
       </form>
     </Form>

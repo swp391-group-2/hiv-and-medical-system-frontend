@@ -22,7 +22,7 @@ export interface DailyScheduleEntry {
 export interface ScheduleApiResponse {
   code: number;
   success: boolean;
-  data: DailyScheduleEntry[];
+  data: DailyScheduleEntry;
 }
 
 export interface GetScheduleQueryParams {

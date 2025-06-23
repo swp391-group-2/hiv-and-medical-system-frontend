@@ -53,8 +53,8 @@ const TimeSlotSelectorConsultation = ({
   if (error)
     return <div className="text-red-500 text-2xl">{error.message}</div>;
 
-  if (schedules && schedules.data.length != 0) {
-    allSlots = schedules.data[0].scheduleSlots;
+  if (schedules) {
+    allSlots = schedules.data.scheduleSlots;
   } else {
     return (
       <div className="flex flex-col items-center justify-center py-16">
