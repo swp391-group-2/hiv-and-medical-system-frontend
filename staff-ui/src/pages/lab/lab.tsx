@@ -51,7 +51,7 @@ const Lab = () => {
         if (filters.code) {
           if (a.appointmentCode != null) {
             const q = filters.code.toLowerCase();
-            return a.appointmentCode.toLowerCase() === q;
+            return a.appointmentCode.toLowerCase().includes(q);
           }
         }
         return true;
