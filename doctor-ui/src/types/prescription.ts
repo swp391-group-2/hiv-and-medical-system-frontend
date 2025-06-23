@@ -24,7 +24,7 @@ export interface patientPrescription {
   patientPrescriptionItems: patientPrescriptionItems[];
   dosageForm: string;
   duration: string;
- 
+  note:string
 }
 
 export interface PrescriptionResponse {

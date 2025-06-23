@@ -103,8 +103,9 @@ export interface PatientPrescription {
   duration: string;
   note: string;
   createdAt: string;
-  originalPrescription: Prescription;
-  prescriptionItems: PatientPresItem[];
+  prescriptionDefaultId: number;
+  prescriptionDefaultName: string;
+  patientPrescriptionItems: PatientPresItem[];
 }
 
 export interface PatientPresItem {
@@ -140,7 +141,7 @@ export interface Appointment {
   labSampleId: number | null;
   labSample: LabSample;
   labResult: LabResult;
-  prescription: PatientPrescription;
+  patientPrescription: PatientPrescription;
 }
 
 export type Response<T> = {

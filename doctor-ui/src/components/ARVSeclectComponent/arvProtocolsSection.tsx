@@ -1,4 +1,5 @@
-import type { Prescription } from "@/types/prescription";
+
+import type { patientPrescription } from "@/types/prescription";
 import PrescriptionCard from "./arvProtocolCard";
 
 const PrescriptionList = ({
@@ -6,8 +7,8 @@ const PrescriptionList = ({
   onSelect,
   selectedPrescriptionId,
 }: {
-  prescriptions: Prescription[];
-  onSelect: (prescription: Prescription) => void;
+  prescriptions: patientPrescription[];
+  onSelect: (prescription: patientPrescription) => void;
   selectedPrescriptionId: number | null;
 }) => {
   if (!prescriptions || prescriptions.length === 0) {

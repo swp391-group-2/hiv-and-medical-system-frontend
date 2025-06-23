@@ -162,10 +162,10 @@ const PatientCard: React.FC<{ patient: Patient; appointment: Appointment }> = ({
                 </div>
 
                 {/* note */}
-                {/* <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
+                <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
         <h3 className="font-semibold text-blue-700 mb-1">Ghi chú</h3>
         <p>{prescription.note || "Không có"}</p>
-      </div> */}
+      </div>
               </div>
             ) : (
               <div className="text-gray-500 italic text-sm">

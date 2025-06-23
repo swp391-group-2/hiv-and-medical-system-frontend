@@ -10,6 +10,7 @@ export function LabRow({ appt }: { appt: Appointment }) {
   return (
     <TableRow>
       <TableCell>{appt.appointmentId}</TableCell>
+      <TableCell>{appt.appointmentCode}</TableCell>
       <TableCell>
         <PatientCell
           name={appt.patient.fullName}
