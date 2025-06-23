@@ -58,7 +58,7 @@ const Appointments = () => {
   return (
     <section className="w-full mt-7">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold mb-5">Lịch khám</h2>
+        <h2 className="text-3xl text-primary font-bold mb-5">Lịch khám</h2>
         <div className="flex gap-4 mr-10">
           <Select>
             <SelectTrigger className="cursor-pointer">

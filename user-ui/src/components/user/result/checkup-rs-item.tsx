@@ -113,6 +113,10 @@ const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
                     label="Thời gian trả kết quả"
                     data={item.startTime + " - " + item.endTime}
                   />
+                  <InfoTextRow
+                    label="Kết Luận"
+                    data={item.labResult.conclusion || "Chưa có kết luận"}
+                  />
 
                   <RsNote note={item.labResult.note} />
                 </InfoGroup>

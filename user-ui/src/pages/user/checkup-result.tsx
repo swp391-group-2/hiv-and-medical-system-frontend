@@ -37,7 +37,7 @@ const CheckUpResult = () => {
   if (checkUpList.length === 0) {
     return (
       <section className="w-full mt-7 mr-10">
-        <h1 className="text-3xl font-bold mb-5">Kết quả khám</h1>
+        <h1 className="text-3xl text-primary font-bold mb-5">Kết quả khám</h1>
         <div className="flex flex-col items-center justify-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
           <div className="w-16 h-16 mb-4 text-gray-300">
             <svg fill="currentColor" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ const CheckUpResult = () => {
 
   return (
     <section className="w-full mt-7 mr-10">
-      <h1 className="text-3xl font-bold mb-5">Kết quả khám</h1>
+      <h1 className="text-3xl text-primary font-bold mb-5">Kết quả khám</h1>
       <CheckUpResultList list={checkUpList} />
     </section>
   );
