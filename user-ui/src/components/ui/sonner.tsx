@@ -1,8 +1,16 @@
+<<<<<<< HEAD
+import { useTheme } from "next-themes"
+import { Toaster as Sonner, ToasterProps } from "sonner"
+
+const Toaster = ({ ...props }: ToasterProps) => {
+  const { theme = "system" } = useTheme()
+=======
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
+>>>>>>> origin/develop
 
   return (
     <Sonner
@@ -17,7 +25,14 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       {...props}
     />
+<<<<<<< HEAD
+  )
+}
+
+export { Toaster }
+=======
   );
 };
 
 export { Toaster };
+>>>>>>> origin/develop
