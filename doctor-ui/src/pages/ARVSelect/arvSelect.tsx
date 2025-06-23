@@ -3,28 +3,28 @@ import { useLocation } from "react-router-dom";
 
 import PatientInfoCard from "@/components/ARVSeclectComponent/patientInfoCard";
 import LatestTestResultCard from "@/components/ARVSeclectComponent/latestTestResultCard";
-// import AlertsCard from "@/components/ARVSeclectComponent/aleartsCard";
-// import TreatmentHistoryCard from "@/components/ARVSeclectComponent/treatmentHistoryCard";
 import PrescriptionList from "@/components/ARVSeclectComponent/arvProtocolsSection";
 import PrescriptionDetailCard from "@/components/ARVSeclectComponent/arvProtocolsDetailCard";
-import UpdatePrescriptionItemsModal from "@/components/ARVSeclectComponent/updatePrescriptionItems"; // Import modal
+import UpdatePrescriptionItemsModal from "@/components/ARVSeclectComponent/updatePrescriptionItems";
+import LabtestParameter from "@/components/ARVSeclectComponent/LabtestParameter";
 
 import {
   fetchARVProtocols,
   fetchPatientAlerts,
   fetchPatientInfo,
- 
 } from "@/api/doctorChonPhacDo";
 
 import type { Patient } from "@/types/patientType";
-import type { Alerts, LatestTestResult, TreatmentHistory } from "@/types/type";
+import type { Alerts, LatestTestResult } from "@/types/type";
 import type { patientPrescription } from "@/types/prescription";
+import type { LabTestParameter } from "@/types/appointment/labTestParameter";
 
 function ARVSeclect() {
   const location = useLocation();
   const rawPatient = location.state?.patient;
   const appointmentId = location.state?.appointmentId;
   const rawLabResult = location.state?.labResult;
+  const rawLabParameter = location.state?.labTestParameter;
 
   const patient: Patient = {
     patientId: rawPatient?.patientId || "Không rõ",
@@ -38,19 +38,14 @@ function ARVSeclect() {
     allergy: "Không rõ",
     comorbid: "Không rõ",
   });
-  
+
   const [result, setResult] = useState<LatestTestResult>({
     cd4: 0,
     viralLoad: "Không rõ",
     date: "Không rõ",
   });
-  // const [history, setHistory] = useState<TreatmentHistory>({
-  //   protocol: "Không rõ",
-  //   status: "Chưa có dữ liệu",
-  //   time: "Không rõ",
-  //   duration: "Không rõ",
-  //   notes: "-",
-  // });
+
+  const [parameter, setParameter] = useState<LabTestParameter | null>(null);
   const [prescriptions, setPrescriptions] = useState<patientPrescription[]>([]);
   const [selectedPrescription, setSelectedPrescription] =
     useState<patientPrescription | null>(null);
@@ -65,10 +60,8 @@ function ARVSeclect() {
           fetchPatientInfo(patient.patientId),
           fetchPatientAlerts(patient.patientId),
           fetchARVProtocols(),
-          console.log(appointmentId),
         ]);
 
-        // Ưu tiên lab result từ location nếu có
         if (rawLabResult) {
           setResult({
             cd4: rawLabResult.resultNumericCD4 ?? "Không rõ",
@@ -81,6 +74,10 @@ function ARVSeclect() {
             viralLoad: info.viralLoad ?? "Không rõ",
             date: info.updatedAt?.split("T")[0] ?? "Không rõ",
           });
+        }
+
+        if (rawLabParameter) {
+          setParameter(rawLabParameter);
         }
 
         setPatientInfo({
@@ -98,16 +95,6 @@ function ARVSeclect() {
             typeof pres.name === "string"
         );
         setPrescriptions(validPrescriptions);
-
-        // if (info.treatmentHistory) {
-        //   setHistory({
-        //     protocol: info.treatmentHistory.protocol || "Không rõ",
-        //     status: info.treatmentHistory.status || "Không rõ",
-        //     time: info.treatmentHistory.time || "Không rõ",
-        //     duration: info.treatmentHistory.duration || "Không rõ",
-        //     notes: info.treatmentHistory.notes || "-",
-        //   });
-        // }
       } catch (error) {
         console.error("❌ Lỗi khi load dữ liệu:", error);
       }
@@ -120,14 +107,12 @@ function ARVSeclect() {
     <div className="max-w-6xl mx-auto p-4 space-y-4">
       <h1 className="text-2xl font-bold mb-2">Chọn phác đồ ARV</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <PatientInfoCard patientInfo={patientInfo} />
-        <LatestTestResultCard result={result} />
-        {/* <div className="space-y-4">
-          <AlertsCard alerts={alerts} />
-          <TreatmentHistoryCard history={history} />
-        </div> */}
-      </div>
+     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <PatientInfoCard patientInfo={patientInfo} />
+  <LatestTestResultCard result={result} />
+  <LabtestParameter  />
+</div>
+
 
       <PrescriptionList
         prescriptions={prescriptions}
@@ -136,7 +121,7 @@ function ARVSeclect() {
       />
 
       <PrescriptionDetailCard prescription={selectedPrescription} />
-      {/* Modal cập nhật thuốc */}
+
       {selectedPrescription && (
         <UpdatePrescriptionItemsModal
           open={showUpdateModal}
@@ -145,32 +130,12 @@ function ARVSeclect() {
           appointmentId={appointmentId}
           onUpdated={async () => {
             setShowUpdateModal(false);
-            // Có thể reload lại prescription nếu muốn
           }}
         />
       )}
+
       {selectedPrescription && (
         <div className="mt-4 flex justify-end gap-2">
-          {/* <button
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-            onClick={async () => {
-              try {
-                await selectPrescription(
-                  appointmentId,
-                  selectedPrescription.prescriptionId
-                );
-                alert("✅ Đã chọn phác đồ mới cho bệnh nhân!");
-              } catch (err: any) {
-                console.error(
-                  "❌ Lỗi khi chọn phác đồ:",
-                  err.response?.data || err
-                );
-                alert("❌ Thất bại: " + (err.response?.data?.message || ""));
-              }
-            }}
-          >
-            Xác nhận chọn phác đồ
-          </button> */}
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={() => setShowUpdateModal(true)}
