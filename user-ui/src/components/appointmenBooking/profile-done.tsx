@@ -77,13 +77,7 @@ const ProfileDone = ({ patientData }: UserProfileProps) => {
             <div className="flex items-center space-x-3">
               <UserCheck className="w-4 h-4 text-gray-400" />
               <span className="text-gray-600">Giới tính:</span>
-              <span className="font-medium">
-                {patientData.gender === "male"
-                  ? "Nam"
-                  : patientData.gender === "female"
-                  ? "Nữ"
-                  : "Không xác định"}
-              </span>
+              <span className="font-medium">{patientData.gender}</span>
             </div>
 
             <div className="flex items-center space-x-3">

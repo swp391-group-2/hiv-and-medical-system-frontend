@@ -25,7 +25,7 @@ import appointmentApi from "@/apis/appointment.api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
-import { AppRoutes, buildRoute } from "@/constants/appRoutes";
+import { AppRoutes } from "@/constants/appRoutes";
 import { useEffect } from "react";
 
 const BookingConfirm = () => {
@@ -71,16 +71,16 @@ const BookingConfirm = () => {
     doctorId: string;
     serviceType: string;
   }>();
-
   useEffect(() => {
-    if (!service && !scheduleSlot && !labTestSlot) {
+    console.log("hello");
+    if (!service || (!scheduleSlot && !labTestSlot)) {
       if (doctorId) {
-        navigate(buildRoute.bookingConsultationDoctor(doctorId));
+        navigate(AppRoutes.HOME);
       } else if (serviceType) {
-        navigate(buildRoute.bookingService(serviceType));
+        navigate(AppRoutes.HOME);
       }
     }
-  }, [service, scheduleSlot, labTestSlot, doctorId, serviceType, navigate]);
+  }, []);
 
   return (
     <div className="min-h-screen  p-4">
@@ -221,9 +221,7 @@ const BookingConfirm = () => {
                       <User className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">Giới tính:</span>
-                        <span className="ml-2 font-medium">
-                          {user?.gender === "male" ? "Nam" : "Nữ"}
-                        </span>
+                        <span className="ml-2 font-medium">{user?.gender}</span>
                       </div>
                     </div>
 
