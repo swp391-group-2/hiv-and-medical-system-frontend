@@ -16,10 +16,17 @@ import ManagerDashboard from "./pages/manager/dashboard";
 import ManagerARV from "./pages/manager/arv";
 import ManagerDoctors from "./pages/manager/doctors";
 import ManagerStaffs from "./pages/manager/staffs";
+import { useAuthStore } from "./stores/auth.store";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
 function App() {
+
+  const initializeAuth = useAuthStore((state)=> state.initializeAuth);
+  useEffect(()=>{
+    initializeAuth();
+  }, [initializeAuth]);
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
