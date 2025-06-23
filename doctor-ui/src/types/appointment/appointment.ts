@@ -1,8 +1,13 @@
+
+import type { Patient } from "../patientType";
+import type { patientPrescription } from "../prescription";
 import type { LabResult } from "./labResult";
 import type { LabSample } from "./labSample";
+import type { LabTestParameter } from "./labTestParameter";
 
 export interface Appointment {
   appointmentId: number;
+  appointmentCode : string;
   serviceType: "CONSULTATION" | "LAB" | "FOLLOW_UP";
   status:
     | "WAITING"
@@ -21,14 +26,17 @@ export interface Appointment {
   scheduleSlotId?: number; // ✅ Thêm dòng này
 
   doctorName?: string;
-  patient: {
-    patientId: string;
-    fullName: string;
-    patientCode: string;
-    gender?: string;
-    dob: string;
-  };
+  // patient: {
+  //   patientId: string;
+  //   fullName: string;
+  //   patientCode: string;
+  //   gender?: string;
+  //   dob: string;
+  // };
+  patient: Patient
 
   labSample?: LabSample;
   labResult?: LabResult;
+  patientPrescription: patientPrescription
+  labTestParameter: LabTestParameter
 }

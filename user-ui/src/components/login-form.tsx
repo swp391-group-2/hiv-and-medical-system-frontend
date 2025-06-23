@@ -33,6 +33,7 @@ export const LoginForm = () => {
   const location = useLocation();
   const loginStore = useAuthStore((state) => state.login);
   const navigationState: { email: string } = location.state;
+  const fromPath = location?.state?.from?.pathname || "/";
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -57,17 +58,12 @@ export const LoginForm = () => {
         queryKey: ["self"],
       });
 
-      navigate("/");
+      navigate(fromPath);
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
-
-  // const handleProviderLogin = (provider: AuthProviders) => {
-  //   console.log(`Login with ${provider}`);
-  //   // login with google
-  // };
 
   return (
     <div className="overflow-hidden ">

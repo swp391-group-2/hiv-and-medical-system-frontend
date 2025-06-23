@@ -5,12 +5,8 @@ import Dashboard from "./pages/home";
 import UnauthLayout from "@/layout/unauth-layout";
 import UserProfile from "./pages/user/profile";
 import LoginPage from "./pages/auth/login";
-import Comeback from "./pages/appointment/comeback";
 import OngoingAppointments from "./pages/appointment/on-going";
 import FinishedAppointments from "./pages/appointment/finished";
-import ArvManagement from "./pages/management/arv";
-import DoctorSchedule from "./pages/management/doctor-schedule";
-import PatientsManagement from "./pages/management/patients";
 import CheckinPending from "./pages/appointment/checkin-pending";
 import Lab from "./pages/lab/lab";
 import LabSidebar from "./components/lab/lab-sidebar";
@@ -18,6 +14,8 @@ import { Toaster } from "sonner";
 import ManagerSidebar from "./components/manager/manager-sidebar";
 import ManagerDashboard from "./pages/manager/dashboard";
 import ManagerARV from "./pages/manager/arv";
+import ManagerDoctors from "./pages/manager/doctors";
+import ManagerStaffs from "./pages/manager/staffs";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +38,8 @@ function App() {
           <Route path="manager" element={<ManagerSidebar />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<ManagerDashboard />} />
+            <Route path="doctors" element={<ManagerDoctors />} />
+            <Route path="staffs" element={<ManagerStaffs />} />
             <Route path="arv" element={<ManagerARV />} />
           </Route>
           {/* staff */}
@@ -49,10 +49,6 @@ function App() {
             <Route path="checkin-pending" element={<CheckinPending />} />
             <Route path="on-going" element={<OngoingAppointments />} />
             <Route path="finished" element={<FinishedAppointments />} />
-            <Route path="comeback" element={<Comeback />} />
-            <Route path="patients" element={<PatientsManagement />} />
-            <Route path="arv" element={<ArvManagement />} />
-            <Route path="doctor-schedule" element={<DoctorSchedule />} />
             <Route path="profile" element={<UserProfile />} />
           </Route>
           {/* <Route
@@ -62,7 +58,7 @@ function App() {
               }
             /> */}
         </Routes>
-        <Toaster position="top-center" />
+        <Toaster richColors position="top-center" />
       </BrowserRouter>
     </QueryClientProvider>
   );

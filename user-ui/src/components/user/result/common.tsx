@@ -1,18 +1,3 @@
-type ViralLoadRsProps = {
-  date: string;
-  load: string;
-  result: string;
-  note: string;
-};
-
-type CD4RsProps = {
-  date: string;
-  quantity: number;
-  percentage: number;
-  normal_threshold: string;
-  note: string;
-};
-
 export interface GenericListProps<T> {
   /** the data array to render */
   items: T[];
@@ -78,4 +63,3 @@ const InfoTextRow = ({ label, data }: { label: string; data: string }) => {
 };
 
 export { RsNote, InfoGroup, InfoTextRow };
-export type { ViralLoadRsProps, CD4RsProps };

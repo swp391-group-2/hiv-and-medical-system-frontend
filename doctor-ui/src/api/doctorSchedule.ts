@@ -3,12 +3,15 @@
 import axios from "axios";
 import { BASE_URL } from "./BaseURL";
 import type { DoctorScheduleAppointment } from "@/types/schedule/doctorScheduleAppointment";
+import { data } from "react-router-dom";
 
 export const fetchDoctorAppointments = async (
   date: string,
   status: string
 ): Promise<DoctorScheduleAppointment[]> => {
   const token = localStorage.getItem("accessToken");
+  console.log("Token:", token);
+  console.log(data);
   if (!token) throw new Error("Không có token");
 
   const response = await axios.get(

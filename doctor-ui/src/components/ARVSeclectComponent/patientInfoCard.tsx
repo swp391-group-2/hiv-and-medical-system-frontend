@@ -9,9 +9,7 @@ const PatientInfoCard = ({ patientInfo }: { patientInfo: Patient }) => {
       <div className="bg-white text-blue-800 p-3 rounded border-2 border-blue-200 mb-2">
         <p className="font-bold ">Ngày sinh: {patientInfo.dob}</p>
       </div>
-      <div className="bg-white text-blue-800 p-3 rounded border-2 border-blue-200 mb-2">
-        <p className="font-bold ">Cân nặng: {patientInfo.weight}</p>
-      </div>
+     
       <div className="bg-white text-blue-800 p-3 rounded border-2 border-blue-200 mb-2">
         <p className="font-bold ">Giới tính: {patientInfo.gender}</p>
       </div>

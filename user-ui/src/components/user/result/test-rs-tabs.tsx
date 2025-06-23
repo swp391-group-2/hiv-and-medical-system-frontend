@@ -1,14 +1,16 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { TestRsListProps } from "./test-rs-list";
-import TestRsList from "./test-rs-list";
 
-const TestRsTabs = ({
-  scr,
-  cfm,
-}: {
-  scr: TestRsListProps;
-  cfm: TestRsListProps;
-}) => {
+import TestRsList from "./test-rs-list";
+import type { LabResult } from "@/types/LabResult.type";
+
+const TestRsTabs = ({ labResultList }: { labResultList: LabResult[] }) => {
+  const screeningResults = labResultList.filter(
+    (result) => result.serviceType === "SCREENING"
+  );
+  const confirmatoryResults = labResultList.filter(
+    (result) => result.serviceType === "CONFIRMATORY"
+  );
+
   return (
     <Tabs defaultValue="screening">
       <TabsList>
@@ -16,10 +18,10 @@ const TestRsTabs = ({
         <TabsTrigger value="confirmatory">Khẳng định</TabsTrigger>
       </TabsList>
       <TabsContent value="screening">
-        <TestRsList list={scr.list} viral={scr.viral} cd4={scr.cd4} />
+        <TestRsList list={screeningResults} />
       </TabsContent>
       <TabsContent value="confirmatory">
-        <TestRsList list={cfm.list} viral={cfm.viral} cd4={cfm.cd4} />
+        <TestRsList list={confirmatoryResults} />
       </TabsContent>
     </Tabs>
   );

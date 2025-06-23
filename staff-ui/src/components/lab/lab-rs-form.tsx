@@ -24,11 +24,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
 import { cn } from "@/lib/utils";
+import { Textarea } from "../ui/textarea";
 
 const resultTextSchema = z.object({
   resultText: z.enum(["Dương tính", "Âm tính"], {
     required_error: "Vui lòng chọn kết quả",
   }),
+  conclusion: z.string().nonempty("Kết luận không được để trống"),
+  note: z.string().optional(),
 });
 
 type ResultTextValues = z.infer<typeof resultTextSchema>;
@@ -44,6 +47,8 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
         appt.labResult.resultText === "Âm tính"
           ? appt.labResult.resultText
           : undefined,
+      conclusion: "",
+      note: "",
     },
   });
 
@@ -98,11 +103,43 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="conclusion"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Kết luận</FormLabel>
+              <FormControl>
+                <Textarea
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  placeholder="Nhập kết luận"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="note"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ghi chú (nếu có)</FormLabel>
+              <FormControl>
+                <Textarea
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  placeholder="Nhập ghi chú"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <Button
           variant="outline"
           className={cn(
             "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400" : ""
+            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
           )}
           type="submit"
         >
@@ -116,6 +153,8 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
 const numericSchema = z.object({
   resultNumericCD4: z.number({ required_error: "Required" }).min(0),
   resultNumericViralLoad: z.number({ required_error: "Required" }).min(0),
+  conclusion: z.string().nonempty("Kết luận không được để trống."),
+  note: z.string().optional(),
 });
 
 type NumericValues = z.infer<typeof numericSchema>;
@@ -128,6 +167,8 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
     defaultValues: {
       resultNumericCD4: appt.labResult.resultNumericCD4,
       resultNumericViralLoad: appt.labResult.resultNumericViralLoad,
+      conclusion: "",
+      note: "",
     },
   });
 
@@ -192,11 +233,43 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="conclusion"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Kết luận</FormLabel>
+              <FormControl>
+                <Textarea
+                  value={field.value}
+                  onChange={field.onChange}
+                  placeholder="Nhập kết luận"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="note"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ghi chú (nếu có)</FormLabel>
+              <FormControl>
+                <Textarea
+                  value={field.value ?? ""}
+                  onChange={field.onChange}
+                  placeholder="Nhập ghi chú"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <Button
           variant="outline"
           className={cn(
             "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400" : ""
+            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
           )}
           type="submit"
         >

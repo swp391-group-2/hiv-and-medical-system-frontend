@@ -1,5 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "./BaseURL";
+import type { patientPrescription, patientPrescriptionItems } from "@/types/prescription";
+
 
 // ✅ Lấy danh sách phác đồ ARV
 export const fetchARVProtocols = async () => {
@@ -74,13 +76,82 @@ export const fetchAppointmentDetail = async (appointmentId: number) => {
 };
 
 // ✅ Cập nhật phác đồ
-export const updatePrescription = async (
+
+// export const updatePrescriptionItem = async (
+// )=>{
+//   try{
+//     const res = await axios.post(
+//     `${BASE_URL}prescriptions/patiens`,
+//   )
+//     console.log("✅ Cập nhật phác đồ thành công:", res.data);
+//     return res.data;
+//   }catch (error) {
+//     console.error("❌ Lỗi khi cập nhật phác đồ:", error);
+//     throw error;
+//   }
+// }
+export const updatePrescriptionItem = async (
   appointmentId: number,
-  prescriptionId: number
+  prescriptionId: number,
+  items: patientPrescriptionItems[],
+  note: string 
 ) => {
-  const res = await axios.put(
-    `${BASE_URL}appointments/${appointmentId}/prescription`,
-    {prescriptionId}
-  );
+  const patientPrescriptionItems = items.map((item) => ({
+    dosage: item.dosage,
+    frequency: item.frequency,
+    quantity: Number(item.quantity) || 0,
+    medicationId: item.medication.medicationId,
+  }));
+
+  const body = {
+    duration: items[0]?.duration || "1 tháng",
+    frequency: items[0]?.frequency || "1 lần/ngày",
+    quantity: items[0]?.quantity ? Number(items[0].quantity) : 0,
+    prescriptionId,
+    appointmentId,
+    note, 
+    patientPrescriptionItems,
+  };
+
+  const res = await axios.post(`${BASE_URL}prescriptions/patients`, body);
+  console.log("🔍 Body gửi lên server:", body);
   return res.data;
+};
+
+
+export const fetchPatientPrescription = async (
+  appointmentId: number
+): Promise<patientPrescription | null> => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const res = await axios.get(`${BASE_URL}appointments/${appointmentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data?.data || null;
+  } catch (err) {
+    console.error("Lỗi khi lấy phác đồ bệnh nhân:", err);
+    return null;
+  }
+};
+export const getPatientDataByAppointmentId = async (
+  appointmentId: number
+): Promise<any> => {
+  try {
+    const token = localStorage.getItem("accessToken");
+    const res = await axios.get(`${BASE_URL}appointments/${appointmentId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    // Thông tin bệnh nhân thường nằm trong res.data.data.patient
+    return res.data?.data?.patient || null;
+  } catch (error) {
+    console.error(
+      "❌ Lỗi khi lấy thông tin bệnh nhân theo appointmentId:",
+      error
+    );
+    return null;
+  }
 };

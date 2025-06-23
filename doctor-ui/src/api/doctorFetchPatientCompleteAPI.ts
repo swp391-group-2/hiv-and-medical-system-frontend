@@ -1,43 +1,33 @@
+// doctorFetchPatientCompleteAPI.ts
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 import { BASE_URL } from "./BaseURL";
 import type { Appointment } from "@/types/appointment";
 
-// Gọi API không cần token
-export const fetchCompletedPatients = async () => {
-  try {
-    const res = await axios.get(`${BASE_URL}patients`);
+export const fetchCompletedAppointmentsByDoctor = async (): Promise<Appointment[]> => {
+  const token = localStorage.getItem("accessToken");
+  if (!token) throw new Error("Không tìm thấy access token");
 
-    const data = res.data?.data;
-    if (!Array.isArray(data)) {
-      console.error("Dữ liệu không hợp lệ:", res.data);
-      return [];
-    }
+  const decoded = jwtDecode(token) as { sub: string };
+  const doctorEmail = decoded.sub;
 
-    // In ra danh sách bệnh nhân
-    console.log("Danh sách bệnh nhân:", data);
+  // 1. Lấy profile bác sĩ theo email
+  const profileRes = await axios.get(`${BASE_URL}doctors/doctorProfile/${doctorEmail}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const doctorFullName = profileRes.data.data.fullName;
 
-    // Nếu cần lọc thêm thì làm ở đây, VD:
-    return data;
-  } catch (err) {
-    console.error("Lỗi khi gọi API:", err);
-    return [];
-  }
-};
-export const fetchAppointments = async (): Promise<Appointment[]> => {
-  try {
-    const res = await axios.get(`${BASE_URL}appointments`);
+  // 2. Lấy tất cả appointments
+  const appointmentsRes = await axios.get(`${BASE_URL}appointments`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  const allAppointments = appointmentsRes.data.data;
 
-    const data = res.data?.data;
-    if (!Array.isArray(data)) {
-      console.error("Dữ liệu appointments không hợp lệ:", res.data);
-      return [];
-    }
+  // 3. Lọc theo doctorName và status === 'COMPLETED'
+  const filtered = allAppointments.filter(
+    (a: Appointment) =>
+      a.doctorName === doctorFullName && a.status === "COMPLETED"
+  );
 
-    console.log("Danh sách appointments:", data);
-
-    return data;
-  } catch (err) {
-    console.error("Lỗi khi gọi API appointments:", err);
-    return [];
-  }
+  return filtered;
 };

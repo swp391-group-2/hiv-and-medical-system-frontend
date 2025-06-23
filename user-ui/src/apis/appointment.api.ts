@@ -1,6 +1,9 @@
 import http from "./http";
 
-export const URL_APPOINTMENTS = "appointments";
+export const URL_APPOINTMENTS = "payments/create-session";
+const getAppointmentCancelUrl = (appointmentId: number) => {
+  return `appointments/${appointmentId}/cancel`;
+};
 
 export type AppointmentBooking = {
   patientId: string;
@@ -9,9 +12,22 @@ export type AppointmentBooking = {
   labTestSlotId: number | null;
 };
 
+interface BookingConfirmResponse {
+  code: number;
+  success: boolean;
+  data: string;
+}
+
 const appointmentApi = {
   postAppointmentBooking: (value: AppointmentBooking) => {
-    return http.post(URL_APPOINTMENTS, value).then((response) => response.data);
+    return http
+      .post<BookingConfirmResponse>(URL_APPOINTMENTS, value)
+      .then((response) => response.data);
+  },
+  cancelAppointment: (appointmentId: number) => {
+    return http
+      .post(getAppointmentCancelUrl(appointmentId))
+      .then((response) => response.data);
   },
 };
 

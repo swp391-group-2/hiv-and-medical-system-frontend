@@ -38,26 +38,7 @@ export const uploadDoctorAvatar = async (doctorId:string, file: File) => {
 
   return response.data?.data || null;
 };
-// export const uploadDoctorAvatar = async (email: string, file: File) => {
-//   const formData = new FormData();
-//   formData.append("file", file); // đổi thành "avatar" nếu backend yêu cầu
 
-//   const encodedEmail = encodeURIComponent(email);
-//   const token = localStorage.getItem("accessToken"); // nếu dùng token
-
-//   const response = await axios.post(
-//     `${BASE_URL}doctors/${encodedEmail}/upload`,
-//     formData,
-//     {
-//       headers: {
-//         "Content-Type": "multipart/form-data",
-//         Authorization: `Bearer ${token}`, // nếu cần
-//       },
-//     }
-//   );
-
-//   return response.data?.data || null;
-// };
 // 5. Lấy thông tin hồ sơ bác sĩ theo email
 export const getDoctorByEmail = async (email: string) => {
   const response = await axios.get(`${BASE_URL}doctors/doctorProfile/${email}`);

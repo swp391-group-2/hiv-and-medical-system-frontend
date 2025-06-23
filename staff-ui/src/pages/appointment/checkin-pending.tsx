@@ -20,6 +20,9 @@ const CheckinPending = () => {
 
   const [filters, setFilters] = useState<Filters>({
     search: "",
+    code: "",
+    date: "default",
+    startHour: "default",
     serviceType: "default",
   });
 
@@ -31,16 +34,41 @@ const CheckinPending = () => {
       .filter((a) => {
         if (filters.search) {
           const q = filters.search.toLowerCase();
-          return (
-            a.patient.fullName.toLowerCase().includes(q) ||
-            a.patient.phoneNumber.includes(q)
-          );
+          if (a.patient.phoneNumber != null) {
+            return (
+              a.patient.fullName.toLowerCase().includes(q) ||
+              a.patient.phoneNumber.includes(q)
+            );
+          } else {
+            return a.patient.fullName.toLowerCase().includes(q);
+          }
+        }
+        return true;
+      })
+      .filter((a) => {
+        if (filters.code) {
+          if (a.appointmentCode != null) {
+            const q = filters.code.toLowerCase();
+            return a.appointmentCode.toLowerCase().includes(q);
+          }
+        }
+        return true;
+      })
+      .filter((a) => {
+        if (filters.date && filters.date !== "default") {
+          return formatDMY(a.date) === filters.date;
         }
         return true;
       })
       .filter((a) => {
         if (filters.serviceType && filters.serviceType !== "default") {
           return a.serviceType === filters.serviceType;
+        }
+        return true;
+      })
+      .filter((a) => {
+        if (filters.startHour && filters.startHour !== "default") {
+          return a.startTime === filters.startHour;
         }
         return true;
       });

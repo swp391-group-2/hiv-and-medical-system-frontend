@@ -6,26 +6,29 @@ export interface Medication {
   strength: string;
 }
 
-export interface PrescriptionItem {
+export interface patientPrescriptionItems {
   prescriptionItemId: number;
-  dosage: string;
-  frequency: string;
-  duration: string;
+  dosage: string;  //lieu dung
+  frequency: string; //tan suat
+  duration: string; //thoi gian
+  quantity: number;  //so luong
   medication: Medication;
 }
 
-export interface Prescription {
+export interface patientPrescription {
   prescriptionId: number;
-  name: string;
+  prescriptionDefaultName: string;
   contraindication: string;
   sideEffect: string;
   instructions: string;
-  prescriptionItems: PrescriptionItem[];
+  patientPrescriptionItems: patientPrescriptionItems[];
   dosageForm: string;
+  duration: string;
+  note:string
 }
 
 export interface PrescriptionResponse {
-  prescription: Prescription;
+  prescription: patientPrescription;
   patientId: string;
   patientName: string;
   doctorId: string;

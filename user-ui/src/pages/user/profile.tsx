@@ -8,10 +8,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import userApi from "@/apis/user.api";
 import type { UserProfileUpdateValues } from "@/types/userProfile.type";
 import { toast } from "sonner";
+import { useProfileStore } from "@/stores/profile.store";
 
 const UserProfile = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const setUserProfile = useProfileStore((state) => state.setProfile);
 
   const handlePasswordSubmit = async (values: {
     email: string;
@@ -41,7 +43,7 @@ const UserProfile = () => {
   };
   const user: User = getProfileFromLS();
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["patient-info", user.email],
     queryFn: async () => {
       const response = await userApi.getPatientProfile(user.email);
@@ -98,9 +100,24 @@ const UserProfile = () => {
       navigate(location.state.path);
     }
   };
+  if (isLoading) {
+    return (
+      <div className="w-full mt-7 flex justify-center items-center mr-10">
+        <div className="flex flex-row gap-2">
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
+        </div>
+      </div>
+    );
+  }
+  if (data) {
+    setUserProfile(data.data);
+  }
+
   return (
     <section className="w-full mt-7">
-      <h2 className="text-3xl font-bold mb-5">Hồ sơ</h2>
+      <h2 className="text-3xl text-primary font-bold mb-5">Hồ sơ</h2>
       <div className="w-full flex gap-5">
         <UserSummary />
 

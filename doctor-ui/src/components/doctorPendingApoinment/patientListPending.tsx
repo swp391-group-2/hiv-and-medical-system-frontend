@@ -15,7 +15,9 @@ const PatientListPending: React.FC<Props> = ({ appointments, loading }) => {
     (app) =>
       app.patient.fullName.toLowerCase().includes(search.toLowerCase()) ||
       (app.patient.patientCode &&
-        app.patient.patientCode.toLowerCase().includes(search.toLowerCase()))
+        app.patient.patientCode.toLowerCase().includes(search.toLowerCase())) ||
+      (app.appointmentCode &&
+        app.appointmentCode.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
@@ -25,7 +27,7 @@ const PatientListPending: React.FC<Props> = ({ appointments, loading }) => {
       </h2>
       <input
         type="text"
-        placeholder="Tìm kiếm tên, mã BN..."
+        placeholder="Tìm kiếm tên, mã bệnh nhân, mã lịch hẹn..."
         className="w-full border rounded px-3 py-2 mb-4"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
