@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { NotebookTabs } from "lucide-react";
 import type { Patient } from "@/types/patientType";
-import type { Appointment } from "@/types/appointment";
+import type { Appointment, LabResult } from "@/types/appointment";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import BasicModal from "@/components/Modal/basicModal";
 
-const PatientCard: React.FC<{ patient: Patient; appointment: Appointment }> = ({
+const PatientCard: React.FC< { result: LabResult ;patient: Patient; appointment: Appointment }> = ({
   patient,
   appointment,
+  
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [tab, setTab] = useState("info");
@@ -112,6 +113,19 @@ const PatientCard: React.FC<{ patient: Patient; appointment: Appointment }> = ({
               <div>
                 <b>Trạng thái:</b> {patient.userStatus || "Không rõ"}
               </div>
+              {/* Thêm kết quả xét nghiệm */}
+              <div>
+                <b>Kết quả CD4:</b>{" "}
+                {appointment.labResult?.resultNumericCD4 !== undefined
+                  ? appointment.labResult.resultNumericCD4
+                  : "Không có"}
+              </div>
+              <div>
+                <b>Kết quả Viral Load:</b>{" "}
+                {appointment.labResult?.resultNumericViralLoad !== undefined
+                  ? appointment.labResult.resultNumericViralLoad
+                  : "Không có"}
+              </div>
             </div>
           </TabsContent>
 
@@ -163,9 +177,9 @@ const PatientCard: React.FC<{ patient: Patient; appointment: Appointment }> = ({
 
                 {/* note */}
                 <div className="bg-gray-50 p-4 rounded-xl border border-gray-200 shadow-sm">
-        <h3 className="font-semibold text-blue-700 mb-1">Ghi chú</h3>
-        <p>{prescription.note || "Không có"}</p>
-      </div>
+                  <h3 className="font-semibold text-blue-700 mb-1">Ghi chú</h3>
+                  <p>{prescription.note || "Không có"}</p>
+                </div>
               </div>
             ) : (
               <div className="text-gray-500 italic text-sm">
