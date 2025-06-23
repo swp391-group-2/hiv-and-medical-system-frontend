@@ -16,7 +16,6 @@ import type { Appointment } from "@/types/types";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 const sampleTestSchema = z.object({
@@ -113,6 +112,7 @@ export function SampleTestForm({ appt }: { appt: Appointment }) {
 
         <Button
           variant="outline"
+          disabled={isPending}
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer"
         >
