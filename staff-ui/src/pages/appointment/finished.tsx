@@ -9,14 +9,22 @@ import {
   type Filters,
 } from "@/components/appointments/appointment-filters";
 import { LoadingOverlay } from "@/components/loading-overlay";
+import { RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
 
 const FinishedAppointments = () => {
+  const queryClient = useQueryClient();
   const {
     data: appointments = [],
     isLoading,
     isError,
     error,
   } = useAppointments();
+
+  const handleReLoadList = () => {
+    queryClient.invalidateQueries({ queryKey: ["appointments"] });
+  };
 
   const [filters, setFilters] = useState<Filters>({
     search: "",
@@ -88,12 +96,22 @@ const FinishedAppointments = () => {
       </div>
       <AppointmentFilters onApply={setFilters} />
       <Tabs defaultValue="list">
-        <TabsList>
-          <TabsTrigger value="list">Danh sách</TabsTrigger>
-          <TabsTrigger value="calendar" disabled>
-            Lịch
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex justify-between">
+          <TabsList>
+            <TabsTrigger value="list">Danh sách</TabsTrigger>
+            <TabsTrigger value="calendar" disabled>
+              Lịch
+            </TabsTrigger>
+          </TabsList>
+          <Button
+            variant="outline"
+            className="bg-white hover:bg-gray-100 cursor-pointer mr-4"
+            onClick={handleReLoadList}
+          >
+            {"Làm mới "}
+            <RotateCcw />
+          </Button>
+        </div>
         <TabsContent value="list">
           <AppointmentTable data={filtered} />
         </TabsContent>
