@@ -3,6 +3,7 @@ import type { Patient } from "../patientType";
 import type { patientPrescription } from "../prescription";
 import type { LabResult } from "./labResult";
 import type { LabSample } from "./labSample";
+import type { LabTestParameter } from "./labTestParameter";
 
 export interface Appointment {
   appointmentId: number;
@@ -37,4 +38,5 @@ export interface Appointment {
   labSample?: LabSample;
   labResult?: LabResult;
   patientPrescription: patientPrescription
+  labTestParameter: LabTestParameter
 }
