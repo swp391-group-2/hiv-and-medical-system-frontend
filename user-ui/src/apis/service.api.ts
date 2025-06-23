@@ -19,7 +19,7 @@ const serviceApi = {
   getServicesByType: (serviceType: string) => {
     return apiGuest
       .get<ServiceResponse>(getServicesByTypeUrl(serviceType))
-      .then((res) => res.data); // Trả về danh sách ServiceResponse
+      .then((res) => res.data);
   },
 };
 

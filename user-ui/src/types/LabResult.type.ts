@@ -23,13 +23,15 @@ export interface LabTestParameter {
 }
 
 export interface LabResult {
+  serviceType: "SCREENING" | "CONFIRMATORY";
+  serviceName: string;
   labResultId: number;
   resultText: string;
   resultNumericCD4: number;
   resultNumericViralLoad: number;
   conclusion: string;
   note: string;
-  resultStatus: "PENDING" | "COMPLETED" | "CANCELLED";
+  resultStatus: "FINISHED" | "PENDING" | "REJECTED";
   resultDate: string;
   labSample: LabSample;
   labTestParameter: LabTestParameter;

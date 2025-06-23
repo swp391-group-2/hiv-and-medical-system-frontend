@@ -1,5 +1,6 @@
 import type { DoctorProfile } from "./doctor.type";
 import type { LabResult } from "./LabResult.type";
+
 import type { Prescription } from "./prescriptions.type";
 
 export type AppointmentStatus =

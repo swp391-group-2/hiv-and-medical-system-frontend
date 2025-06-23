@@ -79,7 +79,7 @@ const AppointmentItem = ({ item }: { item: AppointmentEntry }) => {
         {item.appointmentCode}
       </span>
       <span className="text-gray-800 font-medium col-span-2">
-        {"BS. " + item.doctorName}
+        {item.doctorName && "BS. " + item.doctorName}
       </span>
       <span className="text-gray-600 bg-gray-100 px-2 py-1 rounded text-sm col-span-2">
         {item.serviceName}
@@ -90,7 +90,7 @@ const AppointmentItem = ({ item }: { item: AppointmentEntry }) => {
       <span className=" font-mono text-sm bg-green-50 text-green-500 px-2 py-1 rounded col-span-1">
         {item.startTime} - {item.endTime}
       </span>
-      <span className="font-mono text-sm px-3 py-1 rounded-full col-span-1 text-center font-medium">
+      <span className="font-mono text-sm whitespace-nowrap px-3 py-1 rounded-full col-span-1 text-center font-medium">
         <span
           className={`px-2 py-1 rounded-full text-sm font-semibold   ${
             item.status === "SCHEDULED"
@@ -99,7 +99,9 @@ const AppointmentItem = ({ item }: { item: AppointmentEntry }) => {
               ? "bg-green-100 text-green-500"
               : item.status === "CANCELLED"
               ? "bg-red-50 text-red-500"
-              : "bg-gray-100 text-gray-800"
+              : item.status === "CHECKED_IN" || item.status === "LAB_COMPLETED"
+              ? "bg-yellow-100 text-yellow-500"
+              : "bg-gray-100 text-gray-500"
           }`}
         >
           {item.status === "SCHEDULED"
@@ -108,7 +110,9 @@ const AppointmentItem = ({ item }: { item: AppointmentEntry }) => {
             ? "Đã xong"
             : item.status === "CANCELLED"
             ? "Đã hủy"
-            : item.status}
+            : item.status === "CHECKED_IN" || item.status === "LAB_COMPLETED"
+            ? "Chờ Khám"
+            : "Không xác định"}
         </span>
       </span>
 
