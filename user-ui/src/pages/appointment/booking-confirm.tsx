@@ -24,8 +24,9 @@ import type { AppointmentBooking } from "@/apis/appointment.api";
 import appointmentApi from "@/apis/appointment.api";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppRoutes } from "@/constants/appRoutes";
+import { useEffect } from "react";
 
 const BookingConfirm = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ const BookingConfirm = () => {
   const service = useBookingStore((state) => state.service);
   const scheduleSlot = useBookingStore((state) => state.scheduleSlot);
   const labTestSlot = useBookingStore((state) => state.labTestSlot);
-  const reset = useBookingStore((state) => state.reset);
+  // const reset = useBookingStore((state) => state.reset);
 
   const bookingMutation = useMutation({
     mutationFn: async (appointmentBookingData: AppointmentBooking) => {
@@ -43,8 +44,8 @@ const BookingConfirm = () => {
       );
       return response;
     },
-    onSuccess: () => {
-      toast.success("Đã đăng ký lịch thành công ");
+    onSuccess: (data) => {
+      window.location.replace(data.data);
     },
     onError: (error) => {
       toast.error(error.message);
@@ -52,7 +53,10 @@ const BookingConfirm = () => {
   });
 
   const handleConfirmBooking = () => {
-    if (!user || !service) return;
+    if (!user || !service) {
+      navigate(AppRoutes.HOME);
+      return;
+    }
 
     const bookingData: AppointmentBooking = {
       patientId: user.patientId,
@@ -60,11 +64,23 @@ const BookingConfirm = () => {
       scheduleSlotId: scheduleSlot?.id || null,
       labTestSlotId: labTestSlot?.id || null,
     };
-
     bookingMutation.mutate(bookingData);
-    reset();
-    navigate(AppRoutes.HOME);
   };
+
+  const { doctorId, serviceType } = useParams<{
+    doctorId: string;
+    serviceType: string;
+  }>();
+  useEffect(() => {
+    console.log("hello");
+    if (!service || (!scheduleSlot && !labTestSlot)) {
+      if (doctorId) {
+        navigate(AppRoutes.HOME);
+      } else if (serviceType) {
+        navigate(AppRoutes.HOME);
+      }
+    }
+  }, []);
 
   return (
     <div className="min-h-screen  p-4">
@@ -122,7 +138,7 @@ const BookingConfirm = () => {
                     <TableBody>
                       <TableRow>
                         <TableCell>1</TableCell>
-                        <TableCell>Khám điều trị HIV</TableCell>
+                        <TableCell>{service?.name}</TableCell>
                         {doctor && <TableCell>{doctor.fullName}</TableCell>}
                         {scheduleSlot && (
                           <TableCell>
@@ -205,9 +221,7 @@ const BookingConfirm = () => {
                       <User className="w-5 h-5 text-gray-500" />
                       <div>
                         <span className="text-gray-600">Giới tính:</span>
-                        <span className="ml-2 font-medium">
-                          {user?.gender === "male" ? "Nam" : "Nữ"}
-                        </span>
+                        <span className="ml-2 font-medium">{user?.gender}</span>
                       </div>
                     </div>
 
@@ -243,7 +257,6 @@ const BookingConfirm = () => {
                   </div>
                 </div>
 
-                {/* Warning Notice */}
                 <Alert
                   variant="destructive"
                   className="mt-6 border-red-200 bg-red-50"
@@ -256,7 +269,6 @@ const BookingConfirm = () => {
                   </AlertDescription>
                 </Alert>
 
-                {/* Confirm Button */}
                 <div className="mt-6 flex justify-end">
                   <Button
                     onClick={handleConfirmBooking}

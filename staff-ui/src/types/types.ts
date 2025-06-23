@@ -10,6 +10,7 @@ export type LabResultStatus = "PENDING" | "REJECTED" | "FINISHED";
 export type ParameterType = "NUMERIC" | "TEXT";
 
 export type ServiceType = "CONSULTATION" | "LAB_TEST";
+export type ServiceName = "CONSULTATION" | "SCREENING" | "CONFIRMATORY";
 
 /** Patient info */
 export interface Patient {
@@ -102,8 +103,9 @@ export interface PatientPrescription {
   duration: string;
   note: string;
   createdAt: string;
-  originalPrescription: Prescription;
-  prescriptionItems: PatientPresItem[];
+  prescriptionDefaultId: number;
+  prescriptionDefaultName: string;
+  patientPrescriptionItems: PatientPresItem[];
 }
 
 export interface PatientPresItem {
@@ -122,7 +124,7 @@ export interface Appointment {
   patient: Patient;
 
   serviceId: number;
-  serviceName: string;
+  serviceName: ServiceName;
   serviceType: ServiceType;
   price: number;
   note: string;
@@ -139,7 +141,7 @@ export interface Appointment {
   labSampleId: number | null;
   labSample: LabSample;
   labResult: LabResult;
-  prescription: PatientPrescription;
+  patientPrescription: PatientPrescription;
 }
 
 export type Response<T> = {

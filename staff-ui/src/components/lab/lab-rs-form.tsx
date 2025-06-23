@@ -139,7 +139,7 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
           variant="outline"
           className={cn(
             "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400" : ""
+            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
           )}
           type="submit"
         >
@@ -269,7 +269,7 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
           variant="outline"
           className={cn(
             "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400" : ""
+            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
           )}
           type="submit"
         >

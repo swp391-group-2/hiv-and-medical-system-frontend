@@ -1,7 +1,6 @@
 import {
   Select,
   SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -9,20 +8,57 @@ import { Calendar } from "@/components/ui/calendar";
 import { Clock, Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import AppointmentsTabs from "@/components/user/appointments/appointments-tabs";
-import { appointmentsData, slots } from "@/raw-data/appointment-data";
-
-export interface Slot {
-  id: number;
-  duration: string;
-}
+import { useQuery } from "@tanstack/react-query";
+import userApi from "@/apis/user.api";
+import { type AppointmentApiResponse } from "@/types/appointment.type";
+import { useProfileStore } from "@/stores/profile.store";
 
 const Appointments = () => {
+  const userProfile = useProfileStore((state) => state.profile);
   const [date, setDate] = useState<Date | undefined>(new Date());
+
+  const { data, isLoading } = useQuery<AppointmentApiResponse>({
+    queryKey: ["appointments"],
+    queryFn: async () => {
+      const response = await userApi.getPatientAppointments(
+        userProfile.patientId
+      );
+      return response.data;
+    },
+  });
+
+  if (isLoading) {
+    return (
+      <div className="w-full mt-7 flex justify-center items-center mr-10">
+        <div className="flex flex-row gap-2">
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
+          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
+        </div>
+      </div>
+    );
+  }
+
+  const schedules = data?.data || [];
+
+  const schedulesBooked = schedules.filter(
+    (schedule) => schedule.status === "SCHEDULED"
+  );
+  const schedulesWaiting = schedules.filter(
+    (schedule) =>
+      schedule.status === "CHECKED_IN" || schedule.status === "LAB_COMPLETED"
+  );
+  const schedulesFinished = schedules.filter(
+    (schedule) => schedule.status === "COMPLETED"
+  );
+  const schedulesCancelled = schedules.filter(
+    (schedule) => schedule.status === "CANCELLED"
+  );
 
   return (
     <section className="w-full mt-7">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold mb-5">Lịch khám</h2>
+        <h2 className="text-3xl text-primary font-bold mb-5">Lịch khám</h2>
         <div className="flex gap-4 mr-10">
           <Select>
             <SelectTrigger className="cursor-pointer">
@@ -57,16 +93,21 @@ const Appointments = () => {
               />
             </SelectTrigger>
             <SelectContent>
-              {slots.map((slot) => (
+              {/* {slots.map((slot) => (
                 <SelectItem value={slot.id.toString()}>
                   {slot.duration}
                 </SelectItem>
-              ))}
+              ))} */}
             </SelectContent>
           </Select>
         </div>
       </div>
-      <AppointmentsTabs {...appointmentsData} />
+      <AppointmentsTabs
+        booked={schedulesBooked}
+        waiting={schedulesWaiting}
+        finished={schedulesFinished}
+        cancel={schedulesCancelled}
+      />
     </section>
   );
 };

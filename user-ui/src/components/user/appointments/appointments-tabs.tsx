@@ -1,26 +1,19 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AppointmentLabels, AppointmentsList } from "./appointments-list";
-import type { Slot } from "@/pages/user/appointments";
-export interface AppointmentInfo {
-  id: string;
-  doctor: string;
-  type: string;
-  date: Date;
-  time: Slot;
-}
+import type { AppointmentEntry } from "@/types/appointment.type";
 
 export type AppointmentsTabsProps = {
-  booked: AppointmentInfo[];
-  waiting: AppointmentInfo[];
-  finished: AppointmentInfo[];
-  comeback: AppointmentInfo[];
+  booked: AppointmentEntry[];
+  waiting: AppointmentEntry[];
+  finished: AppointmentEntry[];
+  cancel: AppointmentEntry[];
 };
 
 const AppointmentsTabs = ({
   booked,
   waiting,
   finished,
-  comeback,
+  cancel,
 }: AppointmentsTabsProps) => {
   return (
     <section className="pr-10">
@@ -29,24 +22,24 @@ const AppointmentsTabs = ({
           <TabsTrigger value="booked_success">Đặt thành công</TabsTrigger>
           <TabsTrigger value="waiting">Chờ khám</TabsTrigger>
           <TabsTrigger value="finished">Đã khám</TabsTrigger>
-          <TabsTrigger value="comeback">Tái khám</TabsTrigger>
+          <TabsTrigger value="cancel">Đã Hủy</TabsTrigger>
         </TabsList>
         <AppointmentLabels />
-        {/*Booked success*/}
+
         <TabsContent value="booked_success">
           <AppointmentsList list={booked} />
         </TabsContent>
-        {/*Waiting*/}
+
         <TabsContent value="waiting">
           <AppointmentsList list={waiting} />
         </TabsContent>
-        {/*Finished*/}
+
         <TabsContent value="finished">
           <AppointmentsList list={finished} />
         </TabsContent>
-        {/*Return*/}
-        <TabsContent value="comeback">
-          <AppointmentsList list={comeback} />
+
+        <TabsContent value="cancel">
+          <AppointmentsList list={cancel} />
         </TabsContent>
       </Tabs>
     </section>

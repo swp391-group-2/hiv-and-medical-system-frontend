@@ -9,12 +9,16 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
-import { Funnel, Search, Clock, Calendar } from "lucide-react";
+import { Funnel, Search, Clock, Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { formatDMY } from "@/lib/utils";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
+import { format } from "date-fns";
 
 export type Filters = {
   search: string;
+  code: string;
   date: string;
   startHour: string;
   serviceType: string;
@@ -26,9 +30,10 @@ export function AppointmentFilters({
   onApply: (f: Filters) => void;
 }) {
   const [search, setSearch] = useState("");
+  const [searchCode, setSearchCode] = useState("");
   const [serviceType, setServiceType] = useState("");
   const [startHour, setStartHour] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState<Date | undefined>();
 
   return (
     <Card className="w-full mt-4 mb-4">
@@ -47,18 +52,46 @@ export function AppointmentFilters({
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
-          <Select value={date} onValueChange={setDate}>
+          <div className="relative flex-1 min-w-[200px]">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Input
+              className="pl-10"
+              placeholder="Nhập mã lịch hẹn..."
+              value={searchCode}
+              onChange={(e) => setSearchCode(e.target.value)}
+            />
+          </div>
+          <Select
+            value={date ? date.toISOString() : "default"}
+            onValueChange={(value) => {
+              if (value === "default") {
+                setDate(undefined);
+              } else {
+                setDate(new Date(value));
+              }
+            }}
+          >
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
-              <Calendar className="mr-2 h-4 w-4" />
+              <CalendarIcon className="mr-2 h-4 w-4" />
               <SelectValue placeholder="Ngày" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="default">Tất cả ngày</SelectItem>
-              <SelectItem value={formatDMY(new Date().toISOString())}>
-                Hôm nay
-              </SelectItem>
+              <SelectItem value={new Date().toISOString()}>Hôm nay</SelectItem>
             </SelectContent>
           </Select>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" className="w-[200px] justify-start">
+                {date ? formatDMY(date.toISOString()) : "Chọn ngày khác"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0">
+              <Calendar mode="single" selected={date} onSelect={setDate} />
+            </PopoverContent>
+          </Popover>
+
           <Select value={startHour} onValueChange={setStartHour}>
             <SelectTrigger className="w-[200px] justify-start cursor-pointer">
               <Clock className="mr-2 h-4 w-4" />
@@ -95,7 +128,15 @@ export function AppointmentFilters({
           <Button
             variant="outline"
             className="bg-blue-500 hover:bg-blue-600 cursor-pointer text-white hover:text-white"
-            onClick={() => onApply({ search, date, startHour, serviceType })}
+            onClick={() =>
+              onApply({
+                search,
+                code: searchCode,
+                date: date ? formatDMY(date.toISOString()) : "",
+                startHour,
+                serviceType,
+              })
+            }
           >
             Áp dụng
           </Button>

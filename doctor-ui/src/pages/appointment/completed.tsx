@@ -1,9 +1,10 @@
 import PatientListManage from "@/components/PatientManagement/patientListManage";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import type { Patient } from "../../types/patientType";
 import { fetchCompletedAppointmentsByDoctor } from "@/api/doctorFetchPatientCompleteAPI";
 import HeaderStats from "@/components/PatientManagement/headerStats.t";
 import type { Appointment } from "@/types/appointment";
+
 
 const PatientList = () => {
   const [patients, setPatients] = useState<Patient[]>([]);

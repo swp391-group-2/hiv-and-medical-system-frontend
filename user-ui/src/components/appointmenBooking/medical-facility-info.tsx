@@ -5,46 +5,16 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Card } from "../ui/card";
-import { useParams } from "react-router-dom";
 import useBookingStore from "@/stores/booking.store";
-import { useQuery } from "@tanstack/react-query";
-import serviceApi from "@/apis/service.api";
+import type { Service } from "@/types/service.type";
 
-function MedicalFacilityInfo() {
-  const { serviceType } = useParams<{ serviceType: string }>();
+interface MedicalFacilityInfoProps {
+  service: Service;
+}
+
+function MedicalFacilityInfo({ service }: MedicalFacilityInfoProps) {
   const doctor = useBookingStore((state) => state.doctor);
   const setService = useBookingStore((state) => state.setService);
-
-  const { data: service, isLoading } = useQuery({
-    queryKey: ["service", serviceType],
-    queryFn: async () => {
-      if (!serviceType) {
-        throw new Error("Service type is required");
-      }
-      const response = await serviceApi
-        .getServicesByType(serviceType)
-        .then((res) => res.data);
-      return response;
-    },
-    enabled: !!serviceType,
-  });
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="loader"></div>
-      </div>
-    );
-  }
-
-  if (!service) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="error">Failed to load service data</div>
-      </div>
-    );
-  }
-
   const medicalInfoList: {
     id: number;
     title: string;

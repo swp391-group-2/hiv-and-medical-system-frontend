@@ -10,13 +10,16 @@ export function LabRow({ appt }: { appt: Appointment }) {
   return (
     <TableRow>
       <TableCell>{appt.appointmentId}</TableCell>
+      <TableCell>{appt.appointmentCode}</TableCell>
       <TableCell>
         <PatientCell
           name={appt.patient.fullName}
           phone={appt.patient.phoneNumber}
         />
       </TableCell>
-      <TableCell>{appt.serviceType}</TableCell>
+      <TableCell>
+        {appt.serviceType === "CONSULTATION" ? "Khám combo" : "Xét nghiệm"}
+      </TableCell>
       <TableCell>{formatDMY(appt.date)}</TableCell>
       <TableCell>{appt.startTime}</TableCell>
       <TableCell>{appt.doctorName}</TableCell>

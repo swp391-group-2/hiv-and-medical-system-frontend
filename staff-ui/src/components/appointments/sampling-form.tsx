@@ -16,7 +16,7 @@ import type { Appointment } from "@/types/types";
 import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { LoadingOverlay } from "../loading-overlay";
+import { cn } from "@/lib/utils";
 
 const sampleTestSchema = z.object({
   sampleCode: z.string().nonempty("Mã mẫu không được bỏ trống"),
@@ -78,9 +78,9 @@ export function SampleTestForm({ appt }: { appt: Appointment }) {
   const onSubmit = (data: SampleTestValues) => {
     checkIn(data);
   };
+
   return (
     <Form {...form}>
-      {isPending && <LoadingOverlay message="Đang tải..." />}
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
@@ -113,9 +113,12 @@ export function SampleTestForm({ appt }: { appt: Appointment }) {
         <Button
           variant="outline"
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer"
+          className={cn(
+            "w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer",
+            isPending ? " bg-gray-400 cursor-not-allowed" : ""
+          )}
         >
-          Xác nhận
+          {isPending ? "Đang xử lý" : "Xác nhận"}
         </Button>
       </form>
     </Form>
@@ -134,7 +137,11 @@ export function SampleConsultForm({ appt }: { appt: Appointment }) {
     },
   });
 
-  const { mutate: checkIn } = useMutation<void, Error, SampleConsultValues>({
+  const { mutate: checkIn, isPending } = useMutation<
+    void,
+    Error,
+    SampleConsultValues
+  >({
     mutationFn: async (data: SampleConsultValues) =>
       await axios.post(
         `/api/appointments/${appt.appointmentId}/check-in`,
@@ -225,9 +232,12 @@ export function SampleConsultForm({ appt }: { appt: Appointment }) {
         <Button
           variant="outline"
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer"
+          className={cn(
+            "w-full bg-blue-500 hover:bg-blue-600 hover:text-white text-white cursor-pointer",
+            isPending ? " bg-gray-400 cursor-not-allowed" : ""
+          )}
         >
-          Xác nhận
+          {isPending ? "Đang xử lý" : "Xác nhận"}
         </Button>
       </form>
     </Form>
