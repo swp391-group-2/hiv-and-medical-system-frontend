@@ -13,6 +13,18 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 export function DoctorRow({
   doctor,
   handleDeleteDoctor,
@@ -58,7 +70,11 @@ export function DoctorRow({
       <TableCell className="grid grid-cols-3 items-center gap-4">
         <Tooltip delayDuration={500}>
           <TooltipTrigger>
-            <Button className="cursor-pointer" variant="outline" size="sm">
+            <Button
+              className="cursor-pointer w-full"
+              variant="outline"
+              size="sm"
+            >
               <Edit className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
@@ -69,7 +85,11 @@ export function DoctorRow({
 
         <Tooltip delayDuration={500}>
           <TooltipTrigger>
-            <Button className="cursor-pointer" variant="outline" size="sm">
+            <Button
+              className="cursor-pointer w-full"
+              variant="outline"
+              size="sm"
+            >
               <Calendar className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
@@ -77,21 +97,38 @@ export function DoctorRow({
             <p>Lịch làm việc</p>
           </TooltipContent>
         </Tooltip>
-        <Tooltip delayDuration={500}>
-          <TooltipTrigger>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
             <Button
               variant="outline"
               size="sm"
               className="cursor-pointer text-red-500 hover:text-red-700 hover:bg-red-50"
-              onClick={() => handleDeleteDoctor(doctor.doctorId)}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Xoá bác sĩ</p>
-          </TooltipContent>
-        </Tooltip>
+          </AlertDialogTrigger>
+
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Xác nhận xoá bác sĩ</AlertDialogTitle>
+              <AlertDialogDescription>
+                Hành động này không thể hoàn tác. Bạn có chắc muốn xoá bác sĩ
+                này không?
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel className="cursor-pointer ">
+                Huỷ
+              </AlertDialogCancel>
+              <AlertDialogAction
+                className="cursor-pointer bg-red-500 hover:bg-red-600"
+                onClick={() => handleDeleteDoctor(doctor.doctorId)}
+              >
+                Xoá
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </TableCell>
     </TableRow>
   );
