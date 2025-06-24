@@ -134,6 +134,86 @@ const ManagerDoctors = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/*  */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Danh sách Bác sĩ</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {filteredDoctors.map((doctor) => (
+              <div key={doctor.doctorId} className="p-4 border rounded-lg">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center space-x-4">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage
+                        src={doctor.urlImage || "/placeholder.svg"}
+                      />
+                      <AvatarFallback>
+                        {doctor.fullName.split(" ").pop()?.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="font-medium text-lg">{doctor.fullName}</h3>
+                      <p className="text-sm text-gray-600">
+                        {doctor.specialization}
+                      </p>
+                      <div className="flex items-center mt-1">
+                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
+                        <span className="text-sm text-gray-600">5.0/5.0</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button variant="outline" size="sm">
+                      <Edit className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" size="sm">
+                      <Calendar className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      onClick={() => handleDeleteDoctor(doctor.doctorId)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">
+                      Lịch làm việc
+                    </p>
+                    <p className="text-sm text-gray-600">{}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">
+                      Kinh nghiệm
+                    </p>
+                    <p className="text-sm text-gray-600">{}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">
+                      Bệnh nhân hôm nay
+                    </p>
+                    <Badge variant="secondary">{} bệnh nhân</Badge>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">
+                      Tổng bệnh nhân
+                    </p>
+                    <p className="text-sm text-gray-600">{}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
