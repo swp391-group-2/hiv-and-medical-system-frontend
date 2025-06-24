@@ -22,48 +22,73 @@ import {
   Trash2,
 } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
+import type { Doctor } from "@/types/doctor";
 
-const doctors = [
+export const doctors: Doctor[] = [
   {
-    id: 1,
-    name: "BS. Nguyễn Văn A",
-    specialty: "Nhiễm khuẩn",
-    department: "Khoa Nội",
-    schedule: "Thứ 2,4,6 (8:00-17:00)",
-    experience: "10 năm",
-    rating: 4.8,
-    patientsToday: 12,
-    totalPatients: 1250,
-    avatar: "/placeholder.svg?height=40&width=40",
+    doctorId: "doc-001",
+    userId: "user-101",
+    email: "anna.nguyen@example.com",
+    fullName: "Dr. Anna Nguyễn",
+    userStatus: "active",
+    doctorCode: "AN001",
+    specialization: "Truyền nhiễm",
+    licenseNumber: "LIC-2025-0456",
+    urlImage: "https://example.com/images/doctors/anna_nguyen.jpg",
   },
   {
-    id: 2,
-    name: "BS. Trần Thị B",
-    specialty: "Nội khoa",
-    department: "Khoa Nội",
-    schedule: "Thứ 3,5,7 (8:00-17:00)",
-    experience: "8 năm",
-    rating: 4.6,
-    patientsToday: 8,
-    totalPatients: 980,
-    avatar: "/placeholder.svg?height=40&width=40",
+    doctorId: "doc-002",
+    userId: "user-102",
+    email: "john.smith@example.com",
+    fullName: "Dr. John Smith",
+    userStatus: "active",
+    doctorCode: "JS002",
+    specialization: "Da liễu",
+    licenseNumber: "LIC-2024-1123",
+    urlImage: "https://example.com/images/doctors/john_smith.jpg",
   },
   {
-    id: 3,
-    name: "BS. Lê Văn C",
-    specialty: "Da liễu",
-    department: "Khoa Da liễu",
-    schedule: "Thứ 2-6 (13:00-18:00)",
-    experience: "12 năm",
-    rating: 4.9,
-    patientsToday: 15,
-    totalPatients: 1580,
-    avatar: "/placeholder.svg?height=40&width=40",
+    doctorId: "doc-003",
+    userId: "user-103",
+    email: "mei.li@example.com",
+    fullName: "Dr. Mei Lì",
+    userStatus: "inactive",
+    doctorCode: "ML003",
+    specialization: "Nhi khoa",
+    licenseNumber: "LIC-2023-0789",
+    urlImage: "https://example.com/images/doctors/mei_li.jpg",
+  },
+  {
+    doctorId: "doc-004",
+    userId: "user-104",
+    email: "carlos.ramirez@example.com",
+    fullName: "Dr. Carlos Ramírez",
+    userStatus: "active",
+    doctorCode: "CR004",
+    specialization: "Thần kinh",
+    licenseNumber: "LIC-2025-0234",
+    urlImage: "https://example.com/images/doctors/carlos_ramirez.jpg",
+  },
+  {
+    doctorId: "doc-005",
+    userId: "user-105",
+    email: "aisha.khan@example.com",
+    fullName: "Dr. Aisha Khan",
+    userStatus: "active",
+    doctorCode: "AK005",
+    specialization: "Miễn dịch học",
+    licenseNumber: "LIC-2022-3345",
+    urlImage: "https://example.com/images/doctors/aisha_khan.jpg",
   },
 ];
 
 const ManagerDoctors = () => {
   const [search, setSearch] = useState("");
+
+  const filteredDoctors = doctors.filter((doctor) =>
+    doctor.fullName.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
