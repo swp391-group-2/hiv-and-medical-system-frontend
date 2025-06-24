@@ -23,8 +23,8 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
-import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
+import { Loader2 } from "lucide-react";
 
 const resultTextSchema = z.object({
   resultText: z.enum(["Dương tính", "Âm tính"], {
@@ -137,13 +137,17 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
         />
         <Button
           variant="outline"
-          className={cn(
-            "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
-          )}
+          disabled={isPending}
+          className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
           type="submit"
         >
-          {isPending ? "Đang gửi..." : "Gửi kết quả"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang gửi...
+            </>
+          ) : (
+            "Gửi kết quả"
+          )}
         </Button>
       </form>
     </Form>
@@ -267,13 +271,17 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
         />
         <Button
           variant="outline"
-          className={cn(
-            "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
-          )}
+          disabled={isPending}
+          className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
           type="submit"
         >
-          {isPending ? "Đang gửi..." : "Gửi kết quả"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang gửi...
+            </>
+          ) : (
+            "Gửi kết quả"
+          )}
         </Button>
       </form>
     </Form>
