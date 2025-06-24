@@ -20,6 +20,8 @@ import { useAuthStore } from "./stores/auth.store";
 import { useEffect } from "react";
 import AdminSidebar from "./components/admin/admin-sidebar";
 import AdminDashboard from "./pages/admin/dashboard";
+import AdminAccounts from "./pages/admin/accounts";
+import AdminBlogs from "./pages/admin/blogs";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +56,8 @@ function App() {
           <Route path="admin" element={<AdminSidebar />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="accounts" element={<AdminAccounts />} />
+            <Route path="blogs" element={<AdminBlogs />} />
           </Route>
           {/* staff */}
           <Route path="staff" element={<MainLayout />}>

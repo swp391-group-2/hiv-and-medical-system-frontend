@@ -1,6 +1,5 @@
 import { useFeaturedStats } from "@/api/stats";
 import { Card, CardContent } from "@/components/ui/card";
-import type { StatCardStaticProps } from "@/types/stats";
 import {
   Calendar,
   TrendingUp,
@@ -11,36 +10,9 @@ import {
 import { LoadingOverlay } from "./loading-overlay";
 import { toast } from "sonner";
 
-const stats = [
-  {
-    title: "Tổng khách hàng",
-    value: "1.234",
-    change: "+5%",
-    isGrowing: true,
-  },
-  {
-    title: "Bác sĩ hoạt động",
-    value: "56",
-    change: "-3%",
-    isGrowing: false,
-  },
-  {
-    title: "Lịch hẹn hôm nay",
-    value: "32",
-    change: "+12%",
-    isGrowing: true,
-  },
-  {
-    title: "Doanh thu tháng",
-    value: "₫120.500.000",
-    change: "+8%",
-    isGrowing: true,
-  },
-] as StatCardStaticProps[];
-
 export const StatCardsSection = () => {
   const start = "2025-06-01"; // whatever historic date you like
-  const end = new Date().toISOString().slice(0, 10);
+  const end = "2025-06-23";
 
   const {
     data: featuredStats = [],
