@@ -1,18 +1,14 @@
 import userApi from "@/apis/user.api";
 import CheckUpResultList from "@/components/user/result/checkup-rs-list";
-import { useProfileStore } from "@/stores/profile.store";
 import type { AppointmentCompletedApiResponse } from "@/types/appointment.type";
 import { useQuery } from "@tanstack/react-query";
 
 const CheckUpResult = () => {
-  const userProfile = useProfileStore((state) => state.profile);
   const { data, isLoading, isError, error } =
     useQuery<AppointmentCompletedApiResponse>({
       queryKey: ["checkup-result"],
       queryFn: async () => {
-        const response = await userApi.getPatientAppointmentsComplete(
-          userProfile.patientId
-        );
+        const response = await userApi.getPatientAppointmentsComplete();
         return response.data;
       },
     });
