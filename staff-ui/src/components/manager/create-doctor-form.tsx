@@ -23,6 +23,7 @@ import http from "@/api/http";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
 
 export const CreateDoctorForm = () => {
   const queryClient = useQueryClient();
@@ -201,9 +202,16 @@ export const CreateDoctorForm = () => {
         />
         <Button
           type="submit"
+          disabled={isPending}
           className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
         >
-          Tạo mới
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang tạo...
+            </>
+          ) : (
+            "Tạo mới"
+          )}
         </Button>
       </form>
     </Form>
