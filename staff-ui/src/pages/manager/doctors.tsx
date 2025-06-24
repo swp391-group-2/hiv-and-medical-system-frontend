@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -11,22 +10,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Plus,
-  Search,
-  Edit,
-  Calendar,
-  UserCheck,
-  Clock,
-  Star,
-  Trash2,
-} from "lucide-react";
+import { Plus, Search, UserCheck } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
 import type { Doctor } from "@/types/doctor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
+import { DoctorList } from "@/components/manager/doctor-list";
 
 export const doctors: Doctor[] = [
   {
@@ -162,75 +153,12 @@ const ManagerDoctors = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {filteredDoctors.map((doctor) => (
-              <div key={doctor.doctorId} className="p-4 border rounded-lg">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-4">
-                    <Avatar className="h-12 w-12">
-                      <AvatarImage
-                        src={doctor.urlImage || "/placeholder.svg"}
-                      />
-                      <AvatarFallback>
-                        {doctor.fullName.split(" ").pop()?.charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h3 className="font-medium text-lg">{doctor.fullName}</h3>
-                      <p className="text-sm text-gray-600">
-                        {doctor.specialization}
-                      </p>
-                      <div className="flex items-center mt-1">
-                        <Star className="h-4 w-4 text-yellow-400 mr-1" />
-                        <span className="text-sm text-gray-600">5.0/5.0</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Button variant="outline" size="sm">
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Calendar className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => handleDeleteDoctor(doctor.doctorId)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="mt-4 grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Lịch làm việc
-                    </p>
-                    <p className="text-sm text-gray-600">{}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Kinh nghiệm
-                    </p>
-                    <p className="text-sm text-gray-600">{}</p>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Bệnh nhân hôm nay
-                    </p>
-                    <Badge variant="secondary">{} bệnh nhân</Badge>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-700">
-                      Tổng bệnh nhân
-                    </p>
-                    <p className="text-sm text-gray-600">{}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <div className="flex space-x-2">
+              <DoctorList
+                data={filteredDoctors}
+                handleDeleteDoctor={handleDeleteDoctor}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
