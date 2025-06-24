@@ -1,6 +1,6 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Calendar, Edit, Trash2 } from "lucide-react";
+import { Calendar, Edit, Trash2, Dot } from "lucide-react";
 import type { Doctor } from "@/types/doctor";
 export function DoctorRow({
   doctor,
@@ -16,7 +16,23 @@ export function DoctorRow({
       <TableCell>{doctor.email}</TableCell>
       <TableCell>{doctor.specialization}</TableCell>
       <TableCell>{doctor.licenseNumber}</TableCell>
-      <TableCell>{doctor.userStatus}</TableCell>
+      <TableCell>
+        {doctor.userStatus === "active" ? (
+          <Dot
+            className="cursor-pointer ml-5"
+            size={16}
+            strokeWidth={16}
+            color="#34D399"
+          />
+        ) : (
+          <Dot
+            className="cursor-pointer ml-5"
+            size={16}
+            strokeWidth={16}
+            color="#EF4444"
+          />
+        )}
+      </TableCell>
       <TableCell className="flex items-center gap-2">
         <Button variant="outline" size="sm">
           <Edit className="h-4 w-4" />
