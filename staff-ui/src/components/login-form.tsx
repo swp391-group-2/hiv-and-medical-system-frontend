@@ -62,6 +62,8 @@ export const LoginForm: FC = () => {
         navigate("/lab/dashboard");
       } else if (data.data.data.user.role === "MANAGER") {
         navigate("/manager/dashboard");
+      } else if (data.data.data.user.role === "ADMIN") {
+        navigate("/admin/dashboard");
       }
     },
     onError: (error) => {
