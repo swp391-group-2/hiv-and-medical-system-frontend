@@ -1,3 +1,4 @@
+import { useFeaturedStats } from "@/api/stats";
 import { Card, CardContent } from "@/components/ui/card";
 import type { StatCardStaticProps } from "@/types/stats";
 import {
@@ -7,6 +8,9 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import { useMemo } from "react";
+import { LoadingOverlay } from "./loading-overlay";
+import { toast } from "sonner";
 
 const stats = [
   {
@@ -35,10 +39,23 @@ const stats = [
   },
 ] as StatCardStaticProps[];
 
-export function StatCardsSection() {
+export const StatCardsSection = () => {
+  const {
+    data: featuredStats = [],
+    isLoading,
+    isError,
+    error,
+  } = useFeaturedStats();
+
+  if (isLoading) return <LoadingOverlay message="Đang tải số liệu..." />;
+
+  if (isError) {
+    console.log(error.message);
+    toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((item) => {
+      {featuredStats.map((item) => {
         switch (item.title) {
           case "Tổng khách hàng":
             return (
@@ -126,4 +143,4 @@ export function StatCardsSection() {
       })}
     </div>
   );
-}
+};
