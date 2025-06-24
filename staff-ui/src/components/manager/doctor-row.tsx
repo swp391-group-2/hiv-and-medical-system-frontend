@@ -7,6 +7,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function DoctorRow({
   doctor,
@@ -41,7 +46,7 @@ export function DoctorRow({
               />
             )}
           </HoverCardTrigger>
-          <HoverCardContent>
+          <HoverCardContent className="flex justify-center">
             <div>
               {doctor.userStatus === "active"
                 ? "Tài khoản đang hoạt động"
@@ -50,21 +55,43 @@ export function DoctorRow({
           </HoverCardContent>
         </HoverCard>
       </TableCell>
-      <TableCell className="flex items-center gap-2">
-        <Button variant="outline" size="sm">
-          <Edit className="h-4 w-4" />
-        </Button>
-        <Button variant="outline" size="sm">
-          <Calendar className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-red-500 hover:text-red-700 hover:bg-red-50"
-          onClick={() => handleDeleteDoctor(doctor.doctorId)}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+      <TableCell className="grid grid-cols-3 items-center gap-4">
+        <Tooltip delayDuration={500}>
+          <TooltipTrigger>
+            <Button className="cursor-pointer" variant="outline" size="sm">
+              <Edit className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Chỉnh sửa thông tin</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip delayDuration={500}>
+          <TooltipTrigger>
+            <Button className="cursor-pointer" variant="outline" size="sm">
+              <Calendar className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Lịch làm việc</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip delayDuration={500}>
+          <TooltipTrigger>
+            <Button
+              variant="outline"
+              size="sm"
+              className="cursor-pointer text-red-500 hover:text-red-700 hover:bg-red-50"
+              onClick={() => handleDeleteDoctor(doctor.doctorId)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Xoá bác sĩ</p>
+          </TooltipContent>
+        </Tooltip>
       </TableCell>
     </TableRow>
   );
