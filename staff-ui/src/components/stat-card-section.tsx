@@ -8,7 +8,6 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
-import { useMemo } from "react";
 import { LoadingOverlay } from "./loading-overlay";
 import { toast } from "sonner";
 
@@ -40,12 +39,15 @@ const stats = [
 ] as StatCardStaticProps[];
 
 export const StatCardsSection = () => {
+  const start = "2025-06-01"; // whatever historic date you like
+  const end = new Date().toISOString().slice(0, 10);
+
   const {
     data: featuredStats = [],
     isLoading,
     isError,
     error,
-  } = useFeaturedStats();
+  } = useFeaturedStats(start, end);
 
   if (isLoading) return <LoadingOverlay message="Đang tải số liệu..." />;
 
