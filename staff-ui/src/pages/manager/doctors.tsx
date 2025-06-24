@@ -23,6 +23,10 @@ import {
 } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
 import type { Doctor } from "@/types/doctor";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import http from "@/api/http";
+import { toast } from "sonner";
+import type { AxiosError } from "axios";
 
 export const doctors: Doctor[] = [
   {
@@ -83,11 +87,27 @@ export const doctors: Doctor[] = [
 ];
 
 const ManagerDoctors = () => {
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
 
   const filteredDoctors = doctors.filter((doctor) =>
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
+
+  const { mutate: deleteDoctor } = useMutation<void, AxiosError, string>({
+    mutationFn: async (doctorId) => await http.delete(`doctors/${doctorId}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      toast.success("Xoá thành công.");
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const handleDeleteDoctor = (id: string) => {
+    deleteDoctor(id);
+  };
 
   return (
     <div className="flex flex-col gap-4">
