@@ -27,10 +27,10 @@ const TestResult = () => {
     );
   }
 
-  const labResultList =
-    LabResult?.data.filter((item) => item.resultStatus === "FINISHED") || [];
+  const labResultList = LabResult?.data || [];
+  const finishedLabResults = labResultList.filter((item) => item.resultStatus === "FINISHED") ;
 
-  if (!labResultList || labResultList.length === 0) {
+  if (!finishedLabResults || finishedLabResults.length === 0) {
     return (
       <section className="w-full mt-7 mr-10">
         <h1 className="text-3xl text-primary font-bold mb-5">
@@ -68,7 +68,7 @@ const TestResult = () => {
       <h1 className="text-3xl text-primary font-bold mb-5">
         Kết quả xét nghiệm
       </h1>
-      <TestRsTabs labResultList={labResultList} />
+      <TestRsTabs labResultList={finishedLabResults} />
     </section>
   );
 };
