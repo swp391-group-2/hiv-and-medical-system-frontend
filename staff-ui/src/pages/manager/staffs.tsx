@@ -18,7 +18,7 @@ import type { AxiosError } from "axios";
 import { StaffList } from "@/components/manager/staff-list";
 import type { Staff } from "@/types/staff";
 
-export const sampleStaffs: Staff[] = [
+export const staffs: Staff[] = [
   {
     email: "alice.nguyen@hospital.com",
     fullName: "Alice Nguyen",
@@ -84,6 +84,10 @@ export const sampleStaffs: Staff[] = [
 const ManagerStaffs = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+
+  const filteredStaffs = staffs.filter((staff) =>
+    staff.fullName.toLowerCase().includes(search.toLowerCase())
+  );
 
   const { mutate: deleteStaff } = useMutation<void, AxiosError, string>({
     mutationFn: async (id: string) => await http.delete(`/staffs/${id}`),
@@ -159,13 +163,13 @@ const ManagerStaffs = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle>Danh sách Bác sĩ</CardTitle>
+          <CardTitle>Danh sách nhân viên</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex space-x-2">
               <StaffList
-                data={sampleStaffs}
+                data={filteredStaffs}
                 handleDeleteStaff={handleDeleteStaff}
               />
             </div>
