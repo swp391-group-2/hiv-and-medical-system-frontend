@@ -6,6 +6,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyListMessage } from "@/components/page-message";
+import type { Staff } from "@/types/staff";
+import { StaffRow } from "./staff-row";
 
 export function StaffList({
   data,
