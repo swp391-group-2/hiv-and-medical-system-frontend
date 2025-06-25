@@ -15,6 +15,71 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
+import { StaffList } from "@/components/manager/staff-list";
+import type { Staff } from "@/types/staff";
+
+export const sampleStaffs: Staff[] = [
+  {
+    email: "alice.nguyen@hospital.com",
+    fullName: "Alice Nguyen",
+    status: "active",
+    role: "manager",
+    staffId: "STF001",
+    managerCode: "MGR001",
+    labTechnicianCode: "",
+    labTechnicianId: "",
+    staffCode: "SC001",
+    managerId: "",
+  },
+  {
+    email: "bob.tran@lab.org",
+    fullName: "Bob Tran",
+    status: "active",
+    role: "lab_technician",
+    staffId: "STF002",
+    managerCode: "MGR001",
+    labTechnicianCode: "LTC001",
+    labTechnicianId: "LT001",
+    staffCode: "SC002",
+    managerId: "STF001",
+  },
+  {
+    email: "carol.le@medcenter.vn",
+    fullName: "Carol Le",
+    status: "inactive",
+    role: "staff",
+    staffId: "STF003",
+    managerCode: "MGR002",
+    labTechnicianCode: "",
+    labTechnicianId: "",
+    staffCode: "SC003",
+    managerId: "STF004",
+  },
+  {
+    email: "david.pham@hospital.com",
+    fullName: "David Pham",
+    status: "active",
+    role: "lab_technician",
+    staffId: "STF004",
+    managerCode: "MGR002",
+    labTechnicianCode: "LTC002",
+    labTechnicianId: "LT002",
+    staffCode: "SC004",
+    managerId: "STF001",
+  },
+  {
+    email: "emma.vo@clinic.vn",
+    fullName: "Emma Vo",
+    status: "suspended",
+    role: "staff",
+    staffId: "STF005",
+    managerCode: "MGR001",
+    labTechnicianCode: "",
+    labTechnicianId: "",
+    staffCode: "SC005",
+    managerId: "STF001",
+  },
+];
 
 const ManagerStaffs = () => {
   const queryClient = useQueryClient();
@@ -91,6 +156,22 @@ const ManagerStaffs = () => {
           </CardContent>
         </Card>
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Danh sách Bác sĩ</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex space-x-2">
+              <StaffList
+                data={sampleStaffs}
+                handleDeleteStaff={handleDeleteStaff}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

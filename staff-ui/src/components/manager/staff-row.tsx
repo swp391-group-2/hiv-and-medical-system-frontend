@@ -38,7 +38,6 @@ export function StaffRow({
       <TableCell>{staff.fullName}</TableCell>
       <TableCell>{staff.email}</TableCell>
       <TableCell>{staff.role}</TableCell>
-      <TableCell>{staff.status}</TableCell>
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
           <HoverCardTrigger>
@@ -67,7 +66,7 @@ export function StaffRow({
           </HoverCardContent>
         </HoverCard>
       </TableCell>
-      <TableCell className="grid grid-cols-3 items-center gap-4">
+      <TableCell className="grid grid-cols-2 items-center gap-4">
         <Tooltip delayDuration={500}>
           <TooltipTrigger>
             <Button
