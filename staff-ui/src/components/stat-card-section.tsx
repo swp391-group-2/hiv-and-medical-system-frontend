@@ -1,5 +1,5 @@
+import { useFeaturedStats } from "@/api/stats";
 import { Card, CardContent } from "@/components/ui/card";
-import type { StatCardStaticProps } from "@/types/stats";
 import {
   Calendar,
   TrendingUp,
@@ -7,38 +7,28 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import { LoadingOverlay } from "./loading-overlay";
+import { toast } from "sonner";
 
-const stats = [
-  {
-    title: "Tổng khách hàng",
-    value: "1.234",
-    change: "+5%",
-    isGrowing: true,
-  },
-  {
-    title: "Bác sĩ hoạt động",
-    value: "56",
-    change: "-3%",
-    isGrowing: false,
-  },
-  {
-    title: "Lịch hẹn hôm nay",
-    value: "32",
-    change: "+12%",
-    isGrowing: true,
-  },
-  {
-    title: "Doanh thu tháng",
-    value: "₫120.500.000",
-    change: "+8%",
-    isGrowing: true,
-  },
-] as StatCardStaticProps[];
+export const StatCardsSection = () => {
+  const milestone = "2025-06-01";
 
-export function StatCardsSection() {
+  const {
+    data: featuredStats = [],
+    isLoading,
+    isError,
+    error,
+  } = useFeaturedStats(milestone);
+
+  if (isLoading) return <LoadingOverlay message="Đang tải số liệu..." />;
+
+  if (isError) {
+    console.log(error.message);
+    toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((item) => {
+      {featuredStats.map((item) => {
         switch (item.title) {
           case "Tổng khách hàng":
             return (
@@ -111,7 +101,7 @@ export function StatCardsSection() {
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
                     </div>
-                    {item.isGrowing ? (
+                    {item.growing ? (
                       <TrendingUp className="h-8 w-8 text-orange-600" />
                     ) : (
                       <TrendingDown className="h-8 w-8 text-orange-600" />
@@ -126,4 +116,4 @@ export function StatCardsSection() {
       })}
     </div>
   );
-}
+};

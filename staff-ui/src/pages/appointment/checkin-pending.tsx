@@ -8,13 +8,18 @@ import {
   AppointmentFilters,
   type Filters,
 } from "@/components/appointments/appointment-filters";
-import { LoadingOverlay } from "@/components/loading-overlay";
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
+import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { RotateCcw } from "lucide-react";
 
 const CheckinPending = () => {
+  const queryClient = useQueryClient();
   const {
     data: appointments = [],
     isLoading,
     isError,
+    isFetching,
     error,
   } = useAppointments();
 
@@ -78,6 +83,10 @@ const CheckinPending = () => {
   if (isError)
     return <div className="text-red-600">{(error as Error).message}</div>;
 
+  const handleReloadList = () => {
+    queryClient.invalidateQueries({ queryKey: ["appointments"] });
+  };
+
   return (
     <section className="w-full mt-7">
       <div>
@@ -88,14 +97,28 @@ const CheckinPending = () => {
       </div>
       <AppointmentFilters onApply={setFilters} />
       <Tabs defaultValue="list">
-        <TabsList>
-          <TabsTrigger value="list">Danh sách</TabsTrigger>
-          <TabsTrigger value="calendar" disabled>
-            Lịch
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex justify-between items-center">
+          <TabsList>
+            <TabsTrigger value="list">Danh sách</TabsTrigger>
+            <TabsTrigger value="calendar" disabled>
+              Lịch
+            </TabsTrigger>
+          </TabsList>
+          <Button
+            variant="outline"
+            className="bg-white hover:bg-gray-100 cursor-pointer mr-4"
+            onClick={handleReloadList}
+          >
+            {"Làm mới "}
+            <RotateCcw />
+          </Button>
+        </div>
         <TabsContent value="list">
-          <AppointmentTable data={filtered} />
+          {isFetching ? (
+            <InternalLoading message="Đang tải lại danh sách" />
+          ) : (
+            <AppointmentTable data={filtered} />
+          )}
         </TabsContent>
       </Tabs>
     </section>

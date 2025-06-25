@@ -8,7 +8,7 @@ export type StatCardStaticProps = {
   title: string;
   value: string;
   change: string;
-  isGrowing: boolean;
+  growing: boolean;
 };
 
 export type FavoriteDoctor = {

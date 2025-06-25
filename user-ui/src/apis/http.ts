@@ -39,7 +39,7 @@ export class Http {
     this.instance.interceptors.request.use(
       (config) => {
         if (this.accessToken && config.headers) {
-          config.headers.authorization = this.accessToken;
+          config.headers.authorization = `Bearer ${this.accessToken}`;
           return config;
         }
         return config;
@@ -48,7 +48,7 @@ export class Http {
         return Promise.reject(error);
       }
     );
-    // Add a response interceptor
+    
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
@@ -67,7 +67,7 @@ export class Http {
         return response;
       },
       (error: AxiosError) => {
-        // Chỉ toast lỗi không phải 422 và 401
+        
         if (
           ![
             HttpStatusCode.UnprocessableEntity,
@@ -75,7 +75,7 @@ export class Http {
           ].includes(error.response?.status as 401 | 422)
         ) {
           const message = error.message || "Có lỗi xảy ra";
-          // Thông báo lỗi
+          
           console.error("Lỗi rồi Phương", message);
         }
         if (
@@ -85,20 +85,19 @@ export class Http {
         ) {
           const config = error.response?.config || { headers: {}, url: "" };
           const { url } = config;
-          // Trường hợp Token hết hạn và request đó không phải là của request refresh token
-          // thì chúng ta mới tiến hành gọi refresh token
+         
           if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
-            // Hạn chế gọi 2 lần handleRefreshToken
+            
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
               : this.handleRefreshToken().finally(() => {
-                  // Giữ refreshTokenRequest trong 10s cho những request tiếp theo nếu có 401 thì dùng
+                  
                   setTimeout(() => {
                     this.refreshTokenRequest = null;
                   }, 10000);
                 });
             return this.refreshTokenRequest.then((access_token) => {
-              // Nghĩa là chúng ta tiếp tục gọi lại request cũ vừa bị lỗi
+              
               return this.instance({
                 ...config,
                 headers: { ...config.headers, authorization: access_token },
@@ -106,16 +105,12 @@ export class Http {
             });
           }
 
-          // Còn những trường hợp như token không đúng
-          // không truyền token,
-          // token hết hạn nhưng gọi refresh token bị fail
-          // thì tiến hành xóa local storage và toast message
 
           clearLS();
           this.accessToken = "";
           this.refreshToken = "";
 
-          // window.location.reload()
+          window.location.reload()
         }
         return Promise.reject(error);
       }

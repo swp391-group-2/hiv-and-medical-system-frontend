@@ -19,12 +19,12 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
-import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
+import { Loader2 } from "lucide-react";
 
 const resultTextSchema = z.object({
   resultText: z.enum(["Dương tính", "Âm tính"], {
@@ -54,20 +54,17 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
 
   const { mutate: updateResult, isPending } = useMutation<
     void,
-    Error,
+    AxiosError,
     ResultTextValues
   >({
-    mutationFn: async (data: ResultTextValues) =>
+    mutationFn: async (data) =>
       await axios.put(`/api/lab-samples/${appt.labSampleId}/results`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       toast.success("Cập nhật kết quả thành công!");
     },
     onError: (err) => {
-      const msg =
-        axios.isAxiosError(err) && err.response?.data?.message
-          ? err.response.data.message
-          : err.message;
+      const msg = err.message;
       toast.error(msg);
     },
   });
@@ -137,13 +134,17 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
         />
         <Button
           variant="outline"
-          className={cn(
-            "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
-          )}
+          disabled={isPending}
+          className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
           type="submit"
         >
-          {isPending ? "Đang gửi..." : "Gửi kết quả"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang gửi...
+            </>
+          ) : (
+            "Gửi kết quả"
+          )}
         </Button>
       </form>
     </Form>
@@ -267,13 +268,17 @@ export function ResultNumericForm({ appt }: { appt: Appointment }) {
         />
         <Button
           variant="outline"
-          className={cn(
-            "w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white",
-            isPending ? " cursor-now-allowed bg-gray-400 hover:bg-gray-400" : ""
-          )}
+          disabled={isPending}
+          className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
           type="submit"
         >
-          {isPending ? "Đang gửi..." : "Gửi kết quả"}
+          {isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang gửi...
+            </>
+          ) : (
+            "Gửi kết quả"
+          )}
         </Button>
       </form>
     </Form>
