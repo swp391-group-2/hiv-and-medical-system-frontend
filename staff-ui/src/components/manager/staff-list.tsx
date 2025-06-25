@@ -12,10 +12,17 @@ import { StaffRow } from "./staff-row";
 export function StaffList({
   data,
   handleDeleteStaff,
+  isError,
 }: {
   data: Staff[];
   handleDeleteStaff: (id: string) => void;
+  isError: boolean;
 }) {
+  if (isError) {
+    return (
+      <EmptyListMessage message="Đã xảy ra lỗi, không thể tải danh sách" />
+    );
+  }
   if (data.length == 0) {
     return <EmptyListMessage message="Chưa có nhân viên" />;
   }

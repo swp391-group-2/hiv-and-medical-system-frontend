@@ -16,73 +16,75 @@ import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { StaffList } from "@/components/manager/staff-list";
-import type { Staff } from "@/types/staff";
+import { useStaffs } from "@/api/staff";
+import { LoadingOverlay } from "@/components/loading-overlay";
 
-export const staffs: Staff[] = [
-  {
-    email: "alice.nguyen@hospital.com",
-    fullName: "Alice Nguyen",
-    status: "active",
-    role: "manager",
-    staffId: "STF001",
-    managerCode: "MGR001",
-    labTechnicianCode: "",
-    labTechnicianId: "",
-    staffCode: "SC001",
-    managerId: "",
-  },
-  {
-    email: "bob.tran@lab.org",
-    fullName: "Bob Tran",
-    status: "active",
-    role: "lab_technician",
-    staffId: "STF002",
-    managerCode: "MGR001",
-    labTechnicianCode: "LTC001",
-    labTechnicianId: "LT001",
-    staffCode: "SC002",
-    managerId: "STF001",
-  },
-  {
-    email: "carol.le@medcenter.vn",
-    fullName: "Carol Le",
-    status: "inactive",
-    role: "staff",
-    staffId: "STF003",
-    managerCode: "MGR002",
-    labTechnicianCode: "",
-    labTechnicianId: "",
-    staffCode: "SC003",
-    managerId: "STF004",
-  },
-  {
-    email: "david.pham@hospital.com",
-    fullName: "David Pham",
-    status: "active",
-    role: "lab_technician",
-    staffId: "STF004",
-    managerCode: "MGR002",
-    labTechnicianCode: "LTC002",
-    labTechnicianId: "LT002",
-    staffCode: "SC004",
-    managerId: "STF001",
-  },
-  {
-    email: "emma.vo@clinic.vn",
-    fullName: "Emma Vo",
-    status: "suspended",
-    role: "staff",
-    staffId: "STF005",
-    managerCode: "MGR001",
-    labTechnicianCode: "",
-    labTechnicianId: "",
-    staffCode: "SC005",
-    managerId: "STF001",
-  },
-];
+// export const staffs: Staff[] = [
+//   {
+//     email: "alice.nguyen@hospital.com",
+//     fullName: "Alice Nguyen",
+//     status: "active",
+//     role: "manager",
+//     staffId: "STF001",
+//     managerCode: "MGR001",
+//     labTechnicianCode: "",
+//     labTechnicianId: "",
+//     staffCode: "SC001",
+//     managerId: "",
+//   },
+//   {
+//     email: "bob.tran@lab.org",
+//     fullName: "Bob Tran",
+//     status: "active",
+//     role: "lab_technician",
+//     staffId: "STF002",
+//     managerCode: "MGR001",
+//     labTechnicianCode: "LTC001",
+//     labTechnicianId: "LT001",
+//     staffCode: "SC002",
+//     managerId: "STF001",
+//   },
+//   {
+//     email: "carol.le@medcenter.vn",
+//     fullName: "Carol Le",
+//     status: "inactive",
+//     role: "staff",
+//     staffId: "STF003",
+//     managerCode: "MGR002",
+//     labTechnicianCode: "",
+//     labTechnicianId: "",
+//     staffCode: "SC003",
+//     managerId: "STF004",
+//   },
+//   {
+//     email: "david.pham@hospital.com",
+//     fullName: "David Pham",
+//     status: "active",
+//     role: "lab_technician",
+//     staffId: "STF004",
+//     managerCode: "MGR002",
+//     labTechnicianCode: "LTC002",
+//     labTechnicianId: "LT002",
+//     staffCode: "SC004",
+//     managerId: "STF001",
+//   },
+//   {
+//     email: "emma.vo@clinic.vn",
+//     fullName: "Emma Vo",
+//     status: "suspended",
+//     role: "staff",
+//     staffId: "STF005",
+//     managerCode: "MGR001",
+//     labTechnicianCode: "",
+//     labTechnicianId: "",
+//     staffCode: "SC005",
+//     managerId: "STF001",
+//   },
+// ];
 
 const ManagerStaffs = () => {
   const queryClient = useQueryClient();
+  const { data: staffs = [], isLoading, isError } = useStaffs();
   const [search, setSearch] = useState("");
 
   const filteredStaffs = staffs.filter((staff) =>
@@ -99,6 +101,8 @@ const ManagerStaffs = () => {
       toast.error(err.message);
     },
   });
+
+  if (isLoading) return <LoadingOverlay message="Đang tải danh sách" />;
 
   const handleDeleteStaff = (id: string) => deleteStaff(id);
 
@@ -171,6 +175,7 @@ const ManagerStaffs = () => {
               <StaffList
                 data={filteredStaffs}
                 handleDeleteStaff={handleDeleteStaff}
+                isError={isError}
               />
             </div>
           </div>
