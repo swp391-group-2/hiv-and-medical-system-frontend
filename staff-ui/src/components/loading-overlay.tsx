@@ -15,3 +15,12 @@ export function LoadingOverlay({ message }: { message: string }) {
     </div>
   );
 }
+
+export function InternalLoading({ message }: { message: string }) {
+  return (
+    <div className="flex z-10 items-center justify-center w-full">
+      <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      {message}
+    </div>
+  );
+}

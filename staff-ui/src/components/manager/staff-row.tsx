@@ -1,7 +1,6 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Calendar, Edit, Trash2, Dot } from "lucide-react";
-import type { Doctor } from "@/types/doctor";
+import { Edit, Trash2, Dot } from "lucide-react";
 import {
   HoverCard,
   HoverCardContent,
@@ -12,13 +11,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,26 +23,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { DoctorUpdateForm } from "./doctor-update-form";
+import type { Staff } from "@/types/staff";
 
-export function DoctorRow({
-  doctor,
-  handleDeleteDoctor,
+export function StaffRow({
+  staff,
+  handleDeleteStaff,
 }: {
-  doctor: Doctor;
-  handleDeleteDoctor: (id: string) => void;
+  staff: Staff;
+  handleDeleteStaff: (id: string) => void;
 }) {
   return (
     <TableRow>
-      <TableCell>{doctor.doctorCode}</TableCell>
-      <TableCell>{doctor.fullName}</TableCell>
-      <TableCell>{doctor.email}</TableCell>
-      <TableCell>{doctor.specialization}</TableCell>
-      <TableCell>{doctor.licenseNumber}</TableCell>
+      <TableCell>{staff.staffCode}</TableCell>
+      <TableCell>{staff.fullName}</TableCell>
+      <TableCell>{staff.email}</TableCell>
+      <TableCell>
+        {(staff.role === "staff" && "Nhân viên") ||
+          (staff.role === "manager" && "Quản lý") ||
+          (staff.role === "lab_technician" && "Nhân viên xét nghiệm")}
+      </TableCell>
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
           <HoverCardTrigger>
-            {doctor.userStatus === "active" ? (
+            {staff.status === "active" ? (
               <Dot
                 className="cursor-pointer ml-5"
                 size={16}
@@ -67,42 +63,14 @@ export function DoctorRow({
           </HoverCardTrigger>
           <HoverCardContent className="flex justify-center">
             <div>
-              {doctor.userStatus === "active"
+              {staff.status === "active"
                 ? "Tài khoản đang hoạt động"
                 : "Tài khoản bị vô hiệu hoá"}
             </div>
           </HoverCardContent>
         </HoverCard>
       </TableCell>
-      <TableCell className="grid grid-cols-3 items-center gap-4">
-        <Dialog>
-          <Tooltip delayDuration={500}>
-            <TooltipTrigger asChild>
-              <DialogTrigger asChild>
-                <Button
-                  className="cursor-pointer w-full"
-                  variant="outline"
-                  size="sm"
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-              </DialogTrigger>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Chỉnh sửa thông tin</p>
-            </TooltipContent>
-          </Tooltip>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Cập nhật thông tin</DialogTitle>
-            </DialogHeader>
-            {/* form update doctor */}
-            <DoctorUpdateForm doctor={doctor} />
-          </DialogContent>
-        </Dialog>
-
-        {/* work schedule */}
-
+      <TableCell className="grid grid-cols-2 items-center gap-4">
         <Tooltip delayDuration={500}>
           <TooltipTrigger>
             <Button
@@ -110,15 +78,13 @@ export function DoctorRow({
               variant="outline"
               size="sm"
             >
-              <Calendar className="h-4 w-4" />
+              <Edit className="h-4 w-4" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Lịch làm việc</p>
+            <p>Chỉnh sửa thông tin</p>
           </TooltipContent>
         </Tooltip>
-
-        {/* confirm delete */}
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
@@ -133,9 +99,9 @@ export function DoctorRow({
 
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Xác nhận xoá bác sĩ</AlertDialogTitle>
+              <AlertDialogTitle>Xác nhận xoá nhân viên</AlertDialogTitle>
               <AlertDialogDescription>
-                Hành động này không thể hoàn tác. Bạn có chắc muốn xoá bác sĩ
+                Hành động này không thể hoàn tác. Bạn có chắc muốn xoá nhân viên
                 này không?
               </AlertDialogDescription>
             </AlertDialogHeader>
@@ -145,7 +111,7 @@ export function DoctorRow({
               </AlertDialogCancel>
               <AlertDialogAction
                 className="cursor-pointer bg-red-500 hover:bg-red-600"
-                onClick={() => handleDeleteDoctor(doctor.doctorId)}
+                onClick={() => handleDeleteStaff(staff.staffId)}
               >
                 Xoá
               </AlertDialogAction>

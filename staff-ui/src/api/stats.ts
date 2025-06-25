@@ -8,24 +8,23 @@ import { useQuery } from "@tanstack/react-query";
 import http from "./http";
 
 export const getFeaturedStats = async (
-  startDate: string,
-  endDate: string
+  milestone: string
 ): Promise<StatCardStaticProps[]> => {
   const { data } = await http.get<Response<StatCardStaticProps>>(
     `/dashboards/stats`,
     {
-      params: { startDate, endDate },
+      params: { milestone },
     }
   );
   return data.data;
 };
 
-export function useFeaturedStats(startDate: string, endDate: string) {
+export function useFeaturedStats(milestone: string) {
   return useQuery<StatCardStaticProps[]>({
-    queryKey: ["featured-stats", startDate, endDate],
+    queryKey: ["featured-stats", milestone],
     queryFn: ({ queryKey }) => {
-      const [, start, end] = queryKey as [string, string, string];
-      return getFeaturedStats(start, end);
+      const [, milestone] = queryKey as [string, string];
+      return getFeaturedStats(milestone);
     },
     staleTime: Infinity,
   });

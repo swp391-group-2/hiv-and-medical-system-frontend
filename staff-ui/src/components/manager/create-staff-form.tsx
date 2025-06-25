@@ -10,7 +10,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import http from "@/api/http";
@@ -18,9 +24,8 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
-import { options, SpecializationSelect } from "./specialization-select";
 
-export const CreateDoctorForm = () => {
+export const CreateStaffForm = () => {
   const queryClient = useQueryClient();
   const schema = z
     .object({
@@ -29,53 +34,49 @@ export const CreateDoctorForm = () => {
         .min(1, "Tên phải có ít nhất một kí tự")
         .max(50, "Tên vượt quá số kí tự cho phép"),
       email: z.string().email("Email không hợp lệ"),
-      specialization: z.string().nonempty("Chuyên khoa không được bỏ trống"),
+      role: z.enum(["manager", "lab", "staff"]),
       password: z
         .string()
         .min(8, "Mật khẩu phải có ít nhất 8 kí tự")
         .max(20, "Mật khẩu không được vượt quá 20 kí tự"),
       confirm: z.string().nonempty("Vui lòng xác nhận mật khẩu"),
-      licenseNumber: z
-        .string()
-        .nonempty("Số giấy phép hành nghề không được bỏ trống"),
     })
     .refine((data) => data.password === data.confirm, {
       message: "Mật khẩu xác nhận không khớp",
       path: ["confirm"],
     });
 
-  type DoctorInitializedValues = z.infer<typeof schema>;
+  type StaffInitializedValues = z.infer<typeof schema>;
 
-  const form = useForm<DoctorInitializedValues>({
+  const form = useForm<StaffInitializedValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       fullName: "",
       email: "",
-      specialization: "",
+      role: "staff",
       password: "",
       confirm: "",
-      licenseNumber: "",
     },
   });
 
-  const { mutate: createDoctor, isPending } = useMutation<
+  const { mutate: createStaff, isPending } = useMutation<
     void,
     AxiosError,
-    DoctorInitializedValues
+    StaffInitializedValues
   >({
     mutationFn: async ({ confirm, ...values }) =>
-      await http.post(`/doctors`, values),
+      await http.post(`/staffs`, values),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["doctors"] });
-      toast.success("Tạo tài khoản bác sĩ thành công.");
+      queryClient.invalidateQueries({ queryKey: ["staffs"] });
+      toast.success("Tạo tài khoản thành công");
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  const handleSubmit = (values: DoctorInitializedValues) => {
-    createDoctor(values);
+  const handleSubmit = (values: StaffInitializedValues) => {
+    createStaff(values);
   };
 
   return (
@@ -109,25 +110,21 @@ export const CreateDoctorForm = () => {
         />
         <FormField
           control={form.control}
-          name="specialization"
+          name="role"
           render={({ field }) => (
             <FormItem>
-              <FormLabel htmlFor={field.name}>Chọn chuyên khoa</FormLabel>
+              <FormLabel htmlFor={field.name}>Chọn chức vụ</FormLabel>
               <FormControl>
-                <SpecializationSelect field={field} options={options} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="licenseNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Số giấy phép hành nghề</FormLabel>
-              <FormControl>
-                <Input id={field.name} type="text" {...field} />
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Chọn chức vụ" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="staff">Nhân viên</SelectItem>
+                    <SelectItem value="manager">Quản lý</SelectItem>
+                    <SelectItem value="lab">Nhân viên xét nghiệm</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
