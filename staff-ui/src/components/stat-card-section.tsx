@@ -11,15 +11,14 @@ import { LoadingOverlay } from "./loading-overlay";
 import { toast } from "sonner";
 
 export const StatCardsSection = () => {
-  const start = "2025-06-01"; // whatever historic date you like
-  const end = "2025-06-23";
+  const milestone = "2025-06-01";
 
   const {
     data: featuredStats = [],
     isLoading,
     isError,
     error,
-  } = useFeaturedStats(start, end);
+  } = useFeaturedStats(milestone);
 
   if (isLoading) return <LoadingOverlay message="Đang tải số liệu..." />;
 
@@ -102,7 +101,7 @@ export const StatCardsSection = () => {
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
                     </div>
-                    {item.isGrowing ? (
+                    {item.growing ? (
                       <TrendingUp className="h-8 w-8 text-orange-600" />
                     ) : (
                       <TrendingDown className="h-8 w-8 text-orange-600" />
