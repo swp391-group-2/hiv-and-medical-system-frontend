@@ -3,7 +3,10 @@ import type { Doctor, Schedule } from "@/types/doctor";
 import { type Response } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 
-const getAllDoctors = async (page: number, size: number): Promise<Doctor[]> => {
+const getDoctorsByPage = async (
+  page: number,
+  size: number
+): Promise<Doctor[]> => {
   const { data } = await http.get<Response<Doctor>>(`/doctors`, {
     params: { page, size },
   });
@@ -13,7 +16,7 @@ const getAllDoctors = async (page: number, size: number): Promise<Doctor[]> => {
 export const useDoctors = (page: number, size: number) => {
   return useQuery<Doctor[]>({
     queryKey: ["doctors"],
-    queryFn: () => getAllDoctors(page, size),
+    queryFn: () => getDoctorsByPage(page, size),
     staleTime: Infinity,
   });
 };

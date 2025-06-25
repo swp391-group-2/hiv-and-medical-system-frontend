@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Search, UserCheck } from "lucide-react";
+import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { StaffList } from "@/components/manager/staff-list";
 import { useStaffs } from "@/api/staff";
-import { LoadingOverlay } from "@/components/loading-overlay";
+import { LoadingOverlay, InternalLoading } from "@/components/loading-overlay";
 
 // export const staffs: Staff[] = [
 //   {
@@ -84,7 +84,7 @@ import { LoadingOverlay } from "@/components/loading-overlay";
 
 const ManagerStaffs = () => {
   const queryClient = useQueryClient();
-  const { data: staffs = [], isLoading, isError } = useStaffs();
+  const { data: staffs = [], isLoading, isError, isFetching } = useStaffs();
   const [search, setSearch] = useState("");
 
   const filteredStaffs = staffs.filter((staff) =>
@@ -105,6 +105,9 @@ const ManagerStaffs = () => {
   if (isLoading) return <LoadingOverlay message="Đang tải danh sách" />;
 
   const handleDeleteStaff = (id: string) => deleteStaff(id);
+  const handleReLoadList = () => {
+    queryClient.invalidateQueries({ queryKey: ["staffs"] });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -145,7 +148,7 @@ const ManagerStaffs = () => {
               <UserCheck className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng nhân viên</p>
-                <p className="text-2xl font-bold">{}</p>
+                <p className="text-2xl font-bold">{staffs.length}</p>
               </div>
             </div>
           </CardContent>
@@ -158,7 +161,9 @@ const ManagerStaffs = () => {
                 <p className="text-sm text-gray-600">
                   Số tài khoản đang hoạt động
                 </p>
-                <p className="text-2xl font-bold">{}</p>
+                <p className="text-2xl font-bold">
+                  {staffs.filter((item) => item.status === "active").length}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -166,19 +171,31 @@ const ManagerStaffs = () => {
       </div>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="flex justify-between items-center">
           <CardTitle>Danh sách nhân viên</CardTitle>
+          <Button
+            variant="outline"
+            className="bg-white hover:bg-gray-100 cursor-pointer mr-4"
+            onClick={handleReLoadList}
+          >
+            {"Làm mới "}
+            <RotateCcw />
+          </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex space-x-2">
-              <StaffList
-                data={filteredStaffs}
-                handleDeleteStaff={handleDeleteStaff}
-                isError={isError}
-              />
+          {isFetching ? (
+            <InternalLoading message="Tải lại danh sách..." />
+          ) : (
+            <div className="space-y-4">
+              <div className="flex space-x-2">
+                <StaffList
+                  data={filteredStaffs}
+                  handleDeleteStaff={handleDeleteStaff}
+                  isError={isError}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
