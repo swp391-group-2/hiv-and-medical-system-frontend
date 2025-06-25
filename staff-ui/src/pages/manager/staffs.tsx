@@ -17,7 +17,22 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 
 const ManagerStaffs = () => {
+  const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
+
+  const { mutate: deleteStaff } = useMutation<void, AxiosError, string>({
+    mutationFn: async (id: string) => await http.delete(`/staffs/${id}`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["staffs"] });
+      toast.success("Xoá thành công");
+    },
+    onError: (err) => {
+      toast.error(err.message);
+    },
+  });
+
+  const handleDeleteStaff = (id: string) => deleteStaff(id);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
