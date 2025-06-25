@@ -17,6 +17,8 @@ import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctor-list";
+import { useDoctorsCount } from "@/api/doctor";
+import { InternalLoading } from "@/components/loading-overlay";
 
 export const doctors: Doctor[] = [
   {
@@ -79,7 +81,7 @@ export const doctors: Doctor[] = [
 const ManagerDoctors = () => {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-
+  const { data: doctorsCount } = useDoctorsCount();
   const filteredDoctors = doctors.filter((doctor) =>
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
@@ -138,7 +140,7 @@ const ManagerDoctors = () => {
               <UserCheck className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng bác sĩ</p>
-                <p className="text-2xl font-bold">{doctors.length}</p>
+                <p className="text-2xl font-bold">{doctorsCount}</p>
               </div>
             </div>
           </CardContent>

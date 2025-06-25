@@ -1,7 +1,22 @@
 import http from "./http";
 import type { Doctor, Schedule } from "@/types/doctor";
-import { type Response } from "@/types/types";
+import { type Response, type ResponseSingleObject } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
+
+export const getDoctorsCount = async (): Promise<number> => {
+  const { data } = await http.get<ResponseSingleObject<number>>(
+    `/doctors/count`
+  );
+  return data.data;
+};
+
+export const useDoctorsCount = () => {
+  return useQuery<number>({
+    queryKey: ["doctorsCount"],
+    queryFn: () => getDoctorsCount(),
+    staleTime: Infinity,
+  });
+};
 
 const getDoctorsByPage = async (
   page: number,
