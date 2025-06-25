@@ -10,6 +10,11 @@ export interface Doctor {
   urlImage: string;
 }
 
+export type Specialization = {
+  id: string;
+  name: string;
+};
+
 export interface Schedule {
   id: number;
   workDate: string; // e.g. "2025-06-24"

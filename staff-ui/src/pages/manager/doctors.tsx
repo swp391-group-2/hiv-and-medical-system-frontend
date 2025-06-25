@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctor-list";
 import { useDoctorsCount } from "@/api/doctor";
-import { InternalLoading } from "@/components/loading-overlay";
 
 export const doctors: Doctor[] = [
   {

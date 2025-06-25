@@ -10,13 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import http from "@/api/http";
@@ -24,6 +18,7 @@ import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
+import { options, SpecializationSelect } from "./specialization-select";
 
 export const CreateDoctorForm = () => {
   const queryClient = useQueryClient();
@@ -119,43 +114,7 @@ export const CreateDoctorForm = () => {
             <FormItem>
               <FormLabel htmlFor={field.name}>Chọn chuyên khoa</FormLabel>
               <FormControl>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Chọn chuyên khoa" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="infectious">
-                      Chuyên khoa Truyền nhiễm
-                    </SelectItem>
-                    <SelectItem value="internal">
-                      Chuyên khoa Nội tổng quát
-                    </SelectItem>
-                    <SelectItem value="pediatric-infectious">
-                      Chuyên khoa Nhi - Truyền nhiễm nhi
-                    </SelectItem>
-                    <SelectItem value="tropical">
-                      Chuyên khoa Y học nhiệt đới
-                    </SelectItem>
-                    <SelectItem value="immunology">
-                      Chuyên khoa Miễn dịch học
-                    </SelectItem>
-                    <SelectItem value="public-health-epidemiology">
-                      Chuyên khoa Y tế công cộng - Dịch tễ học
-                    </SelectItem>
-                    <SelectItem value="obstetrics-gynecology">
-                      Chuyên khoa Phụ sản
-                    </SelectItem>
-                    <SelectItem value="dermatology">
-                      Chuyên khoa Da liễu
-                    </SelectItem>
-                    <SelectItem value="neurology">
-                      Chuyên khoa Thần kinh
-                    </SelectItem>
-                    <SelectItem value="hematology">
-                      Chuyên khoa Huyết học
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <SpecializationSelect field={field} options={options} />
               </FormControl>
               <FormMessage />
             </FormItem>

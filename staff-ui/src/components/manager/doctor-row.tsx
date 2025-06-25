@@ -12,7 +12,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,6 +30,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { DoctorUpdateForm } from "./doctor-update-form";
 
 export function DoctorRow({
   doctor,
@@ -68,20 +75,33 @@ export function DoctorRow({
         </HoverCard>
       </TableCell>
       <TableCell className="grid grid-cols-3 items-center gap-4">
-        <Tooltip delayDuration={500}>
-          <TooltipTrigger>
-            <Button
-              className="cursor-pointer w-full"
-              variant="outline"
-              size="sm"
-            >
-              <Edit className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Chỉnh sửa thông tin</p>
-          </TooltipContent>
-        </Tooltip>
+        <Dialog>
+          <Tooltip delayDuration={500}>
+            <TooltipTrigger asChild>
+              <DialogTrigger asChild>
+                <Button
+                  className="cursor-pointer w-full"
+                  variant="outline"
+                  size="sm"
+                >
+                  <Edit className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Chỉnh sửa thông tin</p>
+            </TooltipContent>
+          </Tooltip>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Cập nhật thông tin</DialogTitle>
+            </DialogHeader>
+            {/* form update doctor */}
+            <DoctorUpdateForm doctor={doctor} />
+          </DialogContent>
+        </Dialog>
+
+        {/* work schedule */}
 
         <Tooltip delayDuration={500}>
           <TooltipTrigger>
@@ -97,6 +117,9 @@ export function DoctorRow({
             <p>Lịch làm việc</p>
           </TooltipContent>
         </Tooltip>
+
+        {/* confirm delete */}
+
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button
