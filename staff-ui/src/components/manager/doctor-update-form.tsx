@@ -65,7 +65,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
     UpdateDoctorFormValues
   >({
     mutationFn: async (values) =>
-      await http.put(`/doctors/${doctor.doctorId}`, values),
+      await http.put(`/doctors/${doctor.doctorId}/update-by-manager`, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
       toast.success("Cập nhật thành công!");
