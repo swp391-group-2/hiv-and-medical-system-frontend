@@ -37,7 +37,11 @@ export function StaffRow({
       <TableCell>{staff.staffCode}</TableCell>
       <TableCell>{staff.fullName}</TableCell>
       <TableCell>{staff.email}</TableCell>
-      <TableCell>{staff.role}</TableCell>
+      <TableCell>
+        {(staff.role === "staff" && "Nhân viên") ||
+          (staff.role === "manager" && "Quản lý") ||
+          (staff.role === "lab_technician" && "Nhân viên xét nghiệm")}
+      </TableCell>
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
           <HoverCardTrigger>
