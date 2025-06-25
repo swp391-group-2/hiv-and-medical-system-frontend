@@ -33,7 +33,7 @@ const updateDoctorFormSchema = z.object({
   licenseNumber: z
     .string()
     .nonempty("Số giấy phép hành nghề không được bỏ trống"),
-  status: z.boolean(),
+  active: z.boolean(),
 });
 // image schema
 const imageSchema = z.object({ file: z.string().optional() });
@@ -55,7 +55,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
       specialization: doctor.specialization,
       licenseNumber: doctor.licenseNumber,
       file: "",
-      status: doctor.userStatus === "active" ? true : false,
+      active: doctor.userStatus === "ACTIVE" ? true : false,
     },
   });
 
@@ -172,7 +172,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
         {/* status */}
         <FormField
           control={form.control}
-          name="status"
+          name="active"
           render={({ field }) => (
             <FormItem className="flex justify-between items-center">
               <FormLabel>Trạng thái tài khoản</FormLabel>
@@ -189,12 +189,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
-                    className={cn(
-                      field.value
-                        ? "bg-green-500 hover:bg-green-600"
-                        : "bg-red-500 hover:bg-red-600",
-                      "h-6 w-11 rounded-full transition-colors"
-                    )}
+                    className="h-6 w-11 rounded-full transition-colors"
                   />
                 </div>
               </FormControl>
@@ -211,7 +206,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
         >
           {isPending ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang tạo...
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử lý...
             </>
           ) : (
             "Cập nhật"
