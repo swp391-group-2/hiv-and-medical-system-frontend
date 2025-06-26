@@ -25,14 +25,14 @@ export const useStaffs = () => {
 };
 export const useLabs = () => {
   return useQuery<Staff[]>({
-    queryKey: ["staffs"],
+    queryKey: ["labs"],
     queryFn: getAllLabs,
     staleTime: Infinity,
   });
 };
 export const useManagers = () => {
   return useQuery<Staff[]>({
-    queryKey: ["staffs"],
+    queryKey: ["managers"],
     queryFn: getAllManagers,
     staleTime: Infinity,
   });
