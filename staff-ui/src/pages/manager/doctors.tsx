@@ -18,6 +18,7 @@ import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctor-list";
 import { useDoctors, useDoctorsCount } from "@/api/doctor";
 import { LoadingOverlay } from "@/components/loading-overlay";
+import { useNavigate } from "react-router-dom";
 
 // export const doctors: Doctor[] = [
 //   {
@@ -79,6 +80,7 @@ import { LoadingOverlay } from "@/components/loading-overlay";
 
 const ManagerDoctors = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { data: doctors, isLoading } = useDoctors();
   const [search, setSearch] = useState("");
   const { data: doctorsCount } = useDoctorsCount();
@@ -86,10 +88,15 @@ const ManagerDoctors = () => {
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const { mutate: deleteDoctor } = useMutation<void, AxiosError, string>({
+  const { mutate: deleteDoctor, isPending } = useMutation<
+    void,
+    AxiosError,
+    string
+  >({
     mutationFn: async (doctorId) => await http.delete(`doctors/${doctorId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      navigate("/manager/doctors");
       toast.success("Xoá thành công.");
     },
     onError: (err) => {
@@ -173,6 +180,7 @@ const ManagerDoctors = () => {
               <DoctorList
                 data={filteredDoctors}
                 handleDeleteDoctor={handleDeleteDoctor}
+                isDeleting={isPending}
               />
             </div>
           </div>

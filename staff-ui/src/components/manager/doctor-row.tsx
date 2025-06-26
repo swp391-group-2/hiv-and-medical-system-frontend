@@ -1,6 +1,6 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Calendar, Edit, Trash2, Dot } from "lucide-react";
+import { Calendar, Edit, Trash2, Dot, Loader2 } from "lucide-react";
 import type { Doctor } from "@/types/doctor";
 import {
   HoverCard,
@@ -35,9 +35,11 @@ import { DoctorUpdateForm } from "./doctor-update-form";
 export function DoctorRow({
   doctor,
   handleDeleteDoctor,
+  isDeleting,
 }: {
   doctor: Doctor;
   handleDeleteDoctor: (id: string) => void;
+  isDeleting: boolean;
 }) {
   return (
     <TableRow>
@@ -144,10 +146,20 @@ export function DoctorRow({
                 Huỷ
               </AlertDialogCancel>
               <AlertDialogAction
+                asChild
                 className="cursor-pointer bg-red-500 hover:bg-red-600"
                 onClick={() => handleDeleteDoctor(doctor.doctorId)}
               >
-                Xoá
+                <Button variant="destructive">
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử
+                      lý...
+                    </>
+                  ) : (
+                    "Xoá"
+                  )}
+                </Button>
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

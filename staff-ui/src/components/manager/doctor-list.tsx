@@ -12,9 +12,11 @@ import { DoctorRow } from "./doctor-row";
 export function DoctorList({
   data,
   handleDeleteDoctor,
+  isDeleting,
 }: {
   data: Doctor[];
   handleDeleteDoctor: (id: string) => void;
+  isDeleting: boolean;
 }) {
   if (data.length == 0) {
     return <EmptyListMessage message="Chưa có bác sĩ" />;
@@ -38,6 +40,7 @@ export function DoctorList({
             key={doc.doctorId}
             doctor={doc}
             handleDeleteDoctor={handleDeleteDoctor}
+            isDeleting={isDeleting}
           />
         ))}
       </TableBody>
