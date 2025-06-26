@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
+import { Pill, Plus, RotateCcw, Search } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -56,7 +56,7 @@ const ManagerARV = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center">
-              <UserCheck className="h-8 w-8 text-green-600 mr-3" />
+              <Pill className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng phác đồ</p>
                 <p className="text-2xl font-bold">{}</p>
