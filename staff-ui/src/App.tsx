@@ -20,8 +20,10 @@ import { useAuthStore } from "./stores/auth.store";
 import { useEffect } from "react";
 import AdminSidebar from "./components/admin/admin-sidebar";
 import AdminDashboard from "./pages/admin/dashboard";
-import AdminAccounts from "./pages/admin/accounts";
+
 import AdminBlogs from "./pages/admin/blogs";
+import AdminAccounts from "./pages/admin/accounts";
+
 
 const queryClient = new QueryClient();
 
