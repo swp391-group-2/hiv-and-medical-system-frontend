@@ -45,7 +45,7 @@ export function StaffRow({
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
           <HoverCardTrigger>
-            {staff.status === "active" ? (
+            {staff.status === "ACTIVE" ? (
               <Dot
                 className="cursor-pointer ml-5"
                 size={16}
@@ -63,7 +63,7 @@ export function StaffRow({
           </HoverCardTrigger>
           <HoverCardContent className="flex justify-center">
             <div>
-              {staff.status === "active"
+              {staff.status === "ACTIVE"
                 ? "Tài khoản đang hoạt động"
                 : "Tài khoản bị vô hiệu hoá"}
             </div>
