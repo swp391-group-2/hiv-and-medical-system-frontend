@@ -13,14 +13,14 @@ export const getDoctorsCount = async (): Promise<number> => {
 export const useDoctorsCount = () => {
   return useQuery<number>({
     queryKey: ["doctorsCount"],
-    queryFn: () => getDoctorsCount(),
+    queryFn: getDoctorsCount,
     staleTime: Infinity,
   });
 };
 
 const getDoctorsByPage = async (
-  page: number,
-  size: number
+  page?: number,
+  size?: number
 ): Promise<Doctor[]> => {
   const { data } = await http.get<Response<Doctor>>(`/doctors`, {
     params: { page, size },
@@ -28,7 +28,7 @@ const getDoctorsByPage = async (
   return data.data;
 };
 
-export const useDoctors = (page: number, size: number) => {
+export const useDoctors = (page?: number, size?: number) => {
   return useQuery<Doctor[]>({
     queryKey: ["doctors"],
     queryFn: () => getDoctorsByPage(page, size),

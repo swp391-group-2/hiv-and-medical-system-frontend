@@ -11,77 +11,78 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, Search, UserCheck } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
-import type { Doctor } from "@/types/doctor";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctor-list";
-import { useDoctorsCount } from "@/api/doctor";
+import { useDoctors, useDoctorsCount } from "@/api/doctor";
+import { LoadingOverlay } from "@/components/loading-overlay";
 
-export const doctors: Doctor[] = [
-  {
-    doctorId: "doc-001",
-    userId: "user-101",
-    email: "anna.nguyen@example.com",
-    fullName: "Dr. Anna Nguyễn",
-    userStatus: "active",
-    doctorCode: "AN001",
-    specialization: "Truyền nhiễm",
-    licenseNumber: "LIC-2025-0456",
-    urlImage: "https://example.com/images/doctors/anna_nguyen.jpg",
-  },
-  {
-    doctorId: "doc-002",
-    userId: "user-102",
-    email: "john.smith@example.com",
-    fullName: "Dr. John Smith",
-    userStatus: "active",
-    doctorCode: "JS002",
-    specialization: "Da liễu",
-    licenseNumber: "LIC-2024-1123",
-    urlImage: "https://example.com/images/doctors/john_smith.jpg",
-  },
-  {
-    doctorId: "doc-003",
-    userId: "user-103",
-    email: "mei.li@example.com",
-    fullName: "Dr. Mei Lì",
-    userStatus: "inactive",
-    doctorCode: "ML003",
-    specialization: "Nhi khoa",
-    licenseNumber: "LIC-2023-0789",
-    urlImage: "https://example.com/images/doctors/mei_li.jpg",
-  },
-  {
-    doctorId: "doc-004",
-    userId: "user-104",
-    email: "carlos.ramirez@example.com",
-    fullName: "Dr. Carlos Ramírez",
-    userStatus: "active",
-    doctorCode: "CR004",
-    specialization: "Thần kinh",
-    licenseNumber: "LIC-2025-0234",
-    urlImage: "https://example.com/images/doctors/carlos_ramirez.jpg",
-  },
-  {
-    doctorId: "doc-005",
-    userId: "user-105",
-    email: "aisha.khan@example.com",
-    fullName: "Dr. Aisha Khan",
-    userStatus: "active",
-    doctorCode: "AK005",
-    specialization: "Miễn dịch học",
-    licenseNumber: "LIC-2022-3345",
-    urlImage: "https://example.com/images/doctors/aisha_khan.jpg",
-  },
-];
+// export const doctors: Doctor[] = [
+//   {
+//     doctorId: "doc-001",
+//     userId: "user-101",
+//     email: "anna.nguyen@example.com",
+//     fullName: "Dr. Anna Nguyễn",
+//     userStatus: "active",
+//     doctorCode: "AN001",
+//     specialization: "Truyền nhiễm",
+//     licenseNumber: "LIC-2025-0456",
+//     urlImage: "https://example.com/images/doctors/anna_nguyen.jpg",
+//   },
+//   {
+//     doctorId: "doc-002",
+//     userId: "user-102",
+//     email: "john.smith@example.com",
+//     fullName: "Dr. John Smith",
+//     userStatus: "active",
+//     doctorCode: "JS002",
+//     specialization: "Da liễu",
+//     licenseNumber: "LIC-2024-1123",
+//     urlImage: "https://example.com/images/doctors/john_smith.jpg",
+//   },
+//   {
+//     doctorId: "doc-003",
+//     userId: "user-103",
+//     email: "mei.li@example.com",
+//     fullName: "Dr. Mei Lì",
+//     userStatus: "inactive",
+//     doctorCode: "ML003",
+//     specialization: "Nhi khoa",
+//     licenseNumber: "LIC-2023-0789",
+//     urlImage: "https://example.com/images/doctors/mei_li.jpg",
+//   },
+//   {
+//     doctorId: "doc-004",
+//     userId: "user-104",
+//     email: "carlos.ramirez@example.com",
+//     fullName: "Dr. Carlos Ramírez",
+//     userStatus: "active",
+//     doctorCode: "CR004",
+//     specialization: "Thần kinh",
+//     licenseNumber: "LIC-2025-0234",
+//     urlImage: "https://example.com/images/doctors/carlos_ramirez.jpg",
+//   },
+//   {
+//     doctorId: "doc-005",
+//     userId: "user-105",
+//     email: "aisha.khan@example.com",
+//     fullName: "Dr. Aisha Khan",
+//     userStatus: "active",
+//     doctorCode: "AK005",
+//     specialization: "Miễn dịch học",
+//     licenseNumber: "LIC-2022-3345",
+//     urlImage: "https://example.com/images/doctors/aisha_khan.jpg",
+//   },
+// ];
 
 const ManagerDoctors = () => {
   const queryClient = useQueryClient();
+  const { data: doctors, isLoading } = useDoctors();
   const [search, setSearch] = useState("");
   const { data: doctorsCount } = useDoctorsCount();
-  const filteredDoctors = doctors.filter((doctor) =>
+  const filteredDoctors = (doctors ?? []).filter((doctor) =>
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -99,6 +100,8 @@ const ManagerDoctors = () => {
   const handleDeleteDoctor = (id: string) => {
     deleteDoctor(id);
   };
+
+  if (isLoading) return <LoadingOverlay message="Đang tải dữ liệu" />;
 
   return (
     <div className="flex flex-col gap-4">

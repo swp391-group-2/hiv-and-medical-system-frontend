@@ -49,7 +49,7 @@ export function DoctorRow({
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
           <HoverCardTrigger>
-            {doctor.userStatus === "active" ? (
+            {doctor.userStatus === "ACTIVE" ? (
               <Dot
                 className="cursor-pointer ml-5"
                 size={16}
@@ -67,7 +67,7 @@ export function DoctorRow({
           </HoverCardTrigger>
           <HoverCardContent className="flex justify-center">
             <div>
-              {doctor.userStatus === "active"
+              {doctor.userStatus === "ACTIVE"
                 ? "Tài khoản đang hoạt động"
                 : "Tài khoản bị vô hiệu hoá"}
             </div>
