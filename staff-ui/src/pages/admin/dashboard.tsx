@@ -1,4 +1,4 @@
-import AppointmentStatSection from "@/components/appointment-stat";
+import AppointmentStatSection from "@/components/service-type-stat";
 import RecentActivities from "@/components/dashboard-recent-activities";
 import FavouriteDoctors from "@/components/favourite-doctors";
 import { StatCardsSection } from "@/components/stat-card-section";

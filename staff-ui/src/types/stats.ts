@@ -1,4 +1,4 @@
-export type AppointmentStat = {
+export type ServiceTypeStat = {
   service: string;
   count: number;
   percentage: number;
