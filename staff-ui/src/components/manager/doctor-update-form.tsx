@@ -35,8 +35,16 @@ const updateDoctorFormSchema = z.object({
     .nonempty("Số giấy phép hành nghề không được bỏ trống"),
   active: z.boolean(),
 });
+// maximum file size for image uploads (e.g., 5MB)
+const MAX_BYTES = 5 * 1024 * 1024; // 5MB
+
 // image schema
-const imageSchema = z.object({ file: z.string().optional() });
+const imageSchema = z.object({
+  file: z
+    .instanceof(File)
+    .refine((f) => f.size < MAX_BYTES, "File too large")
+    .optional(),
+});
 
 // merge schemas
 const doctorWithImageSchema = updateDoctorFormSchema.merge(imageSchema);
@@ -54,7 +62,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
       fullName: doctor.fullName,
       specialization: doctor.specialization,
       licenseNumber: doctor.licenseNumber,
-      file: "",
+      file: undefined,
       active: doctor.userStatus === "ACTIVE" ? true : false,
     },
   });
@@ -75,9 +83,13 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
     },
   });
 
-  const { mutate: updateImage } = useMutation<void, AxiosError, string>({
-    mutationFn: async (image) => {
-      await http.put(`/doctors/${doctor.doctorId}/upload`, image);
+  const { mutate: updateImage } = useMutation<void, AxiosError, FormData>({
+    mutationFn: async (formData) => {
+      await http.post(`/doctors/${doctor.doctorId}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
     },
     onSuccess: () => {
       toast.success("Cập nhật hình thành công.");
@@ -90,8 +102,11 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
   const onSubmit = (values: UpdateDoctorFormWithImageValues) => {
     const { file, ...basic } = values;
     updateBasicInfo(basic);
-    if (values.file) {
-      updateImage(values.file);
+
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
+      updateImage(formData);
     }
   };
 
@@ -161,8 +176,12 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
                   className="cursor-pointer"
                   id="file"
                   placeholder="Chọn file"
+                  accept="image/*"
                   type="file"
-                  {...field}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    field.onChange(file); // now values.file === File
+                  }}
                 />
               </FormControl>
               <FormMessage />
