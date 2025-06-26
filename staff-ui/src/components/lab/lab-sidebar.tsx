@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { FlaskConical, User } from "lucide-react";
 import {
   Sidebar,
@@ -57,15 +57,15 @@ const LabSidebar = () => {
                         size="lg"
                         className="w-full justify-start hover:bg-sky-50 hover:text-sky-700 transition-colors duration-200"
                       >
-                        <a
-                          href={item.url}
+                        <NavLink
+                          to={item.url}
                           className="flex items-center gap-3 px-3 py-3 rounded-lg"
                         >
                           <item.icon className="h-5 w-5" />
                           <span className="text-base font-medium">
                             {item.title}
                           </span>
-                        </a>
+                        </NavLink>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
