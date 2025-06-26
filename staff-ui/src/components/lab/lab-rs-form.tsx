@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { Appointment } from "@/types/types";
@@ -54,20 +54,17 @@ export function ResultTextForm({ appt }: { appt: Appointment }) {
 
   const { mutate: updateResult, isPending } = useMutation<
     void,
-    Error,
+    AxiosError,
     ResultTextValues
   >({
-    mutationFn: async (data: ResultTextValues) =>
+    mutationFn: async (data) =>
       await axios.put(`/api/lab-samples/${appt.labSampleId}/results`, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["appointments"] });
       toast.success("Cập nhật kết quả thành công!");
     },
     onError: (err) => {
-      const msg =
-        axios.isAxiosError(err) && err.response?.data?.message
-          ? err.response.data.message
-          : err.message;
+      const msg = err.message;
       toast.error(msg);
     },
   });

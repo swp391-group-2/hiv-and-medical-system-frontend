@@ -18,13 +18,16 @@ import ManagerDoctors from "./pages/manager/doctors";
 import ManagerStaffs from "./pages/manager/staffs";
 import { useAuthStore } from "./stores/auth.store";
 import { useEffect } from "react";
+import AdminSidebar from "./components/admin/admin-sidebar";
+import AdminDashboard from "./pages/admin/dashboard";
+import AdminAccounts from "./pages/admin/accounts";
+import AdminBlogs from "./pages/admin/blogs";
 
 const queryClient = new QueryClient();
 
 function App() {
-
-  const initializeAuth = useAuthStore((state)=> state.initializeAuth);
-  useEffect(()=>{
+  const initializeAuth = useAuthStore((state) => state.initializeAuth);
+  useEffect(() => {
     initializeAuth();
   }, [initializeAuth]);
   return (
@@ -49,6 +52,13 @@ function App() {
             <Route path="staffs" element={<ManagerStaffs />} />
             <Route path="arv" element={<ManagerARV />} />
           </Route>
+          {/* admin */}
+          <Route path="admin" element={<AdminSidebar />}>
+            <Route index element={<Navigate to="dashboard" replace />} />
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="accounts" element={<AdminAccounts />} />
+            <Route path="blogs" element={<AdminBlogs />} />
+          </Route>
           {/* staff */}
           <Route path="staff" element={<MainLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
@@ -58,12 +68,6 @@ function App() {
             <Route path="finished" element={<FinishedAppointments />} />
             <Route path="profile" element={<UserProfile />} />
           </Route>
-          {/* <Route
-              path="*"
-              element={
-                <Navigate to={useAuth().user ? "/" : "/login"} replace />
-              }
-            /> */}
         </Routes>
         <Toaster richColors position="top-center" />
       </BrowserRouter>
