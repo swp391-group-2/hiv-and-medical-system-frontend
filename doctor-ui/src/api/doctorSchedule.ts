@@ -3,7 +3,27 @@
 import axios from "axios";
 import { BASE_URL } from "./BaseURL";
 import type { DoctorScheduleAppointment } from "@/types/schedule/doctorScheduleAppointment";
+import type { DoctorWorkScheduleList } from "@/types/schedule/doctorWorkSchedule";
 import { data } from "react-router-dom";
+
+// Helper function to map service type
+const mapServiceType = (
+  serviceType?: string
+): "Định kỳ" | "Khẩn cấp" | "Tái khám" => {
+  switch (serviceType?.toLowerCase()) {
+    case "consultation":
+    case "regular":
+      return "Định kỳ";
+    case "emergency":
+    case "urgent":
+      return "Khẩn cấp";
+    case "follow_up":
+    case "followup":
+      return "Tái khám";
+    default:
+      return "Định kỳ";
+  }
+};
 
 export const fetchDoctorAppointments = async (
   date: string,
@@ -32,27 +52,143 @@ export const fetchDoctorAppointments = async (
   // Nếu API đã filter theo status và date, có thể bỏ filter dưới
   // Nếu không, hãy kiểm tra lại trường date trong từng appointment
   const filteredAppointments = appointments.filter(
-    (appt: any) => appt.date === date
+    (appt: { date: string }) => appt.date === date
   );
 
   // Map về đúng DoctorScheduleAppointment
-  return filteredAppointments.map((appt: any) => ({
-    name: appt.doctorName || "Chưa có tên bác sĩ",
-    code: appt.appointmentId ? `APPT${appt.appointmentId}` : "Không rõ",
-    time: appt.startTime || appt.time || "Không rõ",
-    slot: appt.slotDescription || "Không rõ slot",
-    date: appt.date || "Không rõ ngày",
-    phone: appt.patient?.phone || "Không có",
-    address: appt.patient?.address || "Không có",
-    note: appt.note || "Không có ghi chú",
-    type: appt.serviceType || "Không rõ loại",
-    status:
-      appt.status === "LAB_COMPLETED"
-        ? "Hoàn thành"
-        : appt.status === "IN_PROGRESS"
-        ? "Đang khám"
-        : appt.status === "WAITING"
-        ? "Chờ khám"
-        : "Không rõ",
-  }));
+  return filteredAppointments.map(
+    (appt: {
+      doctorName?: string;
+      appointmentId?: number;
+      startTime?: string;
+      time?: string;
+      slotDescription?: string;
+      date?: string;
+      patient?: { phone?: string; address?: string };
+      note?: string;
+      serviceType?: string;
+      status?: string;
+    }) => ({
+      name: appt.doctorName || "Chưa có tên bác sĩ",
+      code: appt.appointmentId ? `APPT${appt.appointmentId}` : "Không rõ",
+      time: appt.startTime || appt.time || "Không rõ",
+      slot: appt.slotDescription || "Không rõ slot",
+      date: appt.date || "Không rõ ngày",
+      phone: appt.patient?.phone || "Không có",
+      address: appt.patient?.address || "Không có",
+      note: appt.note || "Không có ghi chú",
+      type: mapServiceType(appt.serviceType),
+      status:
+        appt.status === "LAB_COMPLETED"
+          ? "Hoàn thành"
+          : appt.status === "IN_PROGRESS"
+          ? "Đang khám"
+          : appt.status === "WAITING"
+          ? "Chờ khám"
+          : "Chờ khám", // Default to "Chờ khám" instead of "Không rõ"
+    })
+  );
 };
+
+export const fetchDoctorScheduleById = async (
+  doctorId: string
+): Promise<DoctorWorkScheduleList> => {
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) throw new Error("Không có token");
+
+  try {
+    const response = await axios.get(
+      `${BASE_URL}doctors/${doctorId}/schedules`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const schedules = response.data?.data;
+    console.log("Lịch làm việc của bác sĩ:", schedules);
+
+    if (!Array.isArray(schedules)) return [];
+
+    // Trả về đúng cấu trúc từ API
+    return schedules;
+  } catch (error) {
+    console.error("Lỗi khi lấy lịch làm việc của bác sĩ:", error);
+    throw error;
+  }
+};
+
+// Lấy lịch làm việc của bác sĩ hiện tại đang đăng nhập
+export const fetchMyDoctorSchedule =
+  async (): Promise<DoctorWorkScheduleList> => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!token) throw new Error("Không có token");
+
+    try {
+      // Sử dụng doctorId từ ví dụ hoặc có thể lấy từ profile
+      const doctorId = "3e4e2dcd-9ace-4708-9c71-d1c985f7df8d"; // Hardcode tạm thời để test
+
+      const response = await axios.get(
+        `${BASE_URL}doctors/${doctorId}/schedules`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const schedules = response.data?.data;
+      console.log("Lịch làm việc của tôi:", schedules);
+
+      if (!Array.isArray(schedules)) return [];
+
+      // Trả về đúng cấu trúc từ API
+      return schedules;
+    } catch (error) {
+      console.error("Lỗi khi lấy lịch làm việc của tôi:", error);
+      // Nếu lỗi, trả về mảng rỗng thay vì throw error
+      return [];
+    }
+  };
+
+// Function để lấy thông tin doctor hiện tại
+export const fetchCurrentDoctorInfo = async () => {
+  const token = localStorage.getItem("accessToken");
+
+  if (!token) throw new Error("Không có token");
+
+  try {
+    const response = await axios.get(`${BASE_URL}doctors/me`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data?.data;
+  } catch (error) {
+    console.error("Lỗi khi lấy thông tin doctor:", error);
+    throw error;
+  }
+};
+
+// Version động - lấy doctorId từ thông tin doctor
+export const fetchMyDoctorScheduleDynamic =
+  async (): Promise<DoctorWorkScheduleList> => {
+    try {
+      const doctorInfo = await fetchCurrentDoctorInfo();
+      const doctorId = doctorInfo?.id || doctorInfo?.doctorId;
+
+      if (!doctorId) {
+        console.warn("Không tìm thấy doctorId");
+        return [];
+      }
+
+      return await fetchDoctorScheduleById(doctorId);
+    } catch (error) {
+      console.error("Lỗi khi lấy lịch làm việc động:", error);
+      return [];
+    }
+  };
