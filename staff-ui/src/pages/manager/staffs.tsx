@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
+import { Plus, RotateCcw, Search, UserCheck, Users } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
@@ -85,6 +85,7 @@ import { LoadingOverlay, InternalLoading } from "@/components/loading-overlay";
 const ManagerStaffs = () => {
   const queryClient = useQueryClient();
   const { data: staffs = [], isLoading, isError, isFetching } = useStaffs();
+  const activeStaffs = staffs.filter((s) => s.status === "ACTIVE").length;
   const [search, setSearch] = useState("");
 
   const filteredStaffs = staffs.filter((staff) =>
@@ -145,7 +146,7 @@ const ManagerStaffs = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center">
-              <UserCheck className="h-8 w-8 text-green-600 mr-3" />
+              <Users className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng nhân viên</p>
                 <p className="text-2xl font-bold">{staffs.length}</p>
@@ -161,9 +162,7 @@ const ManagerStaffs = () => {
                 <p className="text-sm text-gray-600">
                   Số tài khoản đang hoạt động
                 </p>
-                <p className="text-2xl font-bold">
-                  {staffs.filter((item) => item.status === "active").length}
-                </p>
+                <p className="text-2xl font-bold">{activeStaffs}</p>
               </div>
             </div>
           </CardContent>
