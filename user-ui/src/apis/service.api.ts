@@ -1,20 +1,20 @@
 import type { ServiceResponse } from "@/types/service.type";
 import apiGuest from "./apiGuest";
-const URL_SERVICES = "services"; 
+const URL_SERVICES = "services";
 
 const getServiceUrl = (serviceId: number): string => {
-  return `${URL_SERVICES}/${serviceId}`; 
+  return `${URL_SERVICES}/${serviceId}`;
 };
 
 const getServicesByTypeUrl = (serviceType: string): string => {
-  return `${URL_SERVICES}/type/${serviceType}`; 
+  return `${URL_SERVICES}/type/${serviceType}`;
 };
 
 const serviceApi = {
   getServiceById: (serviceId: number) => {
     return apiGuest
       .get<ServiceResponse>(getServiceUrl(serviceId))
-      .then((res) => res.data); 
+      .then((res) => res.data);
   },
   getServicesByType: (serviceType: string) => {
     return apiGuest
