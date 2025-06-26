@@ -31,6 +31,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
+import { options } from "./specialization-select";
 
 export function DoctorRow({
   doctor,
@@ -46,7 +47,9 @@ export function DoctorRow({
       <TableCell>{doctor.doctorCode}</TableCell>
       <TableCell>{doctor.fullName}</TableCell>
       <TableCell>{doctor.email}</TableCell>
-      <TableCell>{doctor.specialization}</TableCell>
+      <TableCell>
+        {options.find((option) => option.id === doctor.specialization)?.name}
+      </TableCell>
       <TableCell>{doctor.licenseNumber}</TableCell>
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
