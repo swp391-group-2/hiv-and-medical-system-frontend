@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Search, UserCheck } from "lucide-react";
+import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
@@ -48,6 +48,10 @@ const ManagerDoctors = () => {
 
   const handleDeleteDoctor = (id: string) => {
     deleteDoctor(id);
+  };
+  const handleReLoadList = () => {
+    queryClient.invalidateQueries({ queryKey: ["doctors"] });
+    queryClient.invalidateQueries({ queryKey: ["doctorsCount"] });
   };
 
   if (isLoading) return <LoadingOverlay message="Đang tải dữ liệu" />;
@@ -113,8 +117,16 @@ const ManagerDoctors = () => {
 
       {/*  */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex justify-between items-center">
           <CardTitle>Danh sách Bác sĩ</CardTitle>
+          <Button
+            variant="outline"
+            className="bg-white hover:bg-gray-100 cursor-pointer mr-4"
+            onClick={handleReLoadList}
+          >
+            {"Làm mới "}
+            <RotateCcw />
+          </Button>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
