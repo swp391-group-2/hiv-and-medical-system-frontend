@@ -59,7 +59,7 @@ export const CreateStaffForm = () => {
     },
   });
 
-  const { mutate: createStaff, isPending } = useMutation<
+  const { mutate: createStaff, isPending: isCreateStaffPending } = useMutation<
     void,
     AxiosError,
     StaffInitializedValues
@@ -75,8 +75,41 @@ export const CreateStaffForm = () => {
     },
   });
 
+  const { mutate: createLabTechnician, isPending: isCreateLabPending } =
+    useMutation<void, AxiosError, StaffInitializedValues>({
+      mutationFn: async ({ confirm, ...values }) =>
+        await http.post(`/lab-technicians`, values),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["staffs"] });
+        toast.success("Tạo tài khoản thành công");
+      },
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    });
+
+  const { mutate: createManager, isPending: isCreateManagerPending } =
+    useMutation<void, AxiosError, StaffInitializedValues>({
+      mutationFn: async ({ confirm, ...values }) =>
+        await http.post(`/managers`, values),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["staffs"] });
+        toast.success("Tạo tài khoản thành công");
+      },
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    });
+
+  const isPending =
+    isCreateLabPending ?? isCreateManagerPending ?? isCreateStaffPending;
+
   const handleSubmit = (values: StaffInitializedValues) => {
-    createStaff(values);
+    if (values.role === "STAFF") {
+      createStaff(values);
+    } else if (values.role === "LAB_TECHNICIAN") {
+      createLabTechnician(values);
+    } else createManager(values);
   };
 
   return (
