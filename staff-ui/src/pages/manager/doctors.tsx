@@ -17,13 +17,13 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctor-list";
 import { useDoctors, useDoctorsCount } from "@/api/doctor";
-import { LoadingOverlay } from "@/components/loading-overlay";
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 import { useNavigate } from "react-router-dom";
 
 const ManagerDoctors = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { data: doctors, isLoading } = useDoctors();
+  const { data: doctors, isLoading, isFetching } = useDoctors();
   const [search, setSearch] = useState("");
   const { data: doctorsCount } = useDoctorsCount();
   const filteredDoctors = (doctors ?? []).filter((doctor) =>
@@ -129,15 +129,19 @@ const ManagerDoctors = () => {
           </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex space-x-2">
-              <DoctorList
-                data={filteredDoctors}
-                handleDeleteDoctor={handleDeleteDoctor}
-                isDeleting={isPending}
-              />
+          {isFetching ? (
+            <InternalLoading message="Đang tải" />
+          ) : (
+            <div className="space-y-4">
+              <div className="flex space-x-2">
+                <DoctorList
+                  data={filteredDoctors}
+                  handleDeleteDoctor={handleDeleteDoctor}
+                  isDeleting={isPending}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
