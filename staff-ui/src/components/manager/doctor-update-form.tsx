@@ -78,7 +78,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
       await http.put(`/doctors/${doctor.doctorId}/update-by-manager`, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
-      navigate("/managers/doctors");
+      navigate("/manager/doctors");
       toast.success("Cập nhật thành công!");
     },
     onError: (err) => {

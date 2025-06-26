@@ -37,7 +37,11 @@ const ServiceTypeStatSection = ({
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-sm font-medium">
-                          {item.service}
+                          {item.service === "CONSULTATION"
+                            ? "Dịch vụ khám"
+                            : item.service === "SCREENING"
+                            ? "Xét nghiệm sàng lọc"
+                            : "Xét nghiệm khẳng định"}
                         </span>
                         <span className="text-sm text-gray-500">
                           {item.count}

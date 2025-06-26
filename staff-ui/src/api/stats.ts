@@ -32,7 +32,7 @@ export function useFeaturedStats(milestone: string) {
 
 export const getServiceTypeStats = async (): Promise<ServiceTypeStat[]> => {
   const { data } = await http.get<Response<ServiceTypeStat>>(
-    `/dashboard/service-type-stats`
+    `/dashboards/service-type-stats`
   );
   return data.data;
 };
