@@ -34,7 +34,7 @@ export const CreateStaffForm = () => {
         .min(1, "Tên phải có ít nhất một kí tự")
         .max(50, "Tên vượt quá số kí tự cho phép"),
       email: z.string().email("Email không hợp lệ"),
-      role: z.enum(["manager", "lab", "staff"]),
+      role: z.enum(["MANAGER", "LAB_TECHNICIAN", "STAFF"]),
       password: z
         .string()
         .min(8, "Mật khẩu phải có ít nhất 8 kí tự")
@@ -53,7 +53,7 @@ export const CreateStaffForm = () => {
     defaultValues: {
       fullName: "",
       email: "",
-      role: "staff",
+      role: "STAFF",
       password: "",
       confirm: "",
     },
@@ -120,9 +120,11 @@ export const CreateStaffForm = () => {
                     <SelectValue placeholder="Chọn chức vụ" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="staff">Nhân viên</SelectItem>
-                    <SelectItem value="manager">Quản lý</SelectItem>
-                    <SelectItem value="lab">Nhân viên xét nghiệm</SelectItem>
+                    <SelectItem value="STAFF">Nhân viên</SelectItem>
+                    <SelectItem value="MANAGER">Quản lý</SelectItem>
+                    <SelectItem value="LAB_TECHNICIAN">
+                      Nhân viên xét nghiệm
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>
