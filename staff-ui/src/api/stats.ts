@@ -1,9 +1,9 @@
 import type {
-  AppointmentStat,
+  ServiceTypeStat,
   StatCardStaticProps,
   FavoriteDoctor,
 } from "@/types/stats";
-import type { Response, ResponseSingleObject } from "@/types/types";
+import type { Response } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
 import http from "./http";
 
@@ -30,9 +30,19 @@ export function useFeaturedStats(milestone: string) {
   });
 }
 
-export const getAppointmentStats = async (): Promise<AppointmentStat> => {
-  const { data } = await http.get<ResponseSingleObject<AppointmentStat>>(``);
+export const getServiceTypeStats = async (): Promise<ServiceTypeStat[]> => {
+  const { data } = await http.get<Response<ServiceTypeStat>>(
+    `/dashboards/service-type-stats`
+  );
   return data.data;
+};
+
+export const useServiceTypeStats = () => {
+  return useQuery<ServiceTypeStat[]>({
+    queryKey: ["service-type-stats"],
+    queryFn: getServiceTypeStats,
+    staleTime: Infinity,
+  });
 };
 
 export const getFavoriteDoctors = async (): Promise<FavoriteDoctor[]> => {

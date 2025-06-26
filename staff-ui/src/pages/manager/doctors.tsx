@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Search, UserCheck } from "lucide-react";
+import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
@@ -17,79 +17,28 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctor-list";
 import { useDoctors, useDoctorsCount } from "@/api/doctor";
-import { LoadingOverlay } from "@/components/loading-overlay";
-
-// export const doctors: Doctor[] = [
-//   {
-//     doctorId: "doc-001",
-//     userId: "user-101",
-//     email: "anna.nguyen@example.com",
-//     fullName: "Dr. Anna Nguyễn",
-//     userStatus: "active",
-//     doctorCode: "AN001",
-//     specialization: "Truyền nhiễm",
-//     licenseNumber: "LIC-2025-0456",
-//     urlImage: "https://example.com/images/doctors/anna_nguyen.jpg",
-//   },
-//   {
-//     doctorId: "doc-002",
-//     userId: "user-102",
-//     email: "john.smith@example.com",
-//     fullName: "Dr. John Smith",
-//     userStatus: "active",
-//     doctorCode: "JS002",
-//     specialization: "Da liễu",
-//     licenseNumber: "LIC-2024-1123",
-//     urlImage: "https://example.com/images/doctors/john_smith.jpg",
-//   },
-//   {
-//     doctorId: "doc-003",
-//     userId: "user-103",
-//     email: "mei.li@example.com",
-//     fullName: "Dr. Mei Lì",
-//     userStatus: "inactive",
-//     doctorCode: "ML003",
-//     specialization: "Nhi khoa",
-//     licenseNumber: "LIC-2023-0789",
-//     urlImage: "https://example.com/images/doctors/mei_li.jpg",
-//   },
-//   {
-//     doctorId: "doc-004",
-//     userId: "user-104",
-//     email: "carlos.ramirez@example.com",
-//     fullName: "Dr. Carlos Ramírez",
-//     userStatus: "active",
-//     doctorCode: "CR004",
-//     specialization: "Thần kinh",
-//     licenseNumber: "LIC-2025-0234",
-//     urlImage: "https://example.com/images/doctors/carlos_ramirez.jpg",
-//   },
-//   {
-//     doctorId: "doc-005",
-//     userId: "user-105",
-//     email: "aisha.khan@example.com",
-//     fullName: "Dr. Aisha Khan",
-//     userStatus: "active",
-//     doctorCode: "AK005",
-//     specialization: "Miễn dịch học",
-//     licenseNumber: "LIC-2022-3345",
-//     urlImage: "https://example.com/images/doctors/aisha_khan.jpg",
-//   },
-// ];
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
+import { useNavigate } from "react-router-dom";
 
 const ManagerDoctors = () => {
   const queryClient = useQueryClient();
-  const { data: doctors, isLoading } = useDoctors();
+  const navigate = useNavigate();
+  const { data: doctors, isLoading, isFetching } = useDoctors();
   const [search, setSearch] = useState("");
   const { data: doctorsCount } = useDoctorsCount();
   const filteredDoctors = (doctors ?? []).filter((doctor) =>
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
 
-  const { mutate: deleteDoctor } = useMutation<void, AxiosError, string>({
+  const { mutate: deleteDoctor, isPending } = useMutation<
+    void,
+    AxiosError,
+    string
+  >({
     mutationFn: async (doctorId) => await http.delete(`doctors/${doctorId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      navigate("/manager/doctors");
       toast.success("Xoá thành công.");
     },
     onError: (err) => {
@@ -99,6 +48,10 @@ const ManagerDoctors = () => {
 
   const handleDeleteDoctor = (id: string) => {
     deleteDoctor(id);
+  };
+  const handleReLoadList = () => {
+    queryClient.invalidateQueries({ queryKey: ["doctors"] });
+    queryClient.invalidateQueries({ queryKey: ["doctorsCount"] });
   };
 
   if (isLoading) return <LoadingOverlay message="Đang tải dữ liệu" />;
@@ -164,18 +117,31 @@ const ManagerDoctors = () => {
 
       {/*  */}
       <Card>
-        <CardHeader>
+        <CardHeader className="flex justify-between items-center">
           <CardTitle>Danh sách Bác sĩ</CardTitle>
+          <Button
+            variant="outline"
+            className="bg-white hover:bg-gray-100 cursor-pointer mr-4"
+            onClick={handleReLoadList}
+          >
+            {"Làm mới "}
+            <RotateCcw />
+          </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex space-x-2">
-              <DoctorList
-                data={filteredDoctors}
-                handleDeleteDoctor={handleDeleteDoctor}
-              />
+          {isFetching ? (
+            <InternalLoading message="Đang tải" />
+          ) : (
+            <div className="space-y-4">
+              <div className="flex space-x-2">
+                <DoctorList
+                  data={filteredDoctors}
+                  handleDeleteDoctor={handleDeleteDoctor}
+                  isDeleting={isPending}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>

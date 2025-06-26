@@ -36,6 +36,19 @@ export const useDoctors = (page?: number, size?: number) => {
   });
 };
 
+export const getTopDoctors = async (): Promise<Doctor[]> => {
+  const { data } = await http.get<Response<Doctor>>(`/doctors/top`);
+  return data.data;
+};
+
+export const useTopDoctors = () => {
+  return useQuery<Doctor[]>({
+    queryKey: ["topDoctors"],
+    queryFn: getTopDoctors,
+    staleTime: Infinity,
+  });
+};
+
 const getDoctorWorkSchedule = async (doctorId: string): Promise<Schedule[]> => {
   const { data } = await http.get<Response<Schedule>>(
     `/doctors/${doctorId}/schedules`

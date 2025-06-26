@@ -1,6 +1,6 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Calendar, Edit, Trash2, Dot } from "lucide-react";
+import { Calendar, Edit, Trash2, Dot, Loader2 } from "lucide-react";
 import type { Doctor } from "@/types/doctor";
 import {
   HoverCard,
@@ -31,20 +31,25 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
+import { options } from "./specialization-select";
 
 export function DoctorRow({
   doctor,
   handleDeleteDoctor,
+  isDeleting,
 }: {
   doctor: Doctor;
   handleDeleteDoctor: (id: string) => void;
+  isDeleting: boolean;
 }) {
   return (
     <TableRow>
       <TableCell>{doctor.doctorCode}</TableCell>
       <TableCell>{doctor.fullName}</TableCell>
       <TableCell>{doctor.email}</TableCell>
-      <TableCell>{doctor.specialization}</TableCell>
+      <TableCell>
+        {options.find((option) => option.id === doctor.specialization)?.name}
+      </TableCell>
       <TableCell>{doctor.licenseNumber}</TableCell>
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
@@ -144,10 +149,20 @@ export function DoctorRow({
                 Huỷ
               </AlertDialogCancel>
               <AlertDialogAction
+                asChild
                 className="cursor-pointer bg-red-500 hover:bg-red-600"
                 onClick={() => handleDeleteDoctor(doctor.doctorId)}
               >
-                Xoá
+                <Button variant="destructive">
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử
+                      lý...
+                    </>
+                  ) : (
+                    "Xoá"
+                  )}
+                </Button>
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

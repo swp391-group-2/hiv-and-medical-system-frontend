@@ -22,6 +22,7 @@ import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // basic schema
 const updateDoctorFormSchema = z.object({
@@ -55,6 +56,7 @@ type UpdateDoctorFormWithImageValues = UpdateDoctorFormValues & Image;
 
 export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const form = useForm<UpdateDoctorFormWithImageValues>({
     resolver: zodResolver(doctorWithImageSchema),
@@ -76,6 +78,7 @@ export function DoctorUpdateForm({ doctor }: { doctor: Doctor }) {
       await http.put(`/doctors/${doctor.doctorId}/update-by-manager`, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      navigate("/manager/doctors");
       toast.success("Cập nhật thành công!");
     },
     onError: (err) => {
