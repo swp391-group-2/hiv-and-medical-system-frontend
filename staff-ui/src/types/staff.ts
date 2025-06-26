@@ -10,3 +10,9 @@ export interface Staff {
   staffCode: string;
   managerId: string;
 }
+
+export interface CreateStaffRequest {
+  email: string;
+  fullName: string;
+  password: string;
+}
