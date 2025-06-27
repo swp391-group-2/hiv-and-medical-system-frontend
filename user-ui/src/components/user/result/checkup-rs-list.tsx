@@ -14,10 +14,10 @@ const CheckUpRsLabels = () => {
         <span className="font-semibold col-span-3 text-gray-700 text-sm uppercase tracking-wide">
           Phác Đồ Đã Chọn
         </span>
-        <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
+        <span className="font-semibold col-span-2 text-center text-gray-700 text-sm uppercase tracking-wide">
           Thời Gian Khám
         </span>
-        <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
+        <span className="font-semibold col-span-1 text-center text-gray-700 text-sm uppercase tracking-wide">
           Thao Tác
         </span>
       </div>

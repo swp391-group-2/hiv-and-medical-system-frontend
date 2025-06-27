@@ -2,22 +2,32 @@ import type { PatientPrescriptionItem } from "@/types/prescriptions.type";
 
 export const ArvLabels = () => {
   return (
-    <div className="w-full grid grid-cols-7 mt-6 mb-4 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-      <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
-        Tên Thuốc
-      </span>
-      <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
-        Liều Lượng
-      </span>
-      <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
-        Số Lượng
-      </span>
-      <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
-        Tông Số
-      </span>
-      <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
-        Ghi Chú
-      </span>
+    <div className="w-full grid grid-cols-7 gap-4 mb-6 px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 shadow-sm">
+      <div className="col-span-2 flex items-center">
+        <span className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+          Tên Thuốc
+        </span>
+      </div>
+      <div className="flex items-center">
+        <span className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+          Liều Lượng
+        </span>
+      </div>
+      <div className="flex items-center">
+        <span className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+          Tần Suất
+        </span>
+      </div>
+      <div className="flex items-center">
+        <span className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+          Số Lượng
+        </span>
+      </div>
+      <div className="col-span-2 flex items-center">
+        <span className="font-bold text-gray-800 text-sm uppercase tracking-wider">
+          Mô Tả
+        </span>
+      </div>
     </div>
   );
 };
@@ -53,19 +63,41 @@ export const ArvItem = ({ item }: { item: PatientPrescriptionItem[] }) => {
   }
 
   return (
-    <ul className="w-full border border-gray-300 p-4 rounded">
+    <div className="w-full space-y-3">
       {item.map((med) => (
-        <li
+        <div
           key={med.id}
-          className="w-full grid grid-cols-7  border-b last:border-b-0 pt-4 pb-4 first:pt-0 last:pb-0"
+          className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200"
         >
-          <span className="col-span-2">{med.medication.name}</span>
-          <span>{med.dosage}</span>
-          <span>{med.frequency}</span>
-          <span>{med.quantity}</span>
-          <span className="col-span-2">{med.medication.description}</span>
-        </li>
+          <div className="grid grid-cols-7 gap-4 items-center">
+            <div className="col-span-2">
+              <h3 className="font-semibold text-gray-900 text-base">
+                {med.medication.name}
+              </h3>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm font-medium">
+                {med.dosage}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+                {med.frequency}
+              </span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-purple-50 text-purple-700 px-3 py-1 rounded-full text-sm font-medium">
+                {med.quantity}
+              </span>
+            </div>
+            <div className="col-span-2">
+              <p className="text-gray-600 text-sm leading-relaxed">
+                {med.medication.description}
+              </p>
+            </div>
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };

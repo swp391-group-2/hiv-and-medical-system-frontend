@@ -1,16 +1,13 @@
 import userApi from "@/apis/user.api";
-import { getProfileFromLS } from "@/apis/userauth";
 import ProfileDone from "@/components/appointmenBooking/profile-done";
 import ProfileMissing from "@/components/appointmenBooking/profile-missing";
 import { AppRoutes } from "@/constants/appRoutes";
 import useBookingStore from "@/stores/booking.store";
-import type { User } from "@/types/user.type";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 function SelectProfileBooking() {
-  const user: User = getProfileFromLS();
   const scheduleSlot = useBookingStore((state) => state.scheduleSlot);
   const labTestSlot = useBookingStore((state) => state.labTestSlot);
   const service = useBookingStore((state) => state.service);
@@ -32,12 +29,11 @@ function SelectProfileBooking() {
     }
   }, []);
   const { data: patientData, isLoading } = useQuery({
-    queryKey: ["patient-info", user.email],
+    queryKey: ["patient-info"],
     queryFn: async () => {
-      const response = await userApi.getPatientProfile(user.email);
+      const response = await userApi.getPatientProfile();
       return response.data;
     },
-    enabled: !!user.email,
   });
   const hasProfile = patientData?.data.identificationCard;
   const setUser = useBookingStore((state) => state.setUser);
