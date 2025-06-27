@@ -35,7 +35,17 @@ export const updateDoctorAccount = async (
   );
   return data.data;
 };
-export const deleteDoctorAccount = async () => {};
+//---------------------------Users----------------------------
+export const disableUserAccount = async (userId: string): Promise<void> => {
+  await http.put(`/users/${userId}/updateStatus`, {
+    active: false,
+  });
+};
+export const activeUserAccount = async (userId: string): Promise<void> => {
+  await http.put(`/users/${userId}/updateStatus`, {
+    active: true,
+  });
+}
 //---------------------------patient accounts---------------------------
 export const getAllPatientAccounts = async (): Promise<Patient[]> => {
   const { data } = await http.get<Response<Patient>>(`/patients`);

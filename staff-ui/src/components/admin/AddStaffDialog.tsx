@@ -20,11 +20,13 @@ interface AddStaffDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const AddStaffDialog = ({ isOpen, onOpenChange }: AddStaffDialogProps) => {
+export const AddStaffDialog = ({
+  isOpen,
+  onOpenChange,
+}: AddStaffDialogProps) => {
   const [formData, setFormData] = useState<CreateStaffRequest>({
     email: "",
     fullName: "",
-   
     password: "",
   });
 
@@ -38,13 +40,14 @@ export const AddStaffDialog = ({ isOpen, onOpenChange }: AddStaffDialogProps) =>
       setFormData({
         email: "",
         fullName: "",
-        
         password: "",
       });
       toast.success("Nhân viên đã được thêm thành công!");
     },
     onError: (error: Error) => {
-      toast.error(`Lỗi khi thêm nhân viên: ${error.message || "Có lỗi xảy ra"}`);
+      toast.error(
+        `Lỗi khi thêm nhân viên: ${error.message || "Có lỗi xảy ra"}`
+      );
     },
   });
 
@@ -60,10 +63,7 @@ export const AddStaffDialog = ({ isOpen, onOpenChange }: AddStaffDialogProps) =>
     e.preventDefault();
 
     // Validate required fields
-    if (
-      !formData.email ||
-      !formData.fullName
-    ) {
+    if (!formData.email || !formData.fullName || !formData.password) {
       toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
       return;
     }
@@ -109,17 +109,16 @@ export const AddStaffDialog = ({ isOpen, onOpenChange }: AddStaffDialogProps) =>
             />
           </div>
 
-         
-
           <div className="space-y-2">
-            <Label htmlFor="staff-password">Password</Label>
+            <Label htmlFor="staff-password">Password *</Label>
             <Input
               id="staff-password"
               name="password"
               type="password"
               value={formData.password}
               onChange={handleInputChange}
-              placeholder="Vd:123456"
+              placeholder="Nhập mật khẩu"
+              required
             />
           </div>
 

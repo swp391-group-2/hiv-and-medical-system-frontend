@@ -29,8 +29,6 @@ export interface Patient {
   occupation: string;
 }
 
-
-
 /** Lab sample details */
 export interface LabSample {
   id: number;
