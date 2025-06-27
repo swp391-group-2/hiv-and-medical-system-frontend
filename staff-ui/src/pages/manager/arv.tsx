@@ -13,13 +13,18 @@ import { Pill, Plus, RotateCcw, Search } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArvList } from "@/components/manager/arv-list";
+import { useArvs } from "@/api/arv";
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 
 const ManagerARV = () => {
   const queryClient = useQueryClient();
+  const { data: arvList = [], isLoading, isError, isFetching } = useArvs();
   const [search, setSearch] = useState("");
   const handleReLoadList = () => {
     queryClient.invalidateQueries({ queryKey: ["arvs"] });
   };
+
+  if (isLoading) return <LoadingOverlay message="Đang tải" />;
 
   return (
     <div className="flex flex-col gap-4">
@@ -80,11 +85,15 @@ const ManagerARV = () => {
           </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex space-x-2">
-              <ArvList data={arvList} />
+          {isFetching ? (
+            <InternalLoading message="Đang tải" />
+          ) : (
+            <div className="space-y-4">
+              <div className="flex space-x-2">
+                <ArvList data={arvList} isError={isError} />
+              </div>
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
