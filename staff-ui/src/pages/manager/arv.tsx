@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pill, Plus, RotateCcw, Search } from "lucide-react";
-import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useQueryClient } from "@tanstack/react-query";
 import { ArvList } from "@/components/manager/arv-list";
 import { useArvs } from "@/api/arv";
@@ -25,6 +24,9 @@ const ManagerARV = () => {
     queryClient.invalidateQueries({ queryKey: ["arvs"] });
   };
 
+  const filtered = arvList.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
   if (isLoading) return <LoadingOverlay message="Đang tải" />;
 
   return (
@@ -66,7 +68,7 @@ const ManagerARV = () => {
               <Pill className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng phác đồ</p>
-                <p className="text-2xl font-bold">{}</p>
+                <p className="text-2xl font-bold">{arvList.length}</p>
               </div>
             </div>
           </CardContent>
@@ -91,7 +93,7 @@ const ManagerARV = () => {
           ) : (
             <div className="space-y-4">
               <div className="flex space-x-2">
-                <ArvList data={arvList} isError={isError} />
+                <ArvList data={filtered} isError={isError} />
               </div>
             </div>
           )}

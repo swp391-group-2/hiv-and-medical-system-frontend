@@ -103,10 +103,12 @@ const ManagerStaffs = () => {
     isFetching: isManagerFetching,
   } = useManagers();
 
-  const allStaffs = useMemo(
-    () => staffs.concat(labs).concat(managers),
-    ["staffs", "labs", "managers"]
-  );
+  const allStaffs = staffs.concat(labs).concat(managers);
+
+  // const allStaffs = useMemo(
+  //   () => staffs.concat(labs).concat(managers),
+  //   ["staffs", "labs", "managers"]
+  // );
 
   const isLoading = isStaffLoading || isLabLoading || isManagerLoading;
   const isError = isStaffError || isLabError || isManagerError;
