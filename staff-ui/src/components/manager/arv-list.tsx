@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/table";
 import { EmptyListMessage } from "@/components/page-message";
 import type { Prescription } from "@/types/types";
+import { ArvRow } from "./arv-row";
 
 export function ArvList({
   data,
@@ -32,7 +33,11 @@ export function ArvList({
           <TableHead>Thao tác</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody></TableBody>
+      <TableBody>
+        {data.map((item) => (
+          <ArvRow arv={item} />
+        ))}
+      </TableBody>
     </Table>
   );
 }
