@@ -4,20 +4,20 @@ import { GenericList } from "./common";
 const CheckUpRsLabels = () => {
   return (
     <p>
-      <div className="w-full grid grid-cols-9 mt-6 mb-4 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-        <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
+      <div className="w-full grid grid-cols-9 gap-4 mb-6 px-6 py-4 rounded-2xl  shadow-lg border ">
+        <span className="font-bold col-span-1  text-gray-800 text-sm uppercase tracking-wider">
           Mã số
         </span>
-        <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
+        <span className="font-bold col-span-2 text-gray-800 text-sm uppercase tracking-wider">
           Bác sĩ Phụ Trách
         </span>
-        <span className="font-semibold col-span-3 text-gray-700 text-sm uppercase tracking-wide">
+        <span className="font-bold col-span-3 text-gray-800 text-sm uppercase tracking-wider">
           Phác Đồ Đã Chọn
         </span>
-        <span className="font-semibold col-span-2 text-center text-gray-700 text-sm uppercase tracking-wide">
+        <span className="font-bold col-span-2  text-center text-gray-800 text-sm uppercase tracking-wider">
           Thời Gian Khám
         </span>
-        <span className="font-semibold col-span-1 text-center text-gray-700 text-sm uppercase tracking-wide">
+        <span className="font-bold  col-span-1 text-center text-gray-800 text-sm uppercase tracking-wider">
           Thao Tác
         </span>
       </div>

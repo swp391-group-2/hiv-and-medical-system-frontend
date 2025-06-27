@@ -2,8 +2,8 @@ import type { PatientPrescriptionItem } from "@/types/prescriptions.type";
 
 export const ArvLabels = () => {
   return (
-    <div className="w-full grid grid-cols-7 gap-4 mb-6 px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100 shadow-sm">
-      <div className="col-span-2 flex items-center">
+    <div className="w-full grid grid-cols-7 gap-4 mb-6 px-6 py-4 rounded-2xl  shadow-lg border ">
+      <div className="col-span-2 flex items-center ">
         <span className="font-bold text-gray-800 text-sm uppercase tracking-wider">
           Tên Thuốc
         </span>
