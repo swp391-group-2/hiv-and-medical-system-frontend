@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,10 +103,12 @@ const ManagerStaffs = () => {
     isFetching: isManagerFetching,
   } = useManagers();
 
-  const allStaffs = useMemo(
-    () => staffs.concat(labs).concat(managers),
-    ["staffs", "labs", "managers"]
-  );
+  const allStaffs = staffs.concat(labs).concat(managers);
+
+  // const allStaffs = useMemo(
+  //   () => staffs.concat(labs).concat(managers),
+  //   ["staffs", "labs", "managers"]
+  // );
 
   const isLoading = isStaffLoading || isLabLoading || isManagerLoading;
   const isError = isStaffError || isLabError || isManagerError;

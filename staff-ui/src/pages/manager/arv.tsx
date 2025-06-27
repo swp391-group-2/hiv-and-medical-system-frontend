@@ -9,16 +9,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
-import { CreateStaffForm } from "@/components/manager/create-staff-form";
+import { Pill, Plus, RotateCcw, Search } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArvList } from "@/components/manager/arv-list";
+import { useArvs } from "@/api/arv";
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
+import { CreateArvForm } from "@/components/manager/create-arv-form";
 
 const ManagerARV = () => {
   const queryClient = useQueryClient();
+  const { data: arvList = [], isLoading, isError, isFetching } = useArvs();
   const [search, setSearch] = useState("");
   const handleReLoadList = () => {
     queryClient.invalidateQueries({ queryKey: ["arvs"] });
   };
+
+  const filtered = arvList.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
+  if (isLoading) return <LoadingOverlay message="Đang tải" />;
 
   return (
     <div className="flex flex-col gap-4">
@@ -31,11 +40,11 @@ const ManagerARV = () => {
               Thêm phác đồ
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="flex flex-col justify-between min-w-[1100px] min-h-[800px]">
             <DialogHeader>
               <DialogTitle>Thêm phác đồ mới</DialogTitle>
             </DialogHeader>
-            <CreateStaffForm />
+            <CreateArvForm className="flex flex-col justify-between space-y-4 grow" />
           </DialogContent>
         </Dialog>
       </div>
@@ -56,10 +65,10 @@ const ManagerARV = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center">
-              <UserCheck className="h-8 w-8 text-green-600 mr-3" />
+              <Pill className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng phác đồ</p>
-                <p className="text-2xl font-bold">{}</p>
+                <p className="text-2xl font-bold">{arvList.length}</p>
               </div>
             </div>
           </CardContent>
@@ -79,9 +88,15 @@ const ManagerARV = () => {
           </Button>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            <div className="flex space-x-2"></div>
-          </div>
+          {isFetching ? (
+            <InternalLoading message="Đang tải" />
+          ) : (
+            <div className="space-y-4">
+              <div className="flex space-x-2">
+                <ArvList data={filtered} isError={isError} />
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
