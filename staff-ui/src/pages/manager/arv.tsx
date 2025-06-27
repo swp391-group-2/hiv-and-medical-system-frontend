@@ -38,7 +38,7 @@ const ManagerARV = () => {
               Thêm phác đồ
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="min-w-[1000px] min-h-[700px]">
             <DialogHeader>
               <DialogTitle>Thêm phác đồ mới</DialogTitle>
             </DialogHeader>

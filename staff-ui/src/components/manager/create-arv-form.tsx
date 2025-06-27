@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
@@ -23,7 +23,7 @@ import http from "@/api/http";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 
 export const CreateArvForm = () => {
@@ -81,74 +81,175 @@ export const CreateArvForm = () => {
     createArv(values);
   };
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "prescriptionItems",
+  });
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Tên phác đồ</FormLabel>
-              <FormControl>
-                <Input id={field.name} type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="contraindication"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Chống chỉ định</FormLabel>
-              <FormControl>
-                <Textarea id={field.name} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="sideEffect"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Tác dụng phụ</FormLabel>
-              <FormControl>
-                <Textarea id={field.name} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="dosageForm"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Dạng thuốc</FormLabel>
-              <FormControl>
-                <Input id={field.name} type="text" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="instructions"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>Chỉ dẫn uống</FormLabel>
-              <FormControl>
-                <Textarea id={field.name} {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(handleSubmit)} className=" space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="p-4 border rounded-md flex flex-col gap-3 relative">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Tên phác đồ</FormLabel>
+                  <FormControl>
+                    <Input id={field.name} type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="contraindication"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Chống chỉ định</FormLabel>
+                  <FormControl>
+                    <Textarea id={field.name} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="sideEffect"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Tác dụng phụ</FormLabel>
+                  <FormControl>
+                    <Textarea id={field.name} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="dosageForm"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Dạng thuốc</FormLabel>
+                  <FormControl>
+                    <Input id={field.name} type="text" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="instructions"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel htmlFor={field.name}>Chỉ dẫn uống</FormLabel>
+                  <FormControl>
+                    <Textarea id={field.name} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/*  */}
+          <div className="">
+            <div className="space-y-4">
+              {fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="p-4 border rounded-md flex flex-col gap-3 relative"
+                >
+                  <button
+                    type="button"
+                    onClick={() => remove(index)}
+                    className="absolute cursor-pointer top-2 right-2 text-red-500"
+                  >
+                    &times;
+                  </button>
+
+                  <FormField
+                    control={form.control}
+                    name={`prescriptionItems.${index}.dosage`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Liều lượng</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ví dụ: 2 viên/lần" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`prescriptionItems.${index}.frequency`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Tần suất</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ví dụ: 3 lần/ngày" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`prescriptionItems.${index}.duration`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Thời gian</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Ví dụ: 7 ngày" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name={`prescriptionItems.${index}.medicationId`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Thuốc</FormLabel>
+                        <FormControl>
+                          <Input {...field} type="number" placeholder="Thuốc" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              ))}
+            </div>
+
+            <Button
+              className="w-full bg-blue-50 hover:bg-blue-100 cursor-pointer text-white rounded hover:text-gray-600"
+              onClick={() =>
+                append({
+                  dosage: "",
+                  frequency: "",
+                  duration: "",
+                  medicationId: 0,
+                })
+              }
+            >
+              <Plus />
+              Thêm thành phần
+            </Button>
+          </div>
+        </div>
+
         <Button
           type="submit"
           disabled={isPending}
