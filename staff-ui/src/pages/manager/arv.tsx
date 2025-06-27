@@ -12,6 +12,7 @@ import {
 import { Pill, Plus, RotateCcw, Search } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useQueryClient } from "@tanstack/react-query";
+import { ArvList } from "@/components/manager/arv-list";
 
 const ManagerARV = () => {
   const queryClient = useQueryClient();
@@ -80,7 +81,9 @@ const ManagerARV = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <div className="flex space-x-2"></div>
+            <div className="flex space-x-2">
+              <ArvList data={arvList} />
+            </div>
           </div>
         </CardContent>
       </Card>
