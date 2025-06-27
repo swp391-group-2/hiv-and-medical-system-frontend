@@ -25,8 +25,9 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Loader2, Plus } from "lucide-react";
 import { Textarea } from "../ui/textarea";
+import { cn } from "@/lib/utils";
 
-export const CreateArvForm = () => {
+export const CreateArvForm = ({ className }: { className: string }) => {
   const queryClient = useQueryClient();
   const schema = z.object({
     name: z.string().nonempty("Tên phác đồ không được bỏ trống"),
@@ -88,9 +89,12 @@ export const CreateArvForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className=" space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="p-4 border rounded-md flex flex-col gap-3 relative">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className={cn("", className)}
+      >
+        <div className="grow grid grid-cols-2 gap-4">
+          <div className="p-4 border rounded-md flex flex-col justify-between gap-3 relative">
             <FormField
               control={form.control}
               name="name"
@@ -234,7 +238,7 @@ export const CreateArvForm = () => {
             </div>
 
             <Button
-              className="w-full bg-blue-50 hover:bg-blue-100 cursor-pointer text-white rounded hover:text-gray-600"
+              className="w-full bg-sky-50 hover:bg-sky-100 cursor-pointer text-neutral-600 rounded hover:text-neutral-800"
               onClick={() =>
                 append({
                   dosage: "",
@@ -253,7 +257,7 @@ export const CreateArvForm = () => {
         <Button
           type="submit"
           disabled={isPending}
-          className="w-full bg-blue-500 hover:bg-blue-600 cursor-pointer"
+          className="w-full mt-auto bg-blue-500 hover:bg-blue-600 cursor-pointer"
         >
           {isPending ? (
             <>

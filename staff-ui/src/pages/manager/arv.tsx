@@ -38,11 +38,11 @@ const ManagerARV = () => {
               Thêm phác đồ
             </Button>
           </DialogTrigger>
-          <DialogContent className="min-w-[1000px] min-h-[700px]">
+          <DialogContent className="flex flex-col justify-between min-w-[1000px] min-h-[700px]">
             <DialogHeader>
               <DialogTitle>Thêm phác đồ mới</DialogTitle>
             </DialogHeader>
-            <CreateArvForm />
+            <CreateArvForm className="flex flex-col justify-between space-y-4 grow" />
           </DialogContent>
         </Dialog>
       </div>
