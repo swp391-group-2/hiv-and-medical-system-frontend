@@ -12,7 +12,7 @@ import {
   DialogContent,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { InfoGroup, InfoTextRow, RsNote } from "./common";
@@ -29,7 +29,16 @@ const TestRsItem = ({ item }: { item: LabResult }) => {
         </span>
       </span>
       <span className="col-span-2">{item.serviceName}</span>
-      <span className={cn()}>{item.resultText}</span>
+      <span
+        className={cn(
+          "px-3 py-1 rounded-full text-sm font-medium",
+          item.resultText === "Dương tính"
+            ? "bg-red-100 text-red-700"
+            : "bg-green-100 text-green-700"
+        )}
+      >
+        {item.resultText}
+      </span>
       <span className="col-span-2">{formatISO(item.resultDate)}</span>
       <span>
         <DropdownMenu>
@@ -52,10 +61,8 @@ const TestRsItem = ({ item }: { item: LabResult }) => {
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="w-[500px] min-h-[550px] flex flex-col justify-between">
             <Tabs defaultValue="detail">
-              <TabsList>
-                <TabsTrigger value="detail">Thông tin buổi khám</TabsTrigger>
-              </TabsList>
-              <TabsContent value="detail" className="p-3">
+              <h3 className="text-center">Thông Tin Xét Nghiệm</h3>
+              <TabsContent value="detail" className="p-3 bg-accent">
                 <InfoGroup>
                   <InfoTextRow label="Cơ sở Y Tế" data="Medcare HIV" />
                   <InfoTextRow

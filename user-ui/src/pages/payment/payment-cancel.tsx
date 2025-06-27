@@ -2,18 +2,21 @@ import React, { useEffect, useState } from "react";
 import { XCircle, ArrowLeft, AlertTriangle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "@/constants/appRoutes";
+import useBookingStore from "@/stores/booking.store";
 
 const PaymentCancel: React.FC = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const reset = useBookingStore((state) => state.reset);
 
   useEffect(() => {
     // Hiệu ứng fade in
+    reset();
     setTimeout(() => setIsVisible(true), 100);
     // Hiệu ứng alert
     setTimeout(() => setShowAlert(true), 500);
-  }, []);
+  }, [reset]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-50 to-orange-50 flex items-center justify-center p-4 relative overflow-hidden">
