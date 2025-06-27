@@ -57,39 +57,14 @@ export const AddDoctorDialog = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Real-time validation
-    let processedValue = value;
-
-    if (name === "fullName") {
-      // Chỉ cho phép chữ cái và khoảng trắng
-      processedValue = value.replace(/[^a-zA-ZÀ-ỹ\s]/g, "");
-    } else if (name === "doctorCode") {
-      // Chỉ cho phép chữ in hoa và số
-      processedValue = value.toUpperCase().replace(/[^A-Z0-9]/g, "");
-    } else if (name === "licenseNumber") {
-      // Chỉ cho phép chữ cái, số và dấu gạch ngang
-      processedValue = value.replace(/[^A-Za-z0-9\-/]/g, "");
-    } else if (name === "email") {
-      // Loại bỏ khoảng trắng
-      processedValue = value.replace(/\s/g, "");
-    }
-
     setFormData((prev) => ({
       ...prev,
-      [name]: processedValue,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Email không hợp lệ!");
-      return;
-    }
 
     // Validate required fields
     if (
@@ -99,43 +74,6 @@ export const AddDoctorDialog = ({
       !formData.licenseNumber
     ) {
       toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
-      return;
-    }
-
-    // Validate fullName (chỉ chứa chữ và khoảng trắng)
-    const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
-    if (!nameRegex.test(formData.fullName.trim())) {
-      toast.error("Họ và tên chỉ được chứa chữ cái và khoảng trắng!");
-      return;
-    }
-
-    // Validate doctorCode format (ví dụ: BS001, DOC123)
-    if (formData.doctorCode && !/^[A-Z0-9]+$/.test(formData.doctorCode)) {
-      toast.error("Mã bác sĩ chỉ được chứa chữ in hoa và số!");
-      return;
-    }
-
-    // Validate licenseNumber (chữ và số, không được trống)
-    if (!formData.licenseNumber.trim()) {
-      toast.error("Số giấy phép hành nghề không được để trống!");
-      return;
-    }
-
-    // Validate licenseNumber format (chỉ cho phép chữ, số và một số ký tự đặc biệt)
-    if (!/^[A-Za-z0-9\-/]+$/.test(formData.licenseNumber)) {
-      toast.error("Số giấy phép chỉ được chứa chữ cái, số và dấu gạch ngang!");
-      return;
-    }
-
-    // Validate specialization (không được trống hoặc chỉ khoảng trắng)
-    if (!formData.specialization.trim()) {
-      toast.error("Chuyên khoa không được để trống!");
-      return;
-    }
-
-    // Validate password length (nếu có nhập)
-    if (formData.password && formData.password.length < 6) {
-      toast.error("Mật khẩu phải có ít nhất 6 ký tự!");
       return;
     }
 
@@ -164,7 +102,6 @@ export const AddDoctorDialog = ({
               value={formData.email}
               onChange={handleInputChange}
               placeholder="doctor@example.com"
-              maxLength={100}
               required
             />
           </div>
@@ -177,20 +114,19 @@ export const AddDoctorDialog = ({
               value={formData.fullName}
               onChange={handleInputChange}
               placeholder="Nguyễn Văn A"
-              maxLength={50}
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="doctorCode">Mã bác sĩ</Label>
+            <Label htmlFor="doctorCode">Mã bác sĩ *</Label>
             <Input
               id="doctorCode"
               name="doctorCode"
               value={formData.doctorCode}
               onChange={handleInputChange}
               placeholder="BS001"
-              maxLength={10}
+              required
             />
           </div>
 
@@ -202,7 +138,6 @@ export const AddDoctorDialog = ({
               value={formData.specialization}
               onChange={handleInputChange}
               placeholder="Nội khoa"
-              maxLength={50}
               required
             />
           </div>
@@ -214,8 +149,7 @@ export const AddDoctorDialog = ({
               name="licenseNumber"
               value={formData.licenseNumber}
               onChange={handleInputChange}
-              placeholder="VD: BS123456 hoặc DOC-2024/001"
-              maxLength={20}
+              placeholder="123456789"
               required
             />
           </div>
@@ -228,8 +162,7 @@ export const AddDoctorDialog = ({
               type="password"
               value={formData.password}
               onChange={handleInputChange}
-              placeholder="Tối thiểu 6 ký tự"
-              maxLength={50}
+              placeholder="Vd:123456"
             />
           </div>
 
