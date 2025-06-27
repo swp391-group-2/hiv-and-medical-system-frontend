@@ -20,13 +20,11 @@ interface AddStaffDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const AddStaffDialog = ({
-  isOpen,
-  onOpenChange,
-}: AddStaffDialogProps) => {
+export const AddStaffDialog = ({ isOpen, onOpenChange }: AddStaffDialogProps) => {
   const [formData, setFormData] = useState<CreateStaffRequest>({
     email: "",
     fullName: "",
+   
     password: "",
   });
 
@@ -40,69 +38,33 @@ export const AddStaffDialog = ({
       setFormData({
         email: "",
         fullName: "",
+        
         password: "",
       });
       toast.success("Nhân viên đã được thêm thành công!");
     },
     onError: (error: Error) => {
-      toast.error(
-        `Lỗi khi thêm nhân viên: ${error.message || "Có lỗi xảy ra"}`
-      );
+      toast.error(`Lỗi khi thêm nhân viên: ${error.message || "Có lỗi xảy ra"}`);
     },
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    // Real-time validation
-    let processedValue = value;
-
-    if (name === "fullName") {
-      // Chỉ cho phép chữ cái và khoảng trắng
-      processedValue = value.replace(/[^a-zA-ZÀ-ỹ\s]/g, "");
-    } else if (name === "email") {
-      // Loại bỏ khoảng trắng
-      processedValue = value.replace(/\s/g, "");
-    }
-
     setFormData((prev) => ({
       ...prev,
-      [name]: processedValue,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Email không hợp lệ!");
-      return;
-    }
-
     // Validate required fields
-    if (!formData.email || !formData.fullName) {
+    if (
+      !formData.email ||
+      !formData.fullName
+    ) {
       toast.error("Vui lòng điền đầy đủ thông tin bắt buộc!");
-      return;
-    }
-
-    // Validate fullName (chỉ chứa chữ và khoảng trắng)
-    const nameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
-    if (!nameRegex.test(formData.fullName.trim())) {
-      toast.error("Họ và tên chỉ được chứa chữ cái và khoảng trắng!");
-      return;
-    }
-
-    // Validate fullName length
-    if (formData.fullName.trim().length < 2) {
-      toast.error("Họ và tên phải có ít nhất 2 ký tự!");
-      return;
-    }
-
-    // Validate password length (nếu có nhập)
-    if (formData.password && formData.password.length < 8) {
-      toast.error("Mật khẩu phải có ít nhất 8 ký tự!");
       return;
     }
 
@@ -131,7 +93,6 @@ export const AddStaffDialog = ({
               value={formData.email}
               onChange={handleInputChange}
               placeholder="staff@example.com"
-              maxLength={100}
               required
             />
           </div>
@@ -144,10 +105,11 @@ export const AddStaffDialog = ({
               value={formData.fullName}
               onChange={handleInputChange}
               placeholder="Nguyễn Văn B"
-              maxLength={50}
               required
             />
           </div>
+
+         
 
           <div className="space-y-2">
             <Label htmlFor="staff-password">Password</Label>
@@ -157,8 +119,7 @@ export const AddStaffDialog = ({
               type="password"
               value={formData.password}
               onChange={handleInputChange}
-              placeholder="Tối thiểu 8 ký tự"
-              maxLength={50}
+              placeholder="Vd:123456"
             />
           </div>
 

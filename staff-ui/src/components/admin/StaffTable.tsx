@@ -36,7 +36,9 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
           ) : (
             staffs.map((staff: Staff) => (
               <TableRow key={staff.staffId}>
-                <TableCell className="font-medium">{staff.staffCode}</TableCell>
+                <TableCell className="font-medium">
+                  {staff.staffCode}
+                </TableCell>
                 <TableCell>{staff.fullName}</TableCell>
                 <TableCell>{staff.email}</TableCell>
                 <TableCell>{staff.role}</TableCell>

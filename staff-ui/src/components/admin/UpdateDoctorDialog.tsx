@@ -58,9 +58,7 @@ export const UpdateDoctorDialog = ({
       toast.success("Bác sĩ đã được cập nhật thành công!");
     },
     onError: (error: Error) => {
-      toast.error(
-        `Lỗi khi cập nhật bác sĩ: ${error.message || "Có lỗi xảy ra"}`
-      );
+      toast.error(`Lỗi khi cập nhật bác sĩ: ${error.message || "Có lỗi xảy ra"}`);
     },
   });
 

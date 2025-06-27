@@ -54,7 +54,6 @@ export const addStaffAccount = async (
     `/staffs`,
     staffData
   );
-  console.log("Staff added:", data.data);
   return data.data;
 };
 // export const updateStaffAccount = async () => {};
