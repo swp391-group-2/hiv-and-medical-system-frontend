@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Star, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { buildRoute } from "@/constants/appRoutes";
-import useBookingStore from "@/stores/booking.store";
-import type { Doctor } from "@/types/doctor.type";
 
 export interface DoctorCardProps {
   doctorId: string;
@@ -12,7 +10,6 @@ export interface DoctorCardProps {
   fullName: string;
   image?: string;
   rating?: number;
-  selectDoctor: (doctorId: string) => Doctor | undefined;
 }
 
 const DoctorCard = ({
@@ -21,16 +18,10 @@ const DoctorCard = ({
   fullName,
   image,
   rating = 5,
-  selectDoctor,
 }: DoctorCardProps) => {
   const navigation = useNavigate();
-  const setDoctor = useBookingStore((state) => state.setDoctor);
 
   const handleBooking = (doctorId: string) => {
-    const doctor = selectDoctor(doctorId);
-    if (doctor) {
-      setDoctor(doctor);
-    }
     navigation(buildRoute.bookingConsultationDoctor(doctorId));
   };
   return (

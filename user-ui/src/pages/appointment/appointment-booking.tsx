@@ -1,3 +1,4 @@
+import doctorApi from "@/apis/doctor.api";
 import serviceApi from "@/apis/service.api";
 import MedicalFacilityInfo from "@/components/appointmenBooking/medical-facility-info";
 import TimeSlotSelectorConsultation from "@/components/appointmenBooking/time-slot-selector-consultation";
@@ -47,6 +48,17 @@ const AppointmentBooking = () => {
       return response.data;
     },
     enabled: !!serviceType,
+  });
+
+  const { data: doctor } = useQuery({
+    queryKey: ["doctor", doctorId],
+    queryFn: async () => {
+      if (!doctorId) {
+        throw new Error("not found doctor id");
+      }
+      const response = await doctorApi.getDoctorById(doctorId);
+      return response.data;
+    },
   });
 
   const handleDateSelect = (date: Date) => {
@@ -116,7 +128,7 @@ const AppointmentBooking = () => {
         <div className="mt-7">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-1">
-              <MedicalFacilityInfo service={service} />
+              <MedicalFacilityInfo doctor={doctor} service={service} />
             </div>
             <div className="lg:col-span-3">
               <Card className="bg-white shadow-lg py-0 overflow-hidden">
