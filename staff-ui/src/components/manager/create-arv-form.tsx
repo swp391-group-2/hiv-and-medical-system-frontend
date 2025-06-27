@@ -17,15 +17,22 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import http from "@/api/http";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Loader2, Plus } from "lucide-react";
+import { ChevronDown, Loader2, Plus } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
+import { EmptyListMessage } from "../page-message";
 
 export const CreateArvForm = ({ className }: { className: string }) => {
   const queryClient = useQueryClient();
@@ -163,78 +170,101 @@ export const CreateArvForm = ({ className }: { className: string }) => {
           </div>
 
           {/*  */}
-          <div className="">
+          <div>
             <div className="space-y-4">
-              {fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="p-4 border rounded-md flex flex-col gap-3 relative"
-                >
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="absolute cursor-pointer top-2 right-2 text-red-500"
-                  >
-                    &times;
-                  </button>
+              {fields.length === 0 ? (
+                <EmptyListMessage message="Empty list" />
+              ) : (
+                <Accordion type="single" collapsible className="w-full">
+                  {fields.map((field, index) => (
+                    <AccordionItem key={field.id} value={`item-${index}`}>
+                      <AccordionTrigger className="flex items-center justify-between w-full px-4 py-2 font-medium hover:underline transition [&[data-state=open]>svg]:rotate-180 cursor-pointer">
+                        <span>Thành phần #{index + 1}</span>
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="p-4 border rounded-md flex flex-col gap-3 relative">
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="absolute cursor-pointer top-2 right-2 text-red-500"
+                          >
+                            &times;
+                          </button>
 
-                  <FormField
-                    control={form.control}
-                    name={`prescriptionItems.${index}.dosage`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Liều lượng</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Ví dụ: 2 viên/lần" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormField
+                            control={form.control}
+                            name={`prescriptionItems.${index}.dosage`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Liều lượng</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    placeholder="Ví dụ: 2 viên/lần"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                  <FormField
-                    control={form.control}
-                    name={`prescriptionItems.${index}.frequency`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tần suất</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Ví dụ: 3 lần/ngày" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormField
+                            control={form.control}
+                            name={`prescriptionItems.${index}.frequency`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Tần suất</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    placeholder="Ví dụ: 3 lần/ngày"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                  <FormField
-                    control={form.control}
-                    name={`prescriptionItems.${index}.duration`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Thời gian</FormLabel>
-                        <FormControl>
-                          <Input {...field} placeholder="Ví dụ: 7 ngày" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormField
+                            control={form.control}
+                            name={`prescriptionItems.${index}.duration`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Thời gian</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    placeholder="Ví dụ: 7 ngày"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                  <FormField
-                    control={form.control}
-                    name={`prescriptionItems.${index}.medicationId`}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Thuốc</FormLabel>
-                        <FormControl>
-                          <Input {...field} type="number" placeholder="Thuốc" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              ))}
+                          <FormField
+                            control={form.control}
+                            name={`prescriptionItems.${index}.medicationId`}
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Thuốc</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    {...field}
+                                    type="number"
+                                    placeholder="Thuốc"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              )}
             </div>
 
             <Button
