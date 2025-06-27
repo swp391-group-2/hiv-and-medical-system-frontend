@@ -24,13 +24,13 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../../ui/button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 import { InfoGroup, InfoTextRow, RsNote } from "./common";
 import type { AppointmentCompletedEntry } from "@/types/appointment.type";
 
 const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
   const [open, setOpen] = useState(false);
+  const [openArv, setOpenArv] = useState(false);
 
   return (
     <li className="group w-full grid grid-cols-9 items-center border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 py-4 px-2 rounded-lg">
@@ -89,11 +89,15 @@ const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-48" align="end">
-            <DropdownMenuItem asChild>
-              <Link to="/arv" className="flex items-center gap-2">
-                <Activity className="w-4 h-4" />
-                Xem phác đồ
-              </Link>
+            <DropdownMenuItem
+              onSelect={(e) => {
+                e.preventDefault();
+                setOpenArv(true);
+              }}
+              className="flex items-center gap-2"
+            >
+              <Activity className="w-4 h-4" />
+              Xem phác đồ
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={(e) => {
@@ -191,6 +195,60 @@ const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
                   </InfoGroup>
                 </div>
                 <RsNote note={item.labResult.note} />
+              </TabsContent>
+            </Tabs>
+
+            <DialogFooter className="mt-6">
+              <DialogClose asChild>
+                <Button className="bg-blue-600 hover:bg-blue-700">Đóng</Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        <Dialog open={openArv} onOpenChange={setOpenArv}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Phác Đồ ARV - {item.appointmentCode}
+              </DialogTitle>
+            </DialogHeader>
+
+            <Tabs defaultValue="detail" className="w-full">
+              <TabsContent value="detail" className="mt-6 space-y-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <InfoGroup>
+                    <InfoTextRow
+                      label="Mã số khám"
+                      data={item.appointmentCode}
+                    />
+
+                    <InfoTextRow
+                      label="Tên Phác Đồ ARV"
+                      data={item.patientPrescription.prescriptionDefaultName}
+                    />
+
+                    {item.patientPrescription.patientPrescriptionItems.map(
+                      (medicine) => (
+                        <InfoTextRow
+                          label={medicine.medication.name}
+                          data={medicine.dosage}
+                        />
+                      )
+                    )}
+                    <InfoTextRow
+                      label="Ngày bắt đầu áp dụng"
+                      data={new Date(
+                        item.patientPrescription.createdAt
+                      ).toLocaleDateString("vi")}
+                    />
+                    <InfoTextRow
+                      label="Thời gian áp dụng"
+                      data={item.patientPrescription.duration.toString()}
+                    />
+                  </InfoGroup>
+                </div>
+                <RsNote note={item.patientPrescription.note} />
               </TabsContent>
             </Tabs>
 
