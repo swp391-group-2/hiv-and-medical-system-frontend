@@ -10,13 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+
 import {
   Accordion,
   AccordionContent,
@@ -33,6 +27,7 @@ import { Loader2, Plus } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { cn } from "@/lib/utils";
 import { EmptyListMessage } from "../page-message";
+import { MedicineSelect } from "./medicine-select";
 
 export const CreateArvForm = ({ className }: { className: string }) => {
   const queryClient = useQueryClient();
@@ -173,7 +168,7 @@ export const CreateArvForm = ({ className }: { className: string }) => {
           <div>
             <div className="space-y-4">
               {fields.length === 0 ? (
-                <EmptyListMessage message="Empty list" />
+                <EmptyListMessage message="Chưa có thành phần" />
               ) : (
                 <Accordion type="single" collapsible className="w-full">
                   {fields.map((field, index) => (
@@ -249,10 +244,9 @@ export const CreateArvForm = ({ className }: { className: string }) => {
                               <FormItem>
                                 <FormLabel>Thuốc</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    {...field}
-                                    type="number"
-                                    placeholder="Thuốc"
+                                  <MedicineSelect
+                                    value={field.value}
+                                    onValueChange={field.onChange}
                                   />
                                 </FormControl>
                                 <FormMessage />

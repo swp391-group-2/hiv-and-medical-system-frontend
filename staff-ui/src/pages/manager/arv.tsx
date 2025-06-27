@@ -40,7 +40,7 @@ const ManagerARV = () => {
               Thêm phác đồ
             </Button>
           </DialogTrigger>
-          <DialogContent className="flex flex-col justify-between min-w-[1000px] min-h-[700px]">
+          <DialogContent className="flex flex-col justify-between min-w-[1100px] min-h-[800px]">
             <DialogHeader>
               <DialogTitle>Thêm phác đồ mới</DialogTitle>
             </DialogHeader>
