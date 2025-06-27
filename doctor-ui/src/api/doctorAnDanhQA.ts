@@ -1,7 +1,6 @@
 import { BASE_URL } from "./BaseURL";
 import type { AnonymousPost, CreateCommentResponse } from "@/types/qaType";
 
-
 export const getAnonymousPosts = async (): Promise<AnonymousPost[]> => {
   const token = localStorage.getItem("accessToken");
 
@@ -44,5 +43,6 @@ export const replyToAnonymousPost = async (
   }
 
   const data = await response.json();
+
   return data.data;
 };
