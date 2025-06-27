@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { Mail, Lock, LogIn, Loader2 } from "lucide-react";
 import Logo from "./logo";
 import { useAuthStore } from "@/stores/auth.store";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const loginSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
@@ -26,7 +27,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
-// type AuthProviders = "google";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -61,7 +61,28 @@ export const LoginForm = () => {
       navigate(fromPath);
     },
     onError: (error) => {
-      toast.error(error.message);
+      console.log("Đăng nhập thất bại hoặc popup đã bị đóng:", error);
+    },
+  });
+
+  const googleLogin = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async (codeResponse) => {
+      try {
+        const data = await authApi.loginGoogle({ code: codeResponse.code });
+        toast.success("Login successful!", {
+          description: `Chào mừng ${
+            data.data.data.user.fullName || "bạn"
+          } trở lại.`,
+        });
+        loginStore(data.data.data.user);
+        navigate(fromPath);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onError: (error) => {
+      console.log(error);
     },
   });
 
@@ -171,6 +192,7 @@ export const LoginForm = () => {
 
               {/* Google Button */}
               <Button
+                onClick={googleLogin}
                 type="button"
                 variant="outline"
                 className="w-full h-12 border-2 border-gray-200 hover:bg-gray-50 hover:border-gray-300 font-semibold rounded-xl transition-all duration-200 group"

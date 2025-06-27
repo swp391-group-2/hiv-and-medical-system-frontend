@@ -35,13 +35,15 @@ const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
   return (
     <li className="group w-full grid grid-cols-9 items-center border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200 py-4 px-2 rounded-lg">
       {/* Appointment Code */}
-      <div className="font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded text-sm">
-        {item.appointmentCode}
+      <div className="font-semibold  text-sm">
+        <span className="text-blue-500 rounded-full  bg-blue-50  px-2 mr-6 py-1 ">
+          {item.appointmentCode}
+        </span>
       </div>
 
       {/* Doctor Info */}
       <div className="col-span-2 flex items-center gap-2">
-        <User className="w-4 h-4 text-gray-400" />
+        <User className="w-5 h-5 text-gray-400" />
         <div>
           <div className="font-medium text-gray-900 text-sm">
             Bs. {item.doctor.fullName}
@@ -59,8 +61,8 @@ const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
       </div>
 
       {/* Date & Time */}
-      <div className="col-span-2 flex items-center gap-2">
-        <div className="flex flex-col">
+      <div className="col-span-2  gap-2">
+        <div className="flex flex-col justify-center items-center">
           <div className="flex items-center gap-1 text-sm">
             <Clock className="w-3 h-3 text-gray-400" />
             <span className="font-medium text-gray-700">{item.startTime}</span>
@@ -75,13 +77,13 @@ const CheckUpRsItem = ({ item }: { item: AppointmentCompletedEntry }) => {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-end">
+      <div className="flex justify-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              className="h-8 w-8 p-0  transition-opacity"
             >
               <Ellipsis className="h-4 w-4" />
             </Button>
