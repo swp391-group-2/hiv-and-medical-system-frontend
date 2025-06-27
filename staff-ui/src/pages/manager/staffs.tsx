@@ -10,12 +10,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, RotateCcw, Search, UserCheck, Users } from "lucide-react";
-import { CreateStaffForm } from "@/components/manager/create-staff-form";
+import { CreateStaffForm } from "@/components/manager/staffs/create-staff-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
-import { StaffList } from "@/components/manager/staff-list";
+import { StaffList } from "@/components/manager/staffs/staff-list";
 import { useLabs, useManagers, useStaffs } from "@/api/staff";
 import { LoadingOverlay, InternalLoading } from "@/components/loading-overlay";
 

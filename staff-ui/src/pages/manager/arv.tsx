@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Pill, Plus, RotateCcw, Search } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArvList } from "@/components/manager/arv-list";
+import { ArvList } from "@/components/manager/arvs/arv-list";
 import { useArvs } from "@/api/arv";
 import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
-import { CreateArvForm } from "@/components/manager/create-arv-form";
+import { CreateArvForm } from "@/components/manager/arvs/create-arv-form";
 
 const ManagerARV = () => {
   const queryClient = useQueryClient();

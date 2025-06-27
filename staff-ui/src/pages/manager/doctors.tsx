@@ -10,12 +10,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Plus, RotateCcw, Search, User, UserCheck } from "lucide-react";
-import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
+import { CreateDoctorForm } from "@/components/manager/doctors/create-doctor-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
-import { DoctorList } from "@/components/manager/doctor-list";
+import { DoctorList } from "@/components/manager/doctors/doctor-list";
 import { useDoctors, useDoctorsCount } from "@/api/doctor";
 import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 import { useNavigate } from "react-router-dom";

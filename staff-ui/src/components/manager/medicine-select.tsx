@@ -6,7 +6,6 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { LoadingOverlay } from "../loading-overlay";
 
 type MedicineSelectProps = {
   value?: number;
@@ -17,9 +16,8 @@ export const MedicineSelect = ({
   value,
   onValueChange,
 }: MedicineSelectProps) => {
-  const { data: medicineList = [], isLoading } = useMedications();
+  const { data: medicineList = [] } = useMedications();
 
-  if (isLoading) return <LoadingOverlay message="Đang tải danh sách" />;
   return (
     <Select
       value={value?.toString()}
@@ -31,7 +29,7 @@ export const MedicineSelect = ({
       <SelectTrigger>
         <SelectValue placeholder="Chọn thuốc" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="h-[200px]">
         {medicineList.map((item) => (
           <SelectItem
             key={item.medicationId}

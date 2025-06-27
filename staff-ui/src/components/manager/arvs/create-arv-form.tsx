@@ -21,13 +21,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import http from "@/api/http";
 import { toast } from "sonner";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { Loader2, Plus } from "lucide-react";
-import { Textarea } from "../ui/textarea";
+import { Textarea } from "../../ui/textarea";
 import { cn } from "@/lib/utils";
-import { EmptyListMessage } from "../page-message";
-import { MedicineSelect } from "./medicine-select";
+import { EmptyListMessage } from "../../page-message";
+import { MedicineSelect } from "../medicine-select";
+import { MedicineFrequencySelect } from "../med-frequency-select";
+import { MedicineDosageSelect } from "../med-dosage-select";
 
 export const CreateArvForm = ({ className }: { className: string }) => {
   const queryClient = useQueryClient();
@@ -45,7 +47,7 @@ export const CreateArvForm = ({ className }: { className: string }) => {
       z.object({
         dosage: z.string().nonempty("Liều lượng không được bỏ trống"),
         frequency: z.string().nonempty("Tần suất uống không được bỏ trống"),
-        duration: z.string().nonempty(),
+        duration: z.string().nonempty("Thời gian uống không được bỏ trống"),
         medicationId: z.number().nonnegative("Id không hợp lệ"),
       })
     ),
@@ -193,9 +195,9 @@ export const CreateArvForm = ({ className }: { className: string }) => {
                               <FormItem>
                                 <FormLabel>Liều lượng</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    {...field}
-                                    placeholder="Ví dụ: 2 viên/lần"
+                                  <MedicineDosageSelect
+                                    value={field.value}
+                                    onValueChange={field.onChange}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -210,9 +212,9 @@ export const CreateArvForm = ({ className }: { className: string }) => {
                               <FormItem>
                                 <FormLabel>Tần suất</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    {...field}
-                                    placeholder="Ví dụ: 3 lần/ngày"
+                                  <MedicineFrequencySelect
+                                    value={field.value}
+                                    onValueChange={field.onChange}
                                   />
                                 </FormControl>
                                 <FormMessage />

@@ -31,7 +31,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
-import { options } from "./specialization-select";
+import { options } from "../specialization-select";
 
 export function DoctorRow({
   doctor,
