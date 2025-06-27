@@ -1,5 +1,5 @@
 import { Ellipsis } from "lucide-react";
-import { cn, formatISO } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +39,9 @@ const TestRsItem = ({ item }: { item: LabResult }) => {
       >
         {item.resultText}
       </span>
-      <span className="col-span-2">{formatISO(item.resultDate)}</span>
+      <span className="col-span-2">
+        {new Date(item.resultDate).toLocaleString("vi")}
+      </span>
       <span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -54,15 +56,17 @@ const TestRsItem = ({ item }: { item: LabResult }) => {
                 setOpen(true);
               }}
             >
-              Xem chi tiết
+              Xem
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogContent className="w-[500px] min-h-[550px] flex flex-col justify-between">
             <Tabs defaultValue="detail">
-              <h3 className="text-center">Thông Tin Xét Nghiệm</h3>
-              <TabsContent value="detail" className="p-3 bg-accent">
+              <h3 className="text-center text-2xl font-bold mb-5">
+                Thông Tin Xét Nghiệm
+              </h3>
+              <TabsContent value="detail" className="p-3 rounded-2xl ">
                 <InfoGroup>
                   <InfoTextRow label="Cơ sở Y Tế" data="Medcare HIV" />
                   <InfoTextRow
@@ -72,7 +76,7 @@ const TestRsItem = ({ item }: { item: LabResult }) => {
                   <InfoTextRow label="Kết quả" data={item.resultText} />
                   <InfoTextRow
                     label="Thời gian xét nghiệm"
-                    data={formatISO(item.resultDate)}
+                    data={new Date(item.resultDate).toLocaleString("vi")}
                   />
                   <InfoTextRow
                     label="Kết luận"
