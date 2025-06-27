@@ -8,7 +8,7 @@ export interface DoctorCardProps {
   doctorId: string;
   email: string;
   fullName: string;
-  image?: string;
+  urlImage?: string;
   rating?: number;
 }
 
@@ -16,7 +16,7 @@ const DoctorCard = ({
   doctorId,
   email,
   fullName,
-  image,
+  urlImage,
   rating = 5,
 }: DoctorCardProps) => {
   const navigation = useNavigate();
@@ -30,9 +30,9 @@ const DoctorCard = ({
         <div className="flex justify-center mb-3 ">
           <div className="relative w-full">
             <div className="w-full h-50 rounded-lg overflow-hidden bg-gray-100">
-              {image ? (
+              {urlImage ? (
                 <img
-                  src={image}
+                  src={urlImage}
                   alt={fullName}
                   className="w-full h-full object-cover"
                 />
