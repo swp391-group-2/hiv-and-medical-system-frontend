@@ -53,7 +53,7 @@ const TimeSlotSelectorConsultation = ({
   if (error)
     return <div className="text-red-500 text-2xl">{error.message}</div>;
 
-  if (schedules) {
+  if (schedules && schedules.data.scheduleSlots.length > 0) {
     allSlots = schedules.data.scheduleSlots;
   } else {
     return (
