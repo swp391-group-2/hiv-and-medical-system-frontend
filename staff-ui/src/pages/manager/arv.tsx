@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ArvList } from "@/components/manager/arv-list";
 import { useArvs } from "@/api/arv";
 import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
+import { CreateArvForm } from "@/components/manager/create-arv-form";
 
 const ManagerARV = () => {
   const queryClient = useQueryClient();
@@ -41,7 +42,7 @@ const ManagerARV = () => {
             <DialogHeader>
               <DialogTitle>Thêm phác đồ mới</DialogTitle>
             </DialogHeader>
-            <CreateStaffForm />
+            <CreateArvForm />
           </DialogContent>
         </Dialog>
       </div>
