@@ -33,7 +33,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
-import { ScheduleMutateForm } from "./schedule-form";
 import { CurrentSchedule } from "./current-schedule";
 
 export function DoctorRow({
@@ -138,7 +137,7 @@ export function DoctorRow({
                 </DialogTitle>
               </DialogHeader>
               {/* form update doctor */}
-              <CurrentSchedule />
+              <CurrentSchedule doctor={doctor} />
             </DialogContent>
           </DialogPortal>
         </Dialog>

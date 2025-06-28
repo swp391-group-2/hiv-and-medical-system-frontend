@@ -9,7 +9,7 @@ const getAllSlots = async (): Promise<SlotDetail[]> => {
 };
 
 const getCurrentWeekSchedule = async (
-  doctorId: number,
+  doctorId: string,
   date: string
 ): Promise<Schedule[]> => {
   const { data } = await http.get<Response<Schedule>>(
@@ -19,7 +19,7 @@ const getCurrentWeekSchedule = async (
   return data.data;
 };
 
-export const useCurrentWeekSchedule = (doctorId: number, date: string) => {
+export const useCurrentWeekSchedule = (doctorId: string, date: string) => {
   return useQuery<Schedule[]>({
     queryKey: ["weekSchedule", doctorId, date],
     queryFn: () => getCurrentWeekSchedule(doctorId, date),
