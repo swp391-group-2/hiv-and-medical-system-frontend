@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { type Staff } from "@/types/staff";
-import { disableUserAccount } from "@/api/admin";
+import { disableStaffAccount } from "@/api/admin";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface DisableStaffDialogProps {
@@ -28,7 +28,7 @@ export const DisableStaffDialog = ({
   const queryClient = useQueryClient();
 
   const disableMutation = useMutation({
-    mutationFn: () => disableUserAccount(staff.userId),
+    mutationFn: () => disableStaffAccount(staff.staffId),
     onSuccess: () => {
       toast.success("Vô hiệu hóa tài khoản nhân viên thành công");
       queryClient.invalidateQueries({ queryKey: ["staffs"] });
