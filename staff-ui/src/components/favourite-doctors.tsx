@@ -5,7 +5,7 @@ import { useFavoriteDoctors } from "@/api/stats";
 import { options } from "./manager/specialization-select";
 
 const FavouriteDoctors = () => {
-  const { data: topDoctors = [] } = useFavoriteDoctors(1, 4);
+  const { data: topDoctors = [] } = useFavoriteDoctors(0, 4);
   return (
     <Card>
       <CardHeader>
