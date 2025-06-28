@@ -15,6 +15,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogPortal,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,6 +34,7 @@ import {
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
 import { ScheduleMutateForm } from "./schedule-form";
+import { CurrentSchedule } from "./current-schedule";
 
 export function DoctorRow({
   doctor,
@@ -125,13 +127,20 @@ export function DoctorRow({
               <p>Lịch làm việc</p>
             </TooltipContent>
           </Tooltip>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Cập nhật lịch làm việc</DialogTitle>
-            </DialogHeader>
-            {/* form update doctor */}
-            <ScheduleMutateForm doctor={doctor} />
-          </DialogContent>
+          <DialogPortal>
+            <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !w-[80vw] !h-[90vh] !max-w-none !max-h-none flex flex-col justify-between">
+              <DialogHeader>
+                <DialogTitle>
+                  Cập nhật lịch làm việc:{" "}
+                  <span className="text-blue-800 pl-4 text-xl">
+                    {doctor.fullName}
+                  </span>
+                </DialogTitle>
+              </DialogHeader>
+              {/* form update doctor */}
+              <CurrentSchedule />
+            </DialogContent>
+          </DialogPortal>
         </Dialog>
 
         {/* confirm delete */}
