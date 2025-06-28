@@ -45,7 +45,23 @@ export const useServiceTypeStats = () => {
   });
 };
 
-export const getFavoriteDoctors = async (): Promise<FavoriteDoctor[]> => {
-  const { data } = await http.get<Response<FavoriteDoctor>>(``);
+export const getFavoriteDoctors = async (
+  page?: number,
+  size?: number
+): Promise<FavoriteDoctor[]> => {
+  const { data } = await http.get<Response<FavoriteDoctor>>(
+    `/doctors/top-appointmentCount`,
+    {
+      params: { page, size },
+    }
+  );
   return data.data;
+};
+
+export const useFavoriteDoctors = (page?: number, size?: number) => {
+  return useQuery<FavoriteDoctor[]>({
+    queryKey: ["topDoctors", page, size],
+    queryFn: () => getFavoriteDoctors(page, size),
+    staleTime: Infinity,
+  });
 };
