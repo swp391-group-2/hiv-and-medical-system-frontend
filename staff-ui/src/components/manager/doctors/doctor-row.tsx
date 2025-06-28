@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
+import { ScheduleMutateForm } from "./schedule-form";
 
 export function DoctorRow({
   doctor,
@@ -129,7 +130,7 @@ export function DoctorRow({
               <DialogTitle>Cập nhật lịch làm việc</DialogTitle>
             </DialogHeader>
             {/* form update doctor */}
-            <DoctorUpdateForm doctor={doctor} />
+            <ScheduleMutateForm doctor={doctor} />
           </DialogContent>
         </Dialog>
 
