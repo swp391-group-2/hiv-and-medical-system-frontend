@@ -107,21 +107,31 @@ export function DoctorRow({
         </Dialog>
 
         {/* work schedule */}
-
-        <Tooltip delayDuration={500}>
-          <TooltipTrigger>
-            <Button
-              className="cursor-pointer w-full"
-              variant="outline"
-              size="sm"
-            >
-              <Calendar className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Lịch làm việc</p>
-          </TooltipContent>
-        </Tooltip>
+        <Dialog>
+          <Tooltip delayDuration={500}>
+            <TooltipTrigger>
+              <DialogTrigger asChild>
+                <Button
+                  className="cursor-pointer w-full"
+                  variant="outline"
+                  size="sm"
+                >
+                  <Calendar className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Lịch làm việc</p>
+            </TooltipContent>
+          </Tooltip>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Cập nhật lịch làm việc</DialogTitle>
+            </DialogHeader>
+            {/* form update doctor */}
+            <DoctorUpdateForm doctor={doctor} />
+          </DialogContent>
+        </Dialog>
 
         {/* confirm delete */}
 
