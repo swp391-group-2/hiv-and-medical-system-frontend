@@ -53,6 +53,16 @@ export const getAllPatientAccounts = async (): Promise<Patient[]> => {
 };
 
 //---------------------------staff accounts---------------------------
+export const disableStaffAccount = async (staffId: string): Promise<void> => {
+  await http.put(`/users/${staffId}/updateStatus`, {
+    active: false,
+  });
+}
+export const activeStaffAccount = async (staffId: string): Promise<void> => {
+  await http.put(`/users/${staffId}/updateStatus`, {
+    active: true,
+  });
+}
 export const getAllStaffAccounts = async (): Promise<Staff[]> => {
   const { data } = await http.get<Response<Staff>>(`/staffs`);
   return data.data;
