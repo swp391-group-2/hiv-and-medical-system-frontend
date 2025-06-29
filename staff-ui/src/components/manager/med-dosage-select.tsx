@@ -19,9 +19,9 @@ export const MedicineDosageSelect = ({
         <SelectValue placeholder="Chọn liều lượng uống" />
       </SelectTrigger>
       <SelectContent className="h-[200px]">
-        {[...Array(10)].map((_, i) => (
-          <SelectItem key={i} value={`${i + 1} lần/ngày`}>
-            {i + 1} lần/ngày
+        {[...Array(9)].map((_, i) => (
+          <SelectItem key={i} value={`${50 * (i + 1)} mg`}>
+            {50 * (i + 1)} mg
           </SelectItem>
         ))}
       </SelectContent>
