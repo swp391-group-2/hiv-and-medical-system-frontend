@@ -67,7 +67,7 @@ const AppRoutes = () => {
       <Route element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="education" element={<EducationPage />} />
-
+        <Route path="education/:blogId" />
         <Route path="screening" element={<ServiceScreeningTest />} />
         <Route path="confirmatory" element={<ServiceConfirmatoryTest />} />
         <Route path="consultation">

@@ -6,7 +6,7 @@ import { AppRoutes, buildRoute } from "@/constants/appRoutes";
 
 function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
   return (
-    <section className="bg-primary/25 py-15 ">
+    <section className="bg-gradient-to-tl to-sky-300 bg-primary/25 py-15 ">
       <div className="container mx-auto">
         <div className="grid grid-cols-6 gap-5 items-center">
           <div className="col-span-3">
@@ -16,7 +16,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
                 Sống Khỏe
               </span>
             </h1>
-            <h2 className="mt-2.5  font-bold text-2xl text-primary">
+            <h2 className="mt-2.5  font-bold text-2xl ">
               Cùng nhau đẩy lùi HIV
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed max-w-lg mt-2.5">
@@ -47,8 +47,8 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
                 </Button>
               </Link>
             </div>
-            <div className="grid grid-cols-3 gap-6 pt-8">
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border border-blue-100">
+            <div className="grid grid-cols-3 gap-6 pt-5">
+              <div className="backdrop-blur-sm  p-6 text-center transform hover:scale-105 transition-all duration-300">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full mb-4 shadow-lg">
                   <Clock className="h-6 w-6 text-white" />
                 </div>
@@ -60,7 +60,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
                 </div>
               </div>
 
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border border-cyan-100">
+              <div className="backdrop-blur-sm  p-6 text-center transform hover:scale-105 transition-all duration-300  ">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-cyan-500 to-cyan-600 rounded-full mb-4 shadow-lg">
                   <ShieldCheck className="h-8 w-8 text-white" />
                 </div>
@@ -72,7 +72,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
                 </div>
               </div>
 
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 text-center transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border border-red-100">
+              <div className="backdrop-blur-sm  p-6 text-center transform hover:scale-105 transition-all duration-300">
                 <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-full mb-4 shadow-lg">
                   <Gift className="h-8 w-8 text-white" />
                 </div>

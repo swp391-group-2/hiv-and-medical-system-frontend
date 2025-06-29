@@ -1,9 +1,21 @@
 import { Link } from "react-router-dom";
-import EducationCard from "./education-card";
+import EducationCard from "./eduBlog/education-card";
 import { Button } from "./ui/button";
-import { eduBlogs } from "@/raw-data/hiv-edu-data";
+import { useQuery } from "@tanstack/react-query";
+import { eduBlogApi } from "@/apis/blogEdu.api";
+
+const PAGE = 0;
+const SIZE = 6;
 
 function HomeEducation() {
+  const { data: eduBlogs } = useQuery({
+    queryKey: ["eduBlogs", PAGE, SIZE],
+    queryFn: async () => {
+      const response = await eduBlogApi.getBlogs(PAGE, SIZE);
+      return response.data;
+    },
+  });
+
   return (
     <div>
       <section>
@@ -18,9 +30,16 @@ function HomeEducation() {
             </p>
           </div>
           <div className="grid grid-cols-12 gap-8 mt-8">
-            {eduBlogs.map((eduBlog) => (
-              <div key={eduBlog.id} className="col-span-4">
-                <EducationCard title={eduBlog.title} desc={eduBlog.desc} />
+            {eduBlogs?.data.map((eduBlog) => (
+              <div key={eduBlog.blogId} className="col-span-4">
+                <EducationCard
+                  title={eduBlog.title}
+                  blogId={eduBlog.blogId}
+                  author={eduBlog.author}
+                  createdAt={eduBlog.createdAt}
+                  snippet={eduBlog.snippet}
+                  urlImage={eduBlog.urlImage}
+                />
               </div>
             ))}
           </div>

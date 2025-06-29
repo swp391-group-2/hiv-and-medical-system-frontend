@@ -12,7 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 import userApi from "@/apis/user.api";
 import { type AppointmentApiResponse } from "@/types/appointment.type";
 
-
 const Appointments = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
