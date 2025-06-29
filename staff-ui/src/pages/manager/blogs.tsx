@@ -4,6 +4,7 @@ import { EmptyListMessage } from "@/components/page-message";
 import { Button } from "@/components/ui/button";
 import type { Blog } from "@/types/blog";
 import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const BlogCard = ({ blog }: { blog: Blog }) => {
   return (
@@ -31,6 +32,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
 
 const ManagerBlogs = () => {
   const { data: blogList = [], isLoading } = useBlogList(0, 5);
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <LoadingOverlay message="Đang tải" />;
@@ -41,7 +43,10 @@ const ManagerBlogs = () => {
       <div className="container flex flex-col px-4 grow">
         <header className="mb-8 flex justify-between">
           <h1 className="text-3xl font-bold text-gray-900">Quản lý bài viết</h1>
-          <Button className="cursor-pointer bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors duration-200">
+          <Button
+            className="cursor-pointer bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors duration-200"
+            onClick={() => navigate("/manager/blogs/create")}
+          >
             <Plus /> Tạo bài viết mới
           </Button>
         </header>
