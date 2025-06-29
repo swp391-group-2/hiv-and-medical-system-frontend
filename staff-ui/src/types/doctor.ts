@@ -10,6 +10,21 @@ export interface Doctor {
   urlImage: string;
 }
 
+export interface CreateDoctorRequest {
+  email: string;
+  fullName: string;
+  doctorCode: string;
+  specialization: string;
+  licenseNumber: string;
+  password: string;
+}
+
+export interface UpdateDoctorRequest {
+  fullName: string;
+  specialization: string;
+  licenseNumber: string;
+}
+
 export type Specialization = {
   id: string;
   name: string;

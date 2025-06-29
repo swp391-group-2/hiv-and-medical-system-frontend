@@ -18,7 +18,7 @@ export function GenericList<T>({
   renderItem,
   header,
   emptyMessage = "Không có kết quả",
-  className = "w-full border border-gray-300 p-4 rounded",
+  className = "w-full border rounded-2xl border-gray-300 p-4 shadow-sm",
   emptyClassName = "block w-full text-center text-zinc-500 py-8 italic",
 }: GenericListProps<T>) {
   if (items.length === 0) {

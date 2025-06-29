@@ -3,18 +3,21 @@ import { CheckCircle, ArrowLeft, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { AppRoutes } from "@/constants/appRoutes";
+import useBookingStore from "@/stores/booking.store";
 
 const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const reset = useBookingStore((state) => state.reset);
 
   useEffect(() => {
     // Hiệu ứng fade in
+    reset();
     setTimeout(() => setIsVisible(true), 100);
     // Hiệu ứng confetti
     setTimeout(() => setShowConfetti(true), 500);
-  }, []);
+  }, [reset]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4 relative overflow-hidden">

@@ -18,9 +18,9 @@ function ListTopDoctor() {
   if (isLoading)
     return (
       <div className="w-full gap-x-2 flex justify-center items-center">
-        <div className="w-5 bg-[#d991c2] animate-pulse h-5 rounded-full animate-bounce" />
-        <div className="w-5 animate-pulse h-5 bg-[#9869b8] rounded-full animate-bounce" />
-        <div className="w-5 h-5 animate-pulse bg-[#6756cc] rounded-full animate-bounce" />
+        <div className="w-5 bg-[#d991c2]  h-5 rounded-full animate-bounce" />
+        <div className="w-5  h-5 bg-[#9869b8] rounded-full animate-bounce" />
+        <div className="w-5 h-5  bg-[#6756cc] rounded-full animate-bounce" />
       </div>
     );
 
@@ -35,10 +35,6 @@ function ListTopDoctor() {
     return <div>Không có bác sĩ </div>;
   }
 
-  const selectDoctor = (doctorId: string) => {
-    return doctorsList?.find((doctor) => doctor.doctorId === doctorId);
-  };
-
   return (
     <div className="grid-cols-4 grid gap-5">
       {doctorsList.map((doctor) => (
@@ -46,9 +42,8 @@ function ListTopDoctor() {
           key={doctor.doctorId}
           doctorId={doctor.doctorId}
           fullName={doctor.fullName}
-          image={doctor.urlImage}
+          urlImage={doctor.urlImage}
           email={doctor.email}
-          selectDoctor={selectDoctor}
         />
       ))}
     </div>

@@ -1,16 +1,14 @@
 import userApi from "@/apis/user.api";
 import TestRsTabs from "@/components/user/result/test-rs-tabs";
-import { useProfileStore } from "@/stores/profile.store";
+
 import { useQuery } from "@tanstack/react-query";
 
 const TestResult = () => {
-  const userProfile = useProfileStore((state) => state.profile);
+  
   const { data: LabResult, isLoading } = useQuery({
     queryKey: ["LabResult"],
     queryFn: async () => {
-      const response = await userApi.getPatientLabResults(
-        userProfile.patientId
-      );
+      const response = await userApi.getPatientLabResults();
       return response.data;
     },
   });

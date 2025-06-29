@@ -7,14 +7,17 @@ import {
 import { Card } from "../ui/card";
 import useBookingStore from "@/stores/booking.store";
 import type { Service } from "@/types/service.type";
+import type { Doctor } from "@/types/doctor.type";
 
 interface MedicalFacilityInfoProps {
   service: Service;
+  doctor?: Doctor;
 }
 
-function MedicalFacilityInfo({ service }: MedicalFacilityInfoProps) {
-  const doctor = useBookingStore((state) => state.doctor);
+function MedicalFacilityInfo({ service, doctor }: MedicalFacilityInfoProps) {
   const setService = useBookingStore((state) => state.setService);
+
+  const setDoctor = useBookingStore((state) => state.setDoctor);
   const medicalInfoList: {
     id: number;
     title: string;
@@ -40,6 +43,7 @@ function MedicalFacilityInfo({ service }: MedicalFacilityInfoProps) {
   }
 
   if (doctor) {
+    setDoctor(doctor);
     medicalInfoList.push({
       id: 3,
       title: "Bác sĩ ",

@@ -3,34 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Star, Clock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { buildRoute } from "@/constants/appRoutes";
-import useBookingStore from "@/stores/booking.store";
-import type { Doctor } from "@/types/doctor.type";
 
 export interface DoctorCardProps {
   doctorId: string;
   email: string;
   fullName: string;
-  image?: string;
+  urlImage?: string;
   rating?: number;
-  selectDoctor: (doctorId: string) => Doctor | undefined;
 }
 
 const DoctorCard = ({
   doctorId,
   email,
   fullName,
-  image,
+  urlImage,
   rating = 5,
-  selectDoctor,
 }: DoctorCardProps) => {
   const navigation = useNavigate();
-  const setDoctor = useBookingStore((state) => state.setDoctor);
 
   const handleBooking = (doctorId: string) => {
-    const doctor = selectDoctor(doctorId);
-    if (doctor) {
-      setDoctor(doctor);
-    }
     navigation(buildRoute.bookingConsultationDoctor(doctorId));
   };
   return (
@@ -39,9 +30,9 @@ const DoctorCard = ({
         <div className="flex justify-center mb-3 ">
           <div className="relative w-full">
             <div className="w-full h-50 rounded-lg overflow-hidden bg-gray-100">
-              {image ? (
+              {urlImage ? (
                 <img
-                  src={image}
+                  src={urlImage}
                   alt={fullName}
                   className="w-full h-full object-cover"
                 />

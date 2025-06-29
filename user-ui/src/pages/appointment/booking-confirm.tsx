@@ -35,8 +35,6 @@ const BookingConfirm = () => {
   const service = useBookingStore((state) => state.service);
   const scheduleSlot = useBookingStore((state) => state.scheduleSlot);
   const labTestSlot = useBookingStore((state) => state.labTestSlot);
-  // const reset = useBookingStore((state) => state.reset);
-
   const bookingMutation = useMutation({
     mutationFn: async (appointmentBookingData: AppointmentBooking) => {
       const response = await appointmentApi.postAppointmentBooking(
@@ -72,7 +70,6 @@ const BookingConfirm = () => {
     serviceType: string;
   }>();
   useEffect(() => {
-    console.log("hello");
     if (!service || (!scheduleSlot && !labTestSlot)) {
       if (doctorId) {
         navigate(AppRoutes.HOME);
