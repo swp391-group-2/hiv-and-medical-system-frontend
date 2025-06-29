@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
-import { CurrentSchedule } from "./current-schedule";
+import { SelectedSchedule } from "./current-schedule";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
@@ -128,7 +128,7 @@ export function DoctorRow({
         {/* work schedule */}
         <Dialog>
           <Tooltip delayDuration={500}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <DialogTrigger asChild>
                 <Button
                   className="cursor-pointer w-full"
@@ -185,7 +185,10 @@ export function DoctorRow({
                 </div>
               </DialogHeader>
               {/* form update doctor */}
-              <CurrentSchedule doctor={doctor} />
+              <SelectedSchedule
+                dateInWeek={date ?? new Date()}
+                doctor={doctor}
+              />
             </DialogContent>
           </DialogPortal>
         </Dialog>
