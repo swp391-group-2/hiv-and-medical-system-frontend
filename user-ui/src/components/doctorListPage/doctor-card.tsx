@@ -32,6 +32,7 @@ const DoctorCard = ({
             <div className="w-full h-50 rounded-lg overflow-hidden bg-gray-100">
               {urlImage ? (
                 <img
+                  loading="lazy"
                   src={urlImage}
                   alt={fullName}
                   className="w-full h-full object-cover"

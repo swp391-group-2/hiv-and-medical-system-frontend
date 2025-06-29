@@ -1,9 +1,9 @@
 const EducationPage: React.FC = () => {
   return (
     <div className="container mx-auto flex flex-col ">
-      <main className="flex-grow px-8 py-6 ">
+      <main className="  py-6 ">
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-blue-50 to-primary/50 rounded-2xl p-8 md:p-12 mb-8 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-sky-300 to-primary/50 rounded-2xl p-8 md:p-12 mb-8 overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200 rounded-full opacity-20 -translate-y-16 translate-x-16"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-sky-300 rounded-full opacity-30 translate-y-12 -translate-x-12"></div>
 
@@ -12,11 +12,11 @@ const EducationPage: React.FC = () => {
               Bài viết giáo dục
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-indigo-500 rounded mx-auto mb-6"></div>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Khám phá những kiến thức y khoa hữu ích và cập nhật thông tin sức
-              khỏe mới nhất từ các chuyên gia hàng đầu trong lĩnh vực y tế
+            <p className="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+              Khám phá những kiến thức về HIV hữu ích và cập nhật thông tin sức
+              khỏe mới nhất từ các chuyên gia hàng đầu trong lĩnh HIV/AIDS
             </p>
-            <div className="flex items-center justify-center mt-6 space-x-4 text-sm text-gray-500">
+            <div className="flex items-center justify-center  mt-6 space-x-4 text-md text-gray-600">
               <div className="flex items-center">
                 <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
                 <span>Thông tin chính xác</span>

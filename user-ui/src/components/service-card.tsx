@@ -18,6 +18,7 @@ function ServiceCard({ title, desc, href, icon, imgUrl }: ServiceCardProps) {
         <Link to={href}>
           <img
             src={imgUrl}
+            loading="lazy"
             alt="img"
             className="w-full group-hover:scale-110 transition-all duration-400 transform"
           />
