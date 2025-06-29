@@ -1,5 +1,5 @@
 import MainLayout from "@/layout";
-import EducationPage from "@/pages/static/EducationPage";
+import EducationPage from "@/pages/static/education-page";
 import { Route, Routes } from "react-router-dom";
 import LoginPage from "@/pages/auth/login";
 import RegisterPage from "@/pages/auth/register";

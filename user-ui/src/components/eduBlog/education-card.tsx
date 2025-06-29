@@ -43,7 +43,7 @@ function EducationCard({
           <div className="text-sm text-gray-500 mb-3 flex items-center justify-between space-x-4">
             <div className="flex items-center">
               <User className="h-4 w-4 mr-1" />
-              <span>BS: {author}</span>
+              <span> {author}</span>
             </div>
             <div className="flex items-center">
               <Calendar className="h-4 w-4 mr-1" />
