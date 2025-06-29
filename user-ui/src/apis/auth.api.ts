@@ -5,6 +5,7 @@ export const URL_LOGIN = "auth/login";
 export const URL_REGISTER = "auth/signup";
 export const URL_LOGOUT = "auth/logout";
 export const URL_REFRESH_TOKEN = "auth/refresh";
+export const URL_GOOGLE_LOGIN = "auth/outbound/authentication";
 
 const authApi = {
   registerAccount(body: { email: string; password: string; fullName: string }) {
@@ -15,6 +16,9 @@ const authApi = {
   },
   logout() {
     return http.post(URL_LOGOUT);
+  },
+  loginGoogle(body: { code: string }) {
+    return http.post<AuthResponse>(URL_GOOGLE_LOGIN, body);
   },
 };
 

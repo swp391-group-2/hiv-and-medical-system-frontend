@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
+import { Plus, RotateCcw, Search, User, UserCheck } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/create-doctor-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
@@ -26,6 +26,9 @@ const ManagerDoctors = () => {
   const { data: doctors, isLoading, isFetching } = useDoctors();
   const [search, setSearch] = useState("");
   const { data: doctorsCount } = useDoctorsCount();
+  const activeDoctors = doctors?.filter(
+    (item) => item.userStatus === "ACTIVE"
+  ).length;
   const filteredDoctors = (doctors ?? []).filter((doctor) =>
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
@@ -92,7 +95,7 @@ const ManagerDoctors = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center">
-              <UserCheck className="h-8 w-8 text-green-600 mr-3" />
+              <User className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng bác sĩ</p>
                 <p className="text-2xl font-bold">{doctorsCount}</p>
@@ -108,7 +111,7 @@ const ManagerDoctors = () => {
                 <p className="text-sm text-gray-600">
                   Số tài khoản đang hoạt động
                 </p>
-                <p className="text-2xl font-bold">{}</p>
+                <p className="text-2xl font-bold">{activeDoctors}</p>
               </div>
             </div>
           </CardContent>

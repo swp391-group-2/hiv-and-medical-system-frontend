@@ -4,12 +4,22 @@ import { TestRsItem } from "./test-rs-item";
 
 const TestRsLabels = () => {
   return (
-    <div className="text-gray-500 text-center w-full grid grid-cols-5 mt-5 mb-5 p-4">
-      <span>STT</span>
-      <span>Loại xét nghiệm</span>
-      <span>Kết quả</span>
-      <span>Thời gian xét nghiệm</span>
-      <span>Thao tác</span>
+    <div className="w-full grid grid-cols-7 text-center gap-4 mb-6 px-6 py-4 rounded-2xl  shadow-lg border">
+      <span className="font-bold col-span-1  text-gray-800 text-sm uppercase tracking-wider">
+        Mã Số
+      </span>
+      <span className="font-bold col-span-2  text-gray-800 text-sm uppercase tracking-wider">
+        Loại xét nghiệm
+      </span>
+      <span className="font-bold col-span-1  text-gray-800 text-sm uppercase tracking-wider">
+        Kết quả
+      </span>
+      <span className="font-bold col-span-2  text-gray-800 text-sm uppercase tracking-wider">
+        Thời gian xét nghiệm
+      </span>
+      <span className="font-bold col-span-1  text-gray-800 text-sm uppercase tracking-wider">
+        Thao tác
+      </span>
     </div>
   );
 };

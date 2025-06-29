@@ -9,14 +9,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, RotateCcw, Search, UserCheck } from "lucide-react";
+import { Plus, RotateCcw, Search, UserCheck, Users } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/create-staff-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { StaffList } from "@/components/manager/staff-list";
-import { useStaffs } from "@/api/staff";
+import { useLabs, useManagers, useStaffs } from "@/api/staff";
 import { LoadingOverlay, InternalLoading } from "@/components/loading-overlay";
 
 // export const staffs: Staff[] = [
@@ -84,10 +84,40 @@ import { LoadingOverlay, InternalLoading } from "@/components/loading-overlay";
 
 const ManagerStaffs = () => {
   const queryClient = useQueryClient();
-  const { data: staffs = [], isLoading, isError, isFetching } = useStaffs();
+  const {
+    data: staffs = [],
+    isLoading: isStaffLoading,
+    isError: isStaffError,
+    isFetching: isStaffFetching,
+  } = useStaffs();
+  const {
+    data: labs = [],
+    isLoading: isLabLoading,
+    isError: isLabError,
+    isFetching: isLabFetching,
+  } = useLabs();
+  const {
+    data: managers = [],
+    isLoading: isManagerLoading,
+    isError: isManagerError,
+    isFetching: isManagerFetching,
+  } = useManagers();
+
+  const allStaffs = staffs.concat(labs).concat(managers);
+
+  // const allStaffs = useMemo(
+  //   () => staffs.concat(labs).concat(managers),
+  //   ["staffs", "labs", "managers"]
+  // );
+
+  const isLoading = isStaffLoading || isLabLoading || isManagerLoading;
+  const isError = isStaffError || isLabError || isManagerError;
+  const isFetching = isStaffFetching || isLabFetching || isManagerFetching;
+
+  const activeStaffs = allStaffs.filter((s) => s.status === "ACTIVE").length;
   const [search, setSearch] = useState("");
 
-  const filteredStaffs = staffs.filter((staff) =>
+  const filteredStaffs = allStaffs.filter((staff) =>
     staff.fullName.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -107,6 +137,8 @@ const ManagerStaffs = () => {
   const handleDeleteStaff = (id: string) => deleteStaff(id);
   const handleReLoadList = () => {
     queryClient.invalidateQueries({ queryKey: ["staffs"] });
+    queryClient.invalidateQueries({ queryKey: ["labs"] });
+    queryClient.invalidateQueries({ queryKey: ["managers"] });
   };
 
   return (
@@ -145,10 +177,10 @@ const ManagerStaffs = () => {
         <Card>
           <CardContent className="p-4">
             <div className="flex items-center">
-              <UserCheck className="h-8 w-8 text-green-600 mr-3" />
+              <Users className="h-8 w-8 text-green-600 mr-3" />
               <div>
                 <p className="text-sm text-gray-600">Tổng nhân viên</p>
-                <p className="text-2xl font-bold">{staffs.length}</p>
+                <p className="text-2xl font-bold">{allStaffs.length}</p>
               </div>
             </div>
           </CardContent>
@@ -161,9 +193,7 @@ const ManagerStaffs = () => {
                 <p className="text-sm text-gray-600">
                   Số tài khoản đang hoạt động
                 </p>
-                <p className="text-2xl font-bold">
-                  {staffs.filter((item) => item.status === "active").length}
-                </p>
+                <p className="text-2xl font-bold">{activeStaffs}</p>
               </div>
             </div>
           </CardContent>

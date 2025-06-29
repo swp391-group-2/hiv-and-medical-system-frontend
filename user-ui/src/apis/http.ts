@@ -12,7 +12,12 @@ import {
   setRefreshTokenToLS,
 } from "./userauth";
 import config from "@/constants/config";
-import { URL_LOGIN, URL_LOGOUT, URL_REFRESH_TOKEN } from "@/apis/auth.api";
+import {
+  URL_GOOGLE_LOGIN,
+  URL_LOGIN,
+  URL_LOGOUT,
+  URL_REFRESH_TOKEN,
+} from "@/apis/auth.api";
 import {
   isAxiosExpiredTokenError,
   isAxiosUnauthorizedError,
@@ -48,11 +53,11 @@ export class Http {
         return Promise.reject(error);
       }
     );
-    
+
     this.instance.interceptors.response.use(
       (response) => {
         const { url } = response.config;
-        if (url === URL_LOGIN) {
+        if (url === URL_LOGIN || url === URL_GOOGLE_LOGIN) {
           const data = response.data as AuthResponse;
           this.accessToken = data.data.accessToken;
           this.refreshToken = data.data.refreshToken;
@@ -67,7 +72,6 @@ export class Http {
         return response;
       },
       (error: AxiosError) => {
-        
         if (
           ![
             HttpStatusCode.UnprocessableEntity,
@@ -75,7 +79,7 @@ export class Http {
           ].includes(error.response?.status as 401 | 422)
         ) {
           const message = error.message || "Có lỗi xảy ra";
-          
+
           console.error("Lỗi rồi Phương", message);
         }
         if (
@@ -85,19 +89,16 @@ export class Http {
         ) {
           const config = error.response?.config || { headers: {}, url: "" };
           const { url } = config;
-         
+
           if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
-            
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
               : this.handleRefreshToken().finally(() => {
-                  
                   setTimeout(() => {
                     this.refreshTokenRequest = null;
                   }, 10000);
                 });
             return this.refreshTokenRequest.then((access_token) => {
-              
               return this.instance({
                 ...config,
                 headers: { ...config.headers, authorization: access_token },
@@ -105,12 +106,11 @@ export class Http {
             });
           }
 
-
           clearLS();
           this.accessToken = "";
           this.refreshToken = "";
 
-          window.location.reload()
+          window.location.reload();
         }
         return Promise.reject(error);
       }

@@ -21,12 +21,17 @@ export const updateDoctorProfile = async (
 
 // 3. Lấy thông tin của bác sĩ đã đăng nhập
 export const fetchMyDoctorInfo = async () => {
-  const res = await axios.get(`${BASE_URL}doctors/myInfo`);
-  return res.data?.data || null;
+  const token = localStorage.getItem("accessToken");
+  const response = await axios.get(`${BASE_URL}doctors/myInfo`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data?.data || null;
 };
 
 // 4. Upload ảnh đại diện của bác sĩ theo email
-export const uploadDoctorAvatar = async (doctorId:string, file: File) => {
+export const uploadDoctorAvatar = async (doctorId: string, file: File) => {
   const formData = new FormData();
   // const encodedEmail = encodeURIComponent(email);
   formData.append("file", file);

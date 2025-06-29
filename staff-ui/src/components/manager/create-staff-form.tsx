@@ -34,7 +34,7 @@ export const CreateStaffForm = () => {
         .min(1, "Tên phải có ít nhất một kí tự")
         .max(50, "Tên vượt quá số kí tự cho phép"),
       email: z.string().email("Email không hợp lệ"),
-      role: z.enum(["manager", "lab", "staff"]),
+      role: z.enum(["MANAGER", "LAB_TECHNICIAN", "STAFF"]),
       password: z
         .string()
         .min(8, "Mật khẩu phải có ít nhất 8 kí tự")
@@ -53,13 +53,13 @@ export const CreateStaffForm = () => {
     defaultValues: {
       fullName: "",
       email: "",
-      role: "staff",
+      role: "STAFF",
       password: "",
       confirm: "",
     },
   });
 
-  const { mutate: createStaff, isPending } = useMutation<
+  const { mutate: createStaff, isPending: isCreateStaffPending } = useMutation<
     void,
     AxiosError,
     StaffInitializedValues
@@ -75,8 +75,41 @@ export const CreateStaffForm = () => {
     },
   });
 
+  const { mutate: createLabTechnician, isPending: isCreateLabPending } =
+    useMutation<void, AxiosError, StaffInitializedValues>({
+      mutationFn: async ({ confirm, ...values }) =>
+        await http.post(`/lab-technicians`, values),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["staffs"] });
+        toast.success("Tạo tài khoản thành công");
+      },
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    });
+
+  const { mutate: createManager, isPending: isCreateManagerPending } =
+    useMutation<void, AxiosError, StaffInitializedValues>({
+      mutationFn: async ({ confirm, ...values }) =>
+        await http.post(`/managers`, values),
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["staffs"] });
+        toast.success("Tạo tài khoản thành công");
+      },
+      onError: (err) => {
+        toast.error(err.message);
+      },
+    });
+
+  const isPending =
+    isCreateLabPending ?? isCreateManagerPending ?? isCreateStaffPending;
+
   const handleSubmit = (values: StaffInitializedValues) => {
-    createStaff(values);
+    if (values.role === "STAFF") {
+      createStaff(values);
+    } else if (values.role === "LAB_TECHNICIAN") {
+      createLabTechnician(values);
+    } else createManager(values);
   };
 
   return (
@@ -120,9 +153,11 @@ export const CreateStaffForm = () => {
                     <SelectValue placeholder="Chọn chức vụ" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="staff">Nhân viên</SelectItem>
-                    <SelectItem value="manager">Quản lý</SelectItem>
-                    <SelectItem value="lab">Nhân viên xét nghiệm</SelectItem>
+                    <SelectItem value="STAFF">Nhân viên</SelectItem>
+                    <SelectItem value="MANAGER">Quản lý</SelectItem>
+                    <SelectItem value="LAB_TECHNICIAN">
+                      Nhân viên xét nghiệm
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>

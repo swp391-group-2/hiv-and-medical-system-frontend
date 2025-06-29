@@ -38,14 +38,14 @@ export function StaffRow({
       <TableCell>{staff.fullName}</TableCell>
       <TableCell>{staff.email}</TableCell>
       <TableCell>
-        {(staff.role === "staff" && "Nhân viên") ||
-          (staff.role === "manager" && "Quản lý") ||
-          (staff.role === "lab_technician" && "Nhân viên xét nghiệm")}
+        {(staff.role === "STAFF" && "Nhân viên") ||
+          (staff.role === "MANAGER" && "Quản lý") ||
+          (staff.role === "LAB_TECHNICIAN" && "Nhân viên xét nghiệm")}
       </TableCell>
       <TableCell>
         <HoverCard openDelay={200} closeDelay={200}>
           <HoverCardTrigger>
-            {staff.status === "active" ? (
+            {staff.status === "ACTIVE" ? (
               <Dot
                 className="cursor-pointer ml-5"
                 size={16}
@@ -63,7 +63,7 @@ export function StaffRow({
           </HoverCardTrigger>
           <HoverCardContent className="flex justify-center">
             <div>
-              {staff.status === "active"
+              {staff.status === "ACTIVE"
                 ? "Tài khoản đang hoạt động"
                 : "Tài khoản bị vô hiệu hoá"}
             </div>
