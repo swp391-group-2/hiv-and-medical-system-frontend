@@ -29,6 +29,8 @@ interface BlogFormData {
   content: string;
   snippet: string;
   author: string;
+  urlImage?: string; // URL hình ảnh sau khi upload
+  selectedFile?: File; // File được chọn để upload
 }
 
 const BlogsPost = () => {
@@ -37,6 +39,8 @@ const BlogsPost = () => {
     content: "",
     snippet: "",
     author: "",
+    urlImage: "",
+    selectedFile: undefined,
   });
 
   const [blogs, setBlogs] = useState<BlogResponse[]>([]);
@@ -46,6 +50,8 @@ const BlogsPost = () => {
   const [selectedBlog, setSelectedBlog] = useState<BlogResponse | null>(null);
   const [isViewMode, setIsViewMode] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string>("");
 
   // Lấy thông tin author từ localStorage hoặc token
   useEffect(() => {
@@ -135,6 +141,7 @@ const BlogsPost = () => {
         content: formData.content.trim(),
         snippet: formData.snippet.trim(),
         author: formData.author.trim(),
+        file: formData.selectedFile, // Gửi file trực tiếp
       };
 
       if (isEditMode && selectedBlog) {
@@ -158,7 +165,10 @@ const BlogsPost = () => {
         content: "",
         snippet: "",
         author: formData.author, // Giữ lại tên tác giả
+        urlImage: "",
+        selectedFile: undefined,
       });
+      setImagePreview("");
 
       // Đóng dialog trước
       setIsDialogOpen(false);
@@ -186,7 +196,10 @@ const BlogsPost = () => {
       content: "",
       snippet: "",
       author: formData.author,
+      urlImage: "",
+      selectedFile: undefined,
     });
+    setImagePreview("");
     setIsDialogOpen(true);
   };
 
@@ -199,7 +212,15 @@ const BlogsPost = () => {
       content: blog.content,
       snippet: blog.snippet,
       author: blog.author,
+      urlImage: blog.urlImage || "",
+      selectedFile: undefined,
     });
+    // Set image preview nếu có
+    if (blog.urlImage) {
+      setImagePreview(blog.urlImage);
+    } else {
+      setImagePreview("");
+    }
     setIsDialogOpen(true);
   };
 
@@ -218,6 +239,77 @@ const BlogsPost = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  // Handle file upload
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Vui lòng chọn file hình ảnh!");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Kích thước file không được vượt quá 5MB!");
+      return;
+    }
+
+    setIsUploadingImage(true);
+
+    try {
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+
+      // Lưu file vào state để gửi kèm request tạo/cập nhật blog
+      setFormData((prev) => ({
+        ...prev,
+        selectedFile: file,
+      }));
+
+      if (isEditMode) {
+        toast.success(
+          "Đã chọn ảnh mới! Nhấn 'Cập nhật bài viết' để thay đổi ảnh."
+        );
+      } else {
+        toast.success("Chọn hình ảnh thành công!");
+      }
+    } catch {
+      toast.error("Có lỗi khi xử lý hình ảnh!");
+      setImagePreview("");
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
+
+  // Remove uploaded image
+  const handleRemoveImage = () => {
+    setFormData((prev) => ({
+      ...prev,
+      urlImage: "",
+      selectedFile: undefined,
+    }));
+    setImagePreview("");
+    // Reset input file
+    const fileInput = document.getElementById(
+      "image-upload"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+
+    if (isEditMode) {
+      toast.success("Đã xóa ảnh! Nhấn 'Cập nhật bài viết' để lưu thay đổi.");
+    } else {
+      toast.success("Đã xóa hình ảnh!");
+    }
   };
 
   return (
@@ -371,6 +463,71 @@ const BlogsPost = () => {
                       required
                     />
                   </div>
+
+                  <div>
+                    <Label htmlFor="image-upload" className="flex items-center">
+                      Hình ảnh minh họa:
+                      <span className="text-xs text-gray-500 ml-1">
+                        (
+                        {isEditMode
+                          ? "Chọn ảnh mới để thay đổi, hoặc giữ nguyên ảnh cũ. "
+                          : ""}
+                        Kéo thả hoặc nhấn để tải lên, tối đa 5MB)
+                      </span>
+                    </Label>
+                    <div className="flex items-center gap-4 mt-2">
+                      {imagePreview || formData.urlImage ? (
+                        <div className="relative">
+                          <img
+                            src={imagePreview || formData.urlImage}
+                            alt="Preview"
+                            className="w-32 h-32 object-cover rounded-lg"
+                          />
+                          <Button
+                            type="button"
+                            onClick={handleRemoveImage}
+                            className="absolute top-0 right-0 rounded-full p-1 bg-white shadow-md"
+                            variant="outline"
+                            size="sm"
+                          >
+                            &times;
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          className="flex items-center gap-2"
+                          asChild
+                          disabled={isUploadingImage}
+                        >
+                          <label
+                            htmlFor="image-upload"
+                            className="cursor-pointer"
+                          >
+                            {isUploadingImage ? (
+                              <>
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Đang tải lên...
+                              </>
+                            ) : (
+                              <>
+                                <Plus className="h-4 w-4" />
+                                Tải lên hình ảnh
+                              </>
+                            )}
+                          </label>
+                        </Button>
+                      )}
+                      <input
+                        id="image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        disabled={isUploadingImage}
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div className="flex justify-end gap-3">
@@ -381,11 +538,20 @@ const BlogsPost = () => {
                   >
                     Hủy
                   </Button>
-                  <Button type="submit" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    disabled={isLoading || isUploadingImage}
+                  >
                     {isLoading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {isEditMode ? "Cập nhật bài viết" : "Đăng bài viết"}
+                    {isLoading
+                      ? formData.selectedFile
+                        ? "Đang đăng bài viết với hình ảnh..."
+                        : "Đang đăng bài viết..."
+                      : isEditMode
+                      ? "Cập nhật bài viết"
+                      : "Đăng bài viết"}
                   </Button>
                 </div>
               </form>
@@ -431,6 +597,15 @@ const BlogsPost = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
+                  {blog.urlImage && (
+                    <div className="mb-4">
+                      <img
+                        src={blog.urlImage}
+                        alt={blog.title}
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                    </div>
+                  )}
                   <p className="text-gray-600 line-clamp-3 mb-4">
                     {blog.snippet}
                   </p>
