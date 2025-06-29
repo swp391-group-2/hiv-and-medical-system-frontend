@@ -32,6 +32,7 @@ function EducationCard({
           <div className="rounded-t-lg overflow-hidden">
             <img
               className="h-[200px] w-full object-cover"
+              loading="lazy"
               src="https://i.pinimg.com/736x/31/8b/68/318b6880b4b329ecc4d560af58c5101a.jpg"
               alt={urlImage}
             />
