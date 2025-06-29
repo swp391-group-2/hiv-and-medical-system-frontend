@@ -15,6 +15,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogPortal,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -31,7 +32,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
-import { options } from "./specialization-select";
+import { options } from "../specialization-select";
+import { CurrentSchedule } from "./current-schedule";
 
 export function DoctorRow({
   doctor,
@@ -107,21 +109,38 @@ export function DoctorRow({
         </Dialog>
 
         {/* work schedule */}
-
-        <Tooltip delayDuration={500}>
-          <TooltipTrigger>
-            <Button
-              className="cursor-pointer w-full"
-              variant="outline"
-              size="sm"
-            >
-              <Calendar className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Lịch làm việc</p>
-          </TooltipContent>
-        </Tooltip>
+        <Dialog>
+          <Tooltip delayDuration={500}>
+            <TooltipTrigger>
+              <DialogTrigger asChild>
+                <Button
+                  className="cursor-pointer w-full"
+                  variant="outline"
+                  size="sm"
+                >
+                  <Calendar className="h-4 w-4" />
+                </Button>
+              </DialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Lịch làm việc</p>
+            </TooltipContent>
+          </Tooltip>
+          <DialogPortal>
+            <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !w-[80vw] !h-[90vh] !max-w-none !max-h-none flex flex-col justify-between">
+              <DialogHeader>
+                <DialogTitle>
+                  Cập nhật lịch làm việc:{" "}
+                  <span className="text-blue-800 pl-4 text-xl">
+                    {doctor.fullName}
+                  </span>
+                </DialogTitle>
+              </DialogHeader>
+              {/* form update doctor */}
+              <CurrentSchedule doctor={doctor} />
+            </DialogContent>
+          </DialogPortal>
+        </Dialog>
 
         {/* confirm delete */}
 

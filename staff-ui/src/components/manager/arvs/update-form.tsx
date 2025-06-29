@@ -21,15 +21,23 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import http from "@/api/http";
 import { toast } from "sonner";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { Loader2, Plus } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-import { cn } from "@/lib/utils";
-import { EmptyListMessage } from "../page-message";
-import { MedicineSelect } from "./medicine-select";
+import { Textarea } from "../../ui/textarea";
+import { EmptyListMessage } from "../../page-message";
+import { MedicineSelect } from "../medicine-select";
+import { MedicineFrequencySelect } from "../med-frequency-select";
+import { MedicineDosageSelect } from "../med-dosage-select";
+import type { Prescription } from "@/types/types";
 
-export const CreateArvForm = ({ className }: { className: string }) => {
+export const UpdateArvForm = ({
+  className,
+  arv,
+}: {
+  className: string;
+  arv: Prescription;
+}) => {
   const queryClient = useQueryClient();
   const schema = z.object({
     name: z.string().nonempty("Tên phác đồ không được bỏ trống"),
@@ -45,43 +53,49 @@ export const CreateArvForm = ({ className }: { className: string }) => {
       z.object({
         dosage: z.string().nonempty("Liều lượng không được bỏ trống"),
         frequency: z.string().nonempty("Tần suất uống không được bỏ trống"),
-        duration: z.string().nonempty(),
+        duration: z.string().nonempty("Thời gian uống không được bỏ trống"),
         medicationId: z.number().nonnegative("Id không hợp lệ"),
       })
     ),
   });
 
-  type ArvInitializedValues = z.infer<typeof schema>;
+  type ArvUpdatedValues = z.infer<typeof schema>;
 
-  const form = useForm<ArvInitializedValues>({
+  const form = useForm<ArvUpdatedValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
-      contraindication: "",
-      sideEffect: "",
-      dosageForm: "",
-      instructions: "",
-      prescriptionItems: [],
+      name: arv.name,
+      contraindication: arv.contraindication,
+      sideEffect: arv.sideEffect,
+      dosageForm: arv.dosageForm,
+      instructions: arv.instructions,
+      prescriptionItems: arv.prescriptionItems.map((item) => ({
+        dosage: item.dosage,
+        frequency: item.frequency,
+        duration: item.duration,
+        medicationId: item.medication.medicationId,
+      })),
     },
   });
 
-  const { mutate: createArv, isPending } = useMutation<
+  const { mutate: updateArv, isPending } = useMutation<
     void,
     AxiosError,
-    ArvInitializedValues
+    ArvUpdatedValues
   >({
-    mutationFn: async (values) => await http.post(`/prescriptions`, values),
+    mutationFn: async (values) =>
+      await http.put(`/prescriptions/${arv.prescriptionId}`, values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["prescriptions"] });
-      toast.success("Tạo phác đồ thành công");
+      toast.success("Cập nhật phác đồ thành công");
     },
     onError: (err) => {
       toast.error(err.message);
     },
   });
 
-  const handleSubmit = (values: ArvInitializedValues) => {
-    createArv(values);
+  const handleSubmit = (values: ArvUpdatedValues) => {
+    updateArv(values);
   };
 
   const { fields, append, remove } = useFieldArray({
@@ -91,10 +105,7 @@ export const CreateArvForm = ({ className }: { className: string }) => {
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleSubmit)}
-        className={cn("", className)}
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className={className}>
         <div className="grow grid grid-cols-2 gap-4">
           <div className="p-4 border rounded-md flex flex-col justify-between gap-3 relative">
             <FormField
@@ -193,9 +204,9 @@ export const CreateArvForm = ({ className }: { className: string }) => {
                               <FormItem>
                                 <FormLabel>Liều lượng</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    {...field}
-                                    placeholder="Ví dụ: 2 viên/lần"
+                                  <MedicineDosageSelect
+                                    value={field.value}
+                                    onValueChange={field.onChange}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -210,9 +221,9 @@ export const CreateArvForm = ({ className }: { className: string }) => {
                               <FormItem>
                                 <FormLabel>Tần suất</FormLabel>
                                 <FormControl>
-                                  <Input
-                                    {...field}
-                                    placeholder="Ví dụ: 3 lần/ngày"
+                                  <MedicineFrequencySelect
+                                    value={field.value}
+                                    onValueChange={field.onChange}
                                   />
                                 </FormControl>
                                 <FormMessage />
@@ -285,10 +296,10 @@ export const CreateArvForm = ({ className }: { className: string }) => {
         >
           {isPending ? (
             <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang tạo...
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử lí...
             </>
           ) : (
-            "Tạo mới"
+            "Cập nhật"
           )}
         </Button>
       </form>

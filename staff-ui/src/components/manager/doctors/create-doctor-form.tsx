@@ -15,10 +15,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import http from "@/api/http";
 import { toast } from "sonner";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { Loader2 } from "lucide-react";
-import { options, SpecializationSelect } from "./specialization-select";
+import { options, SpecializationSelect } from "../specialization-select";
 
 export const CreateDoctorForm = () => {
   const queryClient = useQueryClient();

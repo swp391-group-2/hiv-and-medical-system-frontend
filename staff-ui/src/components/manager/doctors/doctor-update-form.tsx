@@ -13,9 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import type { Doctor } from "@/types/doctor";
-import { options, SpecializationSelect } from "./specialization-select";
-import { Switch } from "../ui/switch";
-import { Label } from "../ui/label";
+import { options, SpecializationSelect } from "../specialization-select";
+import { Switch } from "../../ui/switch";
+import { Label } from "../../ui/label";
 import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";

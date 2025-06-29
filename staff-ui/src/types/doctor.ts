@@ -31,7 +31,6 @@ export type Specialization = {
 };
 
 export interface Schedule {
-  id: number;
   workDate: string; // e.g. "2025-06-24"
   scheduleSlots: ScheduleSlot[];
 }
