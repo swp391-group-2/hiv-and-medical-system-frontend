@@ -1,8 +1,24 @@
-const EducationPage: React.FC = () => {
+import EduBlogList from "@/components/eduBlog/edu-blog-list";
+import { EduBlogSearchBar } from "@/components/eduBlog/edu-blog-searchbar";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { useState } from "react";
+
+import { useDebounceValue } from "usehooks-ts";
+const EducationPage = () => {
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(0);
+  const [debouncedValue] = useDebounceValue<string>(search, 500);
+
   return (
     <div className="container mx-auto flex flex-col ">
       <main className="  py-6 ">
-        {/* Hero Section */}
         <div className="relative bg-gradient-to-br from-sky-300 to-primary/50 rounded-2xl p-8 md:p-12 mb-8 overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-200 rounded-full opacity-20 -translate-y-16 translate-x-16"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-sky-300 rounded-full opacity-30 translate-y-12 -translate-x-12"></div>
@@ -31,6 +47,37 @@ const EducationPage: React.FC = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex justify-center mb-8">
+          <EduBlogSearchBar value={search} onChange={setSearch} />
+        </div>
+        <div className="mt-8 ">
+          <EduBlogList search={debouncedValue} page={page} />
+        </div>
+        <div>
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                  className={
+                    page === 0
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationLink isActive>{page + 1}</PaginationLink>
+              </PaginationItem>
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => setPage((prev) => prev + 1)}
+                  className="cursor-pointer"
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
         </div>
       </main>
     </div>

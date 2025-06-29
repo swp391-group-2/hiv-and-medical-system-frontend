@@ -14,3 +14,10 @@ export interface BlogEduResponse {
   message: string;
   data: BlogEdu[];
 }
+
+export interface BlogEduDetailResponse {
+  code: number;
+  success: boolean;
+  message: string;
+  data: BlogEdu;
+}
