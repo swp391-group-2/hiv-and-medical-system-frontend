@@ -1,4 +1,7 @@
-import type { BlogEduResponse } from "@/types/blogEdu.type";
+import type {
+  BlogEduDetailResponse,
+  BlogEduResponse,
+} from "@/types/blogEdu.type";
 import apiGuest from "./apiGuest";
 
 export const URL_BLOG = "blogs";
@@ -12,5 +15,8 @@ export const eduBlogApi = {
         title: title,
       },
     });
+  },
+  getBlogById: (blogId: number) => {
+    return apiGuest.get<BlogEduDetailResponse>(URL_BLOG + `/${blogId}`);
   },
 };
