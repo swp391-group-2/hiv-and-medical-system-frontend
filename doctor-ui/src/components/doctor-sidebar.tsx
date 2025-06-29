@@ -8,12 +8,12 @@ import {
   Newspaper,
   Stethoscope,
   LogOut,
+  StickyNote,
 } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
@@ -56,6 +56,11 @@ const items = [
   //   url: "/doctor/arv-seclect",
   //   icon: Newspaper,
   // },
+  {
+    title: "Đăng bài viết chia sẻ",
+    url: "/doctor/blogs",
+    icon: StickyNote,
+  },
   {
     title: "Cài đặt tài khoản",
     url: "/doctor/setting",
