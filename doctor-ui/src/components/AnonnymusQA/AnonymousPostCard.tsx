@@ -35,7 +35,6 @@ const AnonymousPostCard = ({
       setShowReplyForm(false);
       onReplySuccess?.();
     } catch (error) {
-      console.error("Error replying to post:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Có lỗi xảy ra khi trả lời";
       toast.error(errorMessage);
