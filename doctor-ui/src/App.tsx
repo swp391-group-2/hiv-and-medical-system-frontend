@@ -12,6 +12,7 @@ import Questions from "./pages/questions/qa";
 import Schedule from "./pages/appointment/schedule";
 import ARVSeclect from "./pages/ARVSelect/arvSelect";
 import DoctorProfile from "./pages/doctorProfile/doctorProfile";
+import BlogsPost from "./pages/appointment/blogsPost";
 // import type { JSX } from "react";
 
 
@@ -46,6 +47,7 @@ function App() {
               <Route path="/doctor/qa" element={<Questions />} />
               <Route path="/doctor/profile" element={<UserProfile />} />
               <Route path="/doctor/arv-seclect" element={<ARVSeclect />} />
+              <Route path="/doctor/blogs"element={<BlogsPost/>}/>
               <Route path="/doctor/setting" element={<DoctorProfile />} />
             </Route>
             <Route
