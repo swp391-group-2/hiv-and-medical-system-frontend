@@ -10,6 +10,11 @@ import {
   type UpdateDoctorRequest,
 } from "@/types/doctor";
 import { type Staff, type CreateStaffRequest } from "@/types/staff";
+import type {
+  LabTechnician,
+  CreateLabTechnicianRequest,
+} from "@/types/lab-technicians";
+import type { CreateManagerRequest, Manager } from "@/types/manager";
 
 //---------------------------doctor accounts---------------------------
 export const getAllDoctorAccounts = async (): Promise<Doctor[]> => {
@@ -45,7 +50,7 @@ export const activeUserAccount = async (userId: string): Promise<void> => {
   await http.put(`/users/${userId}/updateStatus`, {
     active: true,
   });
-}
+};
 //---------------------------patient accounts---------------------------
 export const getAllPatientAccounts = async (): Promise<Patient[]> => {
   const { data } = await http.get<Response<Patient>>(`/patients`);
@@ -57,12 +62,12 @@ export const disableStaffAccount = async (staffId: string): Promise<void> => {
   await http.put(`/users/${staffId}/updateStatus`, {
     active: false,
   });
-}
+};
 export const activeStaffAccount = async (staffId: string): Promise<void> => {
   await http.put(`/users/${staffId}/updateStatus`, {
     active: true,
   });
-}
+};
 export const getAllStaffAccounts = async (): Promise<Staff[]> => {
   const { data } = await http.get<Response<Staff>>(`/staffs`);
   return data.data;
@@ -78,3 +83,33 @@ export const addStaffAccount = async (
 };
 // export const updateStaffAccount = async () => {};
 // export const deleteStaffAccount = async () => {};
+//---------------------------lab accounts---------------------------
+export const getAllLabAccounts = async (): Promise<LabTechnician[]> => {
+  const { data } = await http.get<Response<LabTechnician>>(`/lab-technicians`);
+  return data.data;
+};
+export const addLabAccount = async (
+  labData: CreateLabTechnicianRequest
+): Promise<LabTechnician> => {
+  const { data } = await http.post<ResponseSingleObject<LabTechnician>>(
+    `/lab-technicians`,
+    labData
+  );
+  return data.data;
+};
+
+//---------------------------manager accounts---------------------------
+export const getAllManagerAccounts = async (): Promise<Manager[]> => {
+  const { data } = await http.get<Response<Manager>>(`/managers`);
+  return data.data;
+};
+export const addManagerAccount = async (
+  managerData: CreateManagerRequest
+): Promise<Manager> => {
+  const { data } = await http.post<ResponseSingleObject<Manager>>(
+    `/managers`,
+    managerData
+  );
+  return data.data;
+};
+
