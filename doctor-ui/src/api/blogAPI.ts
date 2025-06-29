@@ -83,7 +83,11 @@ export const blogAPI = {
       );
     }
 
-    return response.json();
+    const result = await response.json();
+    console.log("=== CREATE RESPONSE ===");
+    console.log("Create result:", result);
+    console.log("Create urlImage:", result.urlImage || result.data?.urlImage);
+    return result;
   },
 
   // Lấy danh sách blog
@@ -154,7 +158,6 @@ export const blogAPI = {
       throw new Error("Blog ID is required for update");
     }
 
-    // Tạo data object chứa thông tin blog
     const data = {
       author: blogData.author,
       title: blogData.title,
@@ -164,14 +167,16 @@ export const blogAPI = {
 
     const url = new URL(`${BASE_URL}blogs/${blogId}`);
 
-    // Luôn dùng FormData cho update để đảm bảo tương thích
     const formData = new FormData();
     formData.append("data", JSON.stringify(data));
 
-    // Chỉ append file khi có file mới được chọn
     if (blogData.file) {
+      // Chỉ dùng field name giống hệt CREATE
       formData.append("file", blogData.file);
       console.log("Updating blog WITH new file");
+      console.log("File name:", blogData.file.name);
+      console.log("File size:", blogData.file.size);
+      console.log("File type:", blogData.file.type);
     } else {
       console.log("Updating blog WITHOUT changing file");
     }
@@ -179,7 +184,6 @@ export const blogAPI = {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
     };
-    // Không set Content-Type để browser tự động set multipart/form-data boundary
 
     console.log("Updating blog with URL:", url.toString());
     console.log("Data:", data);
@@ -208,6 +212,27 @@ export const blogAPI = {
     }
 
     const result = await response.json();
+    console.log("=== UPDATE RESPONSE ===");
+    console.log("Update result:", result);
+    console.log("New urlImage:", result.urlImage || result.data?.urlImage);
+
+    // Nếu có file nhưng urlImage vẫn null, thử get lại sau 2 giây
+    if (blogData.file && !(result.urlImage || result.data?.urlImage)) {
+      console.log("urlImage is null, retrying after 2 seconds...");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      try {
+        const retryResult = await blogAPI.getBlogById(blogId);
+        console.log("=== RETRY RESULT ===");
+        console.log("Retry urlImage:", retryResult.urlImage);
+        if (retryResult.urlImage) {
+          return retryResult;
+        }
+      } catch (retryError) {
+        console.error("Retry failed:", retryError);
+      }
+    }
+
     return result.data || result;
   },
 };
