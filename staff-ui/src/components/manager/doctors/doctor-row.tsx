@@ -1,6 +1,14 @@
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Calendar, Edit, Trash2, Dot, Loader2 } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
+import {
+  Calendar as CalendarIcon,
+  Edit,
+  Trash2,
+  Dot,
+  Loader2,
+} from "lucide-react";
 import type { Doctor } from "@/types/doctor";
 import {
   HoverCard,
@@ -34,6 +42,8 @@ import {
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
 import { CurrentSchedule } from "./current-schedule";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 export function DoctorRow({
   doctor,
@@ -44,6 +54,13 @@ export function DoctorRow({
   handleDeleteDoctor: (id: string) => void;
   isDeleting: boolean;
 }) {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const handleDateSelect = (selectedDate: Date | undefined) => {
+    setDate(selectedDate);
+    setShowCalendar(false);
+  };
   return (
     <TableRow>
       <TableCell>{doctor.doctorCode}</TableCell>
@@ -118,7 +135,7 @@ export function DoctorRow({
                   variant="outline"
                   size="sm"
                 >
-                  <Calendar className="h-4 w-4" />
+                  <CalendarIcon className="h-4 w-4" />
                 </Button>
               </DialogTrigger>
             </TooltipTrigger>
@@ -128,13 +145,44 @@ export function DoctorRow({
           </Tooltip>
           <DialogPortal>
             <DialogContent className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 !w-[80vw] !h-[90vh] !max-w-none !max-h-none flex flex-col justify-between">
-              <DialogHeader>
+              <DialogHeader className="flex justify-between">
                 <DialogTitle>
                   Cập nhật lịch làm việc:{" "}
                   <span className="text-blue-800 pl-4 text-xl">
                     {doctor.fullName}
                   </span>
                 </DialogTitle>
+                {/* date picker */}
+                <div className="relative mt-4 self-end">
+                  {" "}
+                  {/* Make this container relative for absolute positioning */}
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      value={date ? format(date, "dd/MM/yyyy") : ""}
+                      readOnly
+                      placeholder="Chọn ngày"
+                      className="w-[180px]"
+                    />
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => setShowCalendar(!showCalendar)}
+                      aria-label="Toggle calendar"
+                    >
+                      <CalendarIcon className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  {showCalendar && (
+                    <div className="absolute z-10 mt-2">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={handleDateSelect}
+                        className="rounded-md border shadow-md bg-white"
+                      />
+                    </div>
+                  )}
+                </div>
               </DialogHeader>
               {/* form update doctor */}
               <CurrentSchedule doctor={doctor} />
