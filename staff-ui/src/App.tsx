@@ -22,6 +22,7 @@ import AdminSidebar from "./components/admin/admin-sidebar";
 import AdminDashboard from "./pages/admin/dashboard";
 import AdminAccounts from "./pages/admin/accounts";
 import AdminBlogs from "./pages/admin/blogs";
+import ManagerBlogs from "./pages/manager/blogs";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="doctors" element={<ManagerDoctors />} />
             <Route path="staffs" element={<ManagerStaffs />} />
             <Route path="arv" element={<ManagerARV />} />
+            <Route path="blogs" element={<ManagerBlogs />} />
           </Route>
           {/* admin */}
           <Route path="admin" element={<AdminSidebar />}>
