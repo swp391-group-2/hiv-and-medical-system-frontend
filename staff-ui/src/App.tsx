@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/admin/dashboard";
 import AdminAccounts from "./pages/admin/accounts";
 import AdminBlogs from "./pages/admin/blogs";
 import ManagerBlogs from "./pages/manager/blogs";
+import BlogPost from "./pages/manager/blog-post";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,10 @@ function App() {
             <Route path="doctors" element={<ManagerDoctors />} />
             <Route path="staffs" element={<ManagerStaffs />} />
             <Route path="arv" element={<ManagerARV />} />
-            <Route path="blogs" element={<ManagerBlogs />} />
+            <Route path="blogs">
+              <Route index element={<ManagerBlogs />} />
+              <Route path=":blogId" element={<BlogPost />} />
+            </Route>
           </Route>
           {/* admin */}
           <Route path="admin" element={<AdminSidebar />}>
