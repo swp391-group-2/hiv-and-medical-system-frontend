@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
-import { SelectedSchedule } from "./current-schedule";
+import { SelectedSchedule } from "./test-schedule";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
@@ -184,7 +184,6 @@ export function DoctorRow({
                   )}
                 </div>
               </DialogHeader>
-              {/* form update doctor */}
               <SelectedSchedule
                 dateInWeek={date ?? new Date()}
                 doctor={doctor}

@@ -1,19 +1,10 @@
 import { useCurrentWeekSchedule, useSlots } from "@/api/schedule";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, formatDMY } from "@/lib/utils";
 import type { Doctor, ScheduleSlot } from "@/types/doctor";
 import { CalendarCheck, Pencil, Plus, Save } from "lucide-react";
 import { useState } from "react";
 
-const daysOfWeek = [
-  "Thứ Hai",
-  "Thứ Ba",
-  "Thứ Tư",
-  "Thứ Năm",
-  "Thứ Sáu",
-  "Thứ Bảy",
-  "Chủ Nhật",
-];
 const slotsInHour = [
   "7:00-8:00",
   "8:00-9:00",
@@ -39,16 +30,20 @@ export const SelectedSchedule = ({
   );
   const { data: slots = [] } = useSlots();
   const slotsNumber = slots.map((slot) => slot.slotNumber);
-  // const slotsNumber = useMemo(() => slots.map((slot) => slot.slotNumber), []);
   const [onEdit, setOnEdit] = useState(false);
   console.log(slots);
   console.log(slotsNumber);
   return (
     <div className="flex flex-col gap-3 items-end w-full h-full">
       <div className="w-11/12 grid grid-cols-7 gap-2">
-        {daysOfWeek.map((day) => (
-          <div key={day} className="text-center">
-            <span className=" text-sm font-semibold">{day}</span>
+        {weekSchedule.map((day, idx) => (
+          <div key={day.workDate} className="text-center flex flex-col">
+            <span className=" text-sm font-semibold">
+              {idx === 6 ? "Chủ nhật" : `Thứ ${idx + 2}`}
+            </span>
+            <span className=" text-sm text-gray-500 font-semibold">{`(${formatDMY(
+              day.workDate
+            )})`}</span>
           </div>
         ))}
       </div>
