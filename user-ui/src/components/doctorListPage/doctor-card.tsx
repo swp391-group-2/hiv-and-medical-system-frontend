@@ -25,7 +25,7 @@ const DoctorCard = ({
     navigation(buildRoute.bookingConsultationDoctor(doctorId));
   };
   return (
-    <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md shadow-primary/40 ">
+    <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md  ">
       <CardContent className="p-4">
         <div className="flex justify-center mb-3 ">
           <div className="relative w-full">
