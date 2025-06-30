@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { DoctorUpdateForm } from "./doctor-update-form";
 import { options } from "../specialization-select";
-import { SelectedSchedule } from "./test-schedule";
+import { SelectedSchedule } from "./selected-schedule";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
@@ -63,7 +63,7 @@ export function DoctorRow({
   };
   return (
     <TableRow>
-      <TableCell>{doctor.doctorCode}</TableCell>
+      {/* <TableCell>{doctor.doctorId}</TableCell> */}
       <TableCell>{doctor.fullName}</TableCell>
       <TableCell>{doctor.email}</TableCell>
       <TableCell>

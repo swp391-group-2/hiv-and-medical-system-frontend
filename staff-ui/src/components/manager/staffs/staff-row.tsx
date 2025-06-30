@@ -34,7 +34,6 @@ export function StaffRow({
 }) {
   return (
     <TableRow>
-      <TableCell>{staff.staffCode}</TableCell>
       <TableCell>{staff.fullName}</TableCell>
       <TableCell>{staff.email}</TableCell>
       <TableCell>

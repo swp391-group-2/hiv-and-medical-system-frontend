@@ -82,6 +82,7 @@ export interface PrescriptionItem {
   prescriptionItemId: number;
   dosage: string;
   frequency: string;
+  duration: string;
   medication: Medication;
 }
 
@@ -91,6 +92,7 @@ export interface Prescription {
   name: string;
   contraindication: string;
   sideEffect: string;
+  dosageForm: string;
   instructions: string;
   prescriptionDate: string; // YYYY-MM-DD
   prescriptionItems: PrescriptionItem[];
