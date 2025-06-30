@@ -17,13 +17,11 @@ import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctors/doctor-list";
 import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
-import { useNavigate } from "react-router-dom";
 import PaginationComponent from "@/components/pagination";
 import { useDoctorsCount, useDoctorsV2 } from "@/api/doctor";
 
 const ManagerDoctorsV2 = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);

@@ -9,15 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Plus, RotateCcw, Search, User } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/doctors/create-doctor-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
