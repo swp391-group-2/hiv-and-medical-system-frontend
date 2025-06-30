@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Calendar, Clock } from "lucide-react";
 import {
   fetchMyDoctorSchedule,
-  fetchMyDoctorScheduleDynamic,
+ 
 } from "@/api/doctorSchedule";
 import type { DoctorWorkScheduleList } from "@/types/schedule/doctorWorkSchedule";
 

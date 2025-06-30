@@ -125,31 +125,33 @@ export const fetchMyDoctorSchedule =
   async (): Promise<DoctorWorkScheduleList> => {
     const token = localStorage.getItem("accessToken");
 
-    if (!token) throw new Error("Không có token");
+    if (!token) {
+      console.error("Không có token");
+      return [];
+    }
 
     try {
-      // Sử dụng doctorId từ ví dụ hoặc có thể lấy từ profile
-      const doctorId = "3e4e2dcd-9ace-4708-9c71-d1c985f7df8d"; // Hardcode tạm thời để test
+      // Lấy thông tin doctor trước rồi gọi theo doctorId
+      console.log("Lấy thông tin doctor...");
+      const doctorInfo = await fetchCurrentDoctorInfo();
 
-      const response = await axios.get(
-        `${BASE_URL}doctors/${doctorId}/schedules`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      if (!doctorInfo) {
+        console.warn("Không lấy được thông tin bác sĩ");
+        return [];
+      }
 
-      const schedules = response.data?.data;
-      console.log("Lịch làm việc của tôi:", schedules);
+      const doctorId = doctorInfo?.doctorId || doctorInfo?.id;
 
-      if (!Array.isArray(schedules)) return [];
+      if (!doctorId) {
+        console.warn("Không tìm thấy doctorId từ thông tin bác sĩ");
+        return [];
+      }
 
-      // Trả về đúng cấu trúc từ API
-      return schedules;
+      console.log("Doctor ID được lấy:", doctorId);
+
+      return await fetchDoctorScheduleById(doctorId);
     } catch (error) {
       console.error("Lỗi khi lấy lịch làm việc của tôi:", error);
-      // Nếu lỗi, trả về mảng rỗng thay vì throw error
       return [];
     }
   };
@@ -158,37 +160,22 @@ export const fetchMyDoctorSchedule =
 export const fetchCurrentDoctorInfo = async () => {
   const token = localStorage.getItem("accessToken");
 
-  if (!token) throw new Error("Không có token");
+  if (!token) {
+    console.error("Không có token");
+    return null;
+  }
 
   try {
-    const response = await axios.get(`${BASE_URL}doctors/me`, {
+    const response = await axios.get(`${BASE_URL}doctors/myInfo`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
+    console.log("Thông tin doctor:", response.data?.data);
     return response.data?.data;
   } catch (error) {
     console.error("Lỗi khi lấy thông tin doctor:", error);
-    throw error;
+    return null;
   }
 };
-
-// Version động - lấy doctorId từ thông tin doctor
-export const fetchMyDoctorScheduleDynamic =
-  async (): Promise<DoctorWorkScheduleList> => {
-    try {
-      const doctorInfo = await fetchCurrentDoctorInfo();
-      const doctorId = doctorInfo?.id || doctorInfo?.doctorId;
-
-      if (!doctorId) {
-        console.warn("Không tìm thấy doctorId");
-        return [];
-      }
-
-      return await fetchDoctorScheduleById(doctorId);
-    } catch (error) {
-      console.error("Lỗi khi lấy lịch làm việc động:", error);
-      return [];
-    }
-  };
