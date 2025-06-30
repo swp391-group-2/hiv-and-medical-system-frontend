@@ -7,10 +7,12 @@ interface CommentItemProps {
 }
 
 export function CommentItem({ comment }: CommentItemProps) {
+  console.log(comment.doctorImageUrl);
   return (
     <div className="flex space-x-3">
       <Avatar className="h-8 w-8">
         <AvatarImage
+          className="object-cover"
           src={
             comment.doctorImageUrl
               ? comment.doctorImageUrl
