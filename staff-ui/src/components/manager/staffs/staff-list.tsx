@@ -30,7 +30,6 @@ export function StaffList({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Mã nhân viên</TableHead>
           <TableHead>Tên nhân viên</TableHead>
           <TableHead>Email</TableHead>
           <TableHead>Chức vụ</TableHead>
