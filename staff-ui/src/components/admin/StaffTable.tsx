@@ -37,7 +37,7 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Mã nhân viên</TableHead>
+            {/* <TableHead>Mã nhân viên</TableHead> */}
             <TableHead>Họ và tên</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Vai trò</TableHead>
@@ -55,9 +55,9 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
           ) : (
             staffs.map((staff: Staff) => (
               <TableRow key={staff.staffId}>
-                <TableCell className="font-medium">
+                {/* <TableCell className="font-medium">
                   {staff.staffCode}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>{staff.fullName}</TableCell>
                 <TableCell>{staff.email}</TableCell>
                 <TableCell>{staff.role}</TableCell>
