@@ -21,8 +21,11 @@ import {
 } from "@/components/ui/form";
 import { Send } from "lucide-react";
 import { z } from "zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { anonymousPostApi } from "@/apis/anonymousPost.api";
+import { toast } from "sonner";
 
-export const postSchema = z.object({
+const postSchema = z.object({
   nickName: z
     .string()
     .min(2, "Biệt danh phải có ít nhất 2 ký tự")
@@ -45,24 +48,39 @@ export const postSchema = z.object({
 });
 export type PostFormData = z.infer<typeof postSchema>;
 
-interface PostFormProps {
-  onSubmit: (post: PostFormData) => void;
-}
-
-export function PostForm({ onSubmit }: PostFormProps) {
+export function PostForm() {
   const form = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
     defaultValues: {
       nickName: "",
-      gender: undefined,
+      gender: "Khác",
       age: 18,
       title: "",
       content: "",
     },
   });
 
+  const queryClient = useQueryClient();
+  const { mutate } = useMutation({
+    mutationFn: async (value: PostFormData) => {
+      await anonymousPostApi.postAnonymousPost(value);
+    },
+    onSuccess: () => {
+      toast.success("Câu hỏi đã được gửi thành công!", {
+        description: "Cảm ơn bạn đã chia sẻ câu hỏi của mình.",
+      });
+      form.reset();
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error submitting post:", error);
+    },
+  });
+
   const handleSubmit = async (data: PostFormData) => {
-    onSubmit(data);
+    mutate(data);
     console.log("Submitting post:", data);
   };
 
@@ -74,7 +92,7 @@ export function PostForm({ onSubmit }: PostFormProps) {
       <CardContent>
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(handleSubmit)}
+            onSubmit={form.handleSubmit((value) => handleSubmit(value))}
             className="space-y-4"
           >
             <div className=" gap-4">
@@ -109,9 +127,9 @@ export function PostForm({ onSubmit }: PostFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="male">Nam</SelectItem>
-                        <SelectItem value="female">Nữ</SelectItem>
-                        <SelectItem value="other">Khác</SelectItem>
+                        <SelectItem value="Nam">Nam</SelectItem>
+                        <SelectItem value="Nữ">Nữ</SelectItem>
+                        <SelectItem value="Khác">Khác</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

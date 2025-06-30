@@ -73,9 +73,7 @@ function QAndA() {
           </div>
           <div className="col-span-5 ">
             <div className="sticky w-full top-20">
-              <PostForm
-                onSubmit={(data) => console.log("New post submitted:", data)}
-              />
+              <PostForm />
             </div>
           </div>
         </div>
