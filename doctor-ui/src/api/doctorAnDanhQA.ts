@@ -89,6 +89,7 @@ export const replyToAnonymousPost = async (
     anonymousPostId: parseInt(anonymousPostId),
     content: content,
     doctorId: doctorId,
+     // Assuming no image upload for now
   };
 
   console.log("=== FINAL REQUEST ===");

@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { blogAPI } from "@/api/blogAPI";
+import { blogAPI, type DoctorInfo } from "@/api/blogAPI";
 import type { CreateBlogRequest, BlogResponse } from "@/api/blogAPI";
 import { Loader2, Plus, Eye, Edit } from "lucide-react";
 import {
@@ -53,32 +53,106 @@ const BlogsPost = () => {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string>("");
 
-  // Lấy thông tin author từ localStorage hoặc token
-  useEffect(() => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      try {
-        const payload = JSON.parse(atob(token.split(".")[1]));
+  // State để lưu doctorId và doctor info
+  const [doctorId, setDoctorId] = useState<string>("");
+  const [doctorInfo, setDoctorInfo] = useState<DoctorInfo | null>(null);
 
-        // Thử các key có thể chứa tên bác sĩ
-        const doctorName =
-          payload.name ||
-          payload.doctorName ||
-          payload.fullName ||
-          payload.username ||
-          "Bác sĩ";
-        setFormData((prev) => ({ ...prev, author: doctorName }));
-      } catch {
-        setFormData((prev) => ({ ...prev, author: "Bác sĩ" }));
+  // Lấy thông tin bác sĩ từ API
+  useEffect(() => {
+    const loadDoctorInfo = async () => {
+      try {
+        const info = await blogAPI.getDoctorInfo();
+        console.log("Doctor info loaded:", info);
+        console.log("=== DOCTOR INFO DEBUG ===");
+        console.log("info.id (doctorId):", info.id);
+        console.log("info.userId:", info.userId);
+        console.log("info.fullName:", info.fullName);
+        console.log("========================");
+
+        setDoctorInfo(info);
+        // Ưu tiên lấy id (đã là doctorId) thay vì userId
+        setDoctorId(info.id || "");
+
+        // Console log doctorId sau khi set
+        console.log("DoctorId set to state:", info.id || "");
+
+        // Sử dụng fullName từ API làm tên tác giả
+        const authorName = info.fullName || info.email || "Bác sĩ";
+        setFormData((prev) => ({ ...prev, author: authorName }));
+
+        // Load blogs với doctorId (info.id chính là doctorId)
+        if (info.id) {
+          loadBlogs(info.id);
+        }
+      } catch (error) {
+        console.error("Error loading doctor info:", error);
+
+        // Fallback: thử lấy từ token như trước
+        const token = localStorage.getItem("accessToken");
+        if (token) {
+          try {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+            console.log("=== TOKEN PAYLOAD DEBUG ===");
+            console.log("Full payload:", payload);
+            console.log("payload.doctorId:", payload.doctorId);
+            console.log("payload.id:", payload.id);
+            console.log("payload.sub:", payload.sub);
+            console.log("payload.userId:", payload.userId);
+
+            // Lấy doctorId từ token (ưu tiên doctorId)
+            const doctorIdFromToken =
+              payload.doctorId || payload.id || payload.sub;
+            console.log("Selected doctorId:", doctorIdFromToken);
+            setDoctorId(doctorIdFromToken);
+
+            // Thử các key có thể chứa tên bác sĩ
+            const doctorName =
+              payload.name ||
+              payload.doctorName ||
+              payload.fullName ||
+              payload.username ||
+              "Bác sĩ";
+            setFormData((prev) => ({ ...prev, author: doctorName }));
+
+            // Load blogs với doctorId từ token
+            if (doctorIdFromToken) {
+              loadBlogs(doctorIdFromToken);
+            }
+          } catch (tokenError) {
+            console.error("Error parsing token:", tokenError);
+            setFormData((prev) => ({ ...prev, author: "Bác sĩ" }));
+            
+            loadBlogs();
+          }
+        }
       }
-    }
-    loadBlogs();
+    };
+
+    loadDoctorInfo();
+    
   }, []);
 
-  const loadBlogs = async () => {
+  const loadBlogs = async (doctorIdParam?: string) => {
     try {
       setIsLoadingBlogs(true);
+
+   
+      const currentDoctorId = doctorIdParam || doctorId;
+
+      console.log("=== LOAD BLOGS DEBUG ===");
+      console.log("doctorIdParam:", doctorIdParam);
+      console.log("doctorId from state:", doctorId);
+      console.log("currentDoctorId:", currentDoctorId);
+      console.log("========================");
+
+      if (currentDoctorId) {
+        console.log("Loading blogs for doctorId:", currentDoctorId);
+        // Nếu có doctorId, có thể implement logic filter sau này
+        // Hiện tại vẫn load tất cả blogs
+      }
+
       const blogsList = await blogAPI.getAllBlogs();
+      console.log("Loaded blogs:", blogsList);
 
       // Đảm bảo blogsList là array
       if (Array.isArray(blogsList)) {
@@ -86,7 +160,8 @@ const BlogsPost = () => {
       } else {
         setBlogs([]);
       }
-    } catch {
+    } catch (error) {
+      console.error("Error loading blogs:", error);
       toast.error("Không thể tải danh sách bài viết");
       setBlogs([]); // Set empty array in case of error
     } finally {
@@ -136,13 +211,21 @@ const BlogsPost = () => {
     try {
       setIsLoading(true);
 
+      console.log("=== BLOG SUBMIT DEBUG ===");
+      console.log("Current doctorId in state:", doctorId);
+      console.log("Form data being submitted:", formData);
+      console.log("========================");
+
       const blogData: CreateBlogRequest = {
         title: sanitizeTitle(formData.title),
         content: formData.content.trim(),
         snippet: formData.snippet.trim(),
         author: formData.author.trim(),
+        doctorId: doctorId, // Thêm doctorId từ state
         file: formData.selectedFile, // Gửi file trực tiếp
       };
+
+      console.log("Blog data with doctorId:", blogData);
 
       if (isEditMode && selectedBlog) {
         // Sử dụng blogId thay vì id
@@ -175,7 +258,8 @@ const BlogsPost = () => {
 
       // Delay một chút trước khi reload để đảm bảo API update hoàn tất
       setTimeout(async () => {
-        await loadBlogs();
+        console.log("Reloading blogs after submit with doctorId:", doctorId);
+        await loadBlogs(doctorId);
       }, 500);
     } catch (error) {
       const errorMessage = isEditMode
@@ -320,6 +404,12 @@ const BlogsPost = () => {
           <p className="text-gray-600 mt-2">
             Tạo và quản lý các bài viết chia sẻ kiến thức y tế
           </p>
+          {doctorInfo && (
+            <p className="text-sm text-gray-500 mt-1">
+              Đăng nhập với tư cách: {doctorInfo.fullName} (
+              {doctorInfo.specialization})
+            </p>
+          )}
         </div>
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
