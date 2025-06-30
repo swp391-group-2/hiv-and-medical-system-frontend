@@ -5,6 +5,8 @@ import {
   getAllDoctorAccounts,
   getAllStaffAccounts,
   getAllPatientAccounts,
+  getAllLabAccounts,
+  getAllManagerAccounts,
 } from "@/api/admin";
 import { type Doctor } from "@/types/doctor";
 import {
@@ -17,6 +19,10 @@ import {
   LoadingSpinner,
   ErrorMessage,
 } from "@/components/admin";
+import LabTable from "@/components/admin/lab-technicanManage/LabTable";
+import { AddLabDialog } from "@/components/admin/lab-technicanManage/AddLabDialog";
+import { AddManagerDialog } from "@/components/admin/managersManage/AddManagerDialog";
+import { ManagerTable } from "@/components/admin/managersManage/ManagerTable";
 
 const AdminAccounts = () => {
   const [activeTab, setActiveTab] = useState("doctor");
@@ -53,17 +59,37 @@ const AdminAccounts = () => {
     queryKey: ["patients"],
     queryFn: getAllPatientAccounts,
   });
-
+  const {
+    data: labs = [],
+    isLoading: isLabsLoading,
+    error: labsError,
+  } = useQuery({
+    queryKey: ["labs"],
+    queryFn: getAllLabAccounts,
+  });
+  const {
+    data: managers = [],
+    isLoading: isManagersLoading,
+    error: managersError,
+  } = useQuery({
+    queryKey: ["managers"],
+    queryFn: getAllManagerAccounts,
+  });
   const handleEditClick = (doctor: Doctor) => {
     setSelectedDoctor(doctor);
     setIsUpdateDialogOpen(true);
   };
+  // fetch all lab technicians
 
   const isLoading =
     activeTab === "doctor"
       ? isDoctorsLoading
       : activeTab === "staff"
       ? isStaffsLoading
+      : activeTab === "lab"
+      ? isLabsLoading
+      : activeTab === "manager"
+      ? isManagersLoading
       : isPatientsLoading;
 
   const error =
@@ -71,6 +97,10 @@ const AdminAccounts = () => {
       ? doctorsError
       : activeTab === "staff"
       ? staffsError
+      : activeTab === "lab"
+      ? labsError
+      : activeTab === "manager"
+      ? managersError
       : patientsError;
 
   if (isLoading) {
@@ -104,6 +134,18 @@ const AdminAccounts = () => {
             onOpenChange={setIsAddDialogOpen}
           />
         )}
+        {activeTab === "lab" && (
+          <AddLabDialog
+            isOpen={isAddDialogOpen}
+            onOpenChange={setIsAddDialogOpen}
+          />
+        )}
+        {activeTab === "manager" && (
+          <AddManagerDialog
+            isOpen={isAddDialogOpen}
+            onOpenChange={setIsAddDialogOpen}
+          />
+        )}
 
         {/* Update Doctor Dialog */}
         <UpdateDoctorDialog
@@ -115,10 +157,12 @@ const AdminAccounts = () => {
 
       {/* Tabs for different account types */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="doctor">Bác sĩ</TabsTrigger>
           <TabsTrigger value="staff">Nhân viên</TabsTrigger>
           <TabsTrigger value="patient">Bệnh nhân</TabsTrigger>
+          <TabsTrigger value="lab">Nhân viên phòng lab</TabsTrigger>
+          <TabsTrigger value="manager">Quản lý</TabsTrigger>
         </TabsList>
 
         {/* Doctor Tab */}
@@ -134,6 +178,13 @@ const AdminAccounts = () => {
         {/* Patient Tab */}
         <TabsContent value="patient">
           <PatientTable patients={patients} />
+        </TabsContent>
+        {/* Patient Tab */}
+        <TabsContent value="lab">
+          <LabTable labs={labs} />
+        </TabsContent>
+        <TabsContent value="manager">
+          <ManagerTable managers={managers} />
         </TabsContent>
       </Tabs>
     </div>

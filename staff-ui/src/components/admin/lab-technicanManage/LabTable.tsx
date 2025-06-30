@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -9,35 +7,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { ShieldX, ShieldCheck } from "lucide-react";
-import { type Staff } from "@/types/staff";
-import { DisableStaffDialog } from "./staffsManage/DisableStaffDialog";
-import { ActiveStaffDialog } from "./staffsManage/ActiveStaffDialog";
-
-interface StaffTableProps {
-  staffs: Staff[];
+import type { LabTechnician } from "@/types/lab-technicians";
+import { DisableLabDialog } from "./DisableLabDialog";
+import { ActiveLabDialog } from "./ActiveLabDialog";
+interface LabTableProps {
+  labs: LabTechnician[];
 }
 
-export const StaffTable = ({ staffs }: StaffTableProps) => {
+const LabTable = ({ labs }: LabTableProps) => {
   const [disableDialogOpen, setDisableDialogOpen] = useState(false);
   const [activeDialogOpen, setActiveDialogOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
-
-  const handleDisableClick = (staff: Staff) => {
-    setSelectedStaff(staff);
+  const [selectedLab, setSelectedLab] = useState<LabTechnician | null>(null);
+  const handleDisableClick = (lab: LabTechnician) => {
+    setSelectedLab(lab);
     setDisableDialogOpen(true);
   };
-
-  const handleActiveClick = (staff: Staff) => {
-    setSelectedStaff(staff);
+  const handleActiveClick = (lab: LabTechnician) => {
+    setSelectedLab(lab);
     setActiveDialogOpen(true);
   };
+
   return (
     <div className="border rounded-lg">
       <Table>
         <TableHeader>
           <TableRow>
-            {/* <TableHead>Mã nhân viên</TableHead> */}
             <TableHead>Họ và tên</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Vai trò</TableHead>
@@ -46,39 +43,33 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {staffs.length === 0 ? (
+          {labs.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center py-8">
+              <TableCell colSpan={5} className="text-center py-8">
                 Chưa có nhân viên nào trong hệ thống
               </TableCell>
             </TableRow>
           ) : (
-            staffs.map((staff: Staff) => (
-              <TableRow key={staff.staffId}>
-                {/* <TableCell className="font-medium">
-                  {staff.staffCode}
-                </TableCell> */}
-                <TableCell>{staff.fullName}</TableCell>
-                <TableCell>{staff.email}</TableCell>
-                <TableCell>{staff.role}</TableCell>
+            labs.map((lab: LabTechnician) => (
+              <TableRow key={lab.labTechnicianId}>
+                {/* <TableCell className="font-medium">{lab.labCode}</TableCell> */}
+                <TableCell>{lab.fullName}</TableCell>
+                <TableCell>{lab.email}</TableCell>
+                <TableCell>{lab.role}</TableCell>
                 <TableCell>
                   <Badge
-                    variant={
-                      staff.status === "ACTIVE" ? "default" : "secondary"
-                    }
+                    variant={lab.status === "ACTIVE" ? "default" : "secondary"}
                   >
-                    {staff.status === "ACTIVE"
-                      ? "Hoạt động"
-                      : "Không hoạt động"}
+                    {lab.status === "ACTIVE" ? "Hoạt động" : "Không hoạt động"}
                   </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    {staff.status === "ACTIVE" ? (
+                    {lab.status === "ACTIVE" ? (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleDisableClick(staff)}
+                        onClick={() => handleDisableClick(lab)}
                         className="text-red-600 hover:text-red-700"
                       >
                         <ShieldX className="h-4 w-4" />
@@ -87,7 +78,7 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleActiveClick(staff)}
+                        onClick={() => handleActiveClick(lab)}
                         className="text-green-600 hover:text-green-700"
                       >
                         <ShieldCheck className="h-4 w-4" />
@@ -102,18 +93,18 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
       </Table>
 
       {/* Disable Staff Dialog */}
-      {selectedStaff && (
-        <DisableStaffDialog
-          staff={selectedStaff}
+      {selectedLab && (
+        <DisableLabDialog
+          lab={selectedLab}
           isOpen={disableDialogOpen}
           onOpenChange={setDisableDialogOpen}
         />
       )}
 
       {/* Active Staff Dialog */}
-      {selectedStaff && (
-        <ActiveStaffDialog
-          staff={selectedStaff}
+      {selectedLab && (
+        <ActiveLabDialog
+          lab={selectedLab}
           isOpen={activeDialogOpen}
           onOpenChange={setActiveDialogOpen}
         />
@@ -121,3 +112,5 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
     </div>
   );
 };
+
+export default LabTable;

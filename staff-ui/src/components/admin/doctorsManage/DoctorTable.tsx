@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/table";
 import { Edit, ShieldX, ShieldCheck } from "lucide-react";
 import { type Doctor } from "@/types/doctor";
-import { DeleteDoctorDialog } from "./doctorsManage/DisableDoctorDialog";
-import { ActiveDoctorDialog } from "./doctorsManage/ActiveDoctorDialog";
-import { options } from "../manager/specialization-select";
+import { DeleteDoctorDialog } from "./DisableDoctorDialog";
+import { ActiveDoctorDialog } from "./ActiveDoctorDialog";
 
 interface DoctorTableProps {
   doctors: Doctor[];
@@ -40,7 +39,7 @@ export const DoctorTable = ({ doctors, onEditClick }: DoctorTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            {/* <TableHead>Mã bác sĩ</TableHead> */}
+            <TableHead>Mã bác sĩ</TableHead>
             <TableHead>Họ và tên</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Chuyên khoa</TableHead>
@@ -59,18 +58,12 @@ export const DoctorTable = ({ doctors, onEditClick }: DoctorTableProps) => {
           ) : (
             doctors.map((doctor: Doctor) => (
               <TableRow key={doctor.doctorId}>
-                {/* <TableCell className="font-medium">
+                <TableCell className="font-medium">
                   {doctor.doctorCode}
-                </TableCell> */}
+                </TableCell>
                 <TableCell>{doctor.fullName}</TableCell>
                 <TableCell>{doctor.email}</TableCell>
-                <TableCell>
-                  {
-                    options.find(
-                      (option) => option.id === doctor.specialization
-                    )?.name
-                  }
-                </TableCell>
+                <TableCell>{doctor.specialization}</TableCell>
                 <TableCell>{doctor.licenseNumber}</TableCell>
                 <TableCell>
                   <Badge

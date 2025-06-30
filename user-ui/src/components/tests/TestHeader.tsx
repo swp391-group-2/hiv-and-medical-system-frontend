@@ -17,20 +17,20 @@ interface TestHeaderProps {
   notes: string[];
 }
 
-const TestHeader: React.FC<TestHeaderProps> = ({
+const TestHeader = ({
   title,
   price,
   image,
   resultTime,
   notes,
-}) => {
+}: TestHeaderProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const handleClick = () => {
     navigate(buildRoute.bookingService(location.pathname.split("/")[1]));
   };
   return (
-    <div className="flex flex-col md:flex-row gap-8 bg-primary/40 rounded-2xl p-8 mb-6">
+    <div className="flex flex-col md:flex-row gap-8 bg-gradient-to-br from-primary to-sky-200 rounded-2xl p-8 mb-6">
       <div className="flex flex-col items-center justify-center w-full md:w-1/3 space-y-6">
         <div className="relative group overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 to-white p-1 shadow-2xl">
           <div className="relative overflow-hidden rounded-3xl bg-white">
@@ -65,11 +65,10 @@ const TestHeader: React.FC<TestHeaderProps> = ({
               />
             </svg>
           </span>
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
         </Button>
       </div>
       <div className="flex-1 flex flex-col justify-start items-start space-y-6">
-        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r text-sky-700 mb-6">
+        <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r text-gray-900 mb-6">
           {title}
         </h1>
         <ul className="space-y-4 text-base w-full">
@@ -97,7 +96,7 @@ const TestHeader: React.FC<TestHeaderProps> = ({
             </span>
             <span className="text-gray-700 font-medium">
               Giá Chỉ:{" "}
-              <span className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="text-2xl font-bold  text-emerald-600 ">
                 {price}
               </span>
             </span>

@@ -25,13 +25,14 @@ const DoctorCard = ({
     navigation(buildRoute.bookingConsultationDoctor(doctorId));
   };
   return (
-    <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md shadow-primary/40 ">
-      <CardContent className="p-4">
-        <div className="flex justify-center mb-3 ">
+    <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md  ">
+      <CardContent className="">
+        <div className="flex justify-center ">
           <div className="relative w-full">
             <div className="w-full h-50 rounded-lg overflow-hidden bg-gray-100">
               {urlImage ? (
                 <img
+                  loading="lazy"
                   src={urlImage}
                   alt={fullName}
                   className="w-full h-full object-cover"
@@ -48,14 +49,12 @@ const DoctorCard = ({
           </div>
         </div>
 
-        {/* Name */}
         <h3 className="font-bold text-md  mb-1 text-gray-800 group-hover:text-primary transition-colors">
           Dr. {fullName}
         </h3>
 
         <p className="text-sm text-gray-600 mb-2">{email}</p>
 
-        {/* Rating */}
         <div className="flex items-center  mb-4">
           <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
@@ -64,15 +63,12 @@ const DoctorCard = ({
           </div>
         </div>
 
-        {/* Additional Info */}
         <div className="space-y-2 mb-6">
           <div className="flex items-center text-sm text-gray-600">
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
             <span>8:00 - 17:00</span>
           </div>
         </div>
-
-        {/* Booking Button */}
 
         <Button
           onClick={() => handleBooking(doctorId)}

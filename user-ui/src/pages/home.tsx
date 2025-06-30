@@ -27,7 +27,7 @@ function Home() {
       <div className="p-10 ">
         <HomeEducation />
       </div>
-      <div className="p-10 ">
+      <div className="p-10 bg-gray-100">
         <HomeDoctors />
       </div>
     </div>

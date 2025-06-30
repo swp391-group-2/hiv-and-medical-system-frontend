@@ -44,6 +44,7 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
 }) => {
   const [items, setItems] = useState<ItemWithPills[]>([]);
   const [note, setNote] = useState<string>(prescription?.note || "");
+  const [reExamDays, setReExamDays] = useState<string>("28"); // Mặc định 28 ngày
 
   useEffect(() => {
     if (open && prescription) {
@@ -98,11 +99,40 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
         ...item,
         dosage: `${item.pillsPerDose || 1} viên (${item.dosage})`,
       }));
+
+      // Tạo thông tin tái khám dựa trên số ngày được chọn
+      const getReExamText = (days: string) => {
+        switch (days) {
+          case "7":
+            return "7 ngày (1 tuần)";
+          case "14":
+            return "14 ngày (2 tuần)";
+          case "28":
+            return "28 ngày (1 tháng)";
+          case "56":
+            return "56 ngày (2 tháng)";
+          case "84":
+            return "84 ngày (3 tháng)";
+          case "112":
+            return "112 ngày (4 tháng)";
+          case "168":
+            return "168 ngày (6 tháng)";
+          default:
+            return `${days} ngày`;
+        }
+      };
+
+      // Tạo finalNote với chuỗi tái khám ở đầu, lưu ý ở dòng dưới
+      const reExamText = `Tái khám sau ${getReExamText(reExamDays)}.`;
+      const finalNote = note.trim()
+        ? `${reExamText}\n${note.trim()}`
+        : reExamText;
+
       await updatePrescriptionItem(
         appointmentId,
         prescription.prescriptionId,
         itemsToSave,
-        note
+        finalNote
       );
       alert("Cập nhật thuốc thành công!");
       onOpenChange(false);
@@ -196,7 +226,7 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-600 mb-1">
-                   Tổng số lượng (viên thuốc)
+                    Tổng số lượng (viên thuốc)
                   </label>
                   <input
                     type="number"
@@ -214,6 +244,27 @@ const UpdatePrescriptionItemsModal: React.FC<Props> = ({
             Không có thuốc trong phác đồ.
           </div>
         )}
+
+        {/* Select số ngày tái khám */}
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Số ngày tái khám
+          </label>
+          <select
+            name="soNgayTaiKham"
+            value={reExamDays}
+            onChange={(e) => setReExamDays(e.target.value)}
+            className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring focus:ring-blue-200"
+          >
+            <option value="7">7 ngày (1 tuần)</option>
+            <option value="14">14 ngày (2 tuần)</option>
+            <option value="28">28 ngày (1 tháng)</option>
+            <option value="56">56 ngày (2 tháng)</option>
+            <option value="84">84 ngày (3 tháng)</option>
+            <option value="112">112 ngày (4 tháng)</option>
+            <option value="168">168 ngày (6 tháng)</option>
+          </select>
+        </div>
 
         {/* Thêm ô nhập lưu ý */}
         <div>

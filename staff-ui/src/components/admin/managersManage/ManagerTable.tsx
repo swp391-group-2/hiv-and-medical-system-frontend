@@ -10,26 +10,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ShieldX, ShieldCheck } from "lucide-react";
-import { type Staff } from "@/types/staff";
-import { DisableStaffDialog } from "./staffsManage/DisableStaffDialog";
-import { ActiveStaffDialog } from "./staffsManage/ActiveStaffDialog";
 
-interface StaffTableProps {
-  staffs: Staff[];
+import type { Manager } from "@/types/manager";
+import { ActiveManagerDialog } from "./ActiveManagerDialog";
+import { DisableManagerDialog } from "./DisableManagerDialog";
+
+interface ManagerTableProps {
+  managers: Manager[];
 }
 
-export const StaffTable = ({ staffs }: StaffTableProps) => {
+export const ManagerTable = ({ managers }: ManagerTableProps) => {
   const [disableDialogOpen, setDisableDialogOpen] = useState(false);
   const [activeDialogOpen, setActiveDialogOpen] = useState(false);
-  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+  const [selectedManager, setSelectedManager] = useState<Manager | null>(null);
 
-  const handleDisableClick = (staff: Staff) => {
-    setSelectedStaff(staff);
+  const handleDisableClick = (manager: Manager) => {
+    setSelectedManager(manager);
     setDisableDialogOpen(true);
   };
 
-  const handleActiveClick = (staff: Staff) => {
-    setSelectedStaff(staff);
+  const handleActiveClick = (manager: Manager) => {
+    setSelectedManager(manager);
     setActiveDialogOpen(true);
   };
   return (
@@ -37,7 +38,7 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            {/* <TableHead>Mã nhân viên</TableHead> */}
+            <TableHead>Mã nhân viên</TableHead>
             <TableHead>Họ và tên</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Vai trò</TableHead>
@@ -46,39 +47,39 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {staffs.length === 0 ? (
+          {managers.length === 0 ? (
             <TableRow>
               <TableCell colSpan={6} className="text-center py-8">
                 Chưa có nhân viên nào trong hệ thống
               </TableCell>
             </TableRow>
           ) : (
-            staffs.map((staff: Staff) => (
-              <TableRow key={staff.staffId}>
-                {/* <TableCell className="font-medium">
-                  {staff.staffCode}
-                </TableCell> */}
-                <TableCell>{staff.fullName}</TableCell>
-                <TableCell>{staff.email}</TableCell>
-                <TableCell>{staff.role}</TableCell>
+            managers.map((manager: Manager) => (
+              <TableRow key={manager.managerId}>
+                <TableCell className="font-medium">
+                  {manager.managerCode}
+                </TableCell>
+                <TableCell>{manager.fullName}</TableCell>
+                <TableCell>{manager.email}</TableCell>
+                <TableCell>{manager.role}</TableCell>
                 <TableCell>
                   <Badge
                     variant={
-                      staff.status === "ACTIVE" ? "default" : "secondary"
+                      manager.status === "ACTIVE" ? "default" : "secondary"
                     }
                   >
-                    {staff.status === "ACTIVE"
+                    {manager.status === "ACTIVE"
                       ? "Hoạt động"
                       : "Không hoạt động"}
                   </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
-                    {staff.status === "ACTIVE" ? (
+                    {manager.status === "ACTIVE" ? (
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleDisableClick(staff)}
+                        onClick={() => handleDisableClick(manager)}
                         className="text-red-600 hover:text-red-700"
                       >
                         <ShieldX className="h-4 w-4" />
@@ -87,7 +88,7 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => handleActiveClick(staff)}
+                        onClick={() => handleActiveClick(manager)}
                         className="text-green-600 hover:text-green-700"
                       >
                         <ShieldCheck className="h-4 w-4" />
@@ -102,18 +103,18 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
       </Table>
 
       {/* Disable Staff Dialog */}
-      {selectedStaff && (
-        <DisableStaffDialog
-          staff={selectedStaff}
+      {selectedManager && (
+        <DisableManagerDialog
+          manager={selectedManager}
           isOpen={disableDialogOpen}
           onOpenChange={setDisableDialogOpen}
         />
       )}
 
       {/* Active Staff Dialog */}
-      {selectedStaff && (
-        <ActiveStaffDialog
-          staff={selectedStaff}
+      {selectedManager && (
+        <ActiveManagerDialog
+          manager={selectedManager}
           isOpen={activeDialogOpen}
           onOpenChange={setActiveDialogOpen}
         />
