@@ -5,8 +5,9 @@ import { MessageCircle, Share2 } from "lucide-react";
 
 import type { AnonymousPost } from "@/types/anonymousPost.type";
 import { CommentList } from "./comment-list";
+import { getTimeAgo } from "@/utils/utils";
 
-interface PostCardProps {
+export interface PostCardProps {
   post: AnonymousPost;
   showComments: boolean;
   onToggleComments: (postId: string) => void;
@@ -23,21 +24,6 @@ export function PostCard({
       .map((n) => n[0])
       .join("")
       .toUpperCase();
-  };
-
-  const getTimeAgo = (createdAt: Date) => {
-    const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - createdAt.getTime()) / (1000 * 60 * 60)
-    );
-
-    if (diffInHours < 1) return "Just now";
-    if (diffInHours === 1) return "1 hour ago";
-    if (diffInHours < 24) return `${diffInHours} hours ago`;
-
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays === 1) return "1 day ago";
-    return `${diffInDays} days ago`;
   };
 
   return (

@@ -1,4 +1,5 @@
 export interface Comment {
+  doctorImageUrl: string;
   commentId: number;
   anonymousPostId: number;
   doctorId: string;

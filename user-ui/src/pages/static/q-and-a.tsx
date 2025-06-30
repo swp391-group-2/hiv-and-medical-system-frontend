@@ -33,8 +33,10 @@ function QAndA() {
       <div className="text-center py-8 text-red-500">Lỗi khi tải dữ liệu</div>
     );
   }
-  if (!posts?.data || posts.data.length === 0) {
-    return <div className="text-center py-8">Không có câu hỏi nào.</div>;
+  if (!posts) {
+    return (
+      <div className="text-center py-8">Không có câu hỏi nào được tìm thấy</div>
+    );
   }
 
   return (
@@ -59,16 +61,45 @@ function QAndA() {
         <div className="grid grid-cols-12 gap-8 ">
           <div className="max-w-3xl w-full col-span-7  space-y-6">
             <div className="space-y-4 ">
-              {posts.data.map((post) => (
-                <PostCard
-                  key={post.anonymousPostId}
-                  post={post}
-                  showComments={
-                    showComments["" + post.anonymousPostId] || false
-                  }
-                  onToggleComments={handleToggleComments}
-                />
-              ))}
+              {posts.data.length > 0 ? (
+                posts.data.map((post) => (
+                  <PostCard
+                    key={post.anonymousPostId}
+                    post={post}
+                    showComments={
+                      showComments["" + post.anonymousPostId] || false
+                    }
+                    onToggleComments={handleToggleComments}
+                  />
+                ))
+              ) : (
+                <div className="text-center py-16">
+                  <div className="bg-gray-50 rounded-lg p-8 border border-gray-200">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-8 h-8 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                      Chưa có câu hỏi nào
+                    </h3>
+                    <p className="text-gray-500 mb-6">
+                      Hãy là người đầu tiên đặt câu hỏi và bắt đầu cuộc thảo
+                      luận!
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="col-span-5 ">

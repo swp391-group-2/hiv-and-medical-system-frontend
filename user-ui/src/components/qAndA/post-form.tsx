@@ -75,7 +75,10 @@ export function PostForm() {
       });
     },
     onError: (error) => {
-      console.error("Error submitting post:", error);
+      toast.error("Đã xảy ra lỗi khi gửi câu hỏi", {
+        description:
+          error instanceof Error ? error.message : "Vui lòng thử lại sau.",
+      });
     },
   });
 

@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { Comment } from "@/types/anonymousPost.type";
+import { getTimeAgo } from "@/utils/utils";
 
 interface CommentItemProps {
   comment: Comment;
@@ -9,7 +10,13 @@ export function CommentItem({ comment }: CommentItemProps) {
   return (
     <div className="flex space-x-3">
       <Avatar className="h-8 w-8">
-        <AvatarImage src={`/placeholder.svg?height=32&width=32`} />
+        <AvatarImage
+          src={
+            comment.doctorImageUrl
+              ? comment.doctorImageUrl
+              : "/placeholder.svg?height=32&width=32"
+          }
+        />
         <AvatarFallback className="text-xs">
           {comment.doctorId
             .split(" ")
@@ -24,7 +31,7 @@ export function CommentItem({ comment }: CommentItemProps) {
               {"Dr. " + "Nguyễn Hoài Phương"}
             </span>
             <span className="text-xs text-muted-foreground">
-              {comment.createdAt}
+              {getTimeAgo(new Date(comment.createdAt))}
             </span>
           </div>
           <p className="text-sm">{comment.content}</p>
