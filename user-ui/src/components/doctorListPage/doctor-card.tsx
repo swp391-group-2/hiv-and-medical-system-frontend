@@ -49,14 +49,12 @@ const DoctorCard = ({
           </div>
         </div>
 
-        {/* Name */}
         <h3 className="font-bold text-md  mb-1 text-gray-800 group-hover:text-primary transition-colors">
           Dr. {fullName}
         </h3>
 
         <p className="text-sm text-gray-600 mb-2">{email}</p>
 
-        {/* Rating */}
         <div className="flex items-center  mb-4">
           <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
             <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
@@ -65,15 +63,12 @@ const DoctorCard = ({
           </div>
         </div>
 
-        {/* Additional Info */}
         <div className="space-y-2 mb-6">
           <div className="flex items-center text-sm text-gray-600">
             <Clock className="w-4 h-4 mr-2 text-gray-400" />
             <span>8:00 - 17:00</span>
           </div>
         </div>
-
-        {/* Booking Button */}
 
         <Button
           onClick={() => handleBooking(doctorId)}

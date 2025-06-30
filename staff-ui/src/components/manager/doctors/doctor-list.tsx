@@ -25,7 +25,7 @@ export function DoctorList({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Mã bác sĩ</TableHead>
+          {/* <TableHead>Mã bác sĩ</TableHead> */}
           <TableHead>Tên bác sĩ</TableHead>
           <TableHead>Email</TableHead>
           <TableHead>Chuyên khoa</TableHead>

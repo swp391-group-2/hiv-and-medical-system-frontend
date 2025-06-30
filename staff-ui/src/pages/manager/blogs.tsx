@@ -60,21 +60,6 @@ const ManagerBlogs = () => {
             ))
           )}
         </section>
-
-        <div className="mt-auto flex justify-center">
-          <Button className="cursor-pointer px-4 py-2 mx-1 border rounded-md text-gray-700 bg-white hover:bg-gray-200">
-            Trước
-          </Button>
-          <Button className="cursor-pointer px-4 py-2 mx-1 border rounded-md bg-blue-500 hover:bg-blue-600 text-white">
-            1
-          </Button>
-          <Button className="cursor-pointer px-4 py-2 mx-1 border rounded-md text-gray-700 bg-white hover:bg-gray-200">
-            2
-          </Button>
-          <Button className="cursor-pointer px-4 py-2 mx-1 border rounded-md text-gray-700 bg-white hover:bg-gray-200">
-            Sau
-          </Button>
-        </div>
       </div>
     </div>
   );
