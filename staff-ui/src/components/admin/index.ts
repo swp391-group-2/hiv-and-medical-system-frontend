@@ -1,0 +1,12 @@
+export { AddDoctorDialog } from "./doctorsManage/AddDoctorDialog";
+export { AddStaffDialog } from "./staffsManage/AddStaffDialog";
+export { UpdateDoctorDialog } from "./doctorsManage/UpdateDoctorDialog";
+export { DeleteDoctorDialog } from "./doctorsManage/DisableDoctorDialog";
+export { ActiveDoctorDialog } from "./doctorsManage/ActiveDoctorDialog";
+export { DisableStaffDialog } from "./staffsManage/DisableStaffDialog";
+export { ActiveStaffDialog } from "./staffsManage/ActiveStaffDialog";
+export { DoctorTable } from "./doctorsManage/DoctorTable";
+export { StaffTable } from "./staffsManage/StaffTable";
+export { PatientTable } from "./patientsManage/PatientTable";
+export { LoadingSpinner } from "./LoadingSpinner";
+export { ErrorMessage } from "./ErrorMessage";

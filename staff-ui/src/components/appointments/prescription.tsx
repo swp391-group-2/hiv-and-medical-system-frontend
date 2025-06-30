@@ -13,7 +13,7 @@ const Prescription = ({ appt }: { appt: Appointment }) => {
     appt.patientPrescription !== null &&
     appt.patientPrescription !== undefined
   ) {
-    const { data: defaultPrescription, error } = usePrescription(
+    const { data: defaultPrescription } = usePrescription(
       appt.patientPrescription.prescriptionDefaultId
     );
     return (

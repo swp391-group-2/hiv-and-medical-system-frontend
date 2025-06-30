@@ -92,7 +92,7 @@ export const LoginForm = () => {
             <div className="flex justify-center mb-2">
               <Logo />
             </div>
-            <h1 className=" text-4xl font-bold text-gray-900">Đăng nhập dành cho bác sĩ</h1>
+            <h1 className=" text-4xl font-bold text-gray-900">Đăng nhập</h1>
           </div>
 
           <Form {...form}>

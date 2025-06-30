@@ -87,8 +87,6 @@ const StaffSidebar = () => {
               <p className="text-xs text-gray-500 capitalize">{user?.role}</p>
             </div>
           </div>
-
-          {/* Logout button stays the same, just add a bit of top margin */}
           <LogoutBtn
             handleLogout={handleLogout}
             className="mt-4 cursor-pointer"

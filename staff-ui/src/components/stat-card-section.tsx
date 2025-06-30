@@ -1,5 +1,5 @@
+import { useFeaturedStats } from "@/api/stats";
 import { Card, CardContent } from "@/components/ui/card";
-import type { StatCardStaticProps } from "@/types/stats";
 import {
   Calendar,
   TrendingUp,
@@ -7,38 +7,29 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
+import { LoadingOverlay } from "./loading-overlay";
+import { toast } from "sonner";
+import { formatDMY } from "@/lib/utils";
 
-const stats = [
-  {
-    title: "Tổng khách hàng",
-    value: "1.234",
-    change: "+5%",
-    isGrowing: true,
-  },
-  {
-    title: "Bác sĩ hoạt động",
-    value: "56",
-    change: "-3%",
-    isGrowing: false,
-  },
-  {
-    title: "Lịch hẹn hôm nay",
-    value: "32",
-    change: "+12%",
-    isGrowing: true,
-  },
-  {
-    title: "Doanh thu tháng",
-    value: "₫120.500.000",
-    change: "+8%",
-    isGrowing: true,
-  },
-] as StatCardStaticProps[];
+export const StatCardsSection = () => {
+  const milestone = "2025-06-01";
 
-export function StatCardsSection() {
+  const {
+    data: featuredStats = [],
+    isLoading,
+    isError,
+    error,
+  } = useFeaturedStats(milestone);
+
+  if (isLoading) return <LoadingOverlay message="Đang tải số liệu..." />;
+
+  if (isError) {
+    console.log(error.message);
+    toast.error("Đã xảy ra lỗi, vui lòng thử lại sau.");
+  }
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((item) => {
+      {featuredStats.map((item) => {
         switch (item.title) {
           case "Tổng khách hàng":
             return (
@@ -53,6 +44,9 @@ export function StatCardsSection() {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     <Users className="h-8 w-8 text-blue-600" />
                   </div>
@@ -72,25 +66,31 @@ export function StatCardsSection() {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     <UserCheck className="h-8 w-8 text-green-600" />
                   </div>
                 </CardContent>
               </Card>
             );
-          case "Lịch hẹn hôm nay":
+          case "Tổng lịch hẹn":
             return (
               <Card key="Lịch hẹn hôm nay">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm font-medium text-gray-600">
-                        Lịch hẹn hôm nay
+                        Tổng lịch hẹn
                       </p>
                       <p className="text-2xl font-bold text-gray-900">
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     <Calendar className="h-8 w-8 text-purple-600" />
                   </div>
@@ -110,8 +110,11 @@ export function StatCardsSection() {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
-                    {item.isGrowing ? (
+                    {item.growing ? (
                       <TrendingUp className="h-8 w-8 text-orange-600" />
                     ) : (
                       <TrendingDown className="h-8 w-8 text-orange-600" />
@@ -126,4 +129,4 @@ export function StatCardsSection() {
       })}
     </div>
   );
-}
+};

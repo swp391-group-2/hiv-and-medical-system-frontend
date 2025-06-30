@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import type { Appointment } from "@/types/types";
 import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const ConfirmResult = ({ appt }: { appt: Appointment }) => {
   const queryClient = useQueryClient();
@@ -63,7 +64,14 @@ const ConfirmResult = ({ appt }: { appt: Appointment }) => {
               className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
               onClick={handleReject}
             >
-              Từ chối kết quả
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử
+                  lý...
+                </>
+              ) : (
+                "Từ chối kết quả"
+              )}
             </Button>
             <Button
               variant="outline"
@@ -71,7 +79,14 @@ const ConfirmResult = ({ appt }: { appt: Appointment }) => {
               className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
               onClick={handleAccept}
             >
-              Xác nhận kết quả
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang xử
+                  lý...
+                </>
+              ) : (
+                "Xác nhận kết quả"
+              )}
             </Button>
           </div>
         )
@@ -79,7 +94,7 @@ const ConfirmResult = ({ appt }: { appt: Appointment }) => {
         <Button
           variant="outline"
           disabled
-          className="bg-green-500 hover:bg-green-600 text-white cursor-pointer"
+          className="bg-green-500 hover:bg-green-600 text-white"
         >
           Đã nhận kết quả
         </Button>

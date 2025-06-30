@@ -8,7 +8,7 @@ import {
   AppointmentFilters,
   type Filters,
 } from "@/components/appointments/appointment-filters";
-import { LoadingOverlay } from "@/components/loading-overlay";
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ const FinishedAppointments = () => {
     data: appointments = [],
     isLoading,
     isError,
+    isFetching,
     error,
   } = useAppointments();
 
@@ -113,7 +114,11 @@ const FinishedAppointments = () => {
           </Button>
         </div>
         <TabsContent value="list">
-          <AppointmentTable data={filtered} />
+          {isFetching ? (
+            <InternalLoading message="Đang tải lại danh sách" />
+          ) : (
+            <AppointmentTable data={filtered} />
+          )}
         </TabsContent>
       </Tabs>
     </section>

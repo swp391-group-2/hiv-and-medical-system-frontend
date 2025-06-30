@@ -22,26 +22,26 @@ interface AppointmentsListProps {
 
 export const AppointmentLabels = () => {
   return (
-    <div className="w-full grid grid-cols-10 mt-6 mb-4 px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-      <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
+    <div className="w-full grid  gap-4 mb-6 px-6 py-4 rounded-2xl  shadow-lg  grid-cols-10 mt-6   border  ">
+      <span className="font-bold col-span-1 text-gray-800 text-sm uppercase tracking-wide">
         Mã số
       </span>
-      <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
+      <span className="font-bold col-span-2 text-gray-800 text-sm uppercase tracking-wide">
         Bác sĩ phụ trách
       </span>
-      <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase tracking-wide">
+      <span className="font-bold col-span-2 text-gray-800 text-sm uppercase tracking-wide">
         Loại dịch vụ
       </span>
-      <span className="font-semibold col-span-1 text-gray-700 text-sm uppercase tracking-wide">
+      <span className="font-bold col-span-1 text-gray-800 text-sm uppercase tracking-wide">
         Ngày khám
       </span>
-      <span className="font-semibold col-span-1 text-gray-700 text-center text-sm uppercase tracking-wide">
+      <span className="font-bold col-span-1 text-gray-800 text-center text-sm uppercase tracking-wide">
         Giờ khám
       </span>
-      <span className="font-semibold col-span-1 text-center text-gray-700 text-sm uppercase tracking-wide">
+      <span className="font-bold col-span-1 text-center text-gray-800 text-sm uppercase tracking-wide">
         Trạng Thái
       </span>
-      <span className="font-semibold col-span-2 text-gray-700 text-sm uppercase text-center tracking-wide">
+      <span className="font-bold col-span-2 text-gray-800 text-sm uppercase text-center tracking-wide">
         Thao Tác
       </span>
     </div>

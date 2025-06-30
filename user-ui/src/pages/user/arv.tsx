@@ -13,15 +13,13 @@ import type {
   Prescription,
   PrescriptionsResponse,
 } from "@/types/prescriptions.type";
-import { useProfileStore } from "@/stores/profile.store";
 
 const Arv = () => {
-  const userProfile = useProfileStore((state) => state.profile);
   const { data: prescription, isLoading } = useQuery<PrescriptionsResponse>({
     queryKey: ["prescription"],
     queryFn: () => {
       const response = userApi
-        .getPatientPrescriptions(userProfile.patientId)
+        .getPatientPrescriptions()
         .then((res) => res.data);
       return response;
     },

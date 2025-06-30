@@ -11,18 +11,14 @@ import AppointmentsTabs from "@/components/user/appointments/appointments-tabs";
 import { useQuery } from "@tanstack/react-query";
 import userApi from "@/apis/user.api";
 import { type AppointmentApiResponse } from "@/types/appointment.type";
-import { useProfileStore } from "@/stores/profile.store";
 
 const Appointments = () => {
-  const userProfile = useProfileStore((state) => state.profile);
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   const { data, isLoading } = useQuery<AppointmentApiResponse>({
     queryKey: ["appointments"],
     queryFn: async () => {
-      const response = await userApi.getPatientAppointments(
-        userProfile.patientId
-      );
+      const response = await userApi.getPatientAppointments();
       return response.data;
     },
   });

@@ -33,9 +33,6 @@ function DoctorList() {
     return <div>{error.message}</div>;
   }
 
-  const selectDoctor = (doctorId: string) => {
-    return doctors?.find((doctor) => doctor.doctorId === doctorId);
-  };
   return (
     <div>
       {" "}
@@ -45,9 +42,8 @@ function DoctorList() {
             key={doctor.doctorId}
             doctorId={doctor.doctorId}
             fullName={doctor.fullName}
-            image={doctor.urlImage}
+            urlImage={doctor.urlImage}
             email={doctor.email}
-            selectDoctor={selectDoctor}
           />
         ))}
       </div>
