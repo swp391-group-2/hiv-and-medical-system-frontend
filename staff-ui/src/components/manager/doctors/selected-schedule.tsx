@@ -210,13 +210,14 @@ export const SelectedSchedule = ({
             Huỷ
           </Button>
         ) : (
-          <Button
-            variant="outline"
-            className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white mr-2"
-          >
-            <Pencil className="mr-2 h-4 w-4" />
-            Sửa
-          </Button>
+          ""
+          //   <Button
+          //     variant="outline"
+          //     className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white mr-2"
+          //   >
+          //     <Pencil className="mr-2 h-4 w-4" />
+          //     Sửa
+          //   </Button>
         )}
 
         {onEdit ? (

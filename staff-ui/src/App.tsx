@@ -14,7 +14,7 @@ import { Toaster } from "sonner";
 import ManagerSidebar from "./components/manager/manager-sidebar";
 import ManagerDashboard from "./pages/manager/dashboard";
 import ManagerARV from "./pages/manager/arv";
-import ManagerDoctors from "./pages/manager/doctors";
+// import ManagerDoctors from "./pages/manager/doctors";
 import ManagerStaffs from "./pages/manager/staffs";
 import { useAuthStore } from "./stores/auth.store";
 import { useEffect } from "react";
@@ -26,6 +26,7 @@ import ManagerBlogs from "./pages/manager/blogs";
 import BlogPost from "./pages/manager/blog-post";
 import BlogCreate from "./pages/manager/blog-create";
 import AdminAccounts from "./pages/admin/accounts";
+import ManagerDoctorsV2 from "./pages/manager/doctors-v2";
 
 const queryClient = new QueryClient();
 
@@ -52,7 +53,7 @@ function App() {
           <Route path="manager" element={<ManagerSidebar />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<ManagerDashboard />} />
-            <Route path="doctors" element={<ManagerDoctors />} />
+            <Route path="doctors" element={<ManagerDoctorsV2 />} />
             <Route path="staffs" element={<ManagerStaffs />} />
             <Route path="arv" element={<ManagerARV />} />
             <Route path="blogs">

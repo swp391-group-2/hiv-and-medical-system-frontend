@@ -63,7 +63,7 @@ export function DoctorRow({
   };
   return (
     <TableRow>
-      <TableCell>{doctor.doctorCode}</TableCell>
+      {/* <TableCell>{doctor.doctorId}</TableCell> */}
       <TableCell>{doctor.fullName}</TableCell>
       <TableCell>{doctor.email}</TableCell>
       <TableCell>

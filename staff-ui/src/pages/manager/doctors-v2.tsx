@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,15 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Plus, RotateCcw, Search, User } from "lucide-react";
 import { CreateDoctorForm } from "@/components/manager/doctors/create-doctor-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -25,20 +16,34 @@ import http from "@/api/http";
 import { toast } from "sonner";
 import type { AxiosError } from "axios";
 import { DoctorList } from "@/components/manager/doctors/doctor-list";
-import { useDoctors, useDoctorsCount } from "@/api/doctor";
 import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 import { useNavigate } from "react-router-dom";
+import PaginationComponent from "@/components/pagination";
+import { useDoctorsCount, useDoctorsV2 } from "@/api/doctor";
 
-const ManagerDoctors = () => {
+const ManagerDoctorsV2 = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { data: doctors, isLoading, isFetching } = useDoctors(); // get doctor list: default (page = 0, size = 13)
+
   const [search, setSearch] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const {
+    data: doctorsData = [], // Renamed to avoid conflict with `doctors` variable below
+    isLoading,
+    isFetching,
+    // isPreviousData, // Useful if you want to show old data while new data loads
+  } = useDoctorsV2(currentPage - 1, itemsPerPage);
+
+  const paginatedDoctors = doctorsData;
+
   const { data: doctorsCount } = useDoctorsCount();
-  const filteredDoctors = (doctors ?? []).filter((doctor) =>
+
+  const totalPages = Math.ceil((doctorsCount ?? 0) / itemsPerPage);
+  const filteredDoctors = (paginatedDoctors ?? []).filter((doctor) =>
     doctor.fullName.toLowerCase().includes(search.toLowerCase())
   );
-
   const { mutate: deleteDoctor, isPending } = useMutation<
     void,
     AxiosError,
@@ -47,7 +52,10 @@ const ManagerDoctors = () => {
     mutationFn: async (doctorId) => await http.delete(`doctors/${doctorId}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["doctors"] });
-      navigate("/manager/doctors");
+
+      if (paginatedDoctors.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
       toast.success("Xoá thành công.");
     },
     onError: (err) => {
@@ -58,9 +66,15 @@ const ManagerDoctors = () => {
   const handleDeleteDoctor = (id: string) => {
     deleteDoctor(id);
   };
+
   const handleReLoadList = () => {
     queryClient.invalidateQueries({ queryKey: ["doctors"] });
-    queryClient.invalidateQueries({ queryKey: ["doctorsCount"] });
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (isLoading) return <LoadingOverlay message="Đang tải dữ liệu" />;
@@ -92,7 +106,9 @@ const ManagerDoctors = () => {
               <Input
                 placeholder="Tìm kiếm bác sĩ..."
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 className="pl-10"
               />
             </div>
@@ -111,7 +127,6 @@ const ManagerDoctors = () => {
         </Card>
       </div>
 
-      {/*  */}
       <Card>
         <CardHeader className="flex justify-between items-center">
           <CardTitle>Danh sách Bác sĩ</CardTitle>
@@ -131,7 +146,7 @@ const ManagerDoctors = () => {
             <div className="space-y-4">
               <div className="flex space-x-2">
                 <DoctorList
-                  data={filteredDoctors}
+                  data={filteredDoctors} // Pass paginated data from API
                   handleDeleteDoctor={handleDeleteDoctor}
                   isDeleting={isPending}
                 />
@@ -141,8 +156,15 @@ const ManagerDoctors = () => {
         </CardContent>
       </Card>
       {/* Pagination goes here */}
+      {totalPages > 0 && (
+        <PaginationComponent
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };
 
-export default ManagerDoctors;
+export default ManagerDoctorsV2;

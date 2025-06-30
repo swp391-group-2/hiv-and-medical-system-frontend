@@ -28,10 +28,29 @@ const getDoctorsByPage = async (
   return data.data;
 };
 
+const getDoctorsByPageV2 = async (
+  page?: number,
+  size?: number,
+  search?: string
+): Promise<Doctor[]> => {
+  const { data } = await http.get<Response<Doctor>>(`/doctors`, {
+    params: { page, size, search },
+  });
+  return data.data;
+};
+
 export const useDoctors = (page?: number, size?: number) => {
   return useQuery<Doctor[]>({
-    queryKey: ["doctors"],
+    queryKey: ["doctors", page, size],
     queryFn: () => getDoctorsByPage(page, size),
+    staleTime: Infinity,
+  });
+};
+
+export const useDoctorsV2 = (page?: number, size?: number, search?: string) => {
+  return useQuery<Doctor[]>({
+    queryKey: ["doctors", page, size, search],
+    queryFn: () => getDoctorsByPageV2(page, size, search),
     staleTime: Infinity,
   });
 };
