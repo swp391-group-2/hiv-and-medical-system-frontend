@@ -26,8 +26,8 @@ const DoctorCard = ({
   };
   return (
     <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border-0 shadow-md  ">
-      <CardContent className="p-4">
-        <div className="flex justify-center mb-3 ">
+      <CardContent className="">
+        <div className="flex justify-center ">
           <div className="relative w-full">
             <div className="w-full h-50 rounded-lg overflow-hidden bg-gray-100">
               {urlImage ? (

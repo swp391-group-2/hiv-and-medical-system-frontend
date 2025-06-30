@@ -1,5 +1,5 @@
 // src/pages/services/ServiceTestPage.tsx
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import TestHeader from "./TestHeader";
 import InfoCardTest from "./InfoCardTest";
 import MainContentLeft from "./MainContentLeft";
@@ -23,7 +23,7 @@ interface ServiceTestProps {
   resultDurationEx?: string[];
 }
 
-const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
+const ServiceTestPage = (props: ServiceTestProps) => {
   const reset = useBookingStore((state) => state.reset);
 
   useEffect(() => {
@@ -32,7 +32,6 @@ const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 font-sans">
-      {/* Header Section */}
       <TestHeader
         title={props.title}
         price={props.price}
@@ -42,7 +41,7 @@ const ServiceTestPage: React.FC<ServiceTestProps> = (props) => {
       />
 
       <InfoCardTest Span={props.Span} />
-      {/* Main Content */}
+
       <div className="flex flex-col lg:flex-row gap-8 border  rounded-xl bg-gray-50 p-6">
         <MainContentLeft
           testPurposes={props.testPurposes}

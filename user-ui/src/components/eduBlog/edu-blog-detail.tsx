@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 
-import { User, Hash } from "lucide-react";
+import { User, Hash, Clock } from "lucide-react";
 import { useParams } from "react-router-dom";
 
 export default function EduBlogDetail() {
@@ -63,19 +63,6 @@ export default function EduBlogDetail() {
         );
       }
 
-      if (paragraph.includes("npx create-next-app")) {
-        return (
-          <div
-            key={index}
-            className="bg-gray-900 text-green-400 p-4 rounded-lg my-6 font-mono text-sm"
-          >
-            {paragraph.split("\n").map((line, i) => (
-              <div key={i}>{line}</div>
-            ))}
-          </div>
-        );
-      }
-
       return (
         <p key={index} className="text-gray-700 leading-relaxed mb-6 text-lg">
           {paragraph}
@@ -84,13 +71,20 @@ export default function EduBlogDetail() {
     });
   };
 
+  if (!blog || !blog.data) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <p className="text-gray-500">Không tìm thấy bài viết.</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="max-w-4xl mx-auto px-6 py-5">
       <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
         <CardContent className="p-0">
-          {/* Header Section */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-t-lg">
-            <div className="flex items-center gap-3 mb-4">
+          <div className="bg-gradient-to-r from-primary to-sky-700 text-white p-8 rounded-t-lg">
+            <div className="flex items-center justify-between gap-3 mb-4">
               <Badge
                 variant="secondary"
                 className="bg-white/20 text-white border-0"
@@ -98,6 +92,12 @@ export default function EduBlogDetail() {
                 <Hash className="w-3 h-3 mr-1" />
                 {blogId}
               </Badge>
+              <div className="flex items-center gap-2 text-blue-100">
+                <Clock className="w-4 h-4" />
+                <span className="font-medium">
+                  {new Date(blog?.data.createdAt).toLocaleString("vi")}
+                </span>
+              </div>
             </div>
 
             <h1 className="text-4xl font-bold mb-4 leading-tight">
@@ -114,7 +114,6 @@ export default function EduBlogDetail() {
             </div>
           </div>
 
-          {/* Image Section */}
           {blog?.data.urlImage && (
             <div className="px-8 py-4">
               <img
@@ -125,7 +124,6 @@ export default function EduBlogDetail() {
             </div>
           )}
 
-          {/* Content Section */}
           <div className="p-8">
             <div className="prose prose-lg max-w-none">
               {formatContent(blog?.data.content || "")}
