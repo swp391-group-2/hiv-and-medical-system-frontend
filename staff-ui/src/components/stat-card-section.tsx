@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { LoadingOverlay } from "./loading-overlay";
 import { toast } from "sonner";
+import { formatDMY } from "@/lib/utils";
 
 export const StatCardsSection = () => {
   const milestone = "2025-06-01";
@@ -43,6 +44,9 @@ export const StatCardsSection = () => {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     <Users className="h-8 w-8 text-blue-600" />
                   </div>
@@ -62,6 +66,9 @@ export const StatCardsSection = () => {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     <UserCheck className="h-8 w-8 text-green-600" />
                   </div>
@@ -81,6 +88,9 @@ export const StatCardsSection = () => {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     <Calendar className="h-8 w-8 text-purple-600" />
                   </div>
@@ -100,6 +110,9 @@ export const StatCardsSection = () => {
                         {item.value}
                       </p>
                       <p className="text-sm text-green-600">{item.change}</p>
+                      <p className="mt-2 text-sm font-semibold text-gray-700">{`Tính từ ${formatDMY(
+                        milestone
+                      )}`}</p>
                     </div>
                     {item.growing ? (
                       <TrendingUp className="h-8 w-8 text-orange-600" />
