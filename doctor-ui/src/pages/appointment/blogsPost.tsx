@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
+import { fetchCurrentDoctorInfo } from "@/api/doctorSchedule";
 
 interface BlogFormData {
   title: string;
@@ -61,28 +62,28 @@ const BlogsPost = () => {
   useEffect(() => {
     const loadDoctorInfo = async () => {
       try {
-        const info = await blogAPI.getDoctorInfo();
+        const info = await fetchCurrentDoctorInfo();
         console.log("Doctor info loaded:", info);
         console.log("=== DOCTOR INFO DEBUG ===");
-        console.log("info.id (doctorId):", info.id);
+        console.log("info.id (doctorId):", info.doctorId);
         console.log("info.userId:", info.userId);
         console.log("info.fullName:", info.fullName);
         console.log("========================");
 
         setDoctorInfo(info);
         // Ưu tiên lấy id (đã là doctorId) thay vì userId
-        setDoctorId(info.id || "");
+        setDoctorId(info.doctorId || "");
 
         // Console log doctorId sau khi set
-        console.log("DoctorId set to state:", info.id || "");
+        console.log("DoctorId set to state:", info.doctorId || "");
 
         // Sử dụng fullName từ API làm tên tác giả
         const authorName = info.fullName || info.email || "Bác sĩ";
         setFormData((prev) => ({ ...prev, author: authorName }));
 
         // Load blogs với doctorId (info.id chính là doctorId)
-        if (info.id) {
-          loadBlogs(info.id);
+        if (info.doctorId) {
+          loadBlogs(info.doctorId);
         }
       } catch (error) {
         console.error("Error loading doctor info:", error);
@@ -121,7 +122,7 @@ const BlogsPost = () => {
           } catch (tokenError) {
             console.error("Error parsing token:", tokenError);
             setFormData((prev) => ({ ...prev, author: "Bác sĩ" }));
-            
+
             loadBlogs();
           }
         }
@@ -129,14 +130,12 @@ const BlogsPost = () => {
     };
 
     loadDoctorInfo();
-    
   }, []);
 
   const loadBlogs = async (doctorIdParam?: string) => {
     try {
       setIsLoadingBlogs(true);
 
-   
       const currentDoctorId = doctorIdParam || doctorId;
 
       console.log("=== LOAD BLOGS DEBUG ===");
@@ -145,13 +144,18 @@ const BlogsPost = () => {
       console.log("currentDoctorId:", currentDoctorId);
       console.log("========================");
 
+      let blogsList: BlogResponse[] = [];
+
       if (currentDoctorId) {
         console.log("Loading blogs for doctorId:", currentDoctorId);
-        // Nếu có doctorId, có thể implement logic filter sau này
-        // Hiện tại vẫn load tất cả blogs
+        // Sử dụng getBlogsByDoctorId để chỉ lấy blog của bác sĩ hiện tại
+        blogsList = await blogAPI.getBlogsByDoctorId(currentDoctorId);
+      } else {
+        console.log("No doctorId available, loading all blogs");
+        // Fallback: nếu không có doctorId, load tất cả blogs
+        blogsList = await blogAPI.getAllBlogs();
       }
 
-      const blogsList = await blogAPI.getAllBlogs();
       console.log("Loaded blogs:", blogsList);
 
       // Đảm bảo blogsList là array
