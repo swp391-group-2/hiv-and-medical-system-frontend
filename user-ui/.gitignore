@@ -21,7 +21,7 @@ yarn-error.log*
 pnpm-debug.log*
 
 # Env files
-.env
+
 .env.*.local
 
 # IDE/Editor files
