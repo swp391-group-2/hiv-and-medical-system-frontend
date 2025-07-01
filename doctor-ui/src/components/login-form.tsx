@@ -19,6 +19,7 @@ import { Mail, Lock, LogIn, Loader2 } from "lucide-react";
 import Logo from "./logo";
 import authApi from "@/apis/auth.api";
 import { useAuthStore } from "@/stores/auth.store";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
@@ -33,6 +34,7 @@ export const LoginForm = () => {
   const location = useLocation();
   const loginStore = useAuthStore((state) => state.login);
   const navigationState: { email: string } = location.state;
+  const [loginError, setLoginError] = useState<string>("");
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -46,6 +48,7 @@ export const LoginForm = () => {
   const { mutate: login, status } = useMutation({
     mutationFn: async (value: LoginFormValues) => await authApi.login(value),
     onSuccess: (data) => {
+      setLoginError(""); // Clear any previous errors
       // Map user object to match expected User type for loginStore
       const apiUser = data.data.data.user;
       const mappedUser = {
@@ -74,7 +77,21 @@ export const LoginForm = () => {
       navigate("/doctor/dashboard");
     },
     onError: (error) => {
-      toast.error(error.message);
+      // Check if it's an authentication error (wrong password/email)
+      if (
+        error.message.includes("401") ||
+        error.message.includes("Unauthorized") ||
+        error.message.includes("Invalid") ||
+        error.message.includes("Wrong") ||
+        error.message.toLowerCase().includes("password") ||
+        error.message.toLowerCase().includes("email")
+      ) {
+        setLoginError(
+          "Mật khẩu hoặc tài khoản sai. Vui lòng kiểm tra lại thông tin đăng nhập của bạn."
+        );
+      } else {
+        setLoginError("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+      }
     },
   });
 
@@ -154,6 +171,9 @@ export const LoginForm = () => {
                       </div>
                     </FormControl>
                     <FormMessage />
+                    {loginError && (
+                      <p className="text-sm text-red-600 mt-2">{loginError}</p>
+                    )}
                   </FormItem>
                 )}
               />
