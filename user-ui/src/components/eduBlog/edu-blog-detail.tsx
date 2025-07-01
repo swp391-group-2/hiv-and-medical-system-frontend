@@ -52,13 +52,13 @@ export default function EduBlogDetail() {
   // Format content paragraphs
   const formatContent = (text: string) => {
     return text.split("\n\n").map((paragraph, index) => {
-      if (paragraph.startsWith("## ")) {
+      if (paragraph.startsWith("##")) {
         return (
           <h2
             key={index}
             className="text-2xl font-bold text-gray-800 mt-8 mb-4 border-l-4 border-blue-500 pl-4"
           >
-            {paragraph.replace("## ", "")}
+            {paragraph.replace("##", "")}
           </h2>
         );
       }
