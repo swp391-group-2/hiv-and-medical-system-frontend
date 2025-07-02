@@ -4,11 +4,7 @@ import { cn, formatDMY } from "@/lib/utils";
 import type { Doctor, ScheduleSlot, Schedule } from "@/types/doctor";
 import { CalendarCheck, Plus, Save, Loader2, Undo2 } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
-import {
-  dataTagSymbol,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import http from "@/api/http";
 
@@ -66,6 +62,7 @@ export const SelectedSchedule = ({
       });
       toast.success("Cập nhật lịch làm việc thành công!");
       setOnEdit(false);
+      setScheduleHistory([]);
     },
     onError: (error) => {
       toast.error(`Lỗi cập nhật lịch: ${error.message}`);
@@ -209,14 +206,15 @@ export const SelectedSchedule = ({
                     className={cn(
                       "w-full h-full flex items-center justify-center border border-gray-300 rounded",
                       onEdit &&
-                        isOccupied &&
-                        "cursor-pointer hover:bg-green-500",
-                      onEdit &&
                         !isOccupied &&
                         "cursor-pointer hover:bg-gray-100",
                       isOccupied ? "bg-green-400" : ""
                     )}
-                    onClick={() => handleSlotToggle(day.workDate, slotNumber)}
+                    onClick={() => {
+                      if (!isOccupied) {
+                        handleSlotToggle(day.workDate, slotNumber);
+                      }
+                    }}
                   >
                     {isOccupied ? (
                       <CalendarCheck className="text-white" />
@@ -275,7 +273,7 @@ export const SelectedSchedule = ({
             variant="outline"
             className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
             onClick={handleSaveSchedule}
-            disabled={isUpdating}
+            disabled={isUpdating || scheduleHistory.length === 0}
           >
             {isUpdating ? (
               <>
