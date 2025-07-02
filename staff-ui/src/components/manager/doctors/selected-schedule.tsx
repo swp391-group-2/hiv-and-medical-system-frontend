@@ -2,16 +2,21 @@ import { useCurrentWeekSchedule, useSlots } from "@/api/schedule";
 import { Button } from "@/components/ui/button";
 import { cn, formatDMY } from "@/lib/utils";
 import type { Doctor, ScheduleSlot, Schedule } from "@/types/doctor";
-import { CalendarCheck, Pencil, Plus, Save, Loader2 } from "lucide-react"; // Import Loader2
+import { CalendarCheck, Plus, Save, Loader2, Undo2 } from "lucide-react";
 import { useState, useEffect, useMemo } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query"; // Import useMutation and useQueryClient
-import { toast } from "sonner"; // Import toast
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import http from "@/api/http";
 
 interface BackendSchedulePayload {
   workDate: string;
   slotId: number[];
 }
+
+type ScheduleAction = {
+  workDate: string;
+  slotNumber: number;
+};
 
 export const SelectedSchedule = ({
   dateInWeek,
@@ -34,6 +39,7 @@ export const SelectedSchedule = ({
   const [editableWeekSchedule, setEditableWeekSchedule] = useState<Schedule[]>(
     []
   );
+  const [scheduleHistory, setScheduleHistory] = useState<ScheduleAction[]>([]);
   const [onEdit, setOnEdit] = useState(false);
 
   useEffect(() => {
@@ -56,6 +62,7 @@ export const SelectedSchedule = ({
       });
       toast.success("Cập nhật lịch làm việc thành công!");
       setOnEdit(false);
+      setScheduleHistory([]);
     },
     onError: (error) => {
       toast.error(`Lỗi cập nhật lịch: ${error.message}`);
@@ -66,44 +73,45 @@ export const SelectedSchedule = ({
     if (!onEdit) return;
 
     setEditableWeekSchedule((prevSchedule) => {
+      let actionToRecord: ScheduleAction;
       return prevSchedule.map((day) => {
         if (day.workDate === workDate) {
           const currentSlots = day.scheduleSlots;
-          const slotExists = currentSlots.find(
-            (sSlot) => sSlot.slot.slotNumber === slotNumber
+
+          const newSlotDetail = slotsData.find(
+            (s) => s.slotNumber === slotNumber
           );
 
-          if (slotExists) {
-            return {
-              ...day,
-              scheduleSlots: currentSlots.filter(
-                (sSlot) => sSlot.slot.slotNumber !== slotNumber
-              ),
-            };
-          } else {
-            const newSlotDetail = slotsData.find(
-              (s) => s.slotNumber === slotNumber
-            );
-
-            if (!newSlotDetail) {
-              console.error(
-                `SlotDetail for slotNumber ${slotNumber} not found!`
-              );
-              return day;
-            }
-
-            const newScheduleSlot: ScheduleSlot = {
-              id: 0,
-              scheduleId: 0,
-              slot: newSlotDetail,
-              status: "AVAILABLE",
-            };
-
-            return {
-              ...day,
-              scheduleSlots: [...currentSlots, newScheduleSlot],
-            };
+          if (!newSlotDetail) {
+            console.error(`SlotDetail for slotNumber ${slotNumber} not found!`);
+            return day;
           }
+
+          const newScheduleSlot: ScheduleSlot = {
+            id: 0,
+            scheduleId: 0,
+            slot: newSlotDetail,
+            status: "AVAILABLE",
+          };
+          actionToRecord = {
+            workDate: workDate,
+            slotNumber: slotNumber,
+          };
+
+          const lastHistoryEntry = scheduleHistory.at(
+            scheduleHistory.length - 1
+          );
+          if (
+            actionToRecord.workDate !== lastHistoryEntry?.workDate ||
+            actionToRecord.slotNumber !== lastHistoryEntry?.slotNumber
+          ) {
+            setScheduleHistory([...scheduleHistory, actionToRecord]);
+          }
+
+          return {
+            ...day,
+            scheduleSlots: [...currentSlots, newScheduleSlot],
+          };
         }
         return day;
       });
@@ -126,10 +134,29 @@ export const SelectedSchedule = ({
   const handleCancelEdit = () => {
     if (initialWeekSchedule.length > 0) {
       setEditableWeekSchedule(JSON.parse(JSON.stringify(initialWeekSchedule)));
+      setScheduleHistory([]);
     } else {
       setEditableWeekSchedule([]);
     }
     setOnEdit(false);
+  };
+
+  const handleUndoToggle = () => {
+    const lastAction = scheduleHistory.at(scheduleHistory.length - 1);
+    setScheduleHistory(scheduleHistory.slice(0, -1));
+    setEditableWeekSchedule((prevSchedule) =>
+      prevSchedule.map((day) => {
+        if (day.workDate === lastAction?.workDate) {
+          return {
+            ...day,
+            scheduleSlots: day.scheduleSlots.filter(
+              (sSlot) => sSlot.slot.slotNumber !== lastAction.slotNumber
+            ),
+          };
+        }
+        return day;
+      })
+    );
   };
 
   if (isLoading) {
@@ -178,10 +205,16 @@ export const SelectedSchedule = ({
                     key={`${day.workDate}-${slotNumber}`}
                     className={cn(
                       "w-full h-full flex items-center justify-center border border-gray-300 rounded",
-                      onEdit && "cursor-pointer hover:bg-gray-100",
+                      onEdit &&
+                        !isOccupied &&
+                        "cursor-pointer hover:bg-gray-100",
                       isOccupied ? "bg-green-400" : ""
                     )}
-                    onClick={() => handleSlotToggle(day.workDate, slotNumber)}
+                    onClick={() => {
+                      if (!isOccupied) {
+                        handleSlotToggle(day.workDate, slotNumber);
+                      }
+                    }}
                   >
                     {isOccupied ? (
                       <CalendarCheck className="text-white" />
@@ -202,13 +235,28 @@ export const SelectedSchedule = ({
       </div>
       <div className="flex items-center gap-2">
         {onEdit ? (
-          <Button
-            variant="destructive"
-            className="cursor-pointer"
-            onClick={handleCancelEdit}
-          >
-            Huỷ
-          </Button>
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              disabled={scheduleHistory.length === 0}
+              className={cn(
+                scheduleHistory.length === 0
+                  ? "bg-gray-300 hover:bg-gray-300"
+                  : "cursor-pointer bg-white hover:bg-gray-100"
+              )}
+              onClick={handleUndoToggle}
+            >
+              <Undo2 />
+              Hoàn tác
+            </Button>
+            <Button
+              variant="destructive"
+              className="cursor-pointer"
+              onClick={handleCancelEdit}
+            >
+              Huỷ
+            </Button>
+          </div>
         ) : (
           ""
           //   <Button
@@ -225,7 +273,7 @@ export const SelectedSchedule = ({
             variant="outline"
             className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
             onClick={handleSaveSchedule}
-            disabled={isUpdating}
+            disabled={isUpdating || scheduleHistory.length === 0}
           >
             {isUpdating ? (
               <>
