@@ -2,7 +2,19 @@ import { useCurrentWeekSchedule, useSlots } from "@/api/schedule";
 import { Button } from "@/components/ui/button";
 import { cn, formatDMY } from "@/lib/utils";
 import type { Doctor, ScheduleSlot, Schedule } from "@/types/doctor";
-import { CalendarCheck, Plus, Save, Loader2, Undo2 } from "lucide-react";
+import {
+  CalendarCheck,
+  Plus,
+  Save,
+  Loader2,
+  Undo2,
+  Pencil,
+} from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useState, useEffect, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -199,16 +211,18 @@ export const SelectedSchedule = ({
                   (sSlot: ScheduleSlot) => sSlot.slot.slotNumber === slotNumber
                 );
                 const isOccupied = !!foundScheduleSlot;
-
+                const isAvailable = foundScheduleSlot?.status === "AVAILABLE";
                 return (
                   <div
                     key={`${day.workDate}-${slotNumber}`}
                     className={cn(
                       "w-full h-full flex items-center justify-center border border-gray-300 rounded",
+                      isOccupied && isAvailable ? "bg-green-400" : "",
+                      isOccupied && !isAvailable ? "bg-orange-300" : "",
                       onEdit &&
                         !isOccupied &&
-                        "cursor-pointer hover:bg-gray-100",
-                      isOccupied ? "bg-green-400" : ""
+                        !isAvailable &&
+                        "cursor-pointer bg-white hover:bg-gray-100"
                     )}
                     onClick={() => {
                       if (!isOccupied) {
@@ -233,67 +247,95 @@ export const SelectedSchedule = ({
           ))}
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        {onEdit ? (
-          <div className="flex items-center gap-3">
+      <div className="w-full flex items-center justify-between gap-2">
+        <div className="flex gap-2 items-center">
+          <p>Chú thích: </p>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="rounded w-[20px] h-[20px] bg-green-400"></div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Lịch khả dụng</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="rounded w-[20px] h-[20px] bg-orange-300"></div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Lịch đã được đặt</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="rounded w-[20px] h-[20px] bg-white border border-gray-300"></div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Lịch trống</span>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+        <div className="flex gap-3">
+          {onEdit ? (
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                disabled={scheduleHistory.length === 0}
+                className={cn(
+                  scheduleHistory.length === 0
+                    ? "bg-gray-300 hover:bg-gray-300"
+                    : "cursor-pointer bg-white hover:bg-gray-100"
+                )}
+                onClick={handleUndoToggle}
+              >
+                <Undo2 />
+                Hoàn tác
+              </Button>
+              <Button
+                variant="destructive"
+                className="cursor-pointer"
+                onClick={handleCancelEdit}
+              >
+                Huỷ
+              </Button>
+            </div>
+          ) : (
             <Button
               variant="outline"
-              disabled={scheduleHistory.length === 0}
-              className={cn(
-                scheduleHistory.length === 0
-                  ? "bg-gray-300 hover:bg-gray-300"
-                  : "cursor-pointer bg-white hover:bg-gray-100"
-              )}
-              onClick={handleUndoToggle}
+              className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white mr-2"
             >
-              <Undo2 />
-              Hoàn tác
+              <Pencil className="mr-2 h-4 w-4" />
+              Sửa
             </Button>
-            <Button
-              variant="destructive"
-              className="cursor-pointer"
-              onClick={handleCancelEdit}
-            >
-              Huỷ
-            </Button>
-          </div>
-        ) : (
-          ""
-          //   <Button
-          //     variant="outline"
-          //     className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white mr-2"
-          //   >
-          //     <Pencil className="mr-2 h-4 w-4" />
-          //     Sửa
-          //   </Button>
-        )}
+          )}
 
-        {onEdit ? (
-          <Button
-            variant="outline"
-            className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
-            onClick={handleSaveSchedule}
-            disabled={isUpdating || scheduleHistory.length === 0}
-          >
-            {isUpdating ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang lưu...
-              </>
-            ) : (
-              <>
-                <Save className="mr-2 h-4 w-4" /> Lưu
-              </>
-            )}
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
-            className="cursor-pointer"
-            onClick={() => setOnEdit(true)}
-          >
-            <Plus className="mr-2 h-4 w-4" /> Thêm lịch mới
-          </Button>
-        )}
+          {onEdit ? (
+            <Button
+              variant="outline"
+              className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
+              onClick={handleSaveSchedule}
+              disabled={isUpdating || scheduleHistory.length === 0}
+            >
+              {isUpdating ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang lưu...
+                </>
+              ) : (
+                <>
+                  <Save className="mr-2 h-4 w-4" /> Lưu
+                </>
+              )}
+            </Button>
+          ) : (
+            <Button
+              variant="outline"
+              className="cursor-pointer"
+              onClick={() => setOnEdit(true)}
+            >
+              <Plus className="mr-2 h-4 w-4" /> Thêm lịch mới
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
