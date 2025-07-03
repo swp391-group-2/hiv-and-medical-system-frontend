@@ -19,15 +19,12 @@ import { useState, useEffect, useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import http from "@/api/http";
+import type { AxiosError } from "axios";
 
 interface BackendSchedulePayload {
   workDate: string;
   slotId: number[];
 }
-
-type UpdateSchedulePayload = {
-  scheduleIds: number[];
-};
 
 type ScheduleAction = {
   type: "ADD" | "REMOVE";
@@ -57,6 +54,7 @@ export const SelectedSchedule = ({
     []
   );
   const [scheduleHistory, setScheduleHistory] = useState<ScheduleAction[]>([]);
+  const [updateIds, setUpdateIds] = useState<number[]>([]);
   const [onCreate, setOnCreate] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
 
@@ -66,7 +64,7 @@ export const SelectedSchedule = ({
     }
   }, [initialWeekSchedule]);
 
-  const { mutate: updateDoctorSchedule, isPending: isUpdating } = useMutation<
+  const { mutate: createDoctorSchedule, isPending: isCreating } = useMutation<
     void,
     Error,
     BackendSchedulePayload[]
@@ -74,6 +72,29 @@ export const SelectedSchedule = ({
     mutationFn: async (payload) =>
       http.post(`/doctors/${doctor.doctorId}/schedules/generate`, payload),
 
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["weekSchedule", doctor.doctorId],
+      });
+      toast.success("Cập nhật lịch làm việc thành công!");
+      if (onCreate) {
+        setOnCreate(false);
+      } else {
+        setOnEdit(false);
+      }
+      setScheduleHistory([]);
+    },
+    onError: (error) => {
+      toast.error(`Lỗi cập nhật lịch: ${error.message}`);
+    },
+  });
+
+  const { mutate: updateDoctorSchedule, isPending: isUpdating } = useMutation<
+    void,
+    AxiosError,
+    number[]
+  >({
+    mutationFn: async (payload) => http.put(``, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["weekSchedule", doctor.doctorId],
@@ -156,6 +177,7 @@ export const SelectedSchedule = ({
               actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
             ) {
               setScheduleHistory([...scheduleHistory, actionToRecord]);
+              setUpdateIds([...updateIds, actionToRecord.sSlot.id]);
             }
 
             return {
@@ -171,7 +193,7 @@ export const SelectedSchedule = ({
     });
   };
 
-  const handleSaveSchedule = () => {
+  const handleCreateSchedule = () => {
     // Transform the editableWeekSchedule into the backend's expected format
     const payload: BackendSchedulePayload[] = editableWeekSchedule.map(
       (day) => ({
@@ -181,6 +203,10 @@ export const SelectedSchedule = ({
     );
 
     console.log("Transformed payload for backend:", payload);
+    createDoctorSchedule(payload);
+  };
+
+  const handleUpdateSchedule = (payload: number[]) => {
     updateDoctorSchedule(payload);
   };
 
@@ -215,6 +241,7 @@ export const SelectedSchedule = ({
               slot: lastAction.sSlot.slot,
               status: lastAction.sSlot.status,
             };
+            setUpdateIds(updateIds.filter((id) => id !== originalSlot.id));
             return {
               ...day,
               scheduleSlots: [...day.scheduleSlots, originalSlot],
@@ -380,10 +407,16 @@ export const SelectedSchedule = ({
             <Button
               variant="outline"
               className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
-              onClick={handleSaveSchedule}
+              onClick={() => {
+                if (onCreate) {
+                  handleCreateSchedule;
+                } else {
+                  handleUpdateSchedule(updateIds);
+                }
+              }}
               disabled={isUpdating || scheduleHistory.length === 0}
             >
-              {isUpdating ? (
+              {isUpdating || isCreating ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Đang lưu...
                 </>
