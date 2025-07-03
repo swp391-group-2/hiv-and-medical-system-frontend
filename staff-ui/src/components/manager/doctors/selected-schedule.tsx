@@ -26,8 +26,9 @@ interface BackendSchedulePayload {
 }
 
 type ScheduleAction = {
+  type: "ADD" | "REMOVE";
   workDate: string;
-  slotNumber: number;
+  sSlot: ScheduleSlot;
 };
 
 export const SelectedSchedule = ({
@@ -52,6 +53,7 @@ export const SelectedSchedule = ({
     []
   );
   const [scheduleHistory, setScheduleHistory] = useState<ScheduleAction[]>([]);
+  const [onCreate, setOnCreate] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
 
   useEffect(() => {
@@ -73,7 +75,11 @@ export const SelectedSchedule = ({
         queryKey: ["weekSchedule", doctor.doctorId],
       });
       toast.success("Cập nhật lịch làm việc thành công!");
-      setOnEdit(false);
+      if (onCreate) {
+        setOnCreate(false);
+      } else {
+        setOnEdit(false);
+      }
       setScheduleHistory([]);
     },
     onError: (error) => {
@@ -82,48 +88,79 @@ export const SelectedSchedule = ({
   });
 
   const handleSlotToggle = (workDate: string, slotNumber: number) => {
-    if (!onEdit) return;
+    if (!onCreate && !onEdit) return;
 
     setEditableWeekSchedule((prevSchedule) => {
       let actionToRecord: ScheduleAction;
       return prevSchedule.map((day) => {
         if (day.workDate === workDate) {
           const currentSlots = day.scheduleSlots;
-
-          const newSlotDetail = slotsData.find(
-            (s) => s.slotNumber === slotNumber
+          const foundScheduleSlot = currentSlots.find(
+            (sSlot) => sSlot.slot.slotNumber === slotNumber
           );
+          const isOccupied = !!foundScheduleSlot;
+          if (!isOccupied) {
+            const newSlotDetail = slotsData.find(
+              (s) => s.slotNumber === slotNumber
+            );
 
-          if (!newSlotDetail) {
-            console.error(`SlotDetail for slotNumber ${slotNumber} not found!`);
-            return day;
+            if (!newSlotDetail) {
+              console.error(
+                `SlotDetail for slotNumber ${slotNumber} not found!`
+              );
+              return day;
+            }
+
+            const newScheduleSlot: ScheduleSlot = {
+              id: 0,
+              scheduleId: 0,
+              slot: newSlotDetail,
+              status: "AVAILABLE",
+            };
+            actionToRecord = {
+              type: "ADD",
+              workDate: workDate,
+              sSlot: newScheduleSlot,
+            };
+
+            const lastHistoryEntry = scheduleHistory.at(
+              scheduleHistory.length - 1
+            );
+            if (
+              actionToRecord.workDate !== lastHistoryEntry?.workDate ||
+              actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
+            ) {
+              setScheduleHistory([...scheduleHistory, actionToRecord]);
+            }
+
+            return {
+              ...day,
+              scheduleSlots: [...currentSlots, newScheduleSlot],
+            };
+          } else {
+            actionToRecord = {
+              type: "REMOVE",
+              workDate: workDate,
+              sSlot: foundScheduleSlot,
+            };
+
+            const lastHistoryEntry = scheduleHistory.at(
+              scheduleHistory.length - 1
+            );
+            if (
+              actionToRecord.workDate !== lastHistoryEntry?.workDate ||
+              actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
+            ) {
+              setScheduleHistory([...scheduleHistory, actionToRecord]);
+            }
+
+            return {
+              ...day,
+              scheduleSlots: currentSlots.filter(
+                (sSlot) => sSlot.slot.slotNumber !== slotNumber
+              ),
+            };
           }
-
-          const newScheduleSlot: ScheduleSlot = {
-            id: 0,
-            scheduleId: 0,
-            slot: newSlotDetail,
-            status: "AVAILABLE",
-          };
-          actionToRecord = {
-            workDate: workDate,
-            slotNumber: slotNumber,
-          };
-
-          const lastHistoryEntry = scheduleHistory.at(
-            scheduleHistory.length - 1
-          );
-          if (
-            actionToRecord.workDate !== lastHistoryEntry?.workDate ||
-            actionToRecord.slotNumber !== lastHistoryEntry?.slotNumber
-          ) {
-            setScheduleHistory([...scheduleHistory, actionToRecord]);
-          }
-
-          return {
-            ...day,
-            scheduleSlots: [...currentSlots, newScheduleSlot],
-          };
         }
         return day;
       });
@@ -150,6 +187,7 @@ export const SelectedSchedule = ({
     } else {
       setEditableWeekSchedule([]);
     }
+    setOnCreate(false);
     setOnEdit(false);
   };
 
@@ -159,12 +197,25 @@ export const SelectedSchedule = ({
     setEditableWeekSchedule((prevSchedule) =>
       prevSchedule.map((day) => {
         if (day.workDate === lastAction?.workDate) {
-          return {
-            ...day,
-            scheduleSlots: day.scheduleSlots.filter(
-              (sSlot) => sSlot.slot.slotNumber !== lastAction.slotNumber
-            ),
-          };
+          if (lastAction.type === "ADD") {
+            return {
+              ...day,
+              scheduleSlots: day.scheduleSlots.filter(
+                (sSlot) => sSlot.id !== lastAction.sSlot.id
+              ),
+            };
+          } else {
+            const originalSlot: ScheduleSlot = {
+              id: lastAction.sSlot.id,
+              scheduleId: lastAction.sSlot.scheduleId,
+              slot: lastAction.sSlot.slot,
+              status: lastAction.sSlot.status,
+            };
+            return {
+              ...day,
+              scheduleSlots: [...day.scheduleSlots, originalSlot],
+            };
+          }
         }
         return day;
       })
@@ -211,7 +262,10 @@ export const SelectedSchedule = ({
                   (sSlot: ScheduleSlot) => sSlot.slot.slotNumber === slotNumber
                 );
                 const isOccupied = !!foundScheduleSlot;
-                const isAvailable = foundScheduleSlot?.status === "AVAILABLE";
+                const isAvailable = !!(
+                  foundScheduleSlot?.status === "AVAILABLE"
+                );
+
                 return (
                   <div
                     key={`${day.workDate}-${slotNumber}`}
@@ -219,13 +273,21 @@ export const SelectedSchedule = ({
                       "w-full h-full flex items-center justify-center border border-gray-300 rounded",
                       isOccupied && isAvailable ? "bg-green-400" : "",
                       isOccupied && !isAvailable ? "bg-orange-300" : "",
-                      onEdit &&
+                      onCreate &&
                         !isOccupied &&
-                        !isAvailable &&
-                        "cursor-pointer bg-white hover:bg-gray-100"
+                        "cursor-pointer bg-white hover:bg-gray-100",
+                      onEdit && isOccupied && isAvailable
+                        ? "hover:bg-green-500 cursor-pointer"
+                        : "",
+                      onEdit && isOccupied && !isAvailable
+                        ? "hover:bg-orange-200 cursor-pointer"
+                        : ""
                     )}
                     onClick={() => {
-                      if (!isOccupied) {
+                      if (!isOccupied && onCreate) {
+                        console.log("running onClick create");
+                        handleSlotToggle(day.workDate, slotNumber);
+                      } else if (onEdit && isOccupied) {
                         handleSlotToggle(day.workDate, slotNumber);
                       }
                     }}
@@ -236,7 +298,7 @@ export const SelectedSchedule = ({
                       <Plus
                         className={cn(
                           "text-gray-300",
-                          onEdit && "text-blue-400"
+                          onCreate && "text-blue-400"
                         )}
                       />
                     )}
@@ -276,7 +338,7 @@ export const SelectedSchedule = ({
           </Tooltip>
         </div>
         <div className="flex gap-3">
-          {onEdit ? (
+          {onCreate || onEdit ? (
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -303,13 +365,14 @@ export const SelectedSchedule = ({
             <Button
               variant="outline"
               className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white mr-2"
+              onClick={() => setOnEdit(true)}
             >
               <Pencil className="mr-2 h-4 w-4" />
               Sửa
             </Button>
           )}
 
-          {onEdit ? (
+          {onCreate || onEdit ? (
             <Button
               variant="outline"
               className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
@@ -330,7 +393,7 @@ export const SelectedSchedule = ({
             <Button
               variant="outline"
               className="cursor-pointer"
-              onClick={() => setOnEdit(true)}
+              onClick={() => setOnCreate(true)}
             >
               <Plus className="mr-2 h-4 w-4" /> Thêm lịch mới
             </Button>
