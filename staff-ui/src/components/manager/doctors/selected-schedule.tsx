@@ -25,6 +25,10 @@ interface BackendSchedulePayload {
   slotId: number[];
 }
 
+type UpdateSchedulePayload = {
+  scheduleIds: number[];
+};
+
 type ScheduleAction = {
   type: "ADD" | "REMOVE";
   workDate: string;
@@ -227,7 +231,7 @@ export const SelectedSchedule = ({
   }
 
   return (
-    <div className="flex flex-col gap-3 items-end w-full h-full">
+    <div className="flex flex-col gap-3 items-end w-full h-full overflow-scroll">
       <div className="w-11/12 grid grid-cols-7 gap-2">
         {initialWeekSchedule.map((day, idx) => (
           <div key={day.workDate} className="text-center flex flex-col">
