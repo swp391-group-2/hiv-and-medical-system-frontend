@@ -4,6 +4,7 @@ import type { ServiceTypeStat } from "@/types/stats";
 import { InternalLoading } from "./loading-overlay";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
+
 const ServiceTypeStatSection = ({
   list,
   isLoading,
@@ -109,6 +110,7 @@ const ServiceTypeStatSection = ({
           </div>
         )}
       </CardContent>
+     
     </Card>
   );
 };

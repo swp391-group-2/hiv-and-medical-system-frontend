@@ -151,10 +151,10 @@ export const StatCardsSection = () => {
                           {item.value}
                         </p>
                         <p className="text-sm text-green-600">{item.change}</p>
-                        <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
+                        {/* <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
                           apiStartDate,
                           "dd/MM/yyyy"
-                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p>
+                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p> */}
                       </div>
                       <Users className="h-8 w-8 text-blue-600" />
                     </div>
@@ -174,10 +174,10 @@ export const StatCardsSection = () => {
                           {item.value}
                         </p>
                         <p className="text-sm text-green-600">{item.change}</p>
-                        <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
+                        {/* <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
                           apiStartDate,
                           "dd/MM/yyyy"
-                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p>
+                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p> */}
                       </div>
                       <UserCheck className="h-8 w-8 text-green-600" />
                     </div>
@@ -197,10 +197,10 @@ export const StatCardsSection = () => {
                           {item.value}
                         </p>
                         <p className="text-sm text-green-600">{item.change}</p>
-                        <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
+                        {/* <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
                           apiStartDate,
                           "dd/MM/yyyy"
-                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p>
+                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p> */}
                       </div>
                       <CalendarIcon className="h-8 w-8 text-purple-600" />
                     </div>
@@ -220,10 +220,10 @@ export const StatCardsSection = () => {
                           {item.value}
                         </p>
                         <p className="text-sm text-green-600">{item.change}</p>
-                        <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
+                        {/* <p className="mt-2 text-sm font-semibold text-gray-700">{`Từ ${format(
                           apiStartDate,
                           "dd/MM/yyyy"
-                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p>
+                        )} đến ${format(apiEndDate, "dd/MM/yyyy")}`}</p> */}
                       </div>
                       {item.growing ? (
                         <TrendingUp className="h-8 w-8 text-orange-600" />
