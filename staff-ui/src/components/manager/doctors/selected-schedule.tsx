@@ -237,6 +237,7 @@ export const SelectedSchedule = ({
     }
     setOnCreate(false);
     setOnEdit(false);
+    setUpdateIds([]);
   };
 
   // undo toggle function >>>>>>>>>>>>>>>
@@ -332,16 +333,30 @@ export const SelectedSchedule = ({
                       onEdit && isOccupied && isAvailable
                         ? "hover:bg-green-500 cursor-pointer"
                         : "",
-                      onEdit && isOccupied && !isAvailable
+                      onEdit &&
+                        isOccupied &&
+                        !isAvailable &&
+                        updateIds.length === 0
                         ? "hover:bg-orange-200 cursor-pointer"
+                        : "",
+                      onEdit &&
+                        isOccupied &&
+                        !isAvailable &&
+                        updateIds.length > 0
+                        ? "bg-orange-100"
                         : ""
                     )}
                     onClick={() => {
                       if (!isOccupied && onCreate) {
-                        console.log("running onClick create");
                         handleSlotToggle(day.workDate, slotNumber);
-                      } else if (onEdit && isOccupied) {
+                      } else if (onEdit && isOccupied && isAvailable) {
                         handleSlotToggle(day.workDate, slotNumber);
+                      } else if (
+                        onEdit &&
+                        !isAvailable &&
+                        updateIds.length === 0
+                      ) {
+                        alert("...");
                       }
                     }}
                   >
