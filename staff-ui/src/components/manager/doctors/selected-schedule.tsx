@@ -20,6 +20,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import http from "@/api/http";
 import type { AxiosError } from "axios";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 // types >>>>>>>>>>>>>>>
 interface BackendSchedulePayload {
@@ -62,6 +71,7 @@ export const SelectedSchedule = ({
   const [updateIds, setUpdateIds] = useState<number[]>([]);
   const [onCreate, setOnCreate] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
+  const [onDisablingBooked, setOnDisablingBooked] = useState(false);
 
   // keeps editable schedule and initial schedule (from backend) synced
   useEffect(() => {
@@ -321,56 +331,95 @@ export const SelectedSchedule = ({
                 );
 
                 return (
-                  <div
-                    key={`${day.workDate}-${slotNumber}`}
-                    className={cn(
-                      "w-full h-full flex items-center justify-center border border-gray-300 rounded",
-                      isOccupied && isAvailable ? "bg-green-400" : "",
-                      isOccupied && !isAvailable ? "bg-orange-300" : "",
-                      onCreate &&
-                        !isOccupied &&
-                        "cursor-pointer bg-white hover:bg-gray-100",
-                      onEdit && isOccupied && isAvailable
-                        ? "hover:bg-green-500 cursor-pointer"
-                        : "",
-                      onEdit &&
-                        isOccupied &&
-                        !isAvailable &&
-                        updateIds.length === 0
-                        ? "hover:bg-orange-200 cursor-pointer"
-                        : "",
-                      onEdit &&
-                        isOccupied &&
-                        !isAvailable &&
-                        updateIds.length > 0
-                        ? "bg-orange-100"
-                        : ""
-                    )}
-                    onClick={() => {
-                      if (!isOccupied && onCreate) {
-                        handleSlotToggle(day.workDate, slotNumber);
-                      } else if (onEdit && isOccupied && isAvailable) {
-                        handleSlotToggle(day.workDate, slotNumber);
-                      } else if (
-                        onEdit &&
-                        !isAvailable &&
-                        updateIds.length === 0
-                      ) {
-                        alert("...");
-                      }
-                    }}
-                  >
-                    {isOccupied ? (
-                      <CalendarCheck className="text-white" />
-                    ) : (
-                      <Plus
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <div
+                        key={`${day.workDate}-${slotNumber}`}
                         className={cn(
-                          "text-gray-300",
-                          onCreate && "text-blue-400"
+                          "w-full h-full flex items-center justify-center border border-gray-300 rounded",
+                          isOccupied && isAvailable ? "bg-green-400" : "",
+                          isOccupied && !isAvailable ? "bg-orange-300" : "",
+                          onCreate &&
+                            !isOccupied &&
+                            "cursor-pointer bg-white hover:bg-gray-100",
+                          onEdit && isOccupied && isAvailable
+                            ? "hover:bg-green-500 cursor-pointer"
+                            : "",
+                          onEdit &&
+                            isOccupied &&
+                            !isAvailable &&
+                            updateIds.length === 0
+                            ? "hover:bg-orange-200 cursor-pointer"
+                            : "",
+                          onEdit &&
+                            isOccupied &&
+                            !isAvailable &&
+                            updateIds.length > 0
+                            ? "bg-orange-100"
+                            : ""
                         )}
-                      />
+                        onClick={() => {
+                          if (!isOccupied && onCreate) {
+                            handleSlotToggle(day.workDate, slotNumber);
+                          } else if (onEdit && isOccupied && isAvailable) {
+                            handleSlotToggle(day.workDate, slotNumber);
+                          } else if (
+                            onEdit &&
+                            isOccupied &&
+                            !isAvailable &&
+                            updateIds.length === 0
+                          ) {
+                            setOnDisablingBooked(true);
+                          }
+                        }}
+                      >
+                        {isOccupied ? (
+                          <CalendarCheck className="text-white" />
+                        ) : (
+                          <Plus
+                            className={cn(
+                              "text-gray-300",
+                              onCreate && "text-blue-400"
+                            )}
+                          />
+                        )}
+                      </div>
+                    </DialogTrigger>
+                    {onDisablingBooked ? (
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Huỷ lịch có người đặt</DialogTitle>
+                          <DialogDescription>
+                            Chọn một lựa chọn bên dưới để xác nhận! Hành động
+                            này không thể hoàn tác.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <Button
+                            variant="outline"
+                            className="cursor-pointer bg-red-500 hover:bg-red-400 text-white hover:text-white"
+                          >
+                            Huỷ lịch hoàn tiền
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="cursor-pointer bg-white hover:bg-gray-100"
+                            onClick={() => setOnDisablingBooked(false)}
+                          >
+                            Thoát
+                          </Button>
+                          <Button
+                            variant="outline"
+                            className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white"
+                          >
+                            Hỗ trợ đổi lịch
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    ) : (
+                      ""
                     )}
-                  </div>
+                  </Dialog>
                 );
               })}
             </div>
