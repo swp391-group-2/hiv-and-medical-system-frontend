@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import http from "@/api/http";
 import type { AxiosError } from "axios";
 
+// types >>>>>>>>>>>>>>>
 interface BackendSchedulePayload {
   workDate: string;
   slotId: number[];
@@ -32,6 +33,8 @@ type ScheduleAction = {
   sSlot: ScheduleSlot;
 };
 
+// the main component >>>>>>>>>>>>>>>
+
 export const SelectedSchedule = ({
   dateInWeek,
   doctor,
@@ -39,6 +42,8 @@ export const SelectedSchedule = ({
   dateInWeek: Date;
   doctor: Doctor;
 }) => {
+  // define hooks >>>>>>>>>>>>>>>
+
   const queryClient = useQueryClient();
   const { data: initialWeekSchedule = [], isLoading } = useCurrentWeekSchedule(
     doctor.doctorId,
@@ -58,11 +63,14 @@ export const SelectedSchedule = ({
   const [onCreate, setOnCreate] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
 
+  // keeps editable schedule and initial schedule (from backend) synced
   useEffect(() => {
     if (initialWeekSchedule.length > 0) {
-      setEditableWeekSchedule(JSON.parse(JSON.stringify(initialWeekSchedule)));
+      setEditableWeekSchedule(initialWeekSchedule);
     }
   }, [initialWeekSchedule]);
+
+  // create new schedules handler >>>>>>>>>>>>>>>
 
   const { mutate: createDoctorSchedule, isPending: isCreating } = useMutation<
     void,
@@ -89,6 +97,8 @@ export const SelectedSchedule = ({
     },
   });
 
+  // update existing schedules handler >>>>>>>>>>>>>>>
+
   const { mutate: updateDoctorSchedule, isPending: isUpdating } = useMutation<
     void,
     AxiosError,
@@ -111,6 +121,8 @@ export const SelectedSchedule = ({
       toast.error(`Lỗi cập nhật lịch: ${error.message}`);
     },
   });
+
+  // handle slot toggle both when onCreate and onEdit >>>>>>>>>>>>>>>
 
   const handleSlotToggle = (workDate: string, slotNumber: number) => {
     if (!onCreate && !onEdit) return;
@@ -193,6 +205,8 @@ export const SelectedSchedule = ({
     });
   };
 
+  // create function >>>>>>>>>>>>>>>
+
   const handleCreateSchedule = () => {
     // Transform the editableWeekSchedule into the backend's expected format
     const payload: BackendSchedulePayload[] = editableWeekSchedule.map(
@@ -206,9 +220,13 @@ export const SelectedSchedule = ({
     createDoctorSchedule(payload);
   };
 
+  // update function >>>>>>>>>>>>>>>
+
   const handleUpdateSchedule = (payload: number[]) => {
     updateDoctorSchedule(payload);
   };
+
+  // cancel operation function >>>>>>>>>>>>>>>
 
   const handleCancelEdit = () => {
     if (initialWeekSchedule.length > 0) {
@@ -220,6 +238,8 @@ export const SelectedSchedule = ({
     setOnCreate(false);
     setOnEdit(false);
   };
+
+  // undo toggle function >>>>>>>>>>>>>>>
 
   const handleUndoToggle = () => {
     const lastAction = scheduleHistory.at(scheduleHistory.length - 1);
@@ -256,6 +276,8 @@ export const SelectedSchedule = ({
   if (isLoading) {
     return <div className="text-center py-8">Đang tải lịch làm việc...</div>;
   }
+
+  // return statement >>>>>>>>>>>>>>>
 
   return (
     <div className="flex flex-col gap-3 items-end w-full h-full overflow-scroll">
