@@ -15,7 +15,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import http from "@/api/http";
@@ -42,6 +42,10 @@ type ScheduleAction = {
   sSlot: ScheduleSlot;
 };
 
+interface DisableBookedSlotPayload {
+  id: number;
+  continuity: boolean;
+}
 // the main component >>>>>>>>>>>>>>>
 
 export const SelectedSchedule = ({
@@ -114,7 +118,8 @@ export const SelectedSchedule = ({
     AxiosError,
     number[]
   >({
-    mutationFn: async (payload) => http.put(``, payload),
+    mutationFn: async (payload) =>
+      http.put(`/doctors/schedules/available/block`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["weekSchedule", doctor.doctorId],
@@ -132,92 +137,128 @@ export const SelectedSchedule = ({
     },
   });
 
+  // disable booked slots
+
+  const { mutate: disableBookedSlot, isPending: isDisabling } = useMutation<
+    void,
+    AxiosError,
+    DisableBookedSlotPayload
+  >({
+    mutationFn: async (payload) =>
+      http.put(`/doctors/schedules/unavailable/block`, payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["weekSchedule", doctor.doctorId],
+      });
+      toast.success("Huỷ lịch thành công!");
+      if (onCreate) {
+        setOnCreate(false);
+      } else {
+        setOnEdit(false);
+      }
+    },
+    onError: (error) => {
+      toast.error(`Lỗi cập nhật lịch: ${error.message}`);
+    },
+  });
+
   // handle slot toggle both when onCreate and onEdit >>>>>>>>>>>>>>>
 
-  const handleSlotToggle = (workDate: string, slotNumber: number) => {
-    if (!onCreate && !onEdit) return;
+  const handleSlotToggle = useCallback(
+    (workDate: string, slotNumber: number) => {
+      if (!onCreate && !onEdit) return;
 
-    setEditableWeekSchedule((prevSchedule) => {
-      let actionToRecord: ScheduleAction;
-      return prevSchedule.map((day) => {
-        if (day.workDate === workDate) {
-          const currentSlots = day.scheduleSlots;
-          const foundScheduleSlot = currentSlots.find(
-            (sSlot) => sSlot.slot.slotNumber === slotNumber
-          );
-          const isOccupied = !!foundScheduleSlot;
-          if (!isOccupied) {
-            const newSlotDetail = slotsData.find(
-              (s) => s.slotNumber === slotNumber
+      setEditableWeekSchedule((prevSchedule) => {
+        let actionToRecord: ScheduleAction;
+        return prevSchedule.map((day) => {
+          if (day.workDate === workDate) {
+            const currentSlots = day.scheduleSlots;
+            const foundScheduleSlot = currentSlots.find(
+              (sSlot) => sSlot.slot.slotNumber === slotNumber
             );
-
-            if (!newSlotDetail) {
-              console.error(
-                `SlotDetail for slotNumber ${slotNumber} not found!`
+            const isOccupied = !!foundScheduleSlot;
+            if (!isOccupied) {
+              const newSlotDetail = slotsData.find(
+                (s) => s.slotNumber === slotNumber
               );
-              return day;
+
+              if (!newSlotDetail) {
+                console.error(
+                  `SlotDetail for slotNumber ${slotNumber} not found!`
+                );
+                return day;
+              }
+
+              const newScheduleSlot: ScheduleSlot = {
+                id: 0,
+                scheduleId: 0,
+                slot: newSlotDetail,
+                status: "AVAILABLE",
+              };
+              actionToRecord = {
+                type: "ADD",
+                workDate: workDate,
+                sSlot: newScheduleSlot,
+              };
+
+              const lastHistoryEntry = scheduleHistory.at(
+                scheduleHistory.length - 1
+              );
+              if (
+                actionToRecord.workDate !== lastHistoryEntry?.workDate ||
+                actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
+              ) {
+                setScheduleHistory([...scheduleHistory, actionToRecord]);
+              }
+
+              return {
+                ...day,
+                scheduleSlots: [...currentSlots, newScheduleSlot],
+              };
+            } else {
+              actionToRecord = {
+                type: "REMOVE",
+                workDate: workDate,
+                sSlot: foundScheduleSlot,
+              };
+
+              const lastHistoryEntry = scheduleHistory.at(
+                scheduleHistory.length - 1
+              );
+              if (
+                actionToRecord.workDate !== lastHistoryEntry?.workDate ||
+                actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
+              ) {
+                setScheduleHistory([...scheduleHistory, actionToRecord]);
+                setUpdateIds([...updateIds, actionToRecord.sSlot.id]);
+              }
+
+              return {
+                ...day,
+                scheduleSlots: currentSlots.filter(
+                  (sSlot) => sSlot.slot.slotNumber !== slotNumber
+                ),
+              };
             }
-
-            const newScheduleSlot: ScheduleSlot = {
-              id: 0,
-              scheduleId: 0,
-              slot: newSlotDetail,
-              status: "AVAILABLE",
-            };
-            actionToRecord = {
-              type: "ADD",
-              workDate: workDate,
-              sSlot: newScheduleSlot,
-            };
-
-            const lastHistoryEntry = scheduleHistory.at(
-              scheduleHistory.length - 1
-            );
-            if (
-              actionToRecord.workDate !== lastHistoryEntry?.workDate ||
-              actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
-            ) {
-              setScheduleHistory([...scheduleHistory, actionToRecord]);
-            }
-
-            return {
-              ...day,
-              scheduleSlots: [...currentSlots, newScheduleSlot],
-            };
-          } else {
-            actionToRecord = {
-              type: "REMOVE",
-              workDate: workDate,
-              sSlot: foundScheduleSlot,
-            };
-
-            const lastHistoryEntry = scheduleHistory.at(
-              scheduleHistory.length - 1
-            );
-            if (
-              actionToRecord.workDate !== lastHistoryEntry?.workDate ||
-              actionToRecord.sSlot.id !== lastHistoryEntry?.sSlot.id
-            ) {
-              setScheduleHistory([...scheduleHistory, actionToRecord]);
-              setUpdateIds([...updateIds, actionToRecord.sSlot.id]);
-            }
-
-            return {
-              ...day,
-              scheduleSlots: currentSlots.filter(
-                (sSlot) => sSlot.slot.slotNumber !== slotNumber
-              ),
-            };
           }
-        }
-        return day;
+          return day;
+        });
       });
-    });
-  };
+    },
+    [
+      setEditableWeekSchedule,
+      setScheduleHistory,
+      setUpdateIds,
+      onCreate,
+      onEdit,
+      slotsData,
+      updateIds,
+    ]
+  );
 
   // create function >>>>>>>>>>>>>>>
 
-  const handleCreateSchedule = () => {
+  const handleCreateSchedule = useCallback(() => {
     // Transform the editableWeekSchedule into the backend's expected format
     const payload: BackendSchedulePayload[] = editableWeekSchedule.map(
       (day) => ({
@@ -228,17 +269,20 @@ export const SelectedSchedule = ({
 
     console.log("Transformed payload for backend:", payload);
     createDoctorSchedule(payload);
-  };
+  }, [editableWeekSchedule, createDoctorSchedule]);
 
   // update function >>>>>>>>>>>>>>>
 
-  const handleUpdateSchedule = (payload: number[]) => {
-    updateDoctorSchedule(payload);
-  };
+  const handleUpdateSchedule = useCallback(
+    (payload: number[]) => {
+      updateDoctorSchedule(payload);
+    },
+    [updateDoctorSchedule]
+  );
 
   // cancel operation function >>>>>>>>>>>>>>>
 
-  const handleCancelEdit = () => {
+  const handleCancelEdit = useCallback(() => {
     if (initialWeekSchedule.length > 0) {
       setEditableWeekSchedule(JSON.parse(JSON.stringify(initialWeekSchedule)));
       setScheduleHistory([]);
@@ -248,11 +292,26 @@ export const SelectedSchedule = ({
     setOnCreate(false);
     setOnEdit(false);
     setUpdateIds([]);
-  };
+  }, [
+    initialWeekSchedule,
+    setEditableWeekSchedule,
+    setScheduleHistory,
+    setOnCreate,
+    setOnEdit,
+    setUpdateIds,
+  ]);
 
+  // handle disable booked slots
+
+  const handleDisableBookedSlot = useCallback(
+    (payload: DisableBookedSlotPayload) => {
+      disableBookedSlot(payload);
+    },
+    [disableBookedSlot]
+  );
   // undo toggle function >>>>>>>>>>>>>>>
 
-  const handleUndoToggle = () => {
+  const handleUndoToggle = useCallback(() => {
     const lastAction = scheduleHistory.at(scheduleHistory.length - 1);
     setScheduleHistory(scheduleHistory.slice(0, -1));
     setEditableWeekSchedule((prevSchedule) =>
@@ -282,7 +341,13 @@ export const SelectedSchedule = ({
         return day;
       })
     );
-  };
+  }, [
+    scheduleHistory,
+    setScheduleHistory,
+    setEditableWeekSchedule,
+    setUpdateIds,
+    updateIds,
+  ]);
 
   if (isLoading) {
     return <div className="text-center py-8">Đang tải lịch làm việc...</div>;
@@ -331,7 +396,10 @@ export const SelectedSchedule = ({
                 );
 
                 return (
-                  <Dialog>
+                  <Dialog
+                    open={onDisablingBooked}
+                    onOpenChange={setOnDisablingBooked}
+                  >
                     <DialogTrigger asChild>
                       <div
                         key={`${day.workDate}-${slotNumber}`}
@@ -385,40 +453,68 @@ export const SelectedSchedule = ({
                         )}
                       </div>
                     </DialogTrigger>
-                    {onDisablingBooked ? (
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Huỷ lịch có người đặt</DialogTitle>
-                          <DialogDescription>
-                            Chọn một lựa chọn bên dưới để xác nhận! Hành động
-                            này không thể hoàn tác.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <DialogFooter>
-                          <Button
-                            variant="outline"
-                            className="cursor-pointer bg-red-500 hover:bg-red-400 text-white hover:text-white"
-                          >
-                            Huỷ lịch hoàn tiền
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="cursor-pointer bg-white hover:bg-gray-100"
-                            onClick={() => setOnDisablingBooked(false)}
-                          >
-                            Thoát
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white"
-                          >
-                            Hỗ trợ đổi lịch
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    ) : (
-                      ""
-                    )}
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Huỷ lịch có người đặt</DialogTitle>
+                        <DialogDescription>
+                          Chọn một lựa chọn bên dưới để xác nhận! Hành động này
+                          không thể hoàn tác.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <Button
+                          variant="outline"
+                          className="cursor-pointer bg-red-500 hover:bg-red-400 text-white hover:text-white"
+                          disabled={isDisabling}
+                          onClick={() => {
+                            if (foundScheduleSlot?.id !== undefined) {
+                              handleDisableBookedSlot({
+                                id: foundScheduleSlot.id,
+                                continuity: false,
+                              });
+                            }
+                          }}
+                        >
+                          {isDisabling ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                              Đang xử lí...
+                            </>
+                          ) : (
+                            "Huỷ lịch hoàn tiền"
+                          )}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="cursor-pointer bg-white hover:bg-gray-100"
+                          onClick={() => setOnDisablingBooked(false)}
+                        >
+                          Thoát
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white hover:text-white"
+                          disabled={isDisabling}
+                          onClick={() => {
+                            if (foundScheduleSlot?.id !== undefined) {
+                              handleDisableBookedSlot({
+                                id: foundScheduleSlot.id,
+                                continuity: true,
+                              });
+                            }
+                          }}
+                        >
+                          {isDisabling ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
+                              Đang xử lí...
+                            </>
+                          ) : (
+                            "Hỗ trợ đổi lịch"
+                          )}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
                   </Dialog>
                 );
               })}
