@@ -55,6 +55,7 @@ const TimeSlotSelectorConsultation = ({
 
   if (schedules && schedules.data.scheduleSlots.length > 0) {
     allSlots = schedules.data.scheduleSlots;
+    console.log(allSlots);
   } else {
     return (
       <div className="flex flex-col items-center justify-center py-16">
