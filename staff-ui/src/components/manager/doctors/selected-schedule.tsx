@@ -1,6 +1,6 @@
 import { useCurrentWeekSchedule, useSlots } from "@/api/schedule";
 import { Button } from "@/components/ui/button";
-import { cn, formatDMY } from "@/lib/utils";
+import { cn, formatDMY, formatYMD } from "@/lib/utils";
 import type { Doctor, ScheduleSlot, Schedule } from "@/types/doctor";
 import {
   CalendarCheck,
@@ -405,6 +405,7 @@ export const SelectedSchedule = ({
                 const expiredNoCheckedIn = !!(
                   foundScheduleSlot?.status === "EXPIRED_NO_CHECKED_IN"
                 );
+                const today = new Date();
 
                 return (
                   <Dialog
@@ -455,7 +456,7 @@ export const SelectedSchedule = ({
                           if (
                             !isOccupied &&
                             onCreate &&
-                            day.workDate > Date.now().toString()
+                            day.workDate >= formatYMD(today.toISOString())
                           ) {
                             handleSlotToggle(day.workDate, slotNumber);
                           } else if (
