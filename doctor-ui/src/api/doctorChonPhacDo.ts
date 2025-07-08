@@ -135,23 +135,23 @@ export const fetchPatientPrescription = async (
     return null;
   }
 };
-export const getPatientDataByAppointmentId = async (
-  appointmentId: number
-): Promise<any> => {
-  try {
-    const token = localStorage.getItem("accessToken");
-    const res = await axios.get(`${BASE_URL}appointments/${appointmentId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    // Thông tin bệnh nhân thường nằm trong res.data.data.patient
-    return res.data?.data?.patient || null;
-  } catch (error) {
-    console.error(
-      "❌ Lỗi khi lấy thông tin bệnh nhân theo appointmentId:",
-      error
-    );
-    return null;
-  }
-};
+// export const getPatientDataByAppointmentId = async (
+//   appointmentId: number
+// ): Promise<any> => {
+//   try {
+//     const token = localStorage.getItem("accessToken");
+//     const res = await axios.get(`${BASE_URL}appointments/${appointmentId}`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     // Thông tin bệnh nhân thường nằm trong res.data.data.patient
+//     return res.data?.data?.patient || null;
+//   } catch (error) {
+//     console.error(
+//       "❌ Lỗi khi lấy thông tin bệnh nhân theo appointmentId:",
+//       error
+//     );
+//     return null;
+//   }
+// };

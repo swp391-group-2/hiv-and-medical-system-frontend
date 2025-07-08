@@ -1,5 +1,11 @@
 import { BASE_URL } from "./BaseURL";
-import type { AnonymousPost, CreateCommentResponse } from "@/types/qaType";
+import type {
+  AnonymousPost,
+  CreateCommentResponse,
+  CommentsResponse,
+  Comment,
+  Doctor,
+} from "@/types/qaType";
 import { fetchMyDoctorInfo } from "./doctorProfileAPI";
 
 export const getAnonymousPosts = async (): Promise<AnonymousPost[]> => {
@@ -18,6 +24,30 @@ export const getAnonymousPosts = async (): Promise<AnonymousPost[]> => {
   }
 
   const data = await response.json();
+  return data.data || [];
+};
+
+export const getCommentsForPost = async (
+  anonymousPostId: string
+): Promise<Comment[]> => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(
+    `${BASE_URL}comments/${anonymousPostId}/content`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: ${response.statusText}`);
+  }
+
+  const data: CommentsResponse = await response.json();
   return data.data || [];
 };
 
@@ -85,17 +115,26 @@ export const replyToAnonymousPost = async (
     );
   }
 
+  // Validate inputs
+  if (!anonymousPostId || !content.trim()) {
+    throw new Error("Missing required fields: anonymousPostId or content");
+  }
+
+  const parsedPostId = parseInt(anonymousPostId);
+  if (isNaN(parsedPostId)) {
+    throw new Error("Invalid anonymousPostId format");
+  }
+
   const requestBody = {
-    anonymousPostId: parseInt(anonymousPostId),
-    content: content,
-    doctorId: doctorId,
-     // Assuming no image upload for now
+    content: content.trim(),
+    doctorId: String(doctorId),
+    anonymousPostId: parsedPostId,
   };
 
   console.log("=== FINAL REQUEST ===");
   console.log("Request body:", requestBody);
 
-  const url = `${BASE_URL}comments`;
+  const url = `${BASE_URL}comments/me`;
   console.log("URL:", url);
 
   try {
@@ -113,14 +152,42 @@ export const replyToAnonymousPost = async (
     if (response.ok) {
       const data = await response.json();
       console.log("Response SUCCESS:", data);
-      return data.data;
+      return data.data || data;
     } else {
-      const errorText = await response.text();
-      console.error("Response error:", errorText);
-      throw new Error(`Error ${response.status}: ${errorText}`);
+      // Try to parse error response
+      let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        errorMessage = errorData.message || errorData.error || errorMessage;
+        console.error("Response error JSON:", errorData);
+      } catch {
+        const errorText = await response.text();
+        console.error("Response error text:", errorText);
+        if (errorText) errorMessage = errorText;
+      }
+      throw new Error(errorMessage);
     }
   } catch (error) {
     console.error("Fetch error:", error);
     throw error;
   }
+};
+
+export const getDoctorById = async (doctorId: string): Promise<Doctor> => {
+  const token = localStorage.getItem("accessToken");
+
+  const response = await fetch(`${BASE_URL}doctors/${doctorId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error ${response.status}: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.data || data;
 };

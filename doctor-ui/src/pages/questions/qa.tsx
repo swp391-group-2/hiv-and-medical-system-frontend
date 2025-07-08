@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import StatsBox from "@/components/AnonnymusQA/tagQA";
 import AnonymousPostCard from "@/components/AnonnymusQA/AnonymousPostCard";
 
@@ -11,6 +11,8 @@ import { LoadingSpinner } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Questions = () => {
+  const queryClient = useQueryClient();
+
   const [stats, setStats] = useState<StatsItem[]>([
     { label: "Chờ trả lời", count: 0, description: "Câu hỏi mới" },
     { label: "Đã trả lời", count: 0, description: "Đã tư vấn" },
@@ -27,14 +29,16 @@ const Questions = () => {
     queryKey: ["anonymous-posts"],
     queryFn: getAnonymousPosts,
     refetchOnWindowFocus: false,
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Don't cache data (new property name in v5)
   });
 
   // Cập nhật stats khi có dữ liệu posts
   useEffect(() => {
-    if (posts) {
+    if (posts && Array.isArray(posts)) {
       const totalPosts = posts.length;
       const answeredPosts = posts.filter(
-        (post) => post.comments && post.comments.length > 0
+        (post: AnonymousPost) => post.comments && post.comments.length > 0
       ).length;
       const unansweredPosts = totalPosts - answeredPosts;
 
@@ -55,8 +59,14 @@ const Questions = () => {
     }
   }, [posts]);
 
-  const handleReplySuccess = () => {
-    refetch();
+  const handleReplySuccess = async () => {
+    console.log("Reply success callback triggered, refetching data...");
+    try {
+      await refetch();
+      console.log("Data refetched successfully");
+    } catch (error) {
+      console.error("Error refetching data:", error);
+    }
   };
 
   if (isLoading) {
@@ -123,7 +133,7 @@ const Questions = () => {
 
       {/* Posts */}
       <div>
-        {posts && posts.length > 0 ? (
+        {posts && Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post: AnonymousPost) => (
             <AnonymousPostCard
               key={post.anonymousPostId}

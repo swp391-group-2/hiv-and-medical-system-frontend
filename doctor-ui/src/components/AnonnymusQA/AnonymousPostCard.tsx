@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MessageCircle, Send, User, Calendar } from "lucide-react";
-import type { AnonymousPost, Comment } from "@/types/qaType";
-import { replyToAnonymousPost } from "@/api/doctorAnDanhQA";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { MessageCircle, Send, User, Calendar, Stethoscope } from "lucide-react";
+import type { AnonymousPost, Comment, Doctor } from "@/types/qaType";
+import { replyToAnonymousPost, getDoctorById } from "@/api/doctorAnDanhQA";
 import { toast } from "sonner";
 
 interface AnonymousPostCardProps {
@@ -20,6 +21,45 @@ const AnonymousPostCard = ({
   const [replyContent, setReplyContent] = useState("");
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [doctorInfo, setDoctorInfo] = useState<Record<string, Doctor>>({});
+
+  // Fetch doctor info for comments
+  useEffect(() => {
+    const fetchDoctorsInfo = async () => {
+      if (!post.comments || post.comments.length === 0) return;
+
+      try {
+        const doctorIds = post.comments
+          .map((comment) => comment.doctorId)
+          .filter((id, index, arr) => arr.indexOf(id) === index); // Remove duplicates
+
+        const doctorPromises = doctorIds.map(async (doctorId) => {
+          try {
+            const doctor = await getDoctorById(doctorId);
+            return { doctorId, doctor };
+          } catch (error) {
+            console.error(`Error fetching doctor ${doctorId}:`, error);
+            return { doctorId, doctor: null };
+          }
+        });
+
+        const results = await Promise.all(doctorPromises);
+        const doctorMap: Record<string, Doctor> = {};
+
+        results.forEach(({ doctorId, doctor }) => {
+          if (doctor) {
+            doctorMap[doctorId] = doctor;
+          }
+        });
+
+        setDoctorInfo(doctorMap);
+      } catch (error) {
+        console.error("Error fetching doctors info:", error);
+      }
+    };
+
+    fetchDoctorsInfo();
+  }, [post.comments]);
 
   const handleReply = async () => {
     if (!replyContent.trim()) {
@@ -29,12 +69,22 @@ const AnonymousPostCard = ({
 
     setIsSubmitting(true);
     try {
-      await replyToAnonymousPost(post.anonymousPostId, replyContent.trim());
+      const response = await replyToAnonymousPost(
+        post.anonymousPostId,
+        replyContent.trim()
+      );
+      console.log("Reply response:", response);
       toast.success("Trả lời thành công!");
       setReplyContent("");
       setShowReplyForm(false);
-      onReplySuccess?.();
+
+      // Call the callback to refresh data
+      if (onReplySuccess) {
+        console.log("Calling onReplySuccess to refresh data...");
+        onReplySuccess();
+      }
     } catch (error) {
+      console.error("Reply error:", error);
       const errorMessage =
         error instanceof Error ? error.message : "Có lỗi xảy ra khi trả lời";
       toast.error(errorMessage);
@@ -64,9 +114,12 @@ const AnonymousPostCard = ({
           <CardTitle className="text-lg font-semibold text-gray-900">
             {post.title}
           </CardTitle>
-          <Badge variant="outline" className="ml-2">
-            {post.gender}
-          </Badge>
+          <div className="flex gap-2">
+            <Badge variant="outline" className="ml-2">
+              {post.gender}
+            </Badge>
+            <Badge variant="outline">{post.age} tuổi</Badge>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 text-sm text-gray-500">
@@ -89,17 +142,51 @@ const AnonymousPostCard = ({
             </h4>
 
             <div className="space-y-3">
-              {post.comments.map((comment: Comment) => (
-                <div
-                  key={comment.commentId}
-                  className="bg-blue-50 p-3 rounded-lg"
-                >
-                  <p className="text-gray-800 mb-2">{comment.content}</p>
-                  <div className="text-xs text-gray-500">
-                    Bác sĩ • {formatDate(comment.createdAt)}
+              {post.comments.map((comment: Comment) => {
+                const doctor = doctorInfo[comment.doctorId];
+                const doctorName =
+                  doctor?.fullName || comment.doctorName || "Bác sĩ";
+                const doctorImage =
+                  doctor?.profilePicture || comment.doctorImageUrl;
+
+                return (
+                  <div
+                    key={comment.commentId}
+                    className="bg-blue-50 p-4 rounded-lg"
+                  >
+                    {/* Doctor info header */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <Avatar className="w-10 h-10">
+                        <AvatarImage
+                          src={doctorImage || undefined}
+                          alt={doctorName}
+                        />
+                        <AvatarFallback className="bg-blue-500 text-white">
+                          <Stethoscope className="w-4 h-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-blue-900">
+                            Bác sĩ {doctorName}
+                          </span>
+                          {/* <Badge variant="secondary" className="text-xs">
+                            {doctor?.specialization || "Bác sĩ"}
+                          </Badge> */}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {formatDate(comment.createdAt)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Comment content */}
+                    <p className="text-gray-800 leading-relaxed">
+                      {comment.content}
+                    </p>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

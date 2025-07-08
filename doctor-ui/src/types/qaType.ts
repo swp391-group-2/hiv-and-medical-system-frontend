@@ -2,6 +2,7 @@ export interface AnonymousPost {
   anonymousPostId: string;
   nickName: string;
   gender: string;
+  age: number;
   title: string;
   content: string;
   createdAt: string;
@@ -16,6 +17,8 @@ export interface Comment {
   patientId: string;
   content: string;
   createdAt: string;
+  doctorName: string | null;
+  doctorImageUrl: string | null;
 }
 
 export interface CreateCommentRequest {
@@ -54,4 +57,19 @@ export interface StatsItem {
   count: number;
   description: string;
   color?: string;
+}
+
+export interface CommentsResponse {
+  code: number;
+  message: string;
+  data: Comment[];
+}
+
+export interface Doctor {
+  id: string;
+  doctorId: string;
+  fullName: string;
+  profilePicture?: string;
+  specialization?: string;
+  email?: string;
 }
