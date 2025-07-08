@@ -27,6 +27,7 @@ import BlogPost from "./pages/manager/blog-post";
 import BlogCreate from "./pages/manager/blog-create";
 import AdminAccounts from "./pages/admin/accounts";
 import ManagerDoctorsV2 from "./pages/manager/doctors-v2";
+import Manageservices from "./pages/manager/services";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ function App() {
               <Route path=":blogId" element={<BlogPost />} />
               <Route path="create" element={<BlogCreate />} />
             </Route>
+             <Route path="services" element={<Manageservices/>} />
           </Route>
           {/* admin */}
           <Route path="admin" element={<AdminSidebar />}>

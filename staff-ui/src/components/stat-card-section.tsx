@@ -135,7 +135,7 @@ export const StatCardsSection = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {featuredStats.map((item) => {
           switch (item.title) {
             case "Tổng khách hàng":
