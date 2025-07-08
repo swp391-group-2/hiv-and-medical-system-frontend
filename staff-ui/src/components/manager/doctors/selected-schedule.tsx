@@ -9,6 +9,10 @@ import {
   Loader2,
   Undo2,
   Pencil,
+  Ban,
+  Hourglass,
+  UserRoundCheck,
+  UserRoundX,
 } from "lucide-react";
 import {
   Tooltip,
@@ -75,7 +79,10 @@ export const SelectedSchedule = ({
   const [updateIds, setUpdateIds] = useState<number[]>([]);
   const [onCreate, setOnCreate] = useState(false);
   const [onEdit, setOnEdit] = useState(false);
-  const [onDisablingBooked, setOnDisablingBooked] = useState(false);
+  const [disablingSlot, setDisablingSlot] = useState<{
+    workDate: string;
+    slotNumber: number;
+  } | null>(null);
 
   // keeps editable schedule and initial schedule (from backend) synced
   useEffect(() => {
@@ -119,17 +126,13 @@ export const SelectedSchedule = ({
     number[]
   >({
     mutationFn: async (payload) =>
-      http.put(`/doctors/schedules/available/block`, payload),
+      http.post(`/doctors/schedules/available/block`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["weekSchedule", doctor.doctorId],
       });
       toast.success("Cập nhật lịch làm việc thành công!");
-      if (onCreate) {
-        setOnCreate(false);
-      } else {
-        setOnEdit(false);
-      }
+      setOnEdit(false);
       setScheduleHistory([]);
     },
     onError: (error) => {
@@ -145,7 +148,7 @@ export const SelectedSchedule = ({
     DisableBookedSlotPayload
   >({
     mutationFn: async (payload) =>
-      http.put(`/doctors/schedules/unavailable/block`, payload),
+      http.post(`/doctors/schedules/unavailable/block`, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["weekSchedule", doctor.doctorId],
@@ -394,11 +397,24 @@ export const SelectedSchedule = ({
                 const isAvailable = !!(
                   foundScheduleSlot?.status === "AVAILABLE"
                 );
+                const isBlocked = !!(foundScheduleSlot?.status === "BLOCKED");
+                const isExpired = !!(foundScheduleSlot?.status === "EXPIRED");
+                const checkedIn = !!(
+                  foundScheduleSlot?.status === "CHECKED_IN"
+                );
+                const expiredNoCheckedIn = !!(
+                  foundScheduleSlot?.status === "EXPIRED_NO_CHECKED_IN"
+                );
 
                 return (
                   <Dialog
-                    open={onDisablingBooked}
-                    onOpenChange={setOnDisablingBooked}
+                    open={
+                      disablingSlot?.workDate === day.workDate &&
+                      disablingSlot?.slotNumber === slotNumber
+                    }
+                    onOpenChange={(open) => {
+                      if (!open) setDisablingSlot(null);
+                    }}
                   >
                     <DialogTrigger asChild>
                       <div
@@ -407,6 +423,7 @@ export const SelectedSchedule = ({
                           "w-full h-full flex items-center justify-center border border-gray-300 rounded",
                           isOccupied && isAvailable ? "bg-green-400" : "",
                           isOccupied && !isAvailable ? "bg-orange-300" : "",
+                          isOccupied && isBlocked ? "bg-red-500" : "",
                           onCreate &&
                             !isOccupied &&
                             "cursor-pointer bg-white hover:bg-gray-100",
@@ -414,17 +431,20 @@ export const SelectedSchedule = ({
                             ? "hover:bg-green-500 cursor-pointer"
                             : "",
                           onEdit &&
+                            !isExpired &&
                             isOccupied &&
                             !isAvailable &&
                             updateIds.length === 0
                             ? "hover:bg-orange-200 cursor-pointer"
                             : "",
                           onEdit &&
+                            !isExpired &&
                             isOccupied &&
                             !isAvailable &&
                             updateIds.length > 0
                             ? "bg-orange-100"
-                            : ""
+                            : "",
+                          isExpired ? "bg-gray-300" : ""
                         )}
                         onClick={() => {
                           if (!isOccupied && onCreate) {
@@ -437,12 +457,26 @@ export const SelectedSchedule = ({
                             !isAvailable &&
                             updateIds.length === 0
                           ) {
-                            setOnDisablingBooked(true);
+                            setDisablingSlot({
+                              workDate: day.workDate,
+                              slotNumber,
+                            });
                           }
                         }}
                       >
-                        {isOccupied ? (
+                        {expiredNoCheckedIn ? (
+                          <UserRoundX className="text-white" />
+                        ) : checkedIn ? (
+                          <UserRoundCheck className="text-white" />
+                        ) : isExpired ? (
+                          <Hourglass className="text-white" />
+                        ) : !isExpired &&
+                          !isBlocked &&
+                          isOccupied &&
+                          !checkedIn ? (
                           <CalendarCheck className="text-white" />
+                        ) : isBlocked ? (
+                          <Ban className="text-white" />
                         ) : (
                           <Plus
                             className={cn(
@@ -487,7 +521,7 @@ export const SelectedSchedule = ({
                         <Button
                           variant="outline"
                           className="cursor-pointer bg-white hover:bg-gray-100"
-                          onClick={() => setOnDisablingBooked(false)}
+                          onClick={() => setDisablingSlot(null)}
                         >
                           Thoát
                         </Button>
@@ -591,7 +625,7 @@ export const SelectedSchedule = ({
               className="cursor-pointer bg-green-500 hover:bg-green-600 text-white hover:text-white"
               onClick={() => {
                 if (onCreate) {
-                  handleCreateSchedule;
+                  handleCreateSchedule();
                 } else {
                   handleUpdateSchedule(updateIds);
                 }
