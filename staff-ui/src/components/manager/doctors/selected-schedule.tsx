@@ -423,7 +423,7 @@ export const SelectedSchedule = ({
                           "w-full h-full flex items-center justify-center border border-gray-300 rounded",
                           isOccupied && isAvailable ? "bg-green-400" : "",
                           isOccupied && !isAvailable ? "bg-orange-300" : "",
-                          isOccupied && isBlocked ? "bg-red-500" : "",
+                          isOccupied && isBlocked ? "bg-red-100" : "",
                           onCreate &&
                             !isOccupied &&
                             "cursor-pointer bg-white hover:bg-gray-100",
@@ -432,6 +432,8 @@ export const SelectedSchedule = ({
                             : "",
                           onEdit &&
                             !isExpired &&
+                            !expiredNoCheckedIn &&
+                            !isBlocked &&
                             isOccupied &&
                             !isAvailable &&
                             updateIds.length === 0
@@ -439,21 +441,36 @@ export const SelectedSchedule = ({
                             : "",
                           onEdit &&
                             !isExpired &&
+                            !expiredNoCheckedIn &&
+                            !isBlocked &&
                             isOccupied &&
                             !isAvailable &&
                             updateIds.length > 0
                             ? "bg-orange-100"
                             : "",
-                          isExpired ? "bg-gray-300" : ""
+                          isExpired ? "bg-green-200" : "",
+                          checkedIn || expiredNoCheckedIn ? "bg-orange-100" : ""
                         )}
                         onClick={() => {
-                          if (!isOccupied && onCreate) {
-                            handleSlotToggle(day.workDate, slotNumber);
-                          } else if (onEdit && isOccupied && isAvailable) {
+                          if (
+                            !isOccupied &&
+                            onCreate &&
+                            day.workDate > Date.now().toString()
+                          ) {
                             handleSlotToggle(day.workDate, slotNumber);
                           } else if (
                             onEdit &&
                             isOccupied &&
+                            isAvailable &&
+                            !isBlocked
+                          ) {
+                            handleSlotToggle(day.workDate, slotNumber);
+                          } else if (
+                            onEdit &&
+                            isOccupied &&
+                            !isBlocked &&
+                            !expiredNoCheckedIn &&
+                            !isExpired &&
                             !isAvailable &&
                             updateIds.length === 0
                           ) {
@@ -465,18 +482,18 @@ export const SelectedSchedule = ({
                         }}
                       >
                         {expiredNoCheckedIn ? (
-                          <UserRoundX className="text-white" />
+                          <UserRoundX className="text-red-500" />
                         ) : checkedIn ? (
-                          <UserRoundCheck className="text-white" />
+                          <UserRoundCheck className="text-green-500" />
                         ) : isExpired ? (
-                          <Hourglass className="text-white" />
+                          <Hourglass className="text-gray-400" />
                         ) : !isExpired &&
                           !isBlocked &&
                           isOccupied &&
                           !checkedIn ? (
                           <CalendarCheck className="text-white" />
                         ) : isBlocked ? (
-                          <Ban className="text-white" />
+                          <Ban className="text-red-500" />
                         ) : (
                           <Plus
                             className={cn(
@@ -581,6 +598,38 @@ export const SelectedSchedule = ({
             </TooltipTrigger>
             <TooltipContent>
               <span>Lịch trống</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <Ban className="text-red-500" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Lịch huỷ do bác sĩ bận</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <Hourglass className="text-gray-400" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Lịch quá hạn</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <UserRoundCheck className="text-green-500" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Đã check in</span>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger>
+              <UserRoundX className="text-red-500" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <span>Không tới khám</span>
             </TooltipContent>
           </Tooltip>
         </div>
