@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
-import { AppointmentTable } from "@/components/appointments/appointment-table";
+import { AppointmentTable } from "@/components/manager/appointments/appointment-table";
 import { useQueryClient } from "@tanstack/react-query";
 import { useAppointments } from "@/api/appointments";
 import { useMemo, useState } from "react";
@@ -46,7 +46,7 @@ const ManagerAppointments = () => {
         statuses = ["COMPLETED"];
         break;
       case "canceled":
-        statuses = ["CANCELLED"];
+        statuses = ["CANCELLED", "EXPIRED"];
         break;
       default:
         statuses = ["SCHEDULED"];
