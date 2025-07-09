@@ -60,22 +60,22 @@ const TIME_PERIODS = [
     startDate: "2025-11-01",
     endDate: "2025-12-31",
   },
-  {
-    label: "06/25 - 07/25",
-    value: "2025-06-2025-07",
-    startDate: "2025-06-01",
-    endDate: "2025-07-31",
-  },
-  {
-    label: "08/25 - 09/25",
-    value: "2025-08-2025-09",
-    startDate: "2025-08-01",
-    endDate: "2025-09-30",
-  },
+  // {
+  //   label: "06/25 - 07/25",
+  //   value: "2025-06-2025-07",
+  //   startDate: "2025-06-01",
+  //   endDate: "2025-07-31",
+  // },
+  // {
+  //   label: "08/25 - 09/25",
+  //   value: "2025-08-2025-09",
+  //   startDate: "2025-08-01",
+  //   endDate: "2025-09-30",
+  // },
 ];
 
 export const WeeklyStatsChart = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState(TIME_PERIODS[4]); // Default to 05/25 - 06/25
+  const [selectedPeriod, setSelectedPeriod] = useState(TIME_PERIODS[3]); // Default to 05/25 - 06/25
   const [visibleLines, setVisibleLines] = useState<Record<string, boolean>>({
     "Tổng khách hàng": true,
     "Bác sĩ hoạt động": true,
