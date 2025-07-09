@@ -324,7 +324,8 @@ export const SelectedSchedule = ({
             return {
               ...day,
               scheduleSlots: day.scheduleSlots.filter(
-                (sSlot) => sSlot.id !== lastAction.sSlot.id
+                (sSlot) =>
+                  sSlot.slot.slotNumber !== lastAction.sSlot.slot.slotNumber
               ),
             };
           } else {
