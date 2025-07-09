@@ -1,5 +1,13 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { Grid2x2, Hospital, NotebookText, Pill, User, Users } from "lucide-react";
+import {
+  Calendar,
+  Grid2x2,
+  Hospital,
+  NotebookText,
+  Pill,
+  User,
+  Users,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +32,11 @@ const items = [
     icon: Grid2x2,
   },
   {
+    title: "Quản lý lịch hẹn",
+    url: "/manager/appointments",
+    icon: Calendar,
+  },
+  {
     title: "Quản lý bác sĩ",
     url: "/manager/doctors",
     icon: User,
@@ -43,7 +56,7 @@ const items = [
     url: "/manager/blogs",
     icon: NotebookText,
   },
-    {
+  {
     title: "Quản lý dịch vụ",
     url: "/manager/services",
     icon: Hospital,
