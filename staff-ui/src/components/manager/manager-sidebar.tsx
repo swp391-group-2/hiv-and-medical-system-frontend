@@ -23,14 +23,19 @@ const items = [
     url: "/manager/dashboard",
     icon: Grid2x2,
   },
-  {
-    title: "Quản lý bác sĩ",
-    url: "/manager/doctors",
-    icon: User,
-  },
-  {
-    title: "Quản lý Staff",
-    url: "/manager/staffs",
+  // {
+  //   title: "Quản lý bác sĩ",
+  //   url: "/manager/doctors",
+  //   icon: User,
+  // },
+  // {
+  //   title: "Quản lý Staff",
+  //   url: "/manager/staffs",
+  //   icon: Users,
+  // },
+   {
+    title: "Quản lý tài khoản",
+    url: "/manager/accounts",
     icon: Users,
   },
   {
