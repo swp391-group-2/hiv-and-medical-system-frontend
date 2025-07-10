@@ -1,6 +1,5 @@
 import { formatDMY } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppointmentTable } from "@/components/appointments/appointment-table";
 
 import { useMemo, useState } from "react";
 import { useAppointments } from "@/api/appointments";
@@ -12,6 +11,7 @@ import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
+import { AppointmentTable } from "@/components/appointments/appointment-table";
 
 const CheckinPending = () => {
   const queryClient = useQueryClient();

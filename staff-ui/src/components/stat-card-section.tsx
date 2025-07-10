@@ -15,7 +15,6 @@ import {
   UserCheck,
   Users,
 } from "lucide-react";
-import { LoadingOverlay } from "./loading-overlay";
 import { toast } from "sonner";
 import { useState } from "react";
 import { format } from "date-fns";
@@ -44,15 +43,12 @@ export const StatCardsSection = () => {
 
   const {
     data: featuredStats = [],
-    isLoading,
     isError,
     error,
   } = useFeaturedStats(
     formatDateForAPI(apiStartDate),
     formatDateForAPI(apiEndDate)
   );
-
-  if (isLoading) return <LoadingOverlay message="Đang tải số liệu..." />;
 
   if (isError) {
     console.log(error.message);

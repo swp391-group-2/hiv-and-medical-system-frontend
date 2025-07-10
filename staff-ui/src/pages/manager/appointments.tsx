@@ -1,18 +1,18 @@
-import { formatDMY } from "@/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AppointmentFilters,
   type Filters,
 } from "@/components/appointments/appointment-filters";
-import { useMemo, useState } from "react";
-import { useAppointments } from "@/api/appointments";
-import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
+import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
+import { AppointmentTable } from "@/components/manager/appointments/appointment-table";
 import { useQueryClient } from "@tanstack/react-query";
-import { AppointmentTable } from "@/components/appointments/appointment-table";
+import { useAppointments } from "@/api/appointments";
+import { useMemo, useState } from "react";
+import { formatDMY } from "@/lib/utils";
 
-const OngoingAppointments = () => {
+const ManagerAppointments = () => {
   const queryClient = useQueryClient();
   const {
     data: appointments = [],
@@ -30,11 +30,30 @@ const OngoingAppointments = () => {
     serviceType: "default",
   });
 
+  const [activeTab, setActiveTab] = useState("checkin");
   const filtered = useMemo(() => {
     if (!Array.isArray(appointments)) return [];
 
+    let statuses: string[] = [];
+    switch (activeTab) {
+      case "checkin":
+        statuses = ["SCHEDULED"];
+        break;
+      case "ongoing":
+        statuses = ["CHECKED_IN", "LAB_COMPLETED"];
+        break;
+      case "finished":
+        statuses = ["COMPLETED"];
+        break;
+      case "canceled":
+        statuses = ["CANCELLED", "EXPIRED"];
+        break;
+      default:
+        statuses = ["SCHEDULED"];
+    }
+
     return appointments
-      .filter((a) => a.status === "CHECKED_IN" || a.status === "LAB_COMPLETED")
+      .filter((a) => statuses.includes(a.status))
       .filter((a) => {
         if (filters.search) {
           const q = filters.search.toLowerCase();
@@ -76,42 +95,69 @@ const OngoingAppointments = () => {
         }
         return true;
       });
-  }, [appointments, filters]);
+  }, [appointments, activeTab, filters]);
 
   if (isLoading) return <LoadingOverlay message="Đang tải..." />;
   if (isError)
     return <div className="text-red-600">{(error as Error).message}</div>;
-  const handleReLoadList = () => {
+
+  const handleReloadList = () => {
     queryClient.invalidateQueries({ queryKey: ["appointments"] });
   };
-
   return (
     <section className="w-full mt-7">
       <div>
-        <h1 className="text-3xl font-bold mb-5">Danh Sách Đang Khám</h1>
+        <h1 className="text-3xl font-bold mb-5">Quản lý lịch hẹn</h1>
         <p className="text-gray-500">
           Hôm nay là: {formatDMY(new Date().toISOString())}
         </p>
       </div>
       <AppointmentFilters onApply={setFilters} />
-      <Tabs defaultValue="list">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        defaultValue="checkin"
+      >
         <div className="flex justify-between items-center">
           <TabsList>
-            <TabsTrigger value="list">Danh sách</TabsTrigger>
-            <TabsTrigger value="calendar" disabled>
-              Lịch
-            </TabsTrigger>
+            <TabsTrigger value="checkin">Check-in</TabsTrigger>
+            <TabsTrigger value="ongoing">Đang khám</TabsTrigger>
+            <TabsTrigger value="finished">Khám/xét nghiệm xong</TabsTrigger>
+            <TabsTrigger value="canceled">Lịch huỷ</TabsTrigger>
           </TabsList>
           <Button
             variant="outline"
             className="bg-white hover:bg-gray-100 cursor-pointer mr-4"
-            onClick={handleReLoadList}
+            onClick={handleReloadList}
           >
             {"Làm mới "}
             <RotateCcw />
           </Button>
         </div>
-        <TabsContent value="list">
+        <TabsContent value="checkin">
+          {isFetching ? (
+            <InternalLoading message="Đang tải lại danh sách" />
+          ) : (
+            <AppointmentTable data={filtered} />
+          )}
+        </TabsContent>
+        <TabsContent value="ongoing">
+          {isFetching ? (
+            <InternalLoading message="Đang tải lại danh sách" />
+          ) : (
+            <AppointmentTable data={filtered} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="finished">
+          {isFetching ? (
+            <InternalLoading message="Đang tải lại danh sách" />
+          ) : (
+            <AppointmentTable data={filtered} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="canceled">
           {isFetching ? (
             <InternalLoading message="Đang tải lại danh sách" />
           ) : (
@@ -123,4 +169,4 @@ const OngoingAppointments = () => {
   );
 };
 
-export default OngoingAppointments;
+export default ManagerAppointments;
