@@ -1,6 +1,5 @@
 import { formatDMY } from "@/lib/utils";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AppointmentTable } from "@/components/appointments/appointment-table";
 import {
   AppointmentFilters,
   type Filters,
@@ -11,6 +10,7 @@ import { InternalLoading, LoadingOverlay } from "@/components/loading-overlay";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { AppointmentTable } from "@/components/appointments/appointment-table";
 
 const OngoingAppointments = () => {
   const queryClient = useQueryClient();
