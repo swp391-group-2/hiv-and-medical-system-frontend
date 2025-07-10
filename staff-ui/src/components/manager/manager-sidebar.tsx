@@ -4,6 +4,8 @@ import {
   Grid2x2,
   Hospital,
   NotebookText,
+  BriefcaseMedical,
+  CircleUser,
   Pill,
   User,
   Users,
@@ -31,6 +33,7 @@ const items = [
     url: "/manager/dashboard",
     icon: Grid2x2,
   },
+
   {
     title: "Quản lý lịch hẹn",
     url: "/manager/appointments",
@@ -39,12 +42,17 @@ const items = [
   {
     title: "Quản lý bác sĩ",
     url: "/manager/doctors",
-    icon: User,
+    icon: BriefcaseMedical,
   },
   {
     title: "Quản lý Staff",
     url: "/manager/staffs",
     icon: Users,
+  },
+   {
+    title: "Quản lý tài khoản",
+    url: "/manager/accounts",
+    icon: CircleUser,
   },
   {
     title: "Quản lý phác đồ",

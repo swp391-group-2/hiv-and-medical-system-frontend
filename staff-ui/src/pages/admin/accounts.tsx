@@ -157,12 +157,12 @@ const AdminAccounts = () => {
 
       {/* Tabs for different account types */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="doctor">Bác sĩ</TabsTrigger>
           <TabsTrigger value="staff">Nhân viên</TabsTrigger>
           <TabsTrigger value="patient">Bệnh nhân</TabsTrigger>
           <TabsTrigger value="lab">Nhân viên phòng lab</TabsTrigger>
-          <TabsTrigger value="manager">Quản lý</TabsTrigger>
+          {/* <TabsTrigger value="manager">Quản lý</TabsTrigger> */}
         </TabsList>
 
         {/* Doctor Tab */}

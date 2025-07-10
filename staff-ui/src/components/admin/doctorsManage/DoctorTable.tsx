@@ -39,7 +39,7 @@ export const DoctorTable = ({ doctors, onEditClick }: DoctorTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Mã bác sĩ</TableHead>
+            {/* <TableHead>Mã bác sĩ</TableHead> */}
             <TableHead>Họ và tên</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Chuyên khoa</TableHead>
@@ -58,9 +58,9 @@ export const DoctorTable = ({ doctors, onEditClick }: DoctorTableProps) => {
           ) : (
             doctors.map((doctor: Doctor) => (
               <TableRow key={doctor.doctorId}>
-                <TableCell className="font-medium">
+                {/* <TableCell className="font-medium">
                   {doctor.doctorCode}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>{doctor.fullName}</TableCell>
                 <TableCell>{doctor.email}</TableCell>
                 <TableCell>{doctor.specialization}</TableCell>
