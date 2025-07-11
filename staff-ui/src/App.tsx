@@ -78,6 +78,7 @@ function App() {
           <Route path="staff" element={<MainLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
+
             <Route path="checkin-pending" element={<CheckinPending />} />
             <Route path="on-going" element={<OngoingAppointments />} />
             <Route path="finished" element={<FinishedAppointments />} />

@@ -1,6 +1,6 @@
 import { Sidebar, SidebarNav, SidebarNavItem } from "./user/sidebar";
 import {
-  ChartColumnIncreasing,
+  // ChartColumnIncreasing,
   Clock,
   Calendar,
   FastForward,
@@ -31,12 +31,12 @@ const StaffSidebar = () => {
         <Logo />
       </div>
       <SidebarNav>
-        <SidebarNavItem
+        {/* <SidebarNavItem
           path="/staff/dashboard"
           icon={ChartColumnIncreasing}
           text="Dashboard"
           desc="Tổng quan"
-        />
+        /> */}
         <SidebarNavItem
           path="/staff/checkin-pending"
           icon={Calendar}
