@@ -82,6 +82,7 @@ export class Http {
 
           console.error("Lỗi rồi Phương", message);
         }
+        console.log("Error check status:", error.response?.status);
         if (
           isAxiosUnauthorizedError<
             ErrorResponse<{ name: string; message: string }>
@@ -89,7 +90,6 @@ export class Http {
         ) {
           const config = error.response?.config || { headers: {}, url: "" };
           const { url } = config;
-
           if (isAxiosExpiredTokenError(error) && url !== URL_REFRESH_TOKEN) {
             this.refreshTokenRequest = this.refreshTokenRequest
               ? this.refreshTokenRequest
@@ -116,7 +116,7 @@ export class Http {
       }
     );
   }
-  private handleRefreshToken() {
+  private async handleRefreshToken() {
     return this.instance
       .post<RefreshTokenResponse>(URL_REFRESH_TOKEN, {
         refreshToken: this.refreshToken,

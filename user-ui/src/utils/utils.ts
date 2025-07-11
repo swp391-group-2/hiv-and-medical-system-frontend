@@ -18,11 +18,10 @@ export function isAxiosUnauthorizedError<UnauthorizedError>(
 export function isAxiosExpiredTokenError<UnauthorizedError>(
   error: unknown
 ): error is AxiosError<UnauthorizedError> {
-  return (
-    isAxiosUnauthorizedError<ErrorResponse<{ name: string; message: string }>>(
-      error
-    ) && error.response?.data?.data?.name === "EXPIRED_TOKEN"
-  );
+  return isAxiosUnauthorizedError<
+    ErrorResponse<{ name: string; message: string }>
+  >(error);
+  // && error.response?.data?.data?.name === "EXPIRED_TOKEN"
 }
 
 export const getTimeAgo = (createdAt: Date) => {
