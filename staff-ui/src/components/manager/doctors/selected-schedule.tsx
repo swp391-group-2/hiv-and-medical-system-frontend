@@ -361,6 +361,14 @@ export const SelectedSchedule = ({
 
   return (
     <div className="flex flex-col gap-3 items-end w-full h-full overflow-scroll">
+      {onCreate && (
+        <div className="w-full bg-blue-50 border border-blue-200 rounded-lg p-3 mb-2">
+          <p className="text-blue-700 text-sm font-medium">
+            💡 Chế độ thêm lịch mới: Click vào các ô trống (có dấu +) để thêm
+            slot làm việc, sau đó click "Lưu" để hoàn tất.
+          </p>
+        </div>
+      )}
       <div className="w-11/12 grid grid-cols-7 gap-2">
         {initialWeekSchedule.map((day, idx) => (
           <div key={day.workDate} className="text-center flex flex-col">
@@ -418,94 +426,123 @@ export const SelectedSchedule = ({
                       if (!open) setDisablingSlot(null);
                     }}
                   >
-                    <DialogTrigger asChild>
-                      <div
-                        key={`${day.workDate}-${slotNumber}`}
-                        className={cn(
-                          "w-full h-full flex items-center justify-center border border-gray-300 rounded",
-                          isOccupied && isAvailable ? "bg-green-400" : "",
-                          isOccupied && !isAvailable ? "bg-orange-300" : "",
-                          isOccupied && isBlocked ? "bg-red-100" : "",
-                          onCreate &&
-                            !isOccupied &&
-                            "cursor-pointer bg-white hover:bg-gray-100",
-                          onEdit && isOccupied && isAvailable
-                            ? "hover:bg-green-500 cursor-pointer"
-                            : "",
-                          onEdit &&
-                            !isExpired &&
-                            !expiredNoCheckedIn &&
-                            !isBlocked &&
-                            isOccupied &&
-                            !isAvailable &&
-                            updateIds.length === 0
-                            ? "hover:bg-orange-200 cursor-pointer"
-                            : "",
-                          onEdit &&
-                            !isExpired &&
-                            !expiredNoCheckedIn &&
-                            !isBlocked &&
-                            isOccupied &&
-                            !isAvailable &&
-                            updateIds.length > 0
-                            ? "bg-orange-100"
-                            : "",
-                          isExpired ? "bg-green-200" : "",
-                          checkedIn || expiredNoCheckedIn ? "bg-orange-100" : ""
-                        )}
-                        onClick={() => {
-                          if (
-                            !isOccupied &&
-                            onCreate &&
-                            day.workDate >= formatYMD(today.toISOString())
-                          ) {
-                            handleSlotToggle(day.workDate, slotNumber);
-                          } else if (
-                            onEdit &&
-                            isOccupied &&
-                            isAvailable &&
-                            !isBlocked
-                          ) {
-                            handleSlotToggle(day.workDate, slotNumber);
-                          } else if (
-                            onEdit &&
-                            isOccupied &&
-                            !isBlocked &&
-                            !expiredNoCheckedIn &&
-                            !isExpired &&
-                            !isAvailable &&
-                            updateIds.length === 0
-                          ) {
-                            setDisablingSlot({
-                              workDate: day.workDate,
-                              slotNumber,
-                            });
-                          }
-                        }}
-                      >
-                        {expiredNoCheckedIn ? (
-                          <UserRoundX className="text-red-500" />
-                        ) : checkedIn ? (
-                          <UserRoundCheck className="text-green-500" />
-                        ) : isExpired ? (
-                          <Hourglass className="text-gray-400" />
-                        ) : !isExpired &&
-                          !isBlocked &&
-                          isOccupied &&
-                          !checkedIn ? (
-                          <CalendarCheck className="text-white" />
-                        ) : isBlocked ? (
-                          <Ban className="text-red-500" />
-                        ) : (
-                          <Plus
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <div
+                            key={`${day.workDate}-${slotNumber}`}
                             className={cn(
-                              "text-gray-300",
-                              onCreate && "text-blue-400"
+                              "w-full h-full flex items-center justify-center border border-gray-300 rounded",
+                              isOccupied && isAvailable ? "bg-green-400" : "",
+                              isOccupied && !isAvailable ? "bg-orange-300" : "",
+                              isOccupied && isBlocked ? "bg-red-100" : "",
+                              onCreate &&
+                                !isOccupied &&
+                                "cursor-pointer bg-white hover:bg-gray-100",
+                              onEdit && isOccupied && isAvailable
+                                ? "hover:bg-green-500 cursor-pointer"
+                                : "",
+                              onEdit &&
+                                !isExpired &&
+                                !expiredNoCheckedIn &&
+                                !isBlocked &&
+                                isOccupied &&
+                                !isAvailable &&
+                                updateIds.length === 0
+                                ? "hover:bg-orange-200 cursor-pointer"
+                                : "",
+                              onEdit &&
+                                !isExpired &&
+                                !expiredNoCheckedIn &&
+                                !isBlocked &&
+                                isOccupied &&
+                                !isAvailable &&
+                                updateIds.length > 0
+                                ? "bg-orange-100"
+                                : "",
+                              isExpired ? "bg-green-200" : "",
+                              checkedIn || expiredNoCheckedIn
+                                ? "bg-orange-100"
+                                : ""
                             )}
-                          />
-                        )}
-                      </div>
-                    </DialogTrigger>
+                            onClick={() => {
+                              if (
+                                !isOccupied &&
+                                onCreate &&
+                                day.workDate >= formatYMD(today.toISOString())
+                              ) {
+                                handleSlotToggle(day.workDate, slotNumber);
+                              } else if (
+                                onEdit &&
+                                isOccupied &&
+                                isAvailable &&
+                                !isBlocked
+                              ) {
+                                handleSlotToggle(day.workDate, slotNumber);
+                              } else if (
+                                onEdit &&
+                                isOccupied &&
+                                !isBlocked &&
+                                !expiredNoCheckedIn &&
+                                !isExpired &&
+                                !isAvailable &&
+                                updateIds.length === 0
+                              ) {
+                                setDisablingSlot({
+                                  workDate: day.workDate,
+                                  slotNumber,
+                                });
+                              } else if (
+                                !isOccupied &&
+                                !onCreate &&
+                                day.workDate >= formatYMD(today.toISOString())
+                              ) {
+                                toast.info(
+                                  "Vui lòng click 'Thêm lịch mới' trước để thêm slot!"
+                                );
+                              }
+                            }}
+                          >
+                            {expiredNoCheckedIn ? (
+                              <UserRoundX className="text-red-500" />
+                            ) : checkedIn ? (
+                              <UserRoundCheck className="text-green-500" />
+                            ) : isExpired ? (
+                              <Hourglass className="text-gray-400" />
+                            ) : !isExpired &&
+                              !isBlocked &&
+                              isOccupied &&
+                              !checkedIn ? (
+                              <CalendarCheck className="text-white" />
+                            ) : isBlocked ? (
+                              <Ban className="text-red-500" />
+                            ) : (
+                              <Plus
+                                className={cn(
+                                  "text-gray-300",
+                                  onCreate && "text-blue-400"
+                                )}
+                              />
+                            )}
+                          </div>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {expiredNoCheckedIn
+                          ? "Slot đã hết hạn - không có check-in"
+                          : checkedIn
+                          ? "Đã check-in"
+                          : isExpired
+                          ? "Slot đã hết hạn"
+                          : !isExpired && !isBlocked && isOccupied && !checkedIn
+                          ? "Slot đã được đặt"
+                          : isBlocked
+                          ? "Slot bị chặn"
+                          : onCreate
+                          ? "Click để thêm slot làm việc"
+                          : "Click 'Thêm lịch mới' để thêm slot"}
+                      </TooltipContent>
+                    </Tooltip>
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Huỷ lịch có người đặt</DialogTitle>
