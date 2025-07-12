@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Card,
   CardContent,
@@ -14,16 +14,18 @@ import { toast } from "sonner";
 import { blogAPI, type DoctorInfo } from "@/api/blogAPI";
 import type { CreateBlogRequest, BlogResponse } from "@/api/blogAPI";
 import { Loader2, Plus, Eye, Edit } from "lucide-react";
+import BasicModal from "@/components/Modal/basicModal";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { fetchCurrentDoctorInfo } from "@/api/doctorSchedule";
+import MarkdownGuide from "@/components/MarkdownGuide";
+import QuickMarkdownHelp from "@/components/QuickMarkdownHelp";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
 
 interface BlogFormData {
   title: string;
@@ -57,6 +59,47 @@ const BlogsPost = () => {
   // State để lưu doctorId và doctor info
   const [doctorId, setDoctorId] = useState<string>("");
   const [doctorInfo, setDoctorInfo] = useState<DoctorInfo | null>(null);
+
+  const loadBlogs = useCallback(async (doctorIdParam?: string) => {
+    try {
+      setIsLoadingBlogs(true);
+
+      const currentDoctorId = doctorIdParam || doctorId;
+
+      console.log("=== LOAD BLOGS DEBUG ===");
+      console.log("doctorIdParam:", doctorIdParam);
+      console.log("doctorId from state:", doctorId);
+      console.log("currentDoctorId:", currentDoctorId);
+      console.log("========================");
+
+      let blogsList: BlogResponse[] = [];
+
+      if (currentDoctorId) {
+        console.log("Loading blogs for doctorId:", currentDoctorId);
+        // Sử dụng getBlogsByDoctorId để chỉ lấy blog của bác sĩ hiện tại
+        blogsList = await blogAPI.getBlogsByDoctorId(currentDoctorId);
+      } else {
+        console.log("No doctorId available, loading all blogs");
+        // Fallback: nếu không có doctorId, load tất cả blogs
+        blogsList = await blogAPI.getAllBlogs();
+      }
+
+      console.log("Loaded blogs:", blogsList);
+
+      // Đảm bảo blogsList là array
+      if (Array.isArray(blogsList)) {
+        setBlogs(blogsList);
+      } else {
+        setBlogs([]);
+      }
+    } catch (error) {
+      console.error("Error loading blogs:", error);
+      toast.error("Không thể tải danh sách bài viết");
+      setBlogs([]); // Set empty array in case of error
+    } finally {
+      setIsLoadingBlogs(false);
+    }
+  }, [doctorId]);
 
   // Lấy thông tin bác sĩ từ API
   useEffect(() => {
@@ -130,48 +173,7 @@ const BlogsPost = () => {
     };
 
     loadDoctorInfo();
-  }, []);
-
-  const loadBlogs = async (doctorIdParam?: string) => {
-    try {
-      setIsLoadingBlogs(true);
-
-      const currentDoctorId = doctorIdParam || doctorId;
-
-      console.log("=== LOAD BLOGS DEBUG ===");
-      console.log("doctorIdParam:", doctorIdParam);
-      console.log("doctorId from state:", doctorId);
-      console.log("currentDoctorId:", currentDoctorId);
-      console.log("========================");
-
-      let blogsList: BlogResponse[] = [];
-
-      if (currentDoctorId) {
-        console.log("Loading blogs for doctorId:", currentDoctorId);
-        // Sử dụng getBlogsByDoctorId để chỉ lấy blog của bác sĩ hiện tại
-        blogsList = await blogAPI.getBlogsByDoctorId(currentDoctorId);
-      } else {
-        console.log("No doctorId available, loading all blogs");
-        // Fallback: nếu không có doctorId, load tất cả blogs
-        blogsList = await blogAPI.getAllBlogs();
-      }
-
-      console.log("Loaded blogs:", blogsList);
-
-      // Đảm bảo blogsList là array
-      if (Array.isArray(blogsList)) {
-        setBlogs(blogsList);
-      } else {
-        setBlogs([]);
-      }
-    } catch (error) {
-      console.error("Error loading blogs:", error);
-      toast.error("Không thể tải danh sách bài viết");
-      setBlogs([]); // Set empty array in case of error
-    } finally {
-      setIsLoadingBlogs(false);
-    }
-  };
+  }, [loadBlogs]);
 
   const handleInputChange = (field: keyof BlogFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -401,7 +403,7 @@ const BlogsPost = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto p-6 space-y-6 ">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Quản lý bài viết</h1>
@@ -416,40 +418,45 @@ const BlogsPost = () => {
           )}
         </div>
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              onClick={openCreateDialog}
-              className="flex items-center gap-2"
-            >
-              <Plus className="h-4 w-4" />
-              Tạo bài viết mới
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>
+        <div className="flex gap-2">
+          <MarkdownGuide />
+          <Button
+            onClick={openCreateDialog}
+            className="flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            Tạo bài viết mới
+          </Button>
+        </div>
+
+        <BasicModal open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="max-w-5xl">
+          <div className="space-y-4">
+            <div className="mb-4">
+              <h2 className="text-xl font-semibold">
                 {isViewMode
                   ? "Chi tiết bài viết"
                   : isEditMode
                   ? "Chỉnh sửa bài viết"
                   : "Tạo bài viết mới"}
-              </DialogTitle>
-              <DialogDescription>
+              </h2>
+              <p className="text-gray-600 mt-1">
                 {isViewMode
                   ? "Xem chi tiết bài viết đã đăng"
                   : isEditMode
                   ? "Chỉnh sửa thông tin bài viết"
                   : "Điền thông tin để tạo bài viết chia sẻ kiến thức y tế"}
-              </DialogDescription>
-            </DialogHeader>
+              </p>
+            </div>
 
             {isViewMode && selectedBlog ? (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {selectedBlog.title}
-                  </h2>
+                  <div className="text-2xl font-bold text-gray-900">
+                    <MarkdownRenderer 
+                      content={selectedBlog.title}
+                      className="text-2xl font-bold"
+                    />
+                  </div>
                   <div className="flex items-center gap-4 mt-2 text-sm text-gray-600">
                     <span>Tác giả: {selectedBlog.author}</span>
                     <span>•</span>
@@ -461,25 +468,38 @@ const BlogsPost = () => {
                   <Label className="text-sm font-semibold text-gray-700">
                     Mô tả ngắn:
                   </Label>
-                  <p className="mt-1 text-gray-600 italic">
-                    {selectedBlog.snippet}
-                  </p>
+                  <div className="mt-1">
+                    <MarkdownRenderer 
+                      content={selectedBlog.snippet}
+                      className="text-gray-600 italic text-sm"
+                    />
+                  </div>
                 </div>
+
+                {selectedBlog.urlImage && (
+                  <div>
+                    <Label className="text-sm font-semibold text-gray-700">
+                      Hình ảnh minh họa:
+                    </Label>
+                    <div className="mt-2">
+                      <img
+                        src={selectedBlog.urlImage}
+                        alt={selectedBlog.title}
+                        className="w-full max-w-full max-h-96 object-contain rounded-lg border shadow-sm"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 <div>
                   <Label className="text-sm font-semibold text-gray-700">
                     Nội dung:
                   </Label>
                   <div className="mt-2 p-4 bg-gray-50 rounded-lg">
-                    <div className="prose max-w-none">
-                      {selectedBlog.content
-                        .split("\n")
-                        .map((paragraph, index) => (
-                          <p key={index} className="mb-4 last:mb-0">
-                            {paragraph}
-                          </p>
-                        ))}
-                    </div>
+                    <MarkdownRenderer 
+                      content={selectedBlog.content}
+                      className="text-gray-800"
+                    />
                   </div>
                 </div>
 
@@ -502,7 +522,20 @@ const BlogsPost = () => {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <Tabs defaultValue="edit" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-4">
+                  <TabsTrigger value="edit" className="flex items-center gap-2">
+                    <Edit className="h-4 w-4" />
+                    {isEditMode ? "Chỉnh sửa" : "Viết bài"}
+                  </TabsTrigger>
+                  <TabsTrigger value="preview" className="flex items-center gap-2">
+                    <Eye className="h-4 w-4" />
+                    Xem trước
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="edit">
+                  <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid gap-4">
                   <div>
                     <Label htmlFor="author">Tác giả *</Label>
@@ -546,13 +579,14 @@ const BlogsPost = () => {
 
                   <div>
                     <Label htmlFor="content">Nội dung bài viết *</Label>
+                    <QuickMarkdownHelp />
                     <Textarea
                       id="content"
                       value={formData.content}
                       onChange={(e) =>
                         handleInputChange("content", e.target.value)
                       }
-                      placeholder="Nhập nội dung đầy đủ của bài viết..."
+                      placeholder="Nhập nội dung đầy đủ của bài viết... Sử dụng Markdown để định dạng văn bản đẹp hơn!"
                       rows={12}
                       required
                     />
@@ -649,9 +683,104 @@ const BlogsPost = () => {
                   </Button>
                 </div>
               </form>
+                </TabsContent>
+
+                <TabsContent value="preview">
+                  <div className="space-y-6">
+                    <div className="border rounded-lg p-4 bg-gray-50">
+                      <h3 className="text-lg font-semibold mb-3">Xem trước bài viết</h3>
+                      
+                      {formData.title && (
+                        <div className="mb-4">
+                          <h4 className="text-sm font-medium text-gray-600 mb-1">Tiêu đề:</h4>
+                          <MarkdownRenderer 
+                            content={formData.title}
+                            className="text-xl font-bold"
+                          />
+                        </div>
+                      )}
+
+                      {formData.author && (
+                        <div className="mb-4">
+                          <p className="text-sm text-gray-600">Tác giả: {formData.author}</p>
+                        </div>
+                      )}
+
+                      {formData.snippet && (
+                        <div className="mb-4">
+                          <h4 className="text-sm font-medium text-gray-600 mb-1">Mô tả ngắn:</h4>
+                          <MarkdownRenderer 
+                            content={formData.snippet}
+                            className="text-gray-600 italic"
+                          />
+                        </div>
+                      )}
+
+                      {(imagePreview || formData.urlImage) && (
+                        <div className="mb-4">
+                          <h4 className="text-sm font-medium text-gray-600 mb-1">Hình ảnh:</h4>
+                          <img
+                            src={imagePreview || formData.urlImage}
+                            alt="Preview"
+                            className="w-full max-w-md h-auto rounded-lg border"
+                          />
+                        </div>
+                      )}
+
+                      {formData.content && (
+                        <div>
+                          <h4 className="text-sm font-medium text-gray-600 mb-2">Nội dung:</h4>
+                          <div className="bg-white p-4 rounded border">
+                            <MarkdownRenderer 
+                              content={formData.content}
+                              className="text-gray-800"
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      {!formData.title && !formData.content && !formData.snippet && (
+                        <p className="text-gray-500 text-center py-8">
+                          Nhập nội dung ở tab "Viết bài" để xem preview
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex justify-end gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsDialogOpen(false)}
+                      >
+                        Hủy
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+                          handleSubmit(fakeEvent);
+                        }}
+                        disabled={isLoading || isUploadingImage}
+                      >
+                        {isLoading && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        {isLoading
+                          ? formData.selectedFile
+                            ? "Đang đăng bài viết với hình ảnh..."
+                            : "Đang đăng bài viết..."
+                          : isEditMode
+                          ? "Cập nhật bài viết"
+                          : "Đăng bài viết"}
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
             )}
-          </DialogContent>
-        </Dialog>
+          </div>
+        </BasicModal>
       </div>
 
       {/* Danh sách bài viết */}
@@ -685,7 +814,12 @@ const BlogsPost = () => {
                 className="hover:shadow-lg transition-shadow"
               >
                 <CardHeader>
-                  <CardTitle className="line-clamp-2">{blog.title}</CardTitle>
+                  <CardTitle className="line-clamp-2">
+                    <MarkdownRenderer 
+                      content={blog.title}
+                      className="text-lg font-semibold"
+                    />
+                  </CardTitle>
                   <CardDescription className="text-sm">
                     Bởi {blog.author} • {formatDate(blog.createdAt)}
                   </CardDescription>
@@ -700,9 +834,12 @@ const BlogsPost = () => {
                       />
                     </div>
                   )}
-                  <p className="text-gray-600 line-clamp-3 mb-4">
-                    {blog.snippet}
-                  </p>
+                  <div className="text-gray-600 line-clamp-3 mb-4">
+                    <MarkdownRenderer 
+                      content={blog.snippet}
+                      className="text-sm"
+                    />
+                  </div>
                   <div className="flex justify-between items-center">
                     <Badge variant="secondary">Bài viết</Badge>
                     <div className="flex gap-2">

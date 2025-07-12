@@ -131,7 +131,7 @@ const DoctorProfile: React.FC = () => {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin  h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
           <p className="mt-4 text-gray-600">Đang tải thông tin...</p>
         </div>
       </div>
@@ -347,7 +347,7 @@ const DoctorProfile: React.FC = () => {
             <div className="flex flex-col sm:flex-row justify-end gap-3 mt-8 pt-6 border-t border-gray-100">
               {!editing ? (
                 <button
-                  className="flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg"
+                  className="flex items-center justify-center px-6 py-3 bg-gradient-to-r  text-white rounded-xl bg-black transition-all duration-200 transform hover:scale-105 shadow-lg"
                   onClick={() => setEditing(true)}
                 >
                   <Edit3 className="h-5 w-5 mr-2" />

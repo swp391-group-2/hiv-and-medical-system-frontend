@@ -38,7 +38,7 @@ const PatientList = () => {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="max-w-8xl mx-auto p-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold mb-1">Xét nghiệm đã hoàn thành</h1>
       <p className="text-gray-600 mb-6">
         Thông tin và lịch sử xét nghiệm của bệnh nhân
