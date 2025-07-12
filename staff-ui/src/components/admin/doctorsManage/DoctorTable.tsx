@@ -114,9 +114,11 @@ export const DoctorTable = ({ doctors, onEditClick }: DoctorTableProps) => {
                 <TableCell>
                   <div className="flex gap-2">
                     <Button
-                      variant="ghost"
+                    
+                      variant="outline"
                       size="sm"
                       onClick={() => onEditClick(doctor)}
+                       className="text-blue-600 hover:text-blue-700"
                     >
                       <Edit className="h-4 w-4" />
                     </Button>

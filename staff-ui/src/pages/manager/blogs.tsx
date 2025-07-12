@@ -60,7 +60,7 @@ const ManagerBlogs = () => {
 
   return (
     <div className="min-h-[100%] flex flex-col py-8">
-      <div className="container flex flex-col px-4 grow">
+      <div className="container flex flex-col px-6 grow">
         <header className="mb-8 flex justify-between">
           <h1 className="text-3xl font-bold text-gray-900">Quản lý bài viết</h1>
           {/* <Button

@@ -9,10 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ShieldX, ShieldCheck } from "lucide-react";
+import { ShieldX, ShieldCheck, Edit } from "lucide-react";
 import { type Staff } from "@/types/staff";
 import { DisableStaffDialog } from "./staffsManage/DisableStaffDialog";
 import { ActiveStaffDialog } from "./staffsManage/ActiveStaffDialog";
+import { UpdateStaffDialog } from "./staffsManage/UpdateStaffDialog";
 
 interface StaffTableProps {
   staffs: Staff[];
@@ -21,6 +22,7 @@ interface StaffTableProps {
 export const StaffTable = ({ staffs }: StaffTableProps) => {
   const [disableDialogOpen, setDisableDialogOpen] = useState(false);
   const [activeDialogOpen, setActiveDialogOpen] = useState(false);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
 
   const handleDisableClick = (staff: Staff) => {
@@ -31,6 +33,11 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
   const handleActiveClick = (staff: Staff) => {
     setSelectedStaff(staff);
     setActiveDialogOpen(true);
+  };
+
+  const handleUpdateClick = (staff: Staff) => {
+    setSelectedStaff(staff);
+    setUpdateDialogOpen(true);
   };
   return (
     <div className="border rounded-lg">
@@ -74,6 +81,16 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
+                    {/* Always visible edit button for testing */}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleUpdateClick(staff)}
+                      className="text-blue-600 hover:text-blue-700"
+                      
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
                     {staff.status === "ACTIVE" ? (
                       <Button
                         variant="ghost"
@@ -116,6 +133,15 @@ export const StaffTable = ({ staffs }: StaffTableProps) => {
           staff={selectedStaff}
           isOpen={activeDialogOpen}
           onOpenChange={setActiveDialogOpen}
+        />
+      )}
+
+      {/* Update Staff Dialog */}
+      {selectedStaff && (
+        <UpdateStaffDialog
+          staff={selectedStaff}
+          isOpen={updateDialogOpen}
+          onOpenChange={setUpdateDialogOpen}
         />
       )}
     </div>
