@@ -5,9 +5,25 @@ import { PostCard } from "@/components/qAndA/post-card";
 import { PostForm } from "@/components/qAndA/post-form";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { useDebounceValue } from "usehooks-ts";
+import PostSearchBar from "./post-searchbar";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
+
+const PAGE = 0;
+const SIZE = 6;
 
 function PostContent() {
   const [showComments, setShowComments] = useState<Record<string, boolean>>({});
+  const [search, setSearch] = useState<string>("");
+  const [page, setPage] = useState<number>(0);
+  const [debouncedValue] = useDebounceValue<string>(search, 500);
   const handleToggleComments = (postId: string) => {
     setShowComments((prev) => ({
       ...prev,
@@ -22,9 +38,13 @@ function PostContent() {
     refetch,
     error,
   } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", page, debouncedValue],
     queryFn: async () => {
-      const response = await anonymousPostApi.getAnonymousPosts();
+      const response = await anonymousPostApi.getAnonymousPosts(
+        page || PAGE,
+        SIZE,
+        debouncedValue
+      );
       return response.data;
     },
   });
@@ -50,6 +70,13 @@ function PostContent() {
   return (
     <section>
       <div className="container mx-auto mt-8 ">
+        <div className="flex justify-center mb-6">
+          <PostSearchBar
+            value={search}
+            onChange={setSearch}
+            onReload={refetch}
+          />
+        </div>
         <div className="grid grid-cols-12 gap-8 ">
           <div className="max-w-3xl w-full col-span-7  space-y-6">
             <div className="space-y-4 ">
@@ -92,6 +119,31 @@ function PostContent() {
                   </div>
                 </div>
               )}
+              <div className="mt-6">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                        className={
+                          page === 0
+                            ? "pointer-events-none opacity-50"
+                            : "cursor-pointer"
+                        }
+                      />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink isActive>{page + 1}</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setPage((prev) => prev + 1)}
+                        className="cursor-pointer"
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
             </div>
           </div>
           <div className="col-span-5 ">
