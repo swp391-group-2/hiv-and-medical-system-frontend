@@ -40,11 +40,11 @@ function ListTopDoctor() {
     <div className="grid-cols-4 grid gap-5">
       {doctors.map((doctor) => (
         <DoctorCard
-          key={doctor.doctor.doctorId}
-          doctorId={doctor.doctor.doctorId}
-          fullName={doctor.doctor.fullName}
-          urlImage={doctor.doctor.urlImage}
-          email={doctor.doctor.email}
+          key={doctor.doctorId}
+          doctorId={doctor.doctorId}
+          fullName={doctor.fullName}
+          urlImage={doctor.urlImage}
+          email={doctor.email}
           totalAppointment={doctor.totalAppointment}
         />
       ))}

@@ -1,5 +1,12 @@
 import { Sidebar, SidebarNav, SidebarNavItem } from "@/components/user/sidebar";
-import { User, Calendar, Pill, FileText, FlaskConical } from "lucide-react";
+import {
+  User,
+  Calendar,
+  Pill,
+  FileText,
+  FlaskConical,
+  Ticket,
+} from "lucide-react";
 import { Outlet } from "react-router-dom";
 
 const UserBase = () => {
@@ -12,6 +19,11 @@ const UserBase = () => {
       path: "/user/test-result",
       icon: FlaskConical,
       text: "Kết quả xét nghiệm",
+    },
+    {
+      path: "/user/tickets",
+      icon: Ticket,
+      text: "Vé Của Tôi",
     },
   ];
 
