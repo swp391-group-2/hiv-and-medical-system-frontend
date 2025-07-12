@@ -24,14 +24,20 @@ Markdown là một ngôn ngữ đánh dấu văn bản đơn giản giúp bạn 
 
 ```markdown
 # Tiêu đề cấp 1 (Tiêu đề chính)
+
 ## Tiêu đề cấp 2 (Phần lớn)
+
 ### Tiêu đề cấp 3 (Phần nhỏ)
+
 #### Tiêu đề cấp 4 (Chi tiết)
 ```
 
 **Kết quả:**
+
 # Tiêu đề cấp 1
+
 ## Tiêu đề cấp 2
+
 ### Tiêu đề cấp 3
 
 ---
@@ -42,22 +48,23 @@ Markdown là một ngôn ngữ đánh dấu văn bản đơn giản giúp bạn 
 
 ```markdown
 **Văn bản in đậm** - dùng cho từ khóa quan trọng
-*Văn bản in nghiêng* - dùng cho thuật ngữ y học
-***Vừa đậm vừa nghiêng*** - dùng cho điều đặc biệt quan trọng
+_Văn bản in nghiêng_ - dùng cho thuật ngữ y học
+**_Vừa đậm vừa nghiêng_** - dùng cho điều đặc biệt quan trọng
 ~~Văn bản gạch ngang~~ - dùng cho thông tin đã lỗi thời
 <u>Văn bản gạch chân</u> - dùng để nhấn mạnh
 ```
 
 **Kết quả:**
+
 - **Văn bản in đậm**
-- *Văn bản in nghiêng*
-- ***Vừa đậm vừa nghiêng***
+- _Văn bản in nghiêng_
+- **_Vừa đậm vừa nghiêng_**
 - ~~Văn bản gạch ngang~~
 
 ### Ví dụ y khoa:
 
 ```markdown
-**HIV** (*Human Immunodeficiency Virus*) là một loại ***retrovirus*** 
+**HIV** (_Human Immunodeficiency Virus_) là một loại **_retrovirus_**
 gây ra hội chứng suy giảm miễn dịch mắc phải (**AIDS**).
 ```
 
@@ -91,6 +98,7 @@ gây ra hội chứng suy giảm miễn dịch mắc phải (**AIDS**).
 
 ```markdown
 #### Checklist theo dõi bệnh nhân:
+
 - [x] Xét nghiệm CD4
 - [x] Xét nghiệm Viral Load
 - [ ] Tư vấn tuân thủ điều trị
@@ -127,21 +135,21 @@ Ví dụ:
 ### Bảng cơ bản
 
 ```markdown
-| Thuốc | Liều lượng | Tần suất | Thời gian uống |
-|-------|------------|----------|----------------|
-| Efavirenz | 600mg | 1 lần/ngày | Trước khi ngủ |
-| Tenofovir | 300mg | 1 lần/ngày | Cùng thức ăn |
-| Emtricitabine | 200mg | 1 lần/ngày | Bất kỳ lúc nào |
+| Thuốc         | Liều lượng | Tần suất   | Thời gian uống |
+| ------------- | ---------- | ---------- | -------------- |
+| Efavirenz     | 600mg      | 1 lần/ngày | Trước khi ngủ  |
+| Tenofovir     | 300mg      | 1 lần/ngày | Cùng thức ăn   |
+| Emtricitabine | 200mg      | 1 lần/ngày | Bất kỳ lúc nào |
 ```
 
 ### Bảng chỉ số xét nghiệm
 
 ```markdown
-| Chỉ số | Giá trị bình thường | Ý nghĩa | Ghi chú |
-|--------|-------------------|---------|---------|
-| CD4 | > 500 cells/μL | Miễn dịch tốt | Theo dõi 6 tháng/lần |
-| Viral Load | < 50 copies/mL | Không phát hiện | Mục tiêu điều trị |
-| Hemoglobin | 12-16 g/dL | Không thiếu máu | Theo dõi tác dụng phụ |
+| Chỉ số     | Giá trị bình thường | Ý nghĩa         | Ghi chú               |
+| ---------- | ------------------- | --------------- | --------------------- |
+| CD4        | > 500 cells/μL      | Miễn dịch tốt   | Theo dõi 6 tháng/lần  |
+| Viral Load | < 50 copies/mL      | Không phát hiện | Mục tiêu điều trị     |
+| Hemoglobin | 12-16 g/dL          | Không thiếu máu | Theo dõi tác dụng phụ |
 ```
 
 ---
@@ -152,11 +160,11 @@ Ví dụ:
 
 ```markdown
 > **⚠️ Lưu ý quan trọng:**
-> Không được tự ý ngừng thuốc ARV. Việc ngừng thuốc có thể 
+> Không được tự ý ngừng thuốc ARV. Việc ngừng thuốc có thể
 > dẫn đến kháng thuốc và tiến triển nhanh của bệnh.
 
 > **📋 Ghi nhớ:**
-> "Undetectable = Untransmittable" - Khi viral load không 
+> "Undetectable = Untransmittable" - Khi viral load không
 > phát hiện được, nguy cơ lây truyền sẽ bằng 0.
 ```
 
@@ -164,6 +172,7 @@ Ví dụ:
 
 ```markdown
 > **🚨 CẢNH BÁO:**
+>
 > - Thuốc Efavirenz có thể gây ảo giác, mơ mộng lạ
 > - Khuyến cáo uống trước khi ngủ
 > - Tránh lái xe trong 4 tuần đầu điều trị
@@ -185,6 +194,7 @@ Liều lượng: `Tenofovir 300mg + Emtricitabine 200mg + Efavirenz 600mg`
 ```markdown
 Kết quả xét nghiệm:
 ```
+
 Họ tên: Nguyễn Văn A
 Ngày sinh: 01/01/1990
 Ngày xét nghiệm: 15/12/2024
@@ -192,7 +202,9 @@ Ngày xét nghiệm: 15/12/2024
 - CD4 Count: 350 cells/μL (↑ so với lần trước: 280)
 - Viral Load: < 50 copies/mL (Undetectable)
 - Hemoglobin: 13.2 g/dL (Bình thường)
+
 ```
+
 ```
 
 ### Công thức tính
@@ -200,9 +212,12 @@ Ngày xét nghiệm: 15/12/2024
 ```markdown
 Liều thuốc theo cân nặng:
 ```
+
 Công thức: Liều (mg) = Cân nặng (kg) × 15mg/kg
 Ví dụ: Bệnh nhân 60kg → Liều = 60 × 15 = 900mg/ngày
+
 ```
+
 ```
 
 ---
@@ -215,9 +230,11 @@ Ví dụ: Bệnh nhân 60kg → Liều = 60 × 15 = 900mg/ngày
 # Tiêu đề bài viết
 
 ## Tóm tắt
+
 Mô tả ngắn gọn nội dung chính...
 
 ## Mục lục
+
 1. [Định nghĩa](#định-nghĩa)
 2. [Nguyên nhân](#nguyên-nhân)
 3. [Triệu chứng](#triệu-chứng)
@@ -226,12 +243,15 @@ Mô tả ngắn gọn nội dung chính...
 6. [Phòng ngừa](#phòng-ngừa)
 
 ## Nội dung chính
+
 ...
 
 ## Kết luận
+
 ...
 
 ## Tài liệu tham khảo
+
 ...
 ```
 
@@ -252,7 +272,7 @@ Mô tả ngắn gọn nội dung chính...
 
 ```markdown
 - **🔴 Mức độ cao:** CD4 < 200 cells/μL
-- **🟡 Mức độ trung bình:** CD4 200-500 cells/μL  
+- **🟡 Mức độ trung bình:** CD4 200-500 cells/μL
 - **🟢 Mức độ bình thường:** CD4 > 500 cells/μL
 ```
 
@@ -266,16 +286,20 @@ Mô tả ngắn gọn nội dung chính...
 # [Tên bệnh]: Hướng dẫn toàn diện
 
 ## 📋 Tóm tắt
+
 **[Tên bệnh]** là...
 
 ## 🎯 Mục tiêu bài viết
+
 Sau khi đọc bài viết này, độc giả sẽ hiểu được:
+
 - Định nghĩa và nguyên nhân của [tên bệnh]
 - Các triệu chứng đặc trưng
 - Phương pháp chẩn đoán hiện đại
 - Các lựa chọn điều trị hiệu quả
 
 ## 📚 Mục lục
+
 1. [Định nghĩa](#định-nghĩa)
 2. [Dịch tễ học](#dịch-tễ-học)
 3. [Nguyên nhân](#nguyên-nhân)
@@ -287,64 +311,81 @@ Sau khi đọc bài viết này, độc giả sẽ hiểu được:
 9. [Phòng ngừa](#phòng-ngừa)
 
 ## 1. Định nghĩa {#định-nghĩa}
+
 **[Tên bệnh]** là...
 
 ### Phân loại
+
 - **Loại 1:** ...
 - **Loại 2:** ...
 
 ## 2. Dịch tễ học {#dịch-tễ-học}
-| Đặc điểm | Thống kê |
-|----------|----------|
-| Tỷ lệ mắc | ... |
-| Độ tuổi hay gặp | ... |
-| Tỷ lệ nam/nữ | ... |
+
+| Đặc điểm        | Thống kê |
+| --------------- | -------- |
+| Tỷ lệ mắc       | ...      |
+| Độ tuổi hay gặp | ...      |
+| Tỷ lệ nam/nữ    | ...      |
 
 ## 3. Nguyên nhân {#nguyên-nhân}
+
 ### Nguyên nhân chính:
+
 1. **Nguyên nhân A:** ...
 2. **Nguyên nhân B:** ...
 
 ### Yếu tố nguy cơ:
+
 - Yếu tố di truyền
 - Yếu tố môi trường
 - Yếu tố lối sống
 
 ## 4. Triệu chứng lâm sàng {#triệu-chứng-lâm-sàng}
+
 ### Triệu chứng sớm:
+
 - Triệu chứng 1
 - Triệu chứng 2
 
 ### Triệu chứng muộn:
+
 - Triệu chứng A
 - Triệu chứng B
 
-> **⚠️ Lưu ý:** Khi xuất hiện [triệu chứng nguy hiểm], 
+> **⚠️ Lưu ý:** Khi xuất hiện [triệu chứng nguy hiểm],
 > cần đến cơ sở y tế ngay lập tức.
 
 ## 5. Chẩn đoán {#chẩn-đoán}
+
 ### Xét nghiệm cần thiết:
-| Xét nghiệm | Mục đích | Giá trị bình thường |
-|------------|----------|-------------------|
-| Xét nghiệm A | Chẩn đoán xác định | ... |
-| Xét nghiệm B | Theo dõi điều trị | ... |
+
+| Xét nghiệm   | Mục đích           | Giá trị bình thường |
+| ------------ | ------------------ | ------------------- |
+| Xét nghiệm A | Chẩn đoán xác định | ...                 |
+| Xét nghiệm B | Theo dõi điều trị  | ...                 |
 
 ### Chẩn đoán phân biệt:
+
 - Bệnh A
 - Bệnh B
 
 ## 6. Điều trị {#điều-trị}
+
 ### Điều trị không dùng thuốc:
+
 1. **Thay đổi lối sống:**
    - Chế độ ăn
    - Tập thể dục
    - Tránh các yếu tố nguy cơ
 
 ### Điều trị bằng thuốc:
+
 #### Thuốc hàng đầu:
 ```
+
 Thuốc A: Liều lượng, cách dùng
 Thuốc B: Liều lượng, cách dùng
+
 ```
 
 #### Thuốc dự phòng:
@@ -381,8 +422,8 @@ Thuốc B: Liều lượng, cách dùng
 **📅 Ngày cập nhật:** [Ngày/tháng/năm]
 **📞 Liên hệ:** [Thông tin liên hệ nếu cần]
 
-> **💡 Lưu ý:** Bài viết này chỉ mang tính chất tham khảo. 
-> Vui lòng tham khảo ý kiến bác sĩ chuyên khoa để có chẩn đoán 
+> **💡 Lưu ý:** Bài viết này chỉ mang tính chất tham khảo.
+> Vui lòng tham khảo ý kiến bác sĩ chuyên khoa để có chẩn đoán
 > và điều trị chính xác.
 ```
 
@@ -392,13 +433,16 @@ Thuốc B: Liều lượng, cách dùng
 # [Tên thuốc]: Hướng dẫn sử dụng cho bệnh nhân
 
 ## 📋 Thông tin cơ bản
+
 - **Tên hoạt chất:** [Tên generic]
 - **Tên thương mại:** [Các tên thương mại]
 - **Nhóm thuốc:** [Phân loại dược lý]
 - **Hình thức:** Viên nén/Viên nang/Dung dịch
 
 ## 💊 Công dụng
+
 **[Tên thuốc]** được sử dụng để:
+
 - Điều trị [bệnh A]
 - Phòng ngừa [biến chứng B]
 - Hỗ trợ [điều kiện C]
@@ -406,22 +450,27 @@ Thuốc B: Liều lượng, cách dùng
 ## 📏 Liều lượng và cách dùng
 
 ### Liều thường dùng:
-| Đối tượng | Liều lượng | Tần suất | Ghi chú |
-|-----------|------------|----------|---------|
-| Người lớn | [X] mg | [Y] lần/ngày | [Lưu ý] |
-| Trẻ em | [Z] mg/kg | [Y] lần/ngày | [Lưu ý] |
+
+| Đối tượng | Liều lượng | Tần suất     | Ghi chú |
+| --------- | ---------- | ------------ | ------- |
+| Người lớn | [X] mg     | [Y] lần/ngày | [Lưu ý] |
+| Trẻ em    | [Z] mg/kg  | [Y] lần/ngày | [Lưu ý] |
 
 ### Cách sử dụng:
 ```
+
 ✅ NÊN:
+
 - Uống cùng với thức ăn
 - Uống vào thời gian cố định hàng ngày
 - Nuốt nguyên viên, không nhai
 
 ❌ KHÔNG NÊN:
+
 - Uống cùng với [tương tác]
 - Ngừng thuốc đột ngột
 - Tăng/giảm liều tự ý
+
 ```
 
 ## ⚠️ Tác dụng phụ

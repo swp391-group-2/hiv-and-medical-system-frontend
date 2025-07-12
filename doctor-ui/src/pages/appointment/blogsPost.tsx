@@ -15,12 +15,7 @@ import { blogAPI, type DoctorInfo } from "@/api/blogAPI";
 import type { CreateBlogRequest, BlogResponse } from "@/api/blogAPI";
 import { Loader2, Plus, Eye, Edit } from "lucide-react";
 import BasicModal from "@/components/Modal/basicModal";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { fetchCurrentDoctorInfo } from "@/api/doctorSchedule";
 import MarkdownGuide from "@/components/MarkdownGuide";
@@ -60,46 +55,49 @@ const BlogsPost = () => {
   const [doctorId, setDoctorId] = useState<string>("");
   const [doctorInfo, setDoctorInfo] = useState<DoctorInfo | null>(null);
 
-  const loadBlogs = useCallback(async (doctorIdParam?: string) => {
-    try {
-      setIsLoadingBlogs(true);
+  const loadBlogs = useCallback(
+    async (doctorIdParam?: string) => {
+      try {
+        setIsLoadingBlogs(true);
 
-      const currentDoctorId = doctorIdParam || doctorId;
+        const currentDoctorId = doctorIdParam || doctorId;
 
-      console.log("=== LOAD BLOGS DEBUG ===");
-      console.log("doctorIdParam:", doctorIdParam);
-      console.log("doctorId from state:", doctorId);
-      console.log("currentDoctorId:", currentDoctorId);
-      console.log("========================");
+        console.log("=== LOAD BLOGS DEBUG ===");
+        console.log("doctorIdParam:", doctorIdParam);
+        console.log("doctorId from state:", doctorId);
+        console.log("currentDoctorId:", currentDoctorId);
+        console.log("========================");
 
-      let blogsList: BlogResponse[] = [];
+        let blogsList: BlogResponse[] = [];
 
-      if (currentDoctorId) {
-        console.log("Loading blogs for doctorId:", currentDoctorId);
-        // Sử dụng getBlogsByDoctorId để chỉ lấy blog của bác sĩ hiện tại
-        blogsList = await blogAPI.getBlogsByDoctorId(currentDoctorId);
-      } else {
-        console.log("No doctorId available, loading all blogs");
-        // Fallback: nếu không có doctorId, load tất cả blogs
-        blogsList = await blogAPI.getAllBlogs();
+        if (currentDoctorId) {
+          console.log("Loading blogs for doctorId:", currentDoctorId);
+          // Sử dụng getBlogsByDoctorId để chỉ lấy blog của bác sĩ hiện tại
+          blogsList = await blogAPI.getBlogsByDoctorId(currentDoctorId);
+        } else {
+          console.log("No doctorId available, loading all blogs");
+          // Fallback: nếu không có doctorId, load tất cả blogs
+          blogsList = await blogAPI.getAllBlogs();
+        }
+
+        console.log("Loaded blogs:", blogsList);
+
+        // Đảm bảo blogsList là array
+        if (Array.isArray(blogsList)) {
+          setBlogs(blogsList);
+        } else {
+          setBlogs([]);
+        }
+      } catch (error) {
+        console.error("Error loading blogs:", error);
+        toast.error("Không thể tải danh sách bài viết");
+        setBlogs([]); // Set empty array in case of error
+      } finally {
+        setIsLoadingBlogs(false);
       }
-
-      console.log("Loaded blogs:", blogsList);
-
-      // Đảm bảo blogsList là array
-      if (Array.isArray(blogsList)) {
-        setBlogs(blogsList);
-      } else {
-        setBlogs([]);
-      }
-    } catch (error) {
-      console.error("Error loading blogs:", error);
-      toast.error("Không thể tải danh sách bài viết");
-      setBlogs([]); // Set empty array in case of error
-    } finally {
-      setIsLoadingBlogs(false);
-    }
-  }, [doctorId]);
+    },
+    [doctorId]
+  );
 
   // Lấy thông tin bác sĩ từ API
   useEffect(() => {
@@ -429,7 +427,11 @@ const BlogsPost = () => {
           </Button>
         </div>
 
-        <BasicModal open={isDialogOpen} onClose={() => setIsDialogOpen(false)} maxWidth="max-w-5xl">
+        <BasicModal
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          maxWidth="max-w-5xl"
+        >
           <div className="space-y-4">
             <div className="mb-4">
               <h2 className="text-xl font-semibold">
@@ -452,7 +454,7 @@ const BlogsPost = () => {
               <div className="space-y-6">
                 <div>
                   <div className="text-2xl font-bold text-gray-900">
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                       content={selectedBlog.title}
                       className="text-2xl font-bold"
                     />
@@ -469,7 +471,7 @@ const BlogsPost = () => {
                     Mô tả ngắn:
                   </Label>
                   <div className="mt-1">
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                       content={selectedBlog.snippet}
                       className="text-gray-600 italic text-sm"
                     />
@@ -496,7 +498,7 @@ const BlogsPost = () => {
                     Nội dung:
                   </Label>
                   <div className="mt-2 p-4 bg-gray-50 rounded-lg">
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                       content={selectedBlog.content}
                       className="text-gray-800"
                     />
@@ -528,7 +530,10 @@ const BlogsPost = () => {
                     <Edit className="h-4 w-4" />
                     {isEditMode ? "Chỉnh sửa" : "Viết bài"}
                   </TabsTrigger>
-                  <TabsTrigger value="preview" className="flex items-center gap-2">
+                  <TabsTrigger
+                    value="preview"
+                    className="flex items-center gap-2"
+                  >
                     <Eye className="h-4 w-4" />
                     Xem trước
                   </TabsTrigger>
@@ -536,164 +541,171 @@ const BlogsPost = () => {
 
                 <TabsContent value="edit">
                   <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid gap-4">
-                  <div>
-                    <Label htmlFor="author">Tác giả *</Label>
-                    <Input
-                      id="author"
-                      value={formData.author}
-                      onChange={(e) =>
-                        handleInputChange("author", e.target.value)
-                      }
-                      placeholder="Nhập tên tác giả"
-                      required
-                    />
-                  </div>
+                    <div className="grid gap-4">
+                      <div>
+                        <Label htmlFor="author">Tác giả *</Label>
+                        <Input
+                          id="author"
+                          value={formData.author}
+                          onChange={(e) =>
+                            handleInputChange("author", e.target.value)
+                          }
+                          placeholder="Nhập tên tác giả"
+                          required
+                        />
+                      </div>
 
-                  <div>
-                    <Label htmlFor="title">Tiêu đề bài viết *</Label>
-                    <Input
-                      id="title"
-                      value={formData.title}
-                      onChange={(e) =>
-                        handleInputChange("title", e.target.value)
-                      }
-                      placeholder="Nhập tiêu đề bài viết"
-                      required
-                    />
-                  </div>
+                      <div>
+                        <Label htmlFor="title">Tiêu đề bài viết *</Label>
+                        <Input
+                          id="title"
+                          value={formData.title}
+                          onChange={(e) =>
+                            handleInputChange("title", e.target.value)
+                          }
+                          placeholder="Nhập tiêu đề bài viết"
+                          required
+                        />
+                      </div>
 
-                  <div>
-                    <Label htmlFor="snippet">Mô tả ngắn *</Label>
-                    <Textarea
-                      id="snippet"
-                      value={formData.snippet}
-                      onChange={(e) =>
-                        handleInputChange("snippet", e.target.value)
-                      }
-                      placeholder="Nhập mô tả ngắn về bài viết (1-2 câu)"
-                      rows={3}
-                      required
-                    />
-                  </div>
+                      <div>
+                        <Label htmlFor="snippet">Mô tả ngắn *</Label>
+                        <Textarea
+                          id="snippet"
+                          value={formData.snippet}
+                          onChange={(e) =>
+                            handleInputChange("snippet", e.target.value)
+                          }
+                          placeholder="Nhập mô tả ngắn về bài viết (1-2 câu)"
+                          rows={3}
+                          required
+                        />
+                      </div>
 
-                  <div>
-                    <Label htmlFor="content">Nội dung bài viết *</Label>
-                    <QuickMarkdownHelp />
-                    <Textarea
-                      id="content"
-                      value={formData.content}
-                      onChange={(e) =>
-                        handleInputChange("content", e.target.value)
-                      }
-                      placeholder="Nhập nội dung đầy đủ của bài viết... Sử dụng Markdown để định dạng văn bản đẹp hơn!"
-                      rows={12}
-                      required
-                    />
-                  </div>
+                      <div>
+                        <Label htmlFor="content">Nội dung bài viết *</Label>
+                        <QuickMarkdownHelp />
+                        <Textarea
+                          id="content"
+                          value={formData.content}
+                          onChange={(e) =>
+                            handleInputChange("content", e.target.value)
+                          }
+                          placeholder="Nhập nội dung đầy đủ của bài viết... Sử dụng Markdown để định dạng văn bản đẹp hơn!"
+                          rows={12}
+                          required
+                        />
+                      </div>
 
-                  <div>
-                    <Label htmlFor="image-upload" className="flex items-center">
-                      Hình ảnh minh họa:
-                      <span className="text-xs text-gray-500 ml-1">
-                        (
-                        {isEditMode
-                          ? "Chọn ảnh mới để thay đổi, hoặc giữ nguyên ảnh cũ. "
-                          : ""}
-                        Kéo thả hoặc nhấn để tải lên, tối đa 5MB)
-                      </span>
-                    </Label>
-                    <div className="flex items-center gap-4 mt-2">
-                      {imagePreview || formData.urlImage ? (
-                        <div className="relative">
-                          <img
-                            src={imagePreview || formData.urlImage}
-                            alt="Preview"
-                            className="w-32 h-32 object-cover rounded-lg"
-                          />
-                          <Button
-                            type="button"
-                            onClick={handleRemoveImage}
-                            className="absolute top-0 right-0 rounded-full p-1 bg-white shadow-md"
-                            variant="outline"
-                            size="sm"
-                          >
-                            &times;
-                          </Button>
-                        </div>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          className="flex items-center gap-2"
-                          asChild
-                          disabled={isUploadingImage}
+                      <div>
+                        <Label
+                          htmlFor="image-upload"
+                          className="flex items-center"
                         >
-                          <label
-                            htmlFor="image-upload"
-                            className="cursor-pointer"
-                          >
-                            {isUploadingImage ? (
-                              <>
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                                Đang tải lên...
-                              </>
-                            ) : (
-                              <>
-                                <Plus className="h-4 w-4" />
-                                Tải lên hình ảnh
-                              </>
-                            )}
-                          </label>
-                        </Button>
-                      )}
-                      <input
-                        id="image-upload"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        disabled={isUploadingImage}
-                      />
+                          Hình ảnh minh họa:
+                          <span className="text-xs text-gray-500 ml-1">
+                            (
+                            {isEditMode
+                              ? "Chọn ảnh mới để thay đổi, hoặc giữ nguyên ảnh cũ. "
+                              : ""}
+                            Kéo thả hoặc nhấn để tải lên, tối đa 5MB)
+                          </span>
+                        </Label>
+                        <div className="flex items-center gap-4 mt-2">
+                          {imagePreview || formData.urlImage ? (
+                            <div className="relative">
+                              <img
+                                src={imagePreview || formData.urlImage}
+                                alt="Preview"
+                                className="w-32 h-32 object-cover rounded-lg"
+                              />
+                              <Button
+                                type="button"
+                                onClick={handleRemoveImage}
+                                className="absolute top-0 right-0 rounded-full p-1 bg-white shadow-md"
+                                variant="outline"
+                                size="sm"
+                              >
+                                &times;
+                              </Button>
+                            </div>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              className="flex items-center gap-2"
+                              asChild
+                              disabled={isUploadingImage}
+                            >
+                              <label
+                                htmlFor="image-upload"
+                                className="cursor-pointer"
+                              >
+                                {isUploadingImage ? (
+                                  <>
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                    Đang tải lên...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Plus className="h-4 w-4" />
+                                    Tải lên hình ảnh
+                                  </>
+                                )}
+                              </label>
+                            </Button>
+                          )}
+                          <input
+                            id="image-upload"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            disabled={isUploadingImage}
+                          />
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                <div className="flex justify-end gap-3">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsDialogOpen(false)}
-                  >
-                    Hủy
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={isLoading || isUploadingImage}
-                  >
-                    {isLoading && (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    )}
-                    {isLoading
-                      ? formData.selectedFile
-                        ? "Đang đăng bài viết với hình ảnh..."
-                        : "Đang đăng bài viết..."
-                      : isEditMode
-                      ? "Cập nhật bài viết"
-                      : "Đăng bài viết"}
-                  </Button>
-                </div>
-              </form>
+                    <div className="flex justify-end gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setIsDialogOpen(false)}
+                      >
+                        Hủy
+                      </Button>
+                      <Button
+                        type="submit"
+                        disabled={isLoading || isUploadingImage}
+                      >
+                        {isLoading && (
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        )}
+                        {isLoading
+                          ? formData.selectedFile
+                            ? "Đang đăng bài viết với hình ảnh..."
+                            : "Đang đăng bài viết..."
+                          : isEditMode
+                          ? "Cập nhật bài viết"
+                          : "Đăng bài viết"}
+                      </Button>
+                    </div>
+                  </form>
                 </TabsContent>
 
                 <TabsContent value="preview">
                   <div className="space-y-6">
                     <div className="border rounded-lg p-4 bg-gray-50">
-                      <h3 className="text-lg font-semibold mb-3">Xem trước bài viết</h3>
-                      
+                      <h3 className="text-lg font-semibold mb-3">
+                        Xem trước bài viết
+                      </h3>
+
                       {formData.title && (
                         <div className="mb-4">
-                          <h4 className="text-sm font-medium text-gray-600 mb-1">Tiêu đề:</h4>
-                          <MarkdownRenderer 
+                          <h4 className="text-sm font-medium text-gray-600 mb-1">
+                            Tiêu đề:
+                          </h4>
+                          <MarkdownRenderer
                             content={formData.title}
                             className="text-xl font-bold"
                           />
@@ -702,14 +714,18 @@ const BlogsPost = () => {
 
                       {formData.author && (
                         <div className="mb-4">
-                          <p className="text-sm text-gray-600">Tác giả: {formData.author}</p>
+                          <p className="text-sm text-gray-600">
+                            Tác giả: {formData.author}
+                          </p>
                         </div>
                       )}
 
                       {formData.snippet && (
                         <div className="mb-4">
-                          <h4 className="text-sm font-medium text-gray-600 mb-1">Mô tả ngắn:</h4>
-                          <MarkdownRenderer 
+                          <h4 className="text-sm font-medium text-gray-600 mb-1">
+                            Mô tả ngắn:
+                          </h4>
+                          <MarkdownRenderer
                             content={formData.snippet}
                             className="text-gray-600 italic"
                           />
@@ -718,7 +734,9 @@ const BlogsPost = () => {
 
                       {(imagePreview || formData.urlImage) && (
                         <div className="mb-4">
-                          <h4 className="text-sm font-medium text-gray-600 mb-1">Hình ảnh:</h4>
+                          <h4 className="text-sm font-medium text-gray-600 mb-1">
+                            Hình ảnh:
+                          </h4>
                           <img
                             src={imagePreview || formData.urlImage}
                             alt="Preview"
@@ -729,9 +747,11 @@ const BlogsPost = () => {
 
                       {formData.content && (
                         <div>
-                          <h4 className="text-sm font-medium text-gray-600 mb-2">Nội dung:</h4>
+                          <h4 className="text-sm font-medium text-gray-600 mb-2">
+                            Nội dung:
+                          </h4>
                           <div className="bg-white p-4 rounded border">
-                            <MarkdownRenderer 
+                            <MarkdownRenderer
                               content={formData.content}
                               className="text-gray-800"
                             />
@@ -739,11 +759,13 @@ const BlogsPost = () => {
                         </div>
                       )}
 
-                      {!formData.title && !formData.content && !formData.snippet && (
-                        <p className="text-gray-500 text-center py-8">
-                          Nhập nội dung ở tab "Viết bài" để xem preview
-                        </p>
-                      )}
+                      {!formData.title &&
+                        !formData.content &&
+                        !formData.snippet && (
+                          <p className="text-gray-500 text-center py-8">
+                            Nhập nội dung ở tab "Viết bài" để xem preview
+                          </p>
+                        )}
                     </div>
 
                     <div className="flex justify-end gap-3">
@@ -758,7 +780,9 @@ const BlogsPost = () => {
                         type="button"
                         onClick={(e) => {
                           e.preventDefault();
-                          const fakeEvent = { preventDefault: () => {} } as React.FormEvent;
+                          const fakeEvent = {
+                            preventDefault: () => {},
+                          } as React.FormEvent;
                           handleSubmit(fakeEvent);
                         }}
                         disabled={isLoading || isUploadingImage}
@@ -815,7 +839,7 @@ const BlogsPost = () => {
               >
                 <CardHeader>
                   <CardTitle className="line-clamp-2">
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                       content={blog.title}
                       className="text-lg font-semibold"
                     />
@@ -835,7 +859,7 @@ const BlogsPost = () => {
                     </div>
                   )}
                   <div className="text-gray-600 line-clamp-3 mb-4">
-                    <MarkdownRenderer 
+                    <MarkdownRenderer
                       content={blog.snippet}
                       className="text-sm"
                     />
