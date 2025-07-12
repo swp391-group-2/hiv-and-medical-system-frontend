@@ -1,14 +1,12 @@
 import ScheduleApi from "@/apis/schedule.api";
 import { cn } from "@/lib/utils";
-import type {
-  TestScheduleApiResponse,
-  TestScheduleSlotEntry,
-} from "@/types/schedule.type";
+import type { TestScheduleSlotEntry } from "@/types/schedule.type";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarX } from "lucide-react";
 import { useParams } from "react-router-dom";
 import Loading from "../common/loading";
+import ErrorQuery from "../common/error-query";
 
 interface TimeSlotSelectorProps {
   selectedTime: string;
@@ -31,20 +29,26 @@ const TimeSlotSelectorTest = ({
     data: schedules,
     isLoading,
     error,
-  } = useQuery<TestScheduleApiResponse, Error>({
+    refetch,
+  } = useQuery({
     queryKey: ["dailySchedule", doctorId, dateQuery],
-    queryFn: ({ signal }) => {
-      return ScheduleApi.getTestScheduleByDate({ date: dateQuery }, signal);
+    queryFn: async () => {
+      const response = await ScheduleApi.getTestScheduleByDate({
+        date: dateQuery,
+      });
+      return response.data;
     },
   });
 
   if (isLoading) return <Loading />;
 
   if (error)
-    return <div className="text-red-500 text-2xl">{error.message}</div>;
+    return (
+      <ErrorQuery message={error.message} error={error} onRetry={refetch} />
+    );
 
-  if (schedules && schedules.data.length != 0) {
-    allSlots = schedules.data;
+  if (schedules && schedules.length != 0) {
+    allSlots = schedules as TestScheduleSlotEntry[];
   } else {
     return (
       <div className="flex flex-col items-center justify-center py-16">

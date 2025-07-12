@@ -9,6 +9,7 @@ export interface SlotDetail {
 export interface ScheduleSlot {
   id: number;
   scheduleId: number;
+  date: string;
   slot: SlotDetail;
   status: "AVAILABLE" | "UNAVAILABLE" | string;
 }

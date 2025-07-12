@@ -2,6 +2,8 @@ import { eduBlogApi } from "@/apis/blogEdu.api";
 import { useQuery } from "@tanstack/react-query";
 
 import EducationCard from "./education-card";
+import Loading from "../common/loading";
+import ErrorQuery from "../common/error-query";
 
 const PAGE = 0;
 const SIZE = 12;
@@ -16,6 +18,8 @@ function EduBlogList({ page = PAGE, search = "" }: EduBlogListProps) {
     data: eduBlogs,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["eduBlog", page, SIZE, search],
     queryFn: async () => {
@@ -25,35 +29,16 @@ function EduBlogList({ page = PAGE, search = "" }: EduBlogListProps) {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="text-gray-600 text-lg">Đang tải bài viết...</p>
-        </div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (isError) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="w-16 h-16 mb-4 text-red-400">
-          <svg
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="w-full h-full"
-          >
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-          </svg>
-        </div>
-        <h3 className="text-xl font-semibold text-red-600 mb-2">
-          Có lỗi xảy ra
-        </h3>
-        <p className="text-gray-500">
-          Không thể tải danh sách bài viết. Vui lòng thử lại sau.
-        </p>
-      </div>
+      <ErrorQuery
+        onRetry={refetch}
+        error={error}
+        message="Không thể tải danh sách bài viết. Vui lòng thử lại sau."
+      />
     );
   }
 

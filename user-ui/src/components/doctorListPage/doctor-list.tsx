@@ -1,7 +1,8 @@
-import type { DoctorProfile } from "@/types/doctor.type";
 import { useQuery } from "@tanstack/react-query";
 import DoctorCard from "./doctor-card";
 import doctorApi from "@/apis/doctor.api";
+import Loading from "../common/loading";
+import ErrorQuery from "../common/error-query";
 
 const SIZE = 12;
 
@@ -15,7 +16,8 @@ function DoctorList({ page = 1, search = "" }: DoctorListProps) {
     data: doctors,
     isLoading,
     error,
-  } = useQuery<DoctorProfile[]>({
+    refetch,
+  } = useQuery({
     queryKey: ["doctor", page, search],
     queryFn: async () => {
       const doctors = await doctorApi.getDoctors(page, SIZE, search);
@@ -26,23 +28,18 @@ function DoctorList({ page = 1, search = "" }: DoctorListProps) {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-sky-500 animate-bounce [animation-delay:.7s]" />
-          <div className="w-4 h-4 rounded-full bg-sky-500 animate-bounce [animation-delay:.3s]" />
-          <div className="w-4 h-4 rounded-full bg-sky-500 animate-bounce [animation-delay:.7s]" />
-        </div>
+        <Loading />
       </div>
     );
   }
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
-        <div className="text-center">
-          <div className="text-red-500 text-lg font-semibold mb-2">
-            Có lỗi xảy ra
-          </div>
-          <div className="text-gray-600">{error.message}</div>
-        </div>
+        <ErrorQuery
+          error={error}
+          message="Không thể tải danh sách bác sĩ. Vui lòng thử lại sau."
+          onRetry={refetch}
+        />
       </div>
     );
   }
