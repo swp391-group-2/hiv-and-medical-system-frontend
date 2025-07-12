@@ -6,15 +6,17 @@ interface EduBlogSearchBarProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  onReload?: () => void;
 }
 
 export const EduBlogSearchBar = ({
   value,
   onChange,
   placeholder = "Tìm kiếm bài viết...",
+  onReload,
 }: EduBlogSearchBarProps) => {
   return (
-    <form className="flex w-full max-w-md items-center space-x-2">
+    <div className="flex w-full max-w-md items-center space-x-2">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
@@ -25,9 +27,9 @@ export const EduBlogSearchBar = ({
           className="pl-10"
         />
       </div>
-      <Button type="submit" size="sm">
-        Tìm kiếm
+      <Button onClick={onReload} type="button" size="sm">
+        Tải Lại
       </Button>
-    </form>
+    </div>
   );
 };

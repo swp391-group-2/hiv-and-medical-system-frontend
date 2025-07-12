@@ -1,8 +1,8 @@
 import { anonymousPostApi } from "@/apis/anonymousPost.api";
 import ErrorQuery from "@/components/common/error-query";
 import Loading from "@/components/common/loading";
-import { PostCard } from "@/components/qAndA/post-card";
-import { PostForm } from "@/components/qAndA/post-form";
+import PostCard from "@/components/qAndA/post-card";
+import PostForm from "@/components/qAndA/post-form";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDebounceValue } from "usehooks-ts";

@@ -6,39 +6,55 @@ export const URL_DOCTORS = "doctors";
 export interface DoctorsApiResponse {
   status: string;
   message: string;
-  data: DoctorProfile[];
+  data: {
+    doctor: DoctorProfile;
+    totalAppointment: number;
+  }[];
 }
 
 export interface DoctorApiResponseWithId {
   status: string;
   message: string;
-  data: DoctorProfile;
+  data: DoctorProfile[];
 }
 
 const doctorApi = {
-  getDoctors: (page: number, size: number, title: string = "") => {
+  getDoctors: async (page: number, size: number, name: string = "") => {
     return apiGuest
       .get<DoctorsApiResponse>(URL_DOCTORS, {
         params: {
           page,
           size,
-          title,
+          name,
         },
       })
       .then((data) => {
         return data.data;
       });
   },
-  getDoctorById: (doctorId: string) => {
+  getDoctorById: async (doctorId: string) => {
     return apiGuest
       .get<DoctorApiResponseWithId>(`${URL_DOCTORS}/${doctorId}`)
       .then((response) => {
         return response.data;
       });
   },
-  getTopDoctors: () => {
+  getTopDoctors: async () => {
     return apiGuest
       .get<DoctorsApiResponse>(`${URL_DOCTORS}/top`)
+      .then((data) => {
+        return data.data;
+      });
+  },
+  getTopAppointmentDoctors: async () => {
+    return apiGuest
+      .get<DoctorsApiResponse>(`${URL_DOCTORS}/top-appointmentCount`, {
+        params: {
+          size: 4,
+          page: 0,
+          name: "",
+        },
+      })
       .then((data) => {
         return data.data;
       });

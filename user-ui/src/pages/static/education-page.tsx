@@ -1,4 +1,6 @@
-import EduBlogList from "@/components/eduBlog/edu-blog-list";
+import EduBlogList, {
+  type ListRefHandle,
+} from "@/components/eduBlog/edu-blog-list";
 import { EduBlogSearchBar } from "@/components/eduBlog/edu-blog-searchbar";
 import {
   Pagination,
@@ -8,13 +10,23 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useState } from "react";
+
+import { useRef, useState } from "react";
 
 import { useDebounceValue } from "usehooks-ts";
 const EducationPage = () => {
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(0);
   const [debouncedValue] = useDebounceValue<string>(search, 500);
+
+  const listRef = useRef<ListRefHandle>(null);
+
+  const handleReloadFromSearch = () => {
+    console.log("Reloading with search:", listRef.current);
+    if (listRef.current) {
+      listRef.current.refetch();
+    }
+  };
 
   return (
     <div className="container mx-auto flex flex-col ">
@@ -49,10 +61,14 @@ const EducationPage = () => {
           </div>
         </div>
         <div className="flex justify-center mb-8">
-          <EduBlogSearchBar value={search} onChange={setSearch} />
+          <EduBlogSearchBar
+            value={search}
+            onChange={setSearch}
+            onReload={handleReloadFromSearch}
+          />
         </div>
         <div className="mt-8 ">
-          <EduBlogList search={debouncedValue} page={page} />
+          <EduBlogList search={debouncedValue} page={page} ref={listRef} />
         </div>
         <div className="mt-6">
           <Pagination>

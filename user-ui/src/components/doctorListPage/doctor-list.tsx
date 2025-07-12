@@ -72,6 +72,7 @@ function DoctorList({ page = 1, search = "" }: DoctorListProps) {
       </div>
     );
   }
+  console.log(doctors);
 
   return (
     <div>
@@ -79,11 +80,12 @@ function DoctorList({ page = 1, search = "" }: DoctorListProps) {
       <div className="grid grid-cols-4 gap-5">
         {doctors?.map((doctor) => (
           <DoctorCard
-            key={doctor.doctorId}
-            doctorId={doctor.doctorId}
-            fullName={doctor.fullName}
-            urlImage={doctor.urlImage}
-            email={doctor.email}
+            key={doctor.doctor.doctorId}
+            doctorId={doctor.doctor.doctorId}
+            fullName={doctor.doctor.fullName}
+            urlImage={doctor.doctor.urlImage}
+            totalAppointment={doctor.totalAppointment}
+            email={doctor.doctor.email}
           />
         ))}
       </div>

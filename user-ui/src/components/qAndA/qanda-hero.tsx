@@ -11,7 +11,7 @@ function QAndAHero() {
             Đặt Câu Hỏi
           </button>
           <button className="border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">
-            Xem Câu Hỏi Phổ Biến
+            Xem Câu Hỏi Của Tôi
           </button>
         </div>
       </div>

@@ -30,7 +30,7 @@ const postSchema = z.object({
 });
 export type PostFormData = z.infer<typeof postSchema>;
 
-export function PostForm() {
+const PostForm = () => {
   const form = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -117,4 +117,6 @@ export function PostForm() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default PostForm;
