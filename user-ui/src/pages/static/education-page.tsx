@@ -54,7 +54,7 @@ const EducationPage = () => {
         <div className="mt-8 ">
           <EduBlogList search={debouncedValue} page={page} />
         </div>
-        <div>
+        <div className="mt-6">
           <Pagination>
             <PaginationContent>
               <PaginationItem>

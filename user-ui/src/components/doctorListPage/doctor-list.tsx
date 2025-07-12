@@ -1,36 +1,50 @@
-import apiGuest from "@/apis/apiGuest";
-import type { Doctor } from "@/types/doctor.type";
+import type { DoctorProfile } from "@/types/doctor.type";
 import { useQuery } from "@tanstack/react-query";
 import DoctorCard from "./doctor-card";
+import doctorApi from "@/apis/doctor.api";
 
-function DoctorList() {
-  const fetchDoctors = async (): Promise<Doctor[]> => {
-    const response = await apiGuest.get("doctors");
-    return response.data.data;
-  };
+const SIZE = 12;
 
+type DoctorListProps = {
+  page?: number;
+  search?: string;
+};
+
+function DoctorList({ page = 1, search = "" }: DoctorListProps) {
   const {
     data: doctors,
     isLoading,
     error,
-  } = useQuery<Doctor[], Error>({
-    queryKey: ["doctor"],
-    queryFn: () => fetchDoctors(),
+  } = useQuery<DoctorProfile[]>({
+    queryKey: ["doctor", page, search],
+    queryFn: async () => {
+      const doctors = await doctorApi.getDoctors(page, SIZE, search);
+      return doctors.data;
+    },
   });
 
   if (isLoading) {
     return (
-      <div>
+      <div className="flex justify-center items-center min-h-[200px]">
         <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.7s]" />
-          <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.3s]" />
-          <div className="w-4 h-4 rounded-full bg-blue-700 animate-bounce [animation-delay:.7s]" />
+          <div className="w-4 h-4 rounded-full bg-sky-500 animate-bounce [animation-delay:.7s]" />
+          <div className="w-4 h-4 rounded-full bg-sky-500 animate-bounce [animation-delay:.3s]" />
+          <div className="w-4 h-4 rounded-full bg-sky-500 animate-bounce [animation-delay:.7s]" />
         </div>
       </div>
     );
   }
   if (error) {
-    return <div>{error.message}</div>;
+    return (
+      <div className="flex justify-center items-center min-h-[200px]">
+        <div className="text-center">
+          <div className="text-red-500 text-lg font-semibold mb-2">
+            Có lỗi xảy ra
+          </div>
+          <div className="text-gray-600">{error.message}</div>
+        </div>
+      </div>
+    );
   }
 
   return (

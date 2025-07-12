@@ -29,10 +29,10 @@ const ServiceDoctorList = () => {
           </h1>
           <div className="w-24 h-1 bg-blue-300 rounded mx-auto mb-8"></div>
           <div className="flex flex-row gap-4 mb-4">
-            <FinderBar search={debouncedValue} setSearch={setSearch} />
+            <FinderBar search={search} setSearch={setSearch} />
           </div>
-          <DoctorList />
-          <div>
+          <DoctorList page={page} search={debouncedValue} />
+          <div className="mt-6">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
