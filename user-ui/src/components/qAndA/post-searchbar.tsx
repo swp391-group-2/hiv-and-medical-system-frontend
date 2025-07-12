@@ -2,19 +2,19 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-interface EduBlogSearchBarProps {
+interface PostSearchBarProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
   onReload?: () => void;
 }
 
-export const EduBlogSearchBar = ({
+const PostSearchBar = ({
   value,
   onChange,
-  placeholder = "Tìm kiếm bài viết...",
-  onReload,
-}: EduBlogSearchBarProps) => {
+  placeholder = "Tìm Câu Hỏi",
+  onReload = () => {},
+}: PostSearchBarProps) => {
   return (
     <div className="flex w-full max-w-md items-center space-x-2">
       <div className="relative flex-1">
@@ -27,9 +27,11 @@ export const EduBlogSearchBar = ({
           className="pl-10"
         />
       </div>
-      <Button onClick={onReload} type="button" size="sm">
+      <Button onClick={onReload} size="sm">
         Tải Lại
       </Button>
     </div>
   );
 };
+
+export default PostSearchBar;

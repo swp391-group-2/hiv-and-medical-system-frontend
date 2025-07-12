@@ -13,7 +13,7 @@ export interface PostCardProps {
   onToggleComments: (postId: string) => void;
 }
 
-export function PostCard({
+export default function PostCard({
   post,
   showComments,
   onToggleComments,

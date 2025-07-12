@@ -7,11 +7,11 @@ import {
 import { Card } from "../ui/card";
 import useBookingStore from "@/stores/booking.store";
 import type { Service } from "@/types/service.type";
-import type { Doctor } from "@/types/doctor.type";
+import type { DoctorProfile } from "@/types/doctor.type";
 
 interface MedicalFacilityInfoProps {
   service: Service;
-  doctor?: Doctor;
+  doctor?: DoctorProfile;
 }
 
 function MedicalFacilityInfo({ service, doctor }: MedicalFacilityInfoProps) {
