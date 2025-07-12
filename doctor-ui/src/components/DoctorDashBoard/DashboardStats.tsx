@@ -79,7 +79,6 @@ export const DashboardStats: React.FC<{
         value={stats.totalAppointments}
         subtitle="Tổng số cuộc hẹn"
         gradient="bg-gradient-to-br from-blue-500 to-blue-600"
-        trend={{ value: 12, isPositive: true }}
       />
 
       <StatsCard
@@ -88,7 +87,6 @@ export const DashboardStats: React.FC<{
         value={stats.completedToday}
         subtitle="Bệnh nhân đã khám"
         gradient="bg-gradient-to-br from-green-500 to-green-600"
-        trend={{ value: 8, isPositive: true }}
       />
 
       <StatsCard
@@ -105,7 +103,6 @@ export const DashboardStats: React.FC<{
         value={stats.emergencyToday}
         subtitle="Cần xử lý ngay"
         gradient="bg-gradient-to-br from-red-500 to-red-600"
-        trend={{ value: -5, isPositive: false }}
       />
     </div>
   );
