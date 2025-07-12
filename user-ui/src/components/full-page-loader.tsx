@@ -9,7 +9,7 @@ function FullPageLoader() {
         width: "100vw",
       }}
     >
-      <span className="loader"></span> {/* Sử dụng lại loader của bạn */}
+      <span className="loader"></span>
     </div>
   );
 }

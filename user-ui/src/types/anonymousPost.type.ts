@@ -1,8 +1,9 @@
 export interface Comment {
-  doctorImageUrl: string;
   commentId: number;
   anonymousPostId: number;
   doctorId: string;
+  doctorName: string;
+  doctorImageUrl: string;
   patientId: string;
   content: string;
   createdAt: string;
@@ -10,9 +11,6 @@ export interface Comment {
 
 export interface AnonymousPost {
   anonymousPostId: number;
-  nickName: string;
-  gender: string;
-  age: number;
   title: string;
   content: string;
   createdAt: string;

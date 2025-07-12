@@ -144,7 +144,9 @@ const BookingConfirm = () => {
                                 " " +
                                 scheduleSlot.slot.endTime}
                             </div>
-                            <div className="text-gray-500">2025-06-16</div>
+                            <div className="text-gray-500">
+                              {scheduleSlot.date}
+                            </div>
                           </TableCell>
                         )}
                         {labTestSlot && (

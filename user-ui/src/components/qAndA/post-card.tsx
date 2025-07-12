@@ -33,17 +33,14 @@ export function PostCard({
           <Avatar className="h-10 w-10">
             <AvatarImage src={`/placeholder.svg?height=40&width=40`} />
             <AvatarFallback className="bg-gradient-to-br from-primary to-sky-600 text-white font-medium">
-              {getAvatarFallback(post.nickName)}
+              {getAvatarFallback("Anonymous User")}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-                {post.nickName}
+                Người dùng ẩn danh
               </h3>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200">
-                {post.gender}, {post.age} tuổi
-              </span>
             </div>
             <p className="text-xs text-muted-foreground">
               {getTimeAgo(new Date(post.createdAt))}

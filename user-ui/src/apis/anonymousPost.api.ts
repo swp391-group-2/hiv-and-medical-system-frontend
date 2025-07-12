@@ -2,9 +2,6 @@ import type { AnonymousPostResponse } from "@/types/anonymousPost.type";
 import http from "./http";
 
 interface CreateAnonymousPostRequest {
-  nickName: string;
-  gender: string;
-  age: number;
   title: string;
   content: string;
 }

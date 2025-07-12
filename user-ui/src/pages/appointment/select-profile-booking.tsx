@@ -1,6 +1,8 @@
 import userApi from "@/apis/user.api";
 import ProfileDone from "@/components/appointmenBooking/profile-done";
 import ProfileMissing from "@/components/appointmenBooking/profile-missing";
+import ErrorQuery from "@/components/common/error-query";
+import Loading from "@/components/common/loading";
 import { AppRoutes } from "@/constants/appRoutes";
 import useBookingStore from "@/stores/booking.store";
 import { useQuery } from "@tanstack/react-query";
@@ -28,7 +30,12 @@ function SelectProfileBooking() {
       }
     }
   }, []);
-  const { data: patientData, isLoading } = useQuery({
+  const {
+    data: patientData,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["patient-info"],
     queryFn: async () => {
       const response = await userApi.getPatientProfile();
@@ -43,8 +50,20 @@ function SelectProfileBooking() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="loader"></div>
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Loading />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <ErrorQuery
+          error={error}
+          message="Không thể tải thông tin bệnh nhân. Vui lòng thử lại sau."
+          onRetry={refetch}
+        />
       </div>
     );
   }
