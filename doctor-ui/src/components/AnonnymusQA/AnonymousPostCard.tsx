@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MessageCircle, Send, User, Calendar, Stethoscope } from "lucide-react";
 import type { AnonymousPost, Comment, Doctor } from "@/types/qaType";
@@ -31,9 +31,15 @@ const AnonymousPostCard = ({
       try {
         const doctorIds = post.comments
           .map((comment) => comment.doctorId)
-          .filter((id, index, arr) => arr.indexOf(id) === index); // Remove duplicates
+          .filter((id, index, arr) => id && arr.indexOf(id) === index); // Remove duplicates and null/undefined
 
         const doctorPromises = doctorIds.map(async (doctorId) => {
+          // Additional check to ensure doctorId is valid
+          if (!doctorId || doctorId === "null" || doctorId === "undefined") {
+            console.warn(`Invalid doctorId: ${doctorId}`);
+            return { doctorId, doctor: null };
+          }
+
           try {
             const doctor = await getDoctorById(doctorId);
             return { doctorId, doctor };
@@ -114,17 +120,11 @@ const AnonymousPostCard = ({
           <CardTitle className="text-lg font-semibold text-gray-900">
             {post.title}
           </CardTitle>
-          <div className="flex gap-2">
-            <Badge variant="outline" className="ml-2">
-              {post.gender}
-            </Badge>
-            <Badge variant="outline">{post.age} tuổi</Badge>
-          </div>
         </div>
 
         <div className="flex items-center gap-2 text-sm text-gray-500">
           <User className="w-4 h-4" />
-          <span>{post.nickName}</span>
+          <span>Người dùng ẩn danh</span>
           <Calendar className="w-4 h-4 ml-2" />
           <span>{formatDate(post.createdAt)}</span>
         </div>
@@ -144,8 +144,7 @@ const AnonymousPostCard = ({
             <div className="space-y-3">
               {post.comments.map((comment: Comment) => {
                 const doctor = doctorInfo[comment.doctorId];
-                const doctorName =
-                  doctor?.fullName || comment.doctorName || "Bác sĩ";
+                const doctorName = doctor?.fullName || comment.doctorName;
                 const doctorImage =
                   doctor?.profilePicture || comment.doctorImageUrl;
 
@@ -159,16 +158,32 @@ const AnonymousPostCard = ({
                       <Avatar className="w-10 h-10">
                         <AvatarImage
                           src={doctorImage || undefined}
-                          alt={doctorName}
+                          alt={doctorName || "Bệnh nhân ẩn danh"}
                         />
-                        <AvatarFallback className="bg-blue-500 text-white">
-                          <Stethoscope className="w-4 h-4" />
+                        <AvatarFallback
+                          className={
+                            doctorName
+                              ? "bg-blue-500 text-white"
+                              : "bg-gray-500 text-white"
+                          }
+                        >
+                          {doctorName ? (
+                            <Stethoscope className="w-4 h-4" />
+                          ) : (
+                            <User className="w-4 h-4" />
+                          )}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="font-medium text-blue-900">
-                            Bác sĩ {doctorName}
+                          <span
+                            className={`font-medium ${
+                              doctorName ? "text-blue-900" : "text-gray-700"
+                            }`}
+                          >
+                            {doctorName
+                              ? `Bác sĩ ${doctorName}`
+                              : "Bệnh nhân ẩn danh"}
                           </span>
                           {/* <Badge variant="secondary" className="text-xs">
                             {doctor?.specialization || "Bác sĩ"}

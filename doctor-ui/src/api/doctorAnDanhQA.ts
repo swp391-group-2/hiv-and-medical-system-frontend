@@ -174,6 +174,16 @@ export const replyToAnonymousPost = async (
 };
 
 export const getDoctorById = async (doctorId: string): Promise<Doctor> => {
+  // Validate doctorId
+  if (
+    !doctorId ||
+    doctorId === "null" ||
+    doctorId === "undefined" ||
+    doctorId.trim() === ""
+  ) {
+    throw new Error(`Invalid doctorId: ${doctorId}`);
+  }
+
   const token = localStorage.getItem("accessToken");
 
   const response = await fetch(`${BASE_URL}doctors/${doctorId}`, {
