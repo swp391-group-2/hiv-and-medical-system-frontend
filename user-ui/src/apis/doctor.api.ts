@@ -1,4 +1,4 @@
-import type { Doctor } from "@/types/doctor.type";
+import type { DoctorProfile } from "@/types/doctor.type";
 import apiGuest from "./apiGuest";
 
 export const URL_DOCTORS = "doctors";
@@ -6,20 +6,28 @@ export const URL_DOCTORS = "doctors";
 export interface DoctorsApiResponse {
   status: string;
   message: string;
-  data: Doctor[];
+  data: DoctorProfile[];
 }
 
 export interface DoctorApiResponseWithId {
   status: string;
   message: string;
-  data: Doctor;
+  data: DoctorProfile;
 }
 
 const doctorApi = {
-  getDoctors: () => {
-    return apiGuest.get<DoctorsApiResponse>(URL_DOCTORS).then((data) => {
-      return data.data;
-    });
+  getDoctors: (page: number, size: number, title: string = "") => {
+    return apiGuest
+      .get<DoctorsApiResponse>(URL_DOCTORS, {
+        params: {
+          page,
+          size,
+          title,
+        },
+      })
+      .then((data) => {
+        return data.data;
+      });
   },
   getDoctorById: (doctorId: string) => {
     return apiGuest

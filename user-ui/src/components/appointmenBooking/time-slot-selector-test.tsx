@@ -1,4 +1,5 @@
 import ScheduleApi from "@/apis/schedule.api";
+import { cn } from "@/lib/utils";
 import type {
   TestScheduleApiResponse,
   TestScheduleSlotEntry,
@@ -96,15 +97,17 @@ const TimeSlotSelectorTest = ({
             {session.slots.map((slot) => (
               <button
                 key={slot.id}
+                disabled={slot.status !== "AVAILABLE"}
                 onClick={() => onTimeSelect(slot.slot.startTime, slot)}
-                className={`
-                  px-4 cursor-pointer py-3 rounded-lg border text-sm font-medium transition-colors
-                  ${
-                    selectedTime === slot.slot.startTime
-                      ? "bg-primary text-white border-cyan-500"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-cyan-300 hover:bg-cyan-50"
-                  }
-                `}
+                className={cn(
+                  "px-4 py-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer",
+
+                  selectedTime === slot.slot.startTime
+                    ? "bg-primary text-white border-cyan-500"
+                    : "bg-white text-gray-700 border-gray-200 hover:border-cyan-300 hover:bg-cyan-50",
+                  slot.status !== "AVAILABLE" &&
+                    "bg-gray-300 cursor-not-allowed border-0 hover:bg-gray-300 hover:border-0 "
+                )}
               >
                 {slot.slot.startTime + "-" + slot.slot.endTime}
               </button>

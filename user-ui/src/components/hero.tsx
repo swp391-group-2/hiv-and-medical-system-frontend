@@ -83,7 +83,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
               </div>
             </div>
           </div>
-          <div className="col-span-3 relative">
+          <div className="col-span-3  relative">
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-40 transition duration-1000 animate-pulse"></div>
 
@@ -96,7 +96,7 @@ function Hero({ scrollToHomeService }: { scrollToHomeService: () => void }) {
                 <img
                   src={heroImg}
                   alt="Img HIV"
-                  className="w-full h-auto object-cover rounded-xl shadow-2xl group-hover:shadow-3xl transition-shadow duration-500"
+                  className="w-full h-[100%] object-cover rounded-xl shadow-2xl group-hover:shadow-3xl transition-shadow duration-500"
                 />
 
                 <div className="absolute inset-2 rounded-xl bg-black/5"></div>

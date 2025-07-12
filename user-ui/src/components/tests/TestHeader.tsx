@@ -32,7 +32,7 @@ const TestHeader = ({
   return (
     <div className="flex flex-col md:flex-row gap-8 bg-gradient-to-br from-primary to-sky-200 rounded-2xl p-8 mb-6">
       <div className="flex flex-col items-center justify-center w-full md:w-1/3 space-y-6">
-        <div className="relative group overflow-hidden rounded-3xl bg-gradient-to-br from-blue-50 to-white p-1 shadow-2xl">
+        <div className="relative group overflow-hidden w-full rounded-3xl bg-gradient-to-br from-blue-50 to-white p-1 shadow-2xl">
           <div className="relative overflow-hidden rounded-3xl bg-white">
             <img
               src={image}

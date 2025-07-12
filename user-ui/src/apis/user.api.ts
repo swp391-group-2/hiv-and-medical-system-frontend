@@ -1,5 +1,3 @@
-
-
 import type {
   UserProfileResponse,
   UserProfileUpdateValues,
@@ -13,10 +11,11 @@ import type { PrescriptionsResponse } from "@/types/prescriptions.type";
 import type { LabResultResponse } from "@/types/LabResult.type";
 
 export const URL_PATIENT_PROFILE = "patients/myInfo";
-export const URL_PATIENT_APPOINTMENTS = "patients/me/appointments"
-export const URL_PATIENT_PRESCRIPTIONS = "patients/me/prescriptions"
-export const URL_PATIENT_APPOINTMENTS_COMPLETED = "patients/me/appointmentsCompleted"
-export const URL_PATIENT_TEST_RESULTS = "patients/me/test/results"
+export const URL_PATIENT_APPOINTMENTS = "patients/me/appointments";
+export const URL_PATIENT_PRESCRIPTIONS = "patients/me/prescriptions";
+export const URL_PATIENT_APPOINTMENTS_COMPLETED =
+  "patients/me/appointmentsCompleted";
+export const URL_PATIENT_TEST_RESULTS = "patients/me/test/results";
 
 export const getPatientProfileByEmailUrl = (email: string) => {
   return `patients/patientProfile/${email}`;
@@ -25,7 +24,6 @@ export const getPatientProfileByEmailUrl = (email: string) => {
 export const getPatientProfileByIdUrl = (patientId: string) => {
   return `patients/${patientId}`;
 };
-
 
 const userApi = {
   getPatientProfile: () => {
@@ -38,14 +36,10 @@ const userApi = {
     );
   },
   getPatientAppointments: () => {
-    return http.get<AppointmentApiResponse>(
-      URL_PATIENT_APPOINTMENTS
-    );
+    return http.get<AppointmentApiResponse>(URL_PATIENT_APPOINTMENTS);
   },
   getPatientPrescriptions: () => {
-    return http.get<PrescriptionsResponse>(
-      URL_PATIENT_PRESCRIPTIONS
-    );
+    return http.get<PrescriptionsResponse>(URL_PATIENT_PRESCRIPTIONS);
   },
   getPatientAppointmentsComplete: () => {
     return http.get<AppointmentCompletedApiResponse>(
