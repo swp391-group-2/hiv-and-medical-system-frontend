@@ -45,7 +45,7 @@ const AppRoutes = () => {
             <Route path="checkup-result" element={<CheckUpResult />} />
             <Route path="test-result" element={<TestResult />} />
           </Route>
-
+          <Route path="/qanda" element={<QAndA />} />
           <Route
             path="select-profile-booking/:serviceType"
             element={<SelectProfileBooking />}
@@ -70,7 +70,6 @@ const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="education" element={<EducationPage />} />
         <Route path="education/:blogId" element={<EduBlogDetail />} />
-        <Route path="/qanda" element={<QAndA />} />
         <Route path="screening" element={<ServiceScreeningTest />} />
         <Route path="confirmatory" element={<ServiceConfirmatoryTest />} />
         <Route path="consultation">

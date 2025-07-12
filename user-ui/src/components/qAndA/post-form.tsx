@@ -5,13 +5,6 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Form,
   FormControl,
   FormField,
@@ -26,17 +19,6 @@ import { anonymousPostApi } from "@/apis/anonymousPost.api";
 import { toast } from "sonner";
 
 const postSchema = z.object({
-  nickName: z
-    .string()
-    .min(2, "Biệt danh phải có ít nhất 2 ký tự")
-    .max(50, "Biệt danh phải có ít hơn 50 ký tự"),
-  gender: z.enum(["Nam", "Nữ", "Khác"], {
-    required_error: "Hãy chọn giới tính của bạn",
-  }),
-  age: z
-    .number()
-    .min(1, "Tuổi phải lớn hơn 0")
-    .max(120, "Tuổi phải nhỏ hơn 120"),
   title: z
     .string()
     .min(5, "Tiêu đề phải có ít nhất 5 ký tự")
@@ -52,9 +34,6 @@ export function PostForm() {
   const form = useForm<PostFormData>({
     resolver: zodResolver(postSchema),
     defaultValues: {
-      nickName: "",
-      gender: "Khác",
-      age: 18,
       title: "",
       content: "",
     },
@@ -98,70 +77,6 @@ export function PostForm() {
             onSubmit={form.handleSubmit((value) => handleSubmit(value))}
             className="space-y-4"
           >
-            <div className=" gap-4">
-              <FormField
-                control={form.control}
-                name="nickName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Biệt Danh</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nhập biệt danh của bạn" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Giới tính</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select gender" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Nam">Nam</SelectItem>
-                        <SelectItem value="Nữ">Nữ</SelectItem>
-                        <SelectItem value="Khác">Khác</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tuổi</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Enter your age"
-                        {...field}
-                        onChange={(e) =>
-                          field.onChange(Number.parseInt(e.target.value) || 0)
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
             <FormField
               control={form.control}
               name="title"

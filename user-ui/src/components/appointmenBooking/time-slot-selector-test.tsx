@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarX } from "lucide-react";
 import { useParams } from "react-router-dom";
+import Loading from "../common/loading";
 
 interface TimeSlotSelectorProps {
   selectedTime: string;
@@ -37,16 +38,7 @@ const TimeSlotSelectorTest = ({
     },
   });
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center text-center text-lg">
-        <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
-        </div>
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   if (error)
     return <div className="text-red-500 text-2xl">{error.message}</div>;

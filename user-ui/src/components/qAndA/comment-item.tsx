@@ -7,7 +7,7 @@ interface CommentItemProps {
 }
 
 export function CommentItem({ comment }: CommentItemProps) {
-  console.log(comment.doctorImageUrl);
+  console.log(comment);
   return (
     <div className="flex space-x-3">
       <Avatar className="h-8 w-8">
@@ -20,17 +20,14 @@ export function CommentItem({ comment }: CommentItemProps) {
           }
         />
         <AvatarFallback className="text-xs">
-          {comment.doctorId
-            .split(" ")
-            .map((n) => n[0])
-            .join("")}
+          {comment.doctorName}
         </AvatarFallback>
       </Avatar>
       <div className="flex-1 space-y-1">
         <div className="bg-muted rounded-lg p-3">
           <div className="flex items-center space-x-2 mb-1">
             <span className="font-medium text-sm">
-              {"Dr. " + "Nguyễn Hoài Phương"}
+              {`Dr. ${comment.doctorName}`}
             </span>
             <span className="text-xs text-muted-foreground">
               {getTimeAgo(new Date(comment.createdAt))}
