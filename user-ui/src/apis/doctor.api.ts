@@ -15,7 +15,7 @@ export interface DoctorsApiResponse {
 export interface DoctorApiResponseWithId {
   status: string;
   message: string;
-  data: DoctorProfile[];
+  data: DoctorProfile;
 }
 
 const doctorApi = {
