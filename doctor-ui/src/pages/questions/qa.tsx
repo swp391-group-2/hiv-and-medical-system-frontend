@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import StatsBox from "@/components/AnonnymusQA/tagQA";
 import AnonymousPostCard from "@/components/AnonnymusQA/AnonymousPostCard";
 
@@ -11,8 +11,6 @@ import { LoadingSpinner } from "@/components/ui/loading";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Questions = () => {
-  const queryClient = useQueryClient();
-
   const [stats, setStats] = useState<StatsItem[]>([
     { label: "Chờ trả lời", count: 0, description: "Câu hỏi mới" },
     { label: "Đã trả lời", count: 0, description: "Đã tư vấn" },
@@ -125,7 +123,7 @@ const Questions = () => {
       </div>
 
       {/* Stats */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
           <StatsBox key={s.label} item={s} />
         ))}

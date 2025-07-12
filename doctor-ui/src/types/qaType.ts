@@ -1,8 +1,5 @@
 export interface AnonymousPost {
   anonymousPostId: string;
-  nickName: string;
-  gender: string;
-  age: number;
   title: string;
   content: string;
   createdAt: string;
