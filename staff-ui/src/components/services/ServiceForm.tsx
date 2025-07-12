@@ -2,17 +2,11 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import type { Service, UpdateServiceRequest } from "@/types/services";
-import { SERVICE_TYPE_OPTIONS } from "@/types/services";
+import { SERVICE_TYPE_LABELS } from "@/types/services";
+import ServiceImageUpload from "@/components/ServiceImageUpload";
 
 interface ServiceFormProps {
   service: Service; // Service bắt buộc phải có vì chỉ dùng để edit
@@ -20,7 +14,6 @@ interface ServiceFormProps {
   onCancel: () => void;
   loading?: boolean;
 }
-//avc
 const ServiceForm: React.FC<ServiceFormProps> = ({
   service,
   onSubmit,
@@ -30,9 +23,9 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
   const [formData, setFormData] = useState({
     name: service.name || "",
     price: service.price?.toString() || "",
-    serviceType: service.serviceType || "CONSULTATION",
   });
 
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validateForm = () => {
@@ -51,10 +44,6 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
       }
     }
 
-    if (!formData.serviceType) {
-      newErrors.serviceType = "Loại dịch vụ không được để trống";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -70,10 +59,7 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
       await onSubmit({
         name: formData.name.trim(),
         price: parseFloat(formData.price),
-        serviceType: formData.serviceType as
-          | "CONSULTATION"
-          | "SCREENING"
-          | "CONFIRMATORY",
+        file: selectedImage || undefined, // Gửi file trực tiếp (giống updateBlog)
       });
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -141,31 +127,30 @@ const ServiceForm: React.FC<ServiceFormProps> = ({
             )}
           </div>
 
-          {/* Loại dịch vụ */}
+          {/* Loại dịch vụ - Read only */}
           <div className="space-y-2">
-            <Label htmlFor="serviceType">Loại dịch vụ *</Label>
-            <Select
-              value={formData.serviceType}
-              onValueChange={(value) => handleInputChange("serviceType", value)}
+            <Label htmlFor="serviceType">Loại dịch vụ</Label>
+            <Input
+              id="serviceType"
+              value={
+                SERVICE_TYPE_LABELS[service.serviceType] || service.serviceType
+              }
+              disabled
+              className="bg-gray-100 cursor-not-allowed"
+            />
+            <p className="text-xs text-gray-500">
+              Loại dịch vụ không thể thay đổi
+            </p>
+          </div>
+
+          {/* Hình ảnh dịch vụ */}
+          <div className="space-y-2">
+            <ServiceImageUpload
+              currentImageUrl={service.imageUrl}
+              onImageSelect={setSelectedImage}
+              onImageRemove={() => setSelectedImage(null)}
               disabled={loading}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Chọn loại dịch vụ" />
-              </SelectTrigger>
-              <SelectContent>
-                {SERVICE_TYPE_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {errors.serviceType && (
-              <div className="flex items-center gap-2 text-red-600 text-sm">
-                <AlertCircle size={16} />
-                {errors.serviceType}
-              </div>
-            )}
+            />
           </div>
 
           {/* Actions */}

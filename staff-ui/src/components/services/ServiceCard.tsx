@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Edit2, Eye } from "lucide-react";
+import { Edit2, Eye, ImageIcon } from "lucide-react";
 import type { Service } from "@/types/services";
 import { SERVICE_TYPE_LABELS } from "@/types/services";
 
@@ -38,7 +38,25 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   };
 
   return (
-    <Card className="hover:shadow-md transition-shadow">
+    <Card className="hover:shadow-md transition-shadow overflow-hidden">
+      {/* Service Image */}
+      {service.imageUrl ? (
+        <div className="h-75 overflow-hidden">
+          <img
+            src={service.imageUrl}
+            alt={service.name}
+            className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          />
+        </div>
+      ) : (
+        <div className="h-75 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+          <div className="text-center text-gray-400">
+            <ImageIcon size={48} className="mx-auto mb-2" />
+            <p className="text-sm">Chưa có hình ảnh</p>
+          </div>
+        </div>
+      )}
+
       <CardContent className="p-4">
         <div className="space-y-3">
           {/* Service Header */}

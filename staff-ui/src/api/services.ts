@@ -83,16 +83,48 @@ export const getServicesByType = async (
   }
 };
 
-// Cập nhật dịch vụ
+// Cập nhật dịch vụ với hỗ trợ upload hình ảnh (FormData với JSON data)
 export const updateService = async (
   serviceId: number,
   serviceData: UpdateServiceRequest
 ): Promise<Service> => {
   try {
     console.log("Updating service with data:", serviceData);
+
+    // Tạo data object để stringify thành JSON (giống updateBlog)
+    const data = {
+      name: serviceData.name,
+      price: serviceData.price,
+    };
+
+    // Tạo FormData
+    const formData = new FormData();
+    formData.append("data", JSON.stringify(data));
+
+    // Nếu có file ảnh, thêm vào FormData với field name "file" (giống updateBlog)
+    if (serviceData.file) {
+      formData.append("file", serviceData.file);
+      console.log("Updating service WITH new file");
+      console.log("File name:", serviceData.file.name);
+      console.log("File size:", serviceData.file.size);
+      console.log("File type:", serviceData.file.type);
+    } else {
+      console.log("Updating service WITHOUT changing file");
+    }
+
+    console.log("FormData entries:");
+    for (const [key, value] of formData.entries()) {
+      console.log(key, typeof value === "string" ? value : "File object");
+    }
+
     const response = await http.put<ServiceApiResponse>(
       `/services/${serviceId}`,
-      serviceData
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
     console.log("Update service response:", response.data);
 

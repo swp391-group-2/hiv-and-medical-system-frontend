@@ -4,18 +4,20 @@ export interface Service {
   name: string;
   price: number;
   serviceType: "CONSULTATION" | "SCREENING" | "CONFIRMATORY";
+  imageUrl?: string; // URL của hình ảnh dịch vụ
 }
 
 export interface CreateServiceRequest {
   name: string;
   price: number;
   serviceType: "CONSULTATION" | "SCREENING" | "CONFIRMATORY";
+  file?: File; // File ảnh để upload (giống updateBlog)
 }
 
 export interface UpdateServiceRequest {
   name: string;
   price: number;
-  serviceType: "CONSULTATION" | "SCREENING" | "CONFIRMATORY";
+  file?: File; // File ảnh để upload (giống updateBlog)
 }
 
 export interface ServiceApiResponse {
