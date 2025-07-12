@@ -1,16 +1,36 @@
 import { useBlogList } from "@/api/blog";
 import { LoadingOverlay } from "@/components/loading-overlay";
 import { EmptyListMessage } from "@/components/page-message";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import type { Blog } from "@/types/blog";
-import { Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+// import { Plus } from "lucide-react";
+// import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const BlogCard = ({ blog }: { blog: Blog }) => {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-      {/* Optional: Blog image/thumbnail if your Blog interface included it */}
-      {/* <img src={blog.imageUrl} alt={blog.title} className="w-full h-48 object-cover"/> */}
+      {/* Hiển thị hình ảnh nếu có và không bị lỗi */}
+      {blog.urlImage && !imageError ? (
+        <img
+          src={blog.urlImage}
+          alt={blog.title}
+          className="w-full h-48 object-cover"
+          onError={handleImageError}
+        />
+      ) : (
+        <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
+          <span className="text-gray-500 text-sm">
+            {blog.urlImage ? "Không thể tải hình ảnh" : "Không có hình ảnh"}
+          </span>
+        </div>
+      )}
       <div className="p-6">
         <h3 className="text-xl font-semibold text-gray-900 mb-2 line-clamp-2">
           {blog.title}
@@ -32,7 +52,7 @@ const BlogCard = ({ blog }: { blog: Blog }) => {
 
 const ManagerBlogs = () => {
   const { data: blogList = [], isLoading } = useBlogList(0, 5);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   if (isLoading) {
     return <LoadingOverlay message="Đang tải" />;
@@ -43,12 +63,12 @@ const ManagerBlogs = () => {
       <div className="container flex flex-col px-4 grow">
         <header className="mb-8 flex justify-between">
           <h1 className="text-3xl font-bold text-gray-900">Quản lý bài viết</h1>
-          <Button
+          {/* <Button
             className="cursor-pointer bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700 transition-colors duration-200"
             onClick={() => navigate("/manager/blogs/create")}
           >
             <Plus /> Tạo bài viết mới
-          </Button>
+          </Button> */}
         </header>
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

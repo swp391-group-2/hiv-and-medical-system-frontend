@@ -4,4 +4,5 @@ export interface Blog {
   title: string;
   snipper: string;
   content: string;
+  urlImage?: string; // URL của hình ảnh bài viết
 }
