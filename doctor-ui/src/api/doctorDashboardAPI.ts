@@ -117,19 +117,19 @@ export const getAllAppointmentsByDoctor = async (): Promise<Appointment[]> => {
     const token = localStorage.getItem("accessToken");
     if (!token) throw new Error("Không tìm thấy access token");
 
-    // Thử lấy appointments theo doctor trực tiếp trước
-    try {
-      const res = await axios.get(`${BASE_URL}appointments/doctor/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.data?.data && Array.isArray(res.data.data)) {
-        return res.data.data;
-      }
-    } catch {
-      console.warn(
-        "❌ /appointments/doctor/me failed, trying alternative method..."
-      );
-    }
+    // // Thử lấy appointments theo doctor trực tiếp trước
+    // try {
+    //   const res = await axios.get(`${BASE_URL}doctors/me/appointments`, {
+    //     headers: { Authorization: `Bearer ${token}` },
+    //   });
+    //   if (res.data?.data && Array.isArray(res.data.data)) {
+    //     return res.data.data;
+    //   }
+    // } catch {
+    //   console.warn(
+    //     "❌ /appointments/doctor/me failed, trying alternative method..."
+    //   );
+    // }
 
     // Fallback: lấy doctor info và filter appointments
     const decoded = jwtDecode(token) as { sub: string };
