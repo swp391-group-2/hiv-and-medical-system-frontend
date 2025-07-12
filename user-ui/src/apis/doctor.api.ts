@@ -6,10 +6,7 @@ export const URL_DOCTORS = "doctors";
 export interface DoctorsApiResponse {
   status: string;
   message: string;
-  data: {
-    doctor: DoctorProfile;
-    totalAppointment: number;
-  }[];
+  data: DoctorProfile[];
 }
 
 export interface DoctorApiResponseWithId {

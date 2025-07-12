@@ -67,7 +67,9 @@ export const LoginForm = () => {
       navigate(fromPath);
     },
     onError: (error) => {
-      console.log("Đăng nhập thất bại hoặc popup đã bị đóng:", error);
+      toast.error("Đăng nhập thất bại", {
+        description: error instanceof Error ? error.message : "Có lỗi xảy ra.",
+      });
     },
   });
 

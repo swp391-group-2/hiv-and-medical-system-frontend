@@ -73,21 +73,23 @@ function DoctorList({ page = 1, search = "" }: DoctorListProps) {
     );
   }
   console.log(doctors);
-
   return (
     <div>
       {" "}
       <div className="grid grid-cols-4 gap-5">
-        {doctors?.map((doctor) => (
-          <DoctorCard
-            key={doctor.doctor.doctorId}
-            doctorId={doctor.doctor.doctorId}
-            fullName={doctor.doctor.fullName}
-            urlImage={doctor.doctor.urlImage}
-            totalAppointment={doctor.totalAppointment}
-            email={doctor.doctor.email}
-          />
-        ))}
+        {doctors.map((doctor) => {
+          console.log(doctor);
+          return (
+            <DoctorCard
+              key={doctor.doctorId}
+              doctorId={doctor.doctorId}
+              fullName={doctor.fullName}
+              urlImage={doctor.urlImage}
+              totalAppointment={doctor.totalAppointment}
+              email={doctor.email}
+            />
+          );
+        })}
       </div>
     </div>
   );
