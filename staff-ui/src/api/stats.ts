@@ -1,10 +1,10 @@
 import type {
   ServiceTypeStat,
   StatCardStaticProps,
-  FavoriteDoctor,
   WeeklyStatsData,
 } from "@/types/stats";
 import type { Response } from "@/types/types";
+import type { Doctor } from "@/types/doctor";
 import { useQuery } from "@tanstack/react-query";
 import http from "./http";
 
@@ -48,22 +48,21 @@ export const useServiceTypeStats = () => {
 };
 
 export const getFavoriteDoctors = async (
-  page?: number,
   size?: number
-): Promise<FavoriteDoctor[]> => {
-  const { data } = await http.get<Response<FavoriteDoctor>>(
-    `/doctors/top-appointmentCount`,
+): Promise<Doctor[]> => {
+  const { data } = await http.get<Response<Doctor>>(
+    `/doctors`,
     {
-      params: { page, size },
+      params: { size },
     }
   );
   return data.data;
 };
 
-export const useFavoriteDoctors = (page?: number, size?: number) => {
-  return useQuery<FavoriteDoctor[]>({
-    queryKey: ["topDoctors", page, size],
-    queryFn: () => getFavoriteDoctors(page, size),
+export const useFavoriteDoctors = (size?: number) => {
+  return useQuery<Doctor[]>({
+    queryKey: ["topDoctors", size],
+    queryFn: () => getFavoriteDoctors(size),
     staleTime: Infinity,
   });
 };

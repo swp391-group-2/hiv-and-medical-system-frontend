@@ -29,47 +29,53 @@ const QuickMarkdownHelp = () => {
     {
       title: "Tiêu đề",
       example: "# Tiêu đề chính\n## Tiêu đề phụ\n### Tiêu đề con",
-      description: "Sử dụng # để tạo tiêu đề"
+      description: "Sử dụng # để tạo tiêu đề",
     },
     {
       title: "In đậm/nghiêng",
       example: "**Văn bản in đậm**\n*Văn bản in nghiêng*",
-      description: "Làm nổi bật thông tin quan trọng"
+      description: "Làm nổi bật thông tin quan trọng",
     },
     {
       title: "Danh sách",
       example: "- Mục 1\n- Mục 2\n  - Mục con\n\n1. Bước 1\n2. Bước 2",
-      description: "Tạo danh sách có thứ tự và không thứ tự"
+      description: "Tạo danh sách có thứ tự và không thứ tự",
     },
     {
       title: "Trích dẫn",
       example: "> **Lưu ý:** Thông tin quan trọng\n> cần chú ý đặc biệt",
-      description: "Làm nổi bật cảnh báo hoặc ghi chú"
+      description: "Làm nổi bật cảnh báo hoặc ghi chú",
     },
     {
       title: "Bảng",
-      example: "| Thuốc | Liều | Tần suất |\n|-------|------|----------|\n| ARV | 600mg | 1 lần/ngày |",
-      description: "Trình bày dữ liệu có cấu trúc"
+      example:
+        "| Thuốc | Liều | Tần suất |\n|-------|------|----------|\n| ARV | 600mg | 1 lần/ngày |",
+      description: "Trình bày dữ liệu có cấu trúc",
     },
     {
       title: "Mã/Thuốc",
-      example: "Thuốc: `Efavirenz 600mg`\n\n```\nCD4: 350 cells/μL\nViral Load: Undetectable\n```",
-      description: "Hiển thị tên thuốc và số liệu"
-    }
+      example:
+        "Thuốc: `Efavirenz 600mg`\n\n```\nCD4: 350 cells/μL\nViral Load: Undetectable\n```",
+      description: "Hiển thị tên thuốc và số liệu",
+    },
   ];
 
   return (
     <div className="border rounded-lg">
-      <Button 
-        variant="ghost" 
-        size="sm" 
+      <Button
+        variant="ghost"
+        size="sm"
         className="w-full flex items-center justify-between text-xs p-3"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span>💡 Mẹo viết Markdown</span>
-        <ChevronDown className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown
+          className={`h-3 w-3 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
       </Button>
-      
+
       {isOpen && (
         <div className="p-3 border-t space-y-2">
           <div className="text-xs text-gray-600 mb-2">
