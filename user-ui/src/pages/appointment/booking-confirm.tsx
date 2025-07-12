@@ -27,6 +27,19 @@ import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppRoutes } from "@/constants/appRoutes";
 import { useEffect } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  AlertDialogDescription,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
 
 const BookingConfirm = () => {
   const navigate = useNavigate();
@@ -268,7 +281,32 @@ const BookingConfirm = () => {
                   </AlertDescription>
                 </Alert>
 
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 flex gap-5 justify-end">
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="outline" className="px-8 py-3">
+                        Đặt Bằng Vé
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Xác nhận đặt lịch khám
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Bạn có chắc chắn muốn xác nhận đặt lịch khám này
+                          không? Sau khi xác nhận, bạn sẽ được chuyển đến trang
+                          thanh toán.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Hủy</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleConfirmBooking}>
+                          Xác nhận
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                   <Button
                     onClick={handleConfirmBooking}
                     className="  px-8 py-3"
