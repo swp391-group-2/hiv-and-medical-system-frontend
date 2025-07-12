@@ -187,7 +187,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div className="space-y-6 p-6 bg-gradient-to-br min-h-screen">
       {/* Welcome Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
