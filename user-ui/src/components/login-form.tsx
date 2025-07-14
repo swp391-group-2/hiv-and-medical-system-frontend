@@ -76,21 +76,19 @@ export const LoginForm = () => {
   const googleLogin = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async (codeResponse) => {
-      try {
-        const data = await authApi.loginGoogle({ code: codeResponse.code });
-        toast.success("Login successful!", {
-          description: `Chào mừng ${
-            data.data.data.user.fullName || "bạn"
-          } trở lại.`,
-        });
-        loginStore(data.data.data.user);
-        navigate(fromPath);
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await authApi.loginGoogle({ code: codeResponse.code });
+      toast.success("Login successful!", {
+        description: `Chào mừng ${
+          data.data.data.user.fullName || "bạn"
+        } trở lại.`,
+      });
+      loginStore(data.data.data.user);
+      navigate(fromPath);
     },
     onError: (error) => {
-      console.log(error);
+      toast.error("Đăng nhập bằng Google thất bại", {
+        description: error instanceof Error ? error.message : "Có lỗi xảy ra.",
+      });
     },
   });
 

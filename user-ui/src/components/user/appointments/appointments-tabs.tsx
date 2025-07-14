@@ -7,6 +7,7 @@ export type AppointmentsTabsProps = {
   waiting: AppointmentEntry[];
   finished: AppointmentEntry[];
   cancel: AppointmentEntry[];
+  expired: AppointmentEntry[];
 };
 
 const AppointmentsTabs = ({
@@ -14,6 +15,7 @@ const AppointmentsTabs = ({
   waiting,
   finished,
   cancel,
+  expired,
 }: AppointmentsTabsProps) => {
   return (
     <section className="pr-10">
@@ -23,6 +25,7 @@ const AppointmentsTabs = ({
           <TabsTrigger value="waiting">Chờ khám</TabsTrigger>
           <TabsTrigger value="finished">Đã khám</TabsTrigger>
           <TabsTrigger value="cancel">Đã Hủy</TabsTrigger>
+          <TabsTrigger value="expired">Đã hết hạn</TabsTrigger>
         </TabsList>
         <AppointmentLabels />
 
@@ -40,6 +43,9 @@ const AppointmentsTabs = ({
 
         <TabsContent value="cancel">
           <AppointmentsList list={cancel} />
+        </TabsContent>
+        <TabsContent value="expired">
+          <AppointmentsList list={expired} />
         </TabsContent>
       </Tabs>
     </section>
