@@ -25,7 +25,7 @@ import { AddManagerDialog } from "@/components/admin/managersManage/AddManagerDi
 import { ManagerTable } from "@/components/admin/managersManage/ManagerTable";
 
 const AdminAccounts = () => {
-  const [activeTab, setActiveTab] = useState("doctor");
+  const [activeTab, setActiveTab] = useState("patients");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState<Doctor | null>(null);
@@ -157,11 +157,11 @@ const AdminAccounts = () => {
 
       {/* Tabs for different account types */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="doctor">Bác sĩ</TabsTrigger>
-          <TabsTrigger value="staff">Nhân viên</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-1">
+          {/* <TabsTrigger value="doctor">Bác sĩ</TabsTrigger>
+          <TabsTrigger value="staff">Nhân viên</TabsTrigger> */}
           <TabsTrigger value="patient">Bệnh nhân</TabsTrigger>
-          <TabsTrigger value="lab">Nhân viên phòng lab</TabsTrigger>
+          {/* <TabsTrigger value="lab">Nhân viên phòng lab</TabsTrigger> */}
           {/* <TabsTrigger value="manager">Quản lý</TabsTrigger> */}
         </TabsList>
 
