@@ -10,10 +10,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2, Plus } from "lucide-react";
 import { addDoctorAccount } from "@/api/admin";
 import { type CreateDoctorRequest } from "@/types/doctor";
 import { toast } from "sonner";
+
+const specializationOptions = [
+  "Chuyên khoa Truyền nhiễm",
+  "Chuyên khoa Nội tổng quát",
+  "Chuyên khoa Y học nhiệt đới",
+  "Chuyên khoa Nhi - Truyền nhiễm nhi",
+  "Chuyên khoa Miễn dịch học",
+  "Chuyên khoa Y tế công đồng - Dịch tễ học",
+  "Chuyên khoa Phụ sản",
+  "Chuyên khoa Da liễu",
+  "Chuyên khoa Thần kinh",
+  "Chuyên khoa Huyết học",
+];
 
 interface AddDoctorDialogProps {
   isOpen: boolean;
@@ -57,6 +77,13 @@ export const AddDoctorDialog = ({ isOpen, onOpenChange }: AddDoctorDialogProps) 
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      specialization: value,
     }));
   };
 
@@ -129,14 +156,18 @@ export const AddDoctorDialog = ({ isOpen, onOpenChange }: AddDoctorDialogProps) 
 
           <div className="space-y-2">
             <Label htmlFor="specialization">Chuyên khoa *</Label>
-            <Input
-              id="specialization"
-              name="specialization"
-              value={formData.specialization}
-              onChange={handleInputChange}
-              placeholder="Nội khoa"
-              required
-            />
+            <Select onValueChange={handleSelectChange} value={formData.specialization}>
+              <SelectTrigger>
+                <SelectValue placeholder="Chọn chuyên khoa" />
+              </SelectTrigger>
+              <SelectContent>
+                {specializationOptions.map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">

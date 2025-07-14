@@ -18,7 +18,7 @@ import type { CreateManagerRequest, Manager } from "@/types/manager";
 
 //---------------------------doctor accounts---------------------------
 export const getAllDoctorAccounts = async (): Promise<Doctor[]> => {
-  const { data } = await http.get<Response<Doctor>>(`/doctors`);
+  const { data } = await http.get<Response<Doctor>>(`/doctors?size=100`);
   return data.data;
 };
 export const addDoctorAccount = async (
