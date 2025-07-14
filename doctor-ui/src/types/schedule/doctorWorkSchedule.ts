@@ -11,7 +11,13 @@ export interface DoctorScheduleSlot {
   id: number;
   scheduleId: number;
   slot: DoctorWorkSlot;
-  status: "AVAILABLE" | "UNAVAILABLE";
+  status:
+    | "AVAILABLE"
+    | "UNAVAILABLE"
+    | "BLOCKED"
+    | "EXPIRED"
+    | "CHECKED_IN"
+    | "EXPIRED_NO_CHECKED_IN";
 }
 
 export interface DoctorWorkSchedule {

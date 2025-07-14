@@ -27,6 +27,8 @@ import BlogPost from "./pages/manager/blog-post";
 import BlogCreate from "./pages/manager/blog-create";
 import AdminAccounts from "./pages/admin/accounts";
 import ManagerDoctorsV2 from "./pages/manager/doctors-v2";
+import Manageservices from "./pages/manager/services";
+import ManagerAppointments from "./pages/manager/appointments";
 
 const queryClient = new QueryClient();
 
@@ -55,12 +57,15 @@ function App() {
             <Route path="dashboard" element={<ManagerDashboard />} />
             <Route path="doctors" element={<ManagerDoctorsV2 />} />
             <Route path="staffs" element={<ManagerStaffs />} />
+            <Route path="accounts" element={<AdminAccounts />} />
             <Route path="arv" element={<ManagerARV />} />
             <Route path="blogs">
               <Route index element={<ManagerBlogs />} />
               <Route path=":blogId" element={<BlogPost />} />
               <Route path="create" element={<BlogCreate />} />
             </Route>
+            <Route path="appointments" element={<ManagerAppointments />} />
+            <Route path="services" element={<Manageservices />} />
           </Route>
           {/* admin */}
           <Route path="admin" element={<AdminSidebar />}>
@@ -73,6 +78,7 @@ function App() {
           <Route path="staff" element={<MainLayout />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
+
             <Route path="checkin-pending" element={<CheckinPending />} />
             <Route path="on-going" element={<OngoingAppointments />} />
             <Route path="finished" element={<FinishedAppointments />} />

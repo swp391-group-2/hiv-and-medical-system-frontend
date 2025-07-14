@@ -57,7 +57,7 @@ export const LoginForm: FC = () => {
         queryKey: ["self"],
       });
       if (data.data.data.user.role === "STAFF") {
-        navigate("/staff/dashboard");
+        navigate("/staff/checkin-pending");
       } else if (data.data.data.user.role === "LAB_TECHNICIAN") {
         navigate("/lab/dashboard");
       } else if (data.data.data.user.role === "MANAGER") {

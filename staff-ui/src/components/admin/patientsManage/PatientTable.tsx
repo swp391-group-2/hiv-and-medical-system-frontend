@@ -19,7 +19,7 @@ export const PatientTable = ({ patients }: PatientTableProps) => {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Mã bệnh nhân</TableHead>
+            {/* <TableHead>Mã bệnh nhân</TableHead> */}
             <TableHead>Họ và tên</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Ngày sinh</TableHead>
@@ -38,9 +38,9 @@ export const PatientTable = ({ patients }: PatientTableProps) => {
           ) : (
             patients.map((patient: Patient) => (
               <TableRow key={patient.patientId}>
-                <TableCell className="font-medium">
+                {/* <TableCell className="font-medium">
                   {patient.patientCode}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>{patient.fullName}</TableCell>
                 <TableCell>{patient.email}</TableCell>
                 <TableCell>{patient.dob}</TableCell>

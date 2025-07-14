@@ -51,6 +51,10 @@ const Appointments = () => {
     (schedule) => schedule.status === "CANCELLED"
   );
 
+  const schedulesExpired = schedules.filter(
+    (schedule) => schedule.status === "EXPIRED"
+  );
+
   return (
     <section className="w-full mt-7">
       <div className="flex justify-between items-center">
@@ -103,6 +107,7 @@ const Appointments = () => {
         waiting={schedulesWaiting}
         finished={schedulesFinished}
         cancel={schedulesCancelled}
+        expired={schedulesExpired}
       />
     </section>
   );

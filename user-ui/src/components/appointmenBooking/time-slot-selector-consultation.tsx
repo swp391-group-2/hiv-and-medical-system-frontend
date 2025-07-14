@@ -1,10 +1,12 @@
 import ScheduleApi from "@/apis/schedule.api";
 import { cn } from "@/lib/utils";
-import type { ScheduleApiResponse, ScheduleSlot } from "@/types/schedule.type";
+import type { ScheduleSlot } from "@/types/schedule.type";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarX } from "lucide-react";
 import { useParams } from "react-router-dom";
+import Loading from "../common/loading";
+import ErrorQuery from "../common/error-query";
 
 interface TimeSlotSelectorProps {
   selectedTime: string;
@@ -27,34 +29,27 @@ const TimeSlotSelectorConsultation = ({
     data: schedules,
     isLoading,
     error,
-  } = useQuery<ScheduleApiResponse, Error>({
+    refetch,
+  } = useQuery({
     queryKey: ["dailySchedule", doctorId, dateQuery],
-    queryFn: ({ signal }) => {
+    queryFn: async () => {
       if (!doctorId) throw Error(error?.message);
-      return ScheduleApi.getScheduleDoctorByDate(
-        doctorId,
-        { date: dateQuery },
-        signal
-      );
+      const response = await ScheduleApi.getScheduleDoctorByDate(doctorId, {
+        date: dateQuery,
+      });
+      return response.data;
     },
   });
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center text-center text-lg">
-        <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
-        </div>
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   if (error)
-    return <div className="text-red-500 text-2xl">{error.message}</div>;
+    return (
+      <ErrorQuery message={error.message} error={error} onRetry={refetch} />
+    );
 
-  if (schedules && schedules.data.scheduleSlots.length > 0) {
-    allSlots = schedules.data.scheduleSlots;
+  if (schedules && schedules.scheduleSlots.length > 0) {
+    allSlots = schedules.scheduleSlots;
   } else {
     return (
       <div className="flex flex-col items-center justify-center py-16">

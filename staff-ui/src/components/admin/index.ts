@@ -6,7 +6,7 @@ export { ActiveDoctorDialog } from "./doctorsManage/ActiveDoctorDialog";
 export { DisableStaffDialog } from "./staffsManage/DisableStaffDialog";
 export { ActiveStaffDialog } from "./staffsManage/ActiveStaffDialog";
 export { DoctorTable } from "./doctorsManage/DoctorTable";
-export { StaffTable } from "./staffsManage/StaffTable";
+export { StaffTable } from "./StaffTable";
 export { PatientTable } from "./patientsManage/PatientTable";
 export { LoadingSpinner } from "./LoadingSpinner";
 export { ErrorMessage } from "./ErrorMessage";

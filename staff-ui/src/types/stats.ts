@@ -17,3 +17,20 @@ export type FavoriteDoctor = {
   doctor: Doctor;
   totalAppointment: number;
 };
+
+export type WeeklyStatsData = {
+  weekRange: string;
+  stats: {
+    title: string;
+    value: string;
+    change: string;
+    growing: boolean;
+  }[];
+};
+
+export type WeeklyStatsResponse = {
+  code: number;
+  success: boolean;
+  message: string;
+  data: WeeklyStatsData[];
+};

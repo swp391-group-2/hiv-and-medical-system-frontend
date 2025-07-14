@@ -1,4 +1,3 @@
-import React from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -7,7 +6,7 @@ interface FinderBarProps {
   setSearch: (value: string) => void;
 }
 
-const FinderBar: React.FC<FinderBarProps> = ({ search, setSearch }) => {
+const FinderBar = ({ search, setSearch }: FinderBarProps) => {
   return (
     <div className="mb-0 w-full flex justify-center items-center">
       <div className="relative w-full">

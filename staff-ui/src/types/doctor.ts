@@ -8,6 +8,7 @@ export interface Doctor {
   specialization: string;
   licenseNumber: string;
   urlImage: string;
+  totalAppointment: number;
 }
 
 export interface CreateDoctorRequest {

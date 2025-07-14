@@ -18,7 +18,7 @@ import type { CreateManagerRequest, Manager } from "@/types/manager";
 
 //---------------------------doctor accounts---------------------------
 export const getAllDoctorAccounts = async (): Promise<Doctor[]> => {
-  const { data } = await http.get<Response<Doctor>>(`/doctors`);
+  const { data } = await http.get<Response<Doctor>>(`/doctors?size=100`);
   return data.data;
 };
 export const addDoctorAccount = async (
@@ -51,6 +51,16 @@ export const activeUserAccount = async (userId: string): Promise<void> => {
     active: true,
   });
 };
+
+// Update user name function for staff and lab technicians
+export const updateUserFullName = async (
+  userId: string,
+  fullName: string
+): Promise<void> => {
+  await http.put(`/users/${userId}`, {
+    fullName: fullName,
+  });
+};
 //---------------------------patient accounts---------------------------
 export const getAllPatientAccounts = async (): Promise<Patient[]> => {
   const { data } = await http.get<Response<Patient>>(`/patients`);
@@ -81,8 +91,16 @@ export const addStaffAccount = async (
   );
   return data.data;
 };
-// export const updateStaffAccount = async () => {};
-// export const deleteStaffAccount = async () => {};
+
+// Update staff name using staffId
+export const updateStaffFullName = async (
+  staffId: string,
+  fullName: string
+): Promise<void> => {
+  await http.put(`/users/${staffId}`, {
+    fullName: fullName,
+  });
+};
 //---------------------------lab accounts---------------------------
 export const getAllLabAccounts = async (): Promise<LabTechnician[]> => {
   const { data } = await http.get<Response<LabTechnician>>(`/lab-technicians`);
@@ -96,6 +114,16 @@ export const addLabAccount = async (
     labData
   );
   return data.data;
+};
+
+// Update lab technician name using userId (lab techs use userId, staff use staffId)
+export const updateLabTechnicianFullName = async (
+  labTechnicianId: string,
+  fullName: string
+): Promise<void> => {
+  await http.put(`/users/${labTechnicianId}`, {
+    fullName: fullName,
+  });
 };
 
 //---------------------------manager accounts---------------------------
@@ -112,4 +140,3 @@ export const addManagerAccount = async (
   );
   return data.data;
 };
-

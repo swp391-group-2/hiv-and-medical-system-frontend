@@ -2,9 +2,6 @@ import type { AnonymousPostResponse } from "@/types/anonymousPost.type";
 import http from "./http";
 
 interface CreateAnonymousPostRequest {
-  nickName: string;
-  gender: string;
-  age: number;
   title: string;
   content: string;
 }
@@ -12,8 +9,18 @@ interface CreateAnonymousPostRequest {
 export const URL_ANONYMOUS_POST = "anonymous-posts";
 
 export const anonymousPostApi = {
-  getAnonymousPosts: () => {
-    return http.get<AnonymousPostResponse>(URL_ANONYMOUS_POST);
+  getAnonymousPosts: (
+    page: number = 0,
+    size: number = 10,
+    title: string = ""
+  ) => {
+    return http.get<AnonymousPostResponse>(URL_ANONYMOUS_POST, {
+      params: {
+        page,
+        size,
+        title,
+      },
+    });
   },
 
   postAnonymousPost: (body: CreateAnonymousPostRequest) => {

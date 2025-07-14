@@ -5,8 +5,8 @@ export interface CreateBlogRequest {
   title: string;
   content: string;
   snippet: string;
-  doctorId?: string; 
-  file?: File; 
+  doctorId?: string;
+  file?: File;
 }
 
 export interface DoctorInfo {
@@ -22,28 +22,26 @@ export interface DoctorInfo {
 }
 
 export interface BlogResponse {
-  blogId: string; 
+  blogId: string;
   author: string;
   title: string;
   content: string;
   snippet: string;
-  urlImage?: string; 
+  urlImage?: string;
   createdAt: string;
   updatedAt?: string;
 }
 
 export const blogAPI = {
-  
   createBlog: async (blogData: CreateBlogRequest): Promise<BlogResponse> => {
     const token = localStorage.getItem("accessToken");
 
-    
     const data = {
       author: blogData.author,
       title: blogData.title,
       content: blogData.content,
       snippet: blogData.snippet,
-      doctorId: blogData.doctorId, 
+      doctorId: blogData.doctorId,
     };
 
     const url = new URL(`${BASE_URL}blogs`);
@@ -54,15 +52,13 @@ export const blogAPI = {
     };
 
     if (blogData.file) {
-      
       const formData = new FormData();
       formData.append("data", JSON.stringify(data));
       formData.append("file", blogData.file);
       body = formData;
-      
+
       console.log("Creating blog WITH file via FormData");
     } else {
-      
       headers["Content-Type"] = "application/json";
       body = JSON.stringify(data);
       console.log("Creating blog WITHOUT file via JSON");
@@ -109,6 +105,45 @@ export const blogAPI = {
     const token = localStorage.getItem("accessToken");
 
     const response = await fetch(`${BASE_URL}blogs`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(
+        errorData.message || `HTTP error! status: ${response.status}`
+      );
+    }
+
+    const result = await response.json();
+
+    // Xử lý trường hợp API trả về data nested trong object
+    if (result.data && Array.isArray(result.data)) {
+      return result.data;
+    }
+
+    // Xử lý trường hợp API trả về array trực tiếp
+    if (Array.isArray(result)) {
+      return result;
+    }
+
+    // Trường hợp khác, trả về array rỗng
+    return [];
+  },
+
+  // Lấy danh sách blog theo doctorId
+  getBlogsByDoctorId: async (doctorId: string): Promise<BlogResponse[]> => {
+    const token = localStorage.getItem("accessToken");
+
+    if (!doctorId) {
+      throw new Error("Doctor ID is required");
+    }
+
+    const response = await fetch(`${BASE_URL}blogs/doctor/${doctorId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -252,58 +287,4 @@ export const blogAPI = {
   },
 
   // Lấy thông tin bác sĩ hiện tại từ token
-  getDoctorInfo: async (): Promise<DoctorInfo> => {
-    console.log("Getting doctor info from token...");
-
-    // Kiểm tra token trước
-    const token = localStorage.getItem("accessToken");
-    console.log("Token exists:", !!token);
-
-    if (!token) {
-      throw new Error("No access token found");
-    }
-
-    try {
-      // Decode token để lấy thông tin
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      console.log("=== TOKEN PAYLOAD ANALYSIS ===");
-      console.log("Full token payload:", payload);
-      console.log("Available keys:", Object.keys(payload));
-      console.log("payload.doctorId:", payload.doctorId);
-      console.log("payload.id:", payload.id);
-      console.log("payload.sub:", payload.sub);
-      console.log("payload.userId:", payload.userId);
-      console.log("payload.email:", payload.email);
-      console.log("payload.username:", payload.username);
-      console.log("payload.role:", payload.role);
-      console.log("payload.authorities:", payload.authorities);
-
-      // Ưu tiên lấy doctorId từ token
-      const doctorId = payload.doctorId || payload.id || payload.sub || "";
-      console.log("Selected doctorId from token:", doctorId);
-
-      if (!doctorId) {
-        throw new Error("No doctorId found in token");
-      }
-
-      // Tạo object DoctorInfo từ token
-      const doctorInfo: DoctorInfo = {
-        id: doctorId,
-        userId: payload.userId || "",
-        email: payload.email || "",
-        fullName: payload.fullName || "Bác sĩ", // Dùng fullName từ token
-        specialization: payload.specialization || "Chưa xác định",
-        userStatus: payload.userStatus || "ACTIVE",
-        doctorCode: payload.doctorCode || "",
-        doctorRating: "0", // Token không có doctorRating
-        urlImage: payload.urlImage || "",
-      };
-
-      console.log("Doctor info created from token:", doctorInfo);
-      return doctorInfo;
-    } catch (error) {
-      console.error("Error parsing token:", error);
-      throw new Error("Failed to parse token. Please login again.");
-    }
-  },
 };

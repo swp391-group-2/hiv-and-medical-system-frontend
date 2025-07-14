@@ -23,6 +23,7 @@ import PaymentSuccess from "@/pages/payment/payment-success";
 import PaymentCancel from "@/pages/payment/payment-cancel";
 import EduBlogDetail from "@/components/eduBlog/edu-blog-detail";
 import QAndA from "@/pages/static/q-and-a";
+import Ticket from "@/pages/user/ticket";
 
 const AppRoutes = () => {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
@@ -44,8 +45,9 @@ const AppRoutes = () => {
             <Route path="arv" element={<Arv />} />
             <Route path="checkup-result" element={<CheckUpResult />} />
             <Route path="test-result" element={<TestResult />} />
+            <Route path="tickets" element={<Ticket />} />
           </Route>
-
+          <Route path="/qanda" element={<QAndA />} />
           <Route
             path="select-profile-booking/:serviceType"
             element={<SelectProfileBooking />}
@@ -70,7 +72,6 @@ const AppRoutes = () => {
         <Route index element={<Home />} />
         <Route path="education" element={<EducationPage />} />
         <Route path="education/:blogId" element={<EduBlogDetail />} />
-        <Route path="/qanda" element={<QAndA />} />
         <Route path="screening" element={<ServiceScreeningTest />} />
         <Route path="confirmatory" element={<ServiceConfirmatoryTest />} />
         <Route path="consultation">

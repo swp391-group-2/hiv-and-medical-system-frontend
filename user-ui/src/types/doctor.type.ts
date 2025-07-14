@@ -16,4 +16,5 @@ export interface DoctorProfile {
   specialization: string;
   licenseNumber: string;
   urlImage: string;
+  totalAppointment: number;
 }

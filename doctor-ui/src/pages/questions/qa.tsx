@@ -27,14 +27,16 @@ const Questions = () => {
     queryKey: ["anonymous-posts"],
     queryFn: getAnonymousPosts,
     refetchOnWindowFocus: false,
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Don't cache data (new property name in v5)
   });
 
   // Cập nhật stats khi có dữ liệu posts
   useEffect(() => {
-    if (posts) {
+    if (posts && Array.isArray(posts)) {
       const totalPosts = posts.length;
       const answeredPosts = posts.filter(
-        (post) => post.comments && post.comments.length > 0
+        (post: AnonymousPost) => post.comments && post.comments.length > 0
       ).length;
       const unansweredPosts = totalPosts - answeredPosts;
 
@@ -55,8 +57,14 @@ const Questions = () => {
     }
   }, [posts]);
 
-  const handleReplySuccess = () => {
-    refetch();
+  const handleReplySuccess = async () => {
+    console.log("Reply success callback triggered, refetching data...");
+    try {
+      await refetch();
+      console.log("Data refetched successfully");
+    } catch (error) {
+      console.error("Error refetching data:", error);
+    }
   };
 
   if (isLoading) {
@@ -100,7 +108,7 @@ const Questions = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-4">
+    <div className="max-w-8xl mx-auto p-4">
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-2xl font-bold mb-1">Tư vấn ẩn danh</h1>
@@ -115,7 +123,7 @@ const Questions = () => {
       </div>
 
       {/* Stats */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((s) => (
           <StatsBox key={s.label} item={s} />
         ))}
@@ -123,7 +131,7 @@ const Questions = () => {
 
       {/* Posts */}
       <div>
-        {posts && posts.length > 0 ? (
+        {posts && Array.isArray(posts) && posts.length > 0 ? (
           posts.map((post: AnonymousPost) => (
             <AnonymousPostCard
               key={post.anonymousPostId}

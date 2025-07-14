@@ -1,12 +1,12 @@
 import ScheduleApi from "@/apis/schedule.api";
-import type {
-  TestScheduleApiResponse,
-  TestScheduleSlotEntry,
-} from "@/types/schedule.type";
+import { cn } from "@/lib/utils";
+import type { TestScheduleSlotEntry } from "@/types/schedule.type";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CalendarX } from "lucide-react";
 import { useParams } from "react-router-dom";
+import Loading from "../common/loading";
+import ErrorQuery from "../common/error-query";
 
 interface TimeSlotSelectorProps {
   selectedTime: string;
@@ -29,29 +29,26 @@ const TimeSlotSelectorTest = ({
     data: schedules,
     isLoading,
     error,
-  } = useQuery<TestScheduleApiResponse, Error>({
+    refetch,
+  } = useQuery({
     queryKey: ["dailySchedule", doctorId, dateQuery],
-    queryFn: ({ signal }) => {
-      return ScheduleApi.getTestScheduleByDate({ date: dateQuery }, signal);
+    queryFn: async () => {
+      const response = await ScheduleApi.getTestScheduleByDate({
+        date: dateQuery,
+      });
+      return response.data;
     },
   });
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center items-center text-center text-lg">
-        <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
-        </div>
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   if (error)
-    return <div className="text-red-500 text-2xl">{error.message}</div>;
+    return (
+      <ErrorQuery message={error.message} error={error} onRetry={refetch} />
+    );
 
-  if (schedules && schedules.data.length != 0) {
-    allSlots = schedules.data;
+  if (schedules && schedules.length != 0) {
+    allSlots = schedules as TestScheduleSlotEntry[];
   } else {
     return (
       <div className="flex flex-col items-center justify-center py-16">
@@ -96,15 +93,17 @@ const TimeSlotSelectorTest = ({
             {session.slots.map((slot) => (
               <button
                 key={slot.id}
+                disabled={slot.status !== "AVAILABLE"}
                 onClick={() => onTimeSelect(slot.slot.startTime, slot)}
-                className={`
-                  px-4 cursor-pointer py-3 rounded-lg border text-sm font-medium transition-colors
-                  ${
-                    selectedTime === slot.slot.startTime
-                      ? "bg-primary text-white border-cyan-500"
-                      : "bg-white text-gray-700 border-gray-200 hover:border-cyan-300 hover:bg-cyan-50"
-                  }
-                `}
+                className={cn(
+                  "px-4 py-3 rounded-lg border text-sm font-medium transition-colors cursor-pointer",
+
+                  selectedTime === slot.slot.startTime
+                    ? "bg-primary text-white border-cyan-500"
+                    : "bg-white text-gray-700 border-gray-200 hover:border-cyan-300 hover:bg-cyan-50",
+                  slot.status !== "AVAILABLE" &&
+                    "bg-gray-300 cursor-not-allowed border-0 hover:bg-gray-300 hover:border-0 "
+                )}
               >
                 {slot.slot.startTime + "-" + slot.slot.endTime}
               </button>

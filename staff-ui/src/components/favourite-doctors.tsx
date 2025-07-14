@@ -5,7 +5,7 @@ import { useFavoriteDoctors } from "@/api/stats";
 import { options } from "./manager/specialization-select";
 
 const FavouriteDoctors = () => {
-  const { data: topDoctors = [] } = useFavoriteDoctors(0, 4);
+  const { data: topDoctors = [] } = useFavoriteDoctors(5);
   return (
     <Card>
       <CardHeader>
@@ -16,10 +16,15 @@ const FavouriteDoctors = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {topDoctors.map((item, index) => {
+          {topDoctors.map((doctor, index) => {
+            // Check if doctor exists before accessing its properties
+            if (!doctor) {
+              return null;
+            }
+
             const displayName =
-              options.find((opt) => opt.id === item.doctor.specialization)
-                ?.name ?? item.doctor.specialization;
+              options.find((opt) => opt.id === doctor.specialization)
+                ?.name ?? doctor.specialization;
             return (
               <div
                 // {link to selected doctor profile}
@@ -27,11 +32,11 @@ const FavouriteDoctors = () => {
                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-200 cursor-pointer"
               >
                 <div>
-                  <p className="font-medium">{item.doctor.fullName}</p>
+                  <p className="font-medium">{doctor.fullName}</p>
                   <p className="text-sm text-gray-600">{displayName}</p>
                 </div>
                 <Badge variant="secondary" className="bg-green-400">
-                  {item.totalAppointment} lịch hẹn
+                  {doctor.totalAppointment} lịch hẹn
                 </Badge>
               </div>
             );

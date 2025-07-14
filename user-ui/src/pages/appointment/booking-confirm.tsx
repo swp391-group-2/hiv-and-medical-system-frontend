@@ -22,11 +22,25 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import useBookingStore from "@/stores/booking.store";
 import type { AppointmentBooking } from "@/apis/appointment.api";
 import appointmentApi from "@/apis/appointment.api";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppRoutes } from "@/constants/appRoutes";
 import { useEffect } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
+  AlertDialogDescription,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
+import ticketApi from "@/apis/ticket.api";
 
 const BookingConfirm = () => {
   const navigate = useNavigate();
@@ -49,6 +63,47 @@ const BookingConfirm = () => {
       toast.error(error.message);
     },
   });
+  const { mutate: bookWithTicket } = useMutation({
+    mutationFn: async (appointmentBookingData: AppointmentBooking) => {
+      const response = await appointmentApi.postAppointmentBookingWithTicket(
+        appointmentBookingData
+      );
+      return response;
+    },
+    onSuccess: () => {
+      toast.success("Đặt lịch khám thành công!");
+      navigate(AppRoutes.USER_APPOINTMENTS);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { data: ticketData } = useQuery({
+    queryKey: ["ticket", service?.serviceType],
+    queryFn: async () => {
+      if (!service?.serviceType) {
+        throw new Error("Service type is required to fetch ticket data.");
+      }
+      const response = await ticketApi.getTicketByStatus(service?.serviceType);
+      return response.data;
+    },
+  });
+  const handleBookWithTicket = () => {
+    if (!user || !service) {
+      navigate(AppRoutes.HOME);
+      return;
+    }
+
+    const bookingData: AppointmentBooking = {
+      patientId: user.patientId,
+      serviceId: service.id,
+      scheduleSlotId: scheduleSlot?.id || null,
+      labTestSlotId: labTestSlot?.id || null,
+    };
+    console.log(bookingData);
+    bookWithTicket(bookingData);
+  };
 
   const handleConfirmBooking = () => {
     if (!user || !service) {
@@ -144,7 +199,9 @@ const BookingConfirm = () => {
                                 " " +
                                 scheduleSlot.slot.endTime}
                             </div>
-                            <div className="text-gray-500">2025-06-16</div>
+                            <div className="text-gray-500">
+                              {scheduleSlot.date}
+                            </div>
                           </TableCell>
                         )}
                         {labTestSlot && (
@@ -266,7 +323,38 @@ const BookingConfirm = () => {
                   </AlertDescription>
                 </Alert>
 
-                <div className="mt-6 flex justify-end">
+                <div className="mt-6 flex gap-5 justify-end">
+                  {ticketData && (
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          disabled={ticketData?.count === 0}
+                          className="px-8 py-3"
+                        >
+                          Đặt Bằng Vé
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Xác nhận đặt lịch khám
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Bạn có chắc chắn muốn xác nhận đặt lịch khám này
+                            không? Sau khi xác nhận, bạn sẽ được chuyển đến
+                            trang thanh toán.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Hủy</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleBookWithTicket}>
+                            Xác nhận
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  )}
                   <Button
                     onClick={handleConfirmBooking}
                     className="  px-8 py-3"

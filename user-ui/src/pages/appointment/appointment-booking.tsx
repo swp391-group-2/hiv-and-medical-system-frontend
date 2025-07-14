@@ -4,6 +4,8 @@ import MedicalFacilityInfo from "@/components/appointmenBooking/medical-facility
 import TimeSlotSelectorConsultation from "@/components/appointmenBooking/time-slot-selector-consultation";
 import TimeSlotSelectorTest from "@/components/appointmenBooking/time-slot-selector-test";
 import WeekCalendar from "@/components/appointmenBooking/week-calender";
+import ErrorQuery from "@/components/common/error-query";
+import Loading from "@/components/common/loading";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { buildRoute } from "@/constants/appRoutes";
@@ -38,7 +40,11 @@ const AppointmentBooking = () => {
     }
   };
 
-  const { data: service, isLoading } = useQuery({
+  const {
+    data: service,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["service", serviceType],
     queryFn: async () => {
       if (!serviceType) {
@@ -50,13 +56,15 @@ const AppointmentBooking = () => {
     enabled: !!serviceType,
   });
 
-  const { data: doctor } = useQuery({
+  const { data: doctorData, refetch } = useQuery({
     queryKey: ["doctor", doctorId],
     queryFn: async () => {
       if (!doctorId) {
         throw new Error("not found doctor id");
       }
+
       const response = await doctorApi.getDoctorById(doctorId);
+
       return response.data;
     },
   });
@@ -100,16 +108,21 @@ const AppointmentBooking = () => {
     navigate(-1);
   };
 
-  // const location = useLocation();
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-row gap-2">
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.3s]" />
-          <div className="w-4 h-4 rounded-full bg-primary animate-bounce [animation-delay:-.5s]" />
-        </div>
+        <Loading />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <ErrorQuery
+          message="Không thể tải dữ liệu"
+          onRetry={refetch}
+          error={error}
+        />
       </div>
     );
   }
@@ -128,7 +141,7 @@ const AppointmentBooking = () => {
         <div className="mt-7">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <div className="lg:col-span-1">
-              <MedicalFacilityInfo doctor={doctor} service={service} />
+              <MedicalFacilityInfo doctor={doctorData} service={service} />
             </div>
             <div className="lg:col-span-3">
               <Card className="bg-white shadow-lg py-0 overflow-hidden">

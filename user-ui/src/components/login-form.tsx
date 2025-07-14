@@ -45,7 +45,13 @@ export const LoginForm = () => {
 
   const queryClient = useQueryClient();
   const { mutate: login, status } = useMutation({
-    mutationFn: async (value: LoginFormValues) => await authApi.login(value),
+    mutationFn: async (value: LoginFormValues) => {
+      const result = await authApi.login(value);
+      if (result.data.data.user.role !== "PATIENT") {
+        throw new Error("Bạn không có quyền truy cập vào hệ thống này.");
+      }
+      return result;
+    },
     onSuccess: (data) => {
       loginStore(data.data.data.user);
       toast.success("Login successful!", {
@@ -61,28 +67,28 @@ export const LoginForm = () => {
       navigate(fromPath);
     },
     onError: (error) => {
-      console.log("Đăng nhập thất bại hoặc popup đã bị đóng:", error);
+      toast.error("Đăng nhập thất bại", {
+        description: error instanceof Error ? error.message : "Có lỗi xảy ra.",
+      });
     },
   });
 
   const googleLogin = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async (codeResponse) => {
-      try {
-        const data = await authApi.loginGoogle({ code: codeResponse.code });
-        toast.success("Login successful!", {
-          description: `Chào mừng ${
-            data.data.data.user.fullName || "bạn"
-          } trở lại.`,
-        });
-        loginStore(data.data.data.user);
-        navigate(fromPath);
-      } catch (error) {
-        console.log(error);
-      }
+      const data = await authApi.loginGoogle({ code: codeResponse.code });
+      toast.success("Login successful!", {
+        description: `Chào mừng ${
+          data.data.data.user.fullName || "bạn"
+        } trở lại.`,
+      });
+      loginStore(data.data.data.user);
+      navigate(fromPath);
     },
     onError: (error) => {
-      console.log(error);
+      toast.error("Đăng nhập bằng Google thất bại", {
+        description: error instanceof Error ? error.message : "Có lỗi xảy ra.",
+      });
     },
   });
 

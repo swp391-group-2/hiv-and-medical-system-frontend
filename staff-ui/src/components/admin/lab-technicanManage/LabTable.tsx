@@ -9,10 +9,12 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ShieldX, ShieldCheck } from "lucide-react";
+import { ShieldX, ShieldCheck, Edit } from "lucide-react";
 import type { LabTechnician } from "@/types/lab-technicians";
 import { DisableLabDialog } from "./DisableLabDialog";
 import { ActiveLabDialog } from "./ActiveLabDialog";
+import { UpdateLabDialog } from "./UpdateLabDialog";
+
 interface LabTableProps {
   labs: LabTechnician[];
 }
@@ -20,14 +22,22 @@ interface LabTableProps {
 const LabTable = ({ labs }: LabTableProps) => {
   const [disableDialogOpen, setDisableDialogOpen] = useState(false);
   const [activeDialogOpen, setActiveDialogOpen] = useState(false);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
   const [selectedLab, setSelectedLab] = useState<LabTechnician | null>(null);
+
   const handleDisableClick = (lab: LabTechnician) => {
     setSelectedLab(lab);
     setDisableDialogOpen(true);
   };
+
   const handleActiveClick = (lab: LabTechnician) => {
     setSelectedLab(lab);
     setActiveDialogOpen(true);
+  };
+
+  const handleUpdateClick = (lab: LabTechnician) => {
+    setSelectedLab(lab);
+    setUpdateDialogOpen(true);
   };
 
   return (
@@ -65,6 +75,14 @@ const LabTable = ({ labs }: LabTableProps) => {
                 </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleUpdateClick(lab)}
+                      className="text-blue-600 hover:text-blue-700"
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
                     {lab.status === "ACTIVE" ? (
                       <Button
                         variant="ghost"
@@ -107,6 +125,15 @@ const LabTable = ({ labs }: LabTableProps) => {
           lab={selectedLab}
           isOpen={activeDialogOpen}
           onOpenChange={setActiveDialogOpen}
+        />
+      )}
+
+      {/* Update Lab Dialog */}
+      {selectedLab && (
+        <UpdateLabDialog
+          lab={selectedLab}
+          isOpen={updateDialogOpen}
+          onOpenChange={setUpdateDialogOpen}
         />
       )}
     </div>

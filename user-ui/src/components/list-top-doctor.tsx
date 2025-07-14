@@ -1,49 +1,51 @@
-import doctorApi, { type DoctorsApiResponse } from "@/apis/doctor.api";
-import type { Doctor } from "@/types/doctor.type";
+import doctorApi from "@/apis/doctor.api";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 import DoctorCard from "./doctorListPage/doctor-card";
+import Loading from "./common/loading";
+import ErrorQuery from "./common/error-query";
 
 function ListTopDoctor() {
   const {
     data: doctors,
     isLoading,
     error,
-  } = useQuery<DoctorsApiResponse, Error>({
+    refetch,
+  } = useQuery({
     queryKey: ["topDoctors"],
-    queryFn: () => doctorApi.getTopDoctors(),
+    queryFn: async () => {
+      const response = await doctorApi.getTopAppointmentDoctors();
+      return response.data;
+    },
   });
 
-  if (isLoading)
-    return (
-      <div className="w-full gap-x-2 flex justify-center items-center">
-        <div className="w-5 bg-[#d991c2]  h-5 rounded-full animate-bounce" />
-        <div className="w-5  h-5 bg-[#9869b8] rounded-full animate-bounce" />
-        <div className="w-5 h-5  bg-[#6756cc] rounded-full animate-bounce" />
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   if (error) {
-    toast.error("Lỗi Không tải được ...");
-    return <div>Có lỗi xảy ra</div>;
+    return (
+      <ErrorQuery
+        error={error}
+        message="Không thể tải bác sĩ"
+        onRetry={() => refetch()}
+      />
+    );
   }
-
-  const doctorsList: Doctor[] = doctors?.data || [];
-
-  if (doctorsList.length === 0) {
-    return <div>Không có bác sĩ </div>;
+  if (!doctors || doctors.length === 0) {
+    return (
+      <div className="text-center py-8">Không có bác sĩ nào được tìm thấy</div>
+    );
   }
 
   return (
     <div className="grid-cols-4 grid gap-5">
-      {doctorsList.map((doctor) => (
+      {doctors.map((doctor) => (
         <DoctorCard
           key={doctor.doctorId}
           doctorId={doctor.doctorId}
           fullName={doctor.fullName}
           urlImage={doctor.urlImage}
           email={doctor.email}
+          totalAppointment={doctor.totalAppointment}
         />
       ))}
     </div>

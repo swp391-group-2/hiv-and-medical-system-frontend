@@ -8,7 +8,8 @@ export type AppointmentStatus =
   | "COMPLETED"
   | "CANCELLED"
   | "LAB_COMPLETED"
-  | "CHECKED_IN";
+  | "CHECKED_IN"
+  | "EXPIRED";
 
 export interface AppointmentEntry {
   appointmentId: number;

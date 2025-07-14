@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Calendar, Clock } from "lucide-react";
 import {
-  fetchMyDoctorSchedule,
- 
-} from "@/api/doctorSchedule";
+  ChevronLeft,
+  ChevronRight,
+  Calendar,
+  Clock,
+  CheckCircle,
+  UserX,
+  User,
+} from "lucide-react";
+import { fetchMyDoctorSchedule } from "@/api/doctorSchedule";
 import type { DoctorWorkScheduleList } from "@/types/schedule/doctorWorkSchedule";
 
 const DoctorWorkScheduleView: React.FC = () => {
@@ -73,14 +78,58 @@ const DoctorWorkScheduleView: React.FC = () => {
   };
 
   // Hiển thị status slot
-  const getStatusColor = (status: "AVAILABLE" | "UNAVAILABLE") => {
-    return status === "AVAILABLE"
-      ? "bg-green-100 text-green-800 border-green-300"
-      : "bg-red-100 text-red-800 border-red-300";
+  const getStatusColor = (
+    status:
+      | "AVAILABLE"
+      | "UNAVAILABLE"
+      | "BLOCKED"
+      | "EXPIRED"
+      | "CHECKED_IN"
+      | "EXPIRED_NO_CHECKED_IN"
+  ) => {
+    switch (status) {
+      case "AVAILABLE":
+        return "bg-green-100 text-green-800 border-green-300";
+      case "UNAVAILABLE":
+        return "bg-red-100 text-red-800 border-red-300";
+      case "BLOCKED":
+        return "bg-yellow-100 text-yellow-800 border-yellow-300";
+      case "EXPIRED":
+        return "bg-gray-100 text-gray-800 border-gray-300";
+      case "CHECKED_IN":
+        return "bg-blue-100 text-blue-800 border-blue-300";
+      case "EXPIRED_NO_CHECKED_IN":
+        return "bg-orange-100 text-orange-800 border-orange-300";
+      default:
+        return "bg-gray-100 text-gray-800 border-gray-300";
+    }
   };
 
-  const getStatusText = (status: "AVAILABLE" | "UNAVAILABLE") => {
-    return status === "AVAILABLE" ? "Không có lịch hẹn" : "Đã có lịch hẹn";
+  const getStatusText = (
+    status:
+      | "AVAILABLE"
+      | "UNAVAILABLE"
+      | "BLOCKED"
+      | "EXPIRED"
+      | "CHECKED_IN"
+      | "EXPIRED_NO_CHECKED_IN"
+  ) => {
+    switch (status) {
+      case "AVAILABLE":
+        return "Có thể đặt lịch";
+      case "UNAVAILABLE":
+        return "Đã có lịch hẹn";
+      case "BLOCKED":
+        return "Đã bị khóa";
+      case "EXPIRED":
+        return "Đã hết hạn";
+      case "CHECKED_IN":
+        return "Bệnh nhân đã đến";
+      case "EXPIRED_NO_CHECKED_IN":
+        return "Bệnh nhân vắng mặt";
+      default:
+        return "Không xác định";
+    }
   };
 
   // Time slots cố định
@@ -196,14 +245,20 @@ const DoctorWorkScheduleView: React.FC = () => {
                               scheduleSlot.status
                             )}`}
                           >
-                            <div className="font-medium">
-                              {getStatusText(scheduleSlot.status)}
+                            <div className="font-medium flex items-center justify-center gap-1">
+                              {scheduleSlot.status === "CHECKED_IN" && (
+                                <CheckCircle size={14} />
+                              )}
+                              {scheduleSlot.status ===
+                                "EXPIRED_NO_CHECKED_IN" && <UserX size={14} />}
+                              {scheduleSlot.status === "UNAVAILABLE" && (
+                                <User size={14} />
+                              )}
+                              {scheduleSlot.status === "AVAILABLE" && (
+                                <Calendar size={14} />
+                              )}
+                              <span>{getStatusText(scheduleSlot.status)}</span>
                             </div>
-                            {/* {scheduleSlot.slot.description && (
-                              <div className="text-xs mt-1 opacity-75 truncate">
-                                {scheduleSlot.slot.description}
-                              </div>
-                            )} */}
                           </div>
                         ) : (
                           <div className="text-xs text-gray-400">
@@ -225,15 +280,39 @@ const DoctorWorkScheduleView: React.FC = () => {
         <div className="text-sm font-medium mb-2">Chú thích:</div>
         <div className="flex flex-wrap gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded"></div>
-            <span>Không có lịch hẹn</span>
+            <div className="w-4 h-4 bg-green-100 border border-green-300 rounded flex items-center justify-center">
+              <Calendar size={10} />
+            </div>
+            <span>Có thể đặt lịch</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
+            <div className="w-4 h-4 bg-red-100 border border-red-300 rounded flex items-center justify-center">
+              <User size={10} />
+            </div>
             <span>Đã có lịch hẹn</span>
           </div>
           <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-blue-100 border border-blue-300 rounded flex items-center justify-center">
+              <CheckCircle size={10} />
+            </div>
+            <span>Bệnh nhân đã đến</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-orange-100 border border-orange-300 rounded flex items-center justify-center">
+              <UserX size={10} />
+            </div>
+            <span>Bệnh nhân vắng mặt</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-yellow-100 border border-yellow-300 rounded"></div>
+            <span>Đã bị khóa</span>
+          </div>
+          <div className="flex items-center gap-2">
             <div className="w-4 h-4 bg-gray-100 border border-gray-300 rounded"></div>
+            <span>Đã hết hạn</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-gray-200 border border-gray-400 rounded"></div>
             <span>Chưa có lịch</span>
           </div>
         </div>

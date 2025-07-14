@@ -1,30 +1,32 @@
 import type {
   ServiceTypeStat,
   StatCardStaticProps,
-  FavoriteDoctor,
+  WeeklyStatsData,
 } from "@/types/stats";
 import type { Response } from "@/types/types";
+import type { Doctor } from "@/types/doctor";
 import { useQuery } from "@tanstack/react-query";
 import http from "./http";
 
 export const getFeaturedStats = async (
-  milestone: string
+  startDate: string,
+  endDate: string
 ): Promise<StatCardStaticProps[]> => {
   const { data } = await http.get<Response<StatCardStaticProps>>(
     `/dashboards/stats`,
     {
-      params: { milestone },
+      params: { startDate, endDate },
     }
   );
   return data.data;
 };
 
-export function useFeaturedStats(milestone: string) {
+export function useFeaturedStats(startDate: string, endDate: string) {
   return useQuery<StatCardStaticProps[]>({
-    queryKey: ["featured-stats", milestone],
+    queryKey: ["featured-stats", startDate, endDate],
     queryFn: ({ queryKey }) => {
-      const [, milestone] = queryKey as [string, string];
-      return getFeaturedStats(milestone);
+      const [, startDate, endDate] = queryKey as [string, string, string];
+      return getFeaturedStats(startDate, endDate);
     },
     staleTime: Infinity,
   });
@@ -46,22 +48,45 @@ export const useServiceTypeStats = () => {
 };
 
 export const getFavoriteDoctors = async (
-  page?: number,
   size?: number
-): Promise<FavoriteDoctor[]> => {
-  const { data } = await http.get<Response<FavoriteDoctor>>(
-    `/doctors/top-appointmentCount`,
+): Promise<Doctor[]> => {
+  const { data } = await http.get<Response<Doctor>>(
+    `/doctors`,
     {
-      params: { page, size },
+      params: { size },
     }
   );
   return data.data;
 };
 
-export const useFavoriteDoctors = (page?: number, size?: number) => {
-  return useQuery<FavoriteDoctor[]>({
-    queryKey: ["topDoctors", page, size],
-    queryFn: () => getFavoriteDoctors(page, size),
+export const useFavoriteDoctors = (size?: number) => {
+  return useQuery<Doctor[]>({
+    queryKey: ["topDoctors", size],
+    queryFn: () => getFavoriteDoctors(size),
+    staleTime: Infinity,
+  });
+};
+
+export const getWeeklyStats = async (
+  startDate: string,
+  endDate: string
+): Promise<WeeklyStatsData[]> => {
+  const { data } = await http.get<Response<WeeklyStatsData>>(
+    `/dashboards/stats/weekly`,
+    {
+      params: { startDate, endDate },
+    }
+  );
+  return data.data;
+};
+
+export const useWeeklyStats = (startDate: string, endDate: string) => {
+  return useQuery<WeeklyStatsData[]>({
+    queryKey: ["weekly-stats", startDate, endDate],
+    queryFn: ({ queryKey }) => {
+      const [, startDate, endDate] = queryKey as [string, string, string];
+      return getWeeklyStats(startDate, endDate);
+    },
     staleTime: Infinity,
   });
 };
