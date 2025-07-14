@@ -117,9 +117,12 @@ const ManagerStaffs = () => {
   const activeStaffs = allStaffs.filter((s) => s.status === "ACTIVE").length;
   const [search, setSearch] = useState("");
 
-  const filteredStaffs = allStaffs.filter((staff) =>
-    staff.fullName.toLowerCase().includes(search.toLowerCase())
-  );
+const filteredStaffs = allStaffs.filter((staff) => {
+  if (staff.fullName !== undefined) {
+    return staff.fullName.toLowerCase().includes(search.toLowerCase());
+  }
+  return false;
+});
 
   const { mutate: deleteStaff } = useMutation<void, AxiosError, string>({
     mutationFn: async (id: string) => await http.delete(`/staffs/${id}`),

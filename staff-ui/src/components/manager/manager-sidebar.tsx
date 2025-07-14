@@ -8,6 +8,9 @@ import {
   CircleUser,
   Pill,
   User,
+  Calendar,
+  BriefcaseMedical,
+  Users,
   // Users,
 } from "lucide-react";
 import {
@@ -34,23 +37,23 @@ const items = [
     icon: Grid2x2,
   },
 
-  // {
-  //   title: "Quản lý lịch hẹn",
-  //   url: "/manager/appointments",
-  //   icon: Calendar,
-  // },
-  // {
-  //   title: "Quản lý bác sĩ",
-  //   url: "/manager/doctors",
-  //   icon: BriefcaseMedical,
-  // },
-  // {
-  //   title: "Quản lý Staff",
-  //   url: "/manager/staffs",
-  //   icon: Users,
-  // },
   {
-    title: "Quản lý tài khoản",
+    title: "Quản lý lịch hẹn",
+    url: "/manager/appointments",
+    icon: Calendar,
+  },
+  {
+    title: "Quản lý bác sĩ",
+    url: "/manager/doctors",
+    icon: BriefcaseMedical,
+  },
+  {
+    title: "Quản lý Staff",
+    url: "/manager/staffs",
+    icon: Users,
+  },
+  {
+    title: "Quản lý Bệnh nhân",
     url: "/manager/accounts",
     icon: CircleUser,
   },
