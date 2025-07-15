@@ -28,9 +28,11 @@ import type { Staff } from "@/types/staff";
 export function StaffRow({
   staff,
   handleDeleteStaff,
+  handleEditStaff,
 }: {
   staff: Staff;
   handleDeleteStaff: (id: string) => void;
+  handleEditStaff: (staff: Staff) => void;
 }) {
   return (
     <TableRow>
@@ -76,6 +78,7 @@ export function StaffRow({
               className="cursor-pointer w-full"
               variant="outline"
               size="sm"
+              onClick={() => handleEditStaff(staff)}
             >
               <Edit className="h-4 w-4" />
             </Button>

@@ -12,10 +12,12 @@ import { StaffRow } from "./staff-row";
 export function StaffList({
   data,
   handleDeleteStaff,
+  handleEditStaff,
   isError,
 }: {
   data: Staff[];
   handleDeleteStaff: (id: string) => void;
+  handleEditStaff: (staff: Staff) => void;
   isError: boolean;
 }) {
   if (isError) {
@@ -43,6 +45,7 @@ export function StaffList({
             key={staff.staffId}
             staff={staff}
             handleDeleteStaff={handleDeleteStaff}
+            handleEditStaff={handleEditStaff}
           />
         ))}
       </TableBody>
