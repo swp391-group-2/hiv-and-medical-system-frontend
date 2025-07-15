@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +28,11 @@ export const UpdateStaffDialog = ({
 }: UpdateStaffDialogProps) => {
   const [fullName, setFullName] = useState(staff.fullName);
   const queryClient = useQueryClient();
+
+  // Update fullName when staff changes
+  useEffect(() => {
+    setFullName(staff.fullName);
+  }, [staff.fullName]);
 
   const updateMutation = useMutation({
     mutationFn: (newName: string) =>
