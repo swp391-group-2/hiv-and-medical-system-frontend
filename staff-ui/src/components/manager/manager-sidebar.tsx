@@ -54,7 +54,7 @@ const items = [
   },
   {
     title: "Quản lý Bệnh nhân",
-    url: "/manager/accounts",
+    url: "/manager/patients",
     icon: CircleUser,
   },
   {
