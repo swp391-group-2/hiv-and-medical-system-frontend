@@ -25,10 +25,11 @@ import AdminBlogs from "./pages/admin/blogs";
 import ManagerBlogs from "./pages/manager/blogs";
 import BlogPost from "./pages/manager/blog-post";
 import BlogCreate from "./pages/manager/blog-create";
-import AdminAccounts from "./pages/admin/accounts";
+// import AdminAccounts from "./pages/manager/patients";
 import ManagerDoctorsV2 from "./pages/manager/doctors-v2";
 import Manageservices from "./pages/manager/services";
 import ManagerAppointments from "./pages/manager/appointments";
+import PatientManagement from "./pages/manager/patients";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +58,7 @@ function App() {
             <Route path="dashboard" element={<ManagerDashboard />} />
             <Route path="doctors" element={<ManagerDoctorsV2 />} />
             <Route path="staffs" element={<ManagerStaffs />} />
-            <Route path="accounts" element={<AdminAccounts />} />
+            <Route path="patients" element={<PatientManagement />} />
             <Route path="arv" element={<ManagerARV />} />
             <Route path="blogs">
               <Route index element={<ManagerBlogs />} />
@@ -71,7 +72,7 @@ function App() {
           <Route path="admin" element={<AdminSidebar />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="accounts" element={<AdminAccounts />} />
+            {/* <Route path="accounts" element={<AdminAccounts />} /> */}
             <Route path="blogs" element={<AdminBlogs />} />
           </Route>
           {/* staff */}

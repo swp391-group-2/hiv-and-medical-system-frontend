@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, RotateCcw, Search, UserCheck, Users } from "lucide-react";
 import { CreateStaffForm } from "@/components/manager/staffs/create-staff-form";
+import { UpdateStaffDialog } from "@/components/admin/staffsManage/UpdateStaffDialog";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import http from "@/api/http";
 import { toast } from "sonner";
@@ -18,6 +19,7 @@ import type { AxiosError } from "axios";
 import { StaffList } from "@/components/manager/staffs/staff-list";
 import { useLabs, useManagers, useStaffs } from "@/api/staff";
 import { LoadingOverlay, InternalLoading } from "@/components/loading-overlay";
+import type { Staff } from "@/types/staff";
 
 // export const staffs: Staff[] = [
 //   {
@@ -116,6 +118,8 @@ const ManagerStaffs = () => {
 
   const activeStaffs = allStaffs.filter((s) => s.status === "ACTIVE").length;
   const [search, setSearch] = useState("");
+  const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
+  const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
 
 const filteredStaffs = allStaffs.filter((staff) => {
   if (staff.fullName !== undefined) {
@@ -138,6 +142,12 @@ const filteredStaffs = allStaffs.filter((staff) => {
   if (isLoading) return <LoadingOverlay message="Đang tải danh sách" />;
 
   const handleDeleteStaff = (id: string) => deleteStaff(id);
+  
+  const handleEditStaff = (staff: Staff) => {
+    setSelectedStaff(staff);
+    setIsUpdateDialogOpen(true);
+  };
+  
   const handleReLoadList = () => {
     queryClient.invalidateQueries({ queryKey: ["staffs"] });
     queryClient.invalidateQueries({ queryKey: ["labs"] });
@@ -224,6 +234,7 @@ const filteredStaffs = allStaffs.filter((staff) => {
                 <StaffList
                   data={filteredStaffs}
                   handleDeleteStaff={handleDeleteStaff}
+                  handleEditStaff={handleEditStaff}
                   isError={isError}
                 />
               </div>
@@ -231,6 +242,15 @@ const filteredStaffs = allStaffs.filter((staff) => {
           )}
         </CardContent>
       </Card>
+      
+      {/* Update Staff Dialog */}
+      {selectedStaff && (
+        <UpdateStaffDialog
+          staff={selectedStaff}
+          isOpen={isUpdateDialogOpen}
+          onOpenChange={setIsUpdateDialogOpen}
+        />
+      )}
     </div>
   );
 };

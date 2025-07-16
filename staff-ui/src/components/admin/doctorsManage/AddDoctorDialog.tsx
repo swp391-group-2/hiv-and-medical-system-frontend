@@ -40,7 +40,10 @@ interface AddDoctorDialogProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export const AddDoctorDialog = ({ isOpen, onOpenChange }: AddDoctorDialogProps) => {
+export const AddDoctorDialog = ({
+  isOpen,
+  onOpenChange,
+}: AddDoctorDialogProps) => {
   const [formData, setFormData] = useState<CreateDoctorRequest>({
     email: "",
     fullName: "",
@@ -156,7 +159,10 @@ export const AddDoctorDialog = ({ isOpen, onOpenChange }: AddDoctorDialogProps) 
 
           <div className="space-y-2">
             <Label htmlFor="specialization">Chuyên khoa *</Label>
-            <Select onValueChange={handleSelectChange} value={formData.specialization}>
+            <Select
+              onValueChange={handleSelectChange}
+              value={formData.specialization}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Chọn chuyên khoa" />
               </SelectTrigger>
