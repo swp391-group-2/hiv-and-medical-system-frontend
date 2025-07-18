@@ -12,13 +12,15 @@ export const anonymousPostApi = {
   getAnonymousPosts: (
     page: number = 0,
     size: number = 10,
-    title: string = ""
+    title: string = "",
+    isPatient: boolean = false
   ) => {
     return http.get<AnonymousPostResponse>(URL_ANONYMOUS_POST, {
       params: {
         page,
         size,
         title,
+        isPatient,
       },
     });
   },

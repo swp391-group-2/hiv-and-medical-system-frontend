@@ -21,7 +21,7 @@ function Ticket() {
   }
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
+      <div className="flex justify-center mx-auto items-center min-h-screen">
         <ErrorQuery
           onRetry={refetch}
           error={error}

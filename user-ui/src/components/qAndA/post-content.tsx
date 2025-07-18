@@ -15,6 +15,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
+import userApi from "@/apis/user.api";
+import { useProfileStore } from "@/stores/profile.store";
 
 const PAGE = 0;
 const SIZE = 6;
@@ -24,6 +26,9 @@ function PostContent() {
   const [search, setSearch] = useState<string>("");
   const [page, setPage] = useState<number>(0);
   const [debouncedValue] = useDebounceValue<string>(search, 500);
+  const [postowner, setPostOwner] = useState<string>("all");
+  const setProfile = useProfileStore((state) => state.setProfile);
+
   const handleToggleComments = (postId: string) => {
     setShowComments((prev) => ({
       ...prev,
@@ -38,14 +43,19 @@ function PostContent() {
     refetch,
     error,
   } = useQuery({
-    queryKey: ["posts", page, debouncedValue],
+    queryKey: ["posts", page, debouncedValue, postowner],
     queryFn: async () => {
-      const response = await anonymousPostApi.getAnonymousPosts(
-        page || PAGE,
-        SIZE,
-        debouncedValue
-      );
-      return response.data;
+      const response = await Promise.all([
+        anonymousPostApi.getAnonymousPosts(
+          page || PAGE,
+          SIZE,
+          debouncedValue,
+          postowner === "mine" ? true : false
+        ),
+        userApi.getPatientProfile(),
+      ]);
+      setProfile(response[1].data.data);
+      return response[0].data;
     },
   });
 
@@ -75,6 +85,8 @@ function PostContent() {
             value={search}
             onChange={setSearch}
             onReload={refetch}
+            setPostOwner={setPostOwner}
+            postowner={postowner}
           />
         </div>
         <div className="grid grid-cols-12 gap-8 ">

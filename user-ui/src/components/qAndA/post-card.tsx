@@ -6,6 +6,7 @@ import { MessageCircle, Share2 } from "lucide-react";
 import type { AnonymousPost } from "@/types/anonymousPost.type";
 import { CommentList } from "./comment-list";
 import { getTimeAgo } from "@/utils/utils";
+import { useProfileStore } from "@/stores/profile.store";
 
 export interface PostCardProps {
   post: AnonymousPost;
@@ -26,6 +27,8 @@ export default function PostCard({
       .toUpperCase();
   };
 
+  const user = useProfileStore((state) => state.profile);
+
   return (
     <Card>
       <CardHeader>
@@ -39,7 +42,9 @@ export default function PostCard({
           <div className="flex-1 min-w-0">
             <div className="flex items-center space-x-2 mb-1">
               <h3 className="font-semibold text-sm text-gray-900 dark:text-gray-100">
-                Người dùng ẩn danh
+                {post.patientId == user?.patientId
+                  ? "Bạn"
+                  : "Người dùng ẩn danh"}
               </h3>
             </div>
             <p className="text-xs text-muted-foreground">
