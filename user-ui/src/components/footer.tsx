@@ -1,6 +1,7 @@
 import { Phone, Mail, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import Logo from "./logo";
+import { AppRoutes } from "@/constants/appRoutes";
 
 function Footer() {
   return (
@@ -22,7 +23,7 @@ function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/prescription"
+                  to={AppRoutes.HOME}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Trang Chủ
@@ -30,7 +31,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/"
+                  to={AppRoutes.EDUCATION}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Giáo dục HIV
@@ -38,7 +39,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/appointment"
+                  to={AppRoutes.CONSULTATION_DOCTORS}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Đặt lịch hẹn
@@ -46,7 +47,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/health-record"
+                  to={AppRoutes.USER_PROFILE}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Hồ sơ sức khỏe
@@ -60,7 +61,7 @@ function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="/service/screeningtest"
+                  to={AppRoutes.SCREENING}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Xét nghiệm sàng lọc
@@ -68,7 +69,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/service/confirmatorytest"
+                  to={AppRoutes.CONFIRMATORY}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Xét nghiệm khẳng định
@@ -76,7 +77,7 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/doctors"
+                  to={AppRoutes.CONSULTATION_DOCTORS}
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Đội ngũ bác sĩ
@@ -85,7 +86,7 @@ function Footer() {
 
               <li>
                 <Link
-                  to="/help"
+                  to="/"
                   className="text-muted-foreground hover:text-white transition-colors"
                 >
                   Trợ giúp
@@ -103,7 +104,7 @@ function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="h-4 w-4" />
-                <p>info@medicalsystem.com</p>
+                <p>hcareplus2@gmail.com</p>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="h-4 w-4" />
@@ -114,7 +115,7 @@ function Footer() {
         </div>
 
         <div className="border-t border-border mt-8 pt-4 text-center text-muted-foreground">
-          <p>&copy; 2025 Hệ thống Y tế. Tất cả các quyền được bảo lưu.</p>
+          <p>&copy; 2025 HCarePlus. Tất cả các quyền được bảo lưu.</p>
         </div>
       </div>
     </footer>
