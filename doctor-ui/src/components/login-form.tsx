@@ -57,9 +57,9 @@ export const LoginForm = () => {
         name: apiUser.fullName ?? apiUser.fullName ?? apiUser.email ?? "", // fallback to fullName or email
       };
       loginStore(mappedUser);
-      console.log("doctor email", mappedUser.email);
-      console.log("Login successful:", mappedUser);
-      console.log("Access Token:", data.data.data.accessToken);
+      // console.log("doctor email", mappedUser.email);
+      // console.log("Login successful:", mappedUser);
+      // console.log("Access Token:", data.data.data.accessToken);
       localStorage.setItem("accessToken", data.data.data.accessToken);
       localStorage.setItem("refreshToken", data.data.data.refreshToken);
       localStorage.setItem("doctorEmail", data.data.data.user.email);

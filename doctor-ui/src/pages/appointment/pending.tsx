@@ -14,7 +14,7 @@ const PendingAppointment: React.FC = () => {
       try {
         const filtered = await fetchPendingAppointments();
         setAppointments(filtered);
-        console.log("Fetched appointments:", filtered);
+        // console.log("Fetched appointments:", filtered);
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {

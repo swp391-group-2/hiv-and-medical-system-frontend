@@ -62,16 +62,16 @@ const BlogsPost = () => {
 
         const currentDoctorId = doctorIdParam || doctorId;
 
-        console.log("=== LOAD BLOGS DEBUG ===");
-        console.log("doctorIdParam:", doctorIdParam);
-        console.log("doctorId from state:", doctorId);
-        console.log("currentDoctorId:", currentDoctorId);
-        console.log("========================");
+        // console.log("=== LOAD BLOGS DEBUG ===");
+        // console.log("doctorIdParam:", doctorIdParam);
+        // console.log("doctorId from state:", doctorId);
+        // console.log("currentDoctorId:", currentDoctorId);
+        // console.log("========================");
 
         let blogsList: BlogResponse[] = [];
 
         if (currentDoctorId) {
-          console.log("Loading blogs for doctorId:", currentDoctorId);
+          // console.log("Loading blogs for doctorId:", currentDoctorId);
           // Sử dụng getBlogsByDoctorId để chỉ lấy blog của bác sĩ hiện tại
           blogsList = await blogAPI.getBlogsByDoctorId(currentDoctorId);
         } else {
@@ -80,7 +80,7 @@ const BlogsPost = () => {
           blogsList = await blogAPI.getAllBlogs();
         }
 
-        console.log("Loaded blogs:", blogsList);
+        // console.log("Loaded blogs:", blogsList);
 
         // Đảm bảo blogsList là array
         if (Array.isArray(blogsList)) {
@@ -104,19 +104,19 @@ const BlogsPost = () => {
     const loadDoctorInfo = async () => {
       try {
         const info = await fetchCurrentDoctorInfo();
-        console.log("Doctor info loaded:", info);
-        console.log("=== DOCTOR INFO DEBUG ===");
-        console.log("info.id (doctorId):", info.doctorId);
-        console.log("info.userId:", info.userId);
-        console.log("info.fullName:", info.fullName);
-        console.log("========================");
+        // console.log("Doctor info loaded:", info);
+        // console.log("=== DOCTOR INFO DEBUG ===");
+        // console.log("info.id (doctorId):", info.doctorId);
+        // console.log("info.userId:", info.userId);
+        // console.log("info.fullName:", info.fullName);
+        // console.log("========================");
 
         setDoctorInfo(info);
         // Ưu tiên lấy id (đã là doctorId) thay vì userId
         setDoctorId(info.doctorId || "");
 
         // Console log doctorId sau khi set
-        console.log("DoctorId set to state:", info.doctorId || "");
+        // console.log("DoctorId set to state:", info.doctorId || "");
 
         // Sử dụng fullName từ API làm tên tác giả
         const authorName = info.fullName || info.email || "Bác sĩ";
