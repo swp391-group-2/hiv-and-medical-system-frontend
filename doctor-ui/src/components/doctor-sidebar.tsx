@@ -78,7 +78,7 @@ const DoctorSidebar = () => {
 
   const getDoctorName = localStorage.getItem("doctorName");
 
-  console.log("Doctor Name:", getDoctorName);
+  // console.log("Doctor Name:", getDoctorName);
   return (
     <div className="min-h-screen flex bg-gray-50">
       <SidebarProvider>

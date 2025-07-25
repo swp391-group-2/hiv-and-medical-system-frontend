@@ -108,7 +108,7 @@ export const fetchDoctorScheduleById = async (
     );
 
     const schedules = response.data?.data;
-    console.log("Lịch làm việc của bác sĩ:", schedules);
+    // console.log("Lịch làm việc của bác sĩ:", schedules);
 
     if (!Array.isArray(schedules)) return [];
 
@@ -132,7 +132,7 @@ export const fetchMyDoctorSchedule =
 
     try {
       // Lấy thông tin doctor trước rồi gọi theo doctorId
-      console.log("Lấy thông tin doctor...");
+      // console.log("Lấy thông tin doctor...");
       const doctorInfo = await fetchCurrentDoctorInfo();
 
       if (!doctorInfo) {
@@ -147,7 +147,7 @@ export const fetchMyDoctorSchedule =
         return [];
       }
 
-      console.log("Doctor ID được lấy:", doctorId);
+      // console.log("Doctor ID được lấy:", doctorId);
 
       return await fetchDoctorScheduleById(doctorId);
     } catch (error) {
@@ -172,7 +172,7 @@ export const fetchCurrentDoctorInfo = async () => {
       },
     });
 
-    console.log("Thông tin doctor:", response.data?.data);
+    // console.log("Thông tin doctor:", response.data?.data);
     return response.data?.data;
   } catch (error) {
     console.error("Lỗi khi lấy thông tin doctor:", error);

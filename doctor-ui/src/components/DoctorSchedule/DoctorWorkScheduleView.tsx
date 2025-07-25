@@ -22,7 +22,7 @@ const DoctorWorkScheduleView: React.FC = () => {
     try {
       const data = await fetchMyDoctorSchedule();
       setSchedules(data);
-      console.log("Doctor work schedules:", data);
+      // console.log("Doctor work schedules:", data);
     } catch (error) {
       console.error("Error fetching work schedule:", error);
     } finally {
